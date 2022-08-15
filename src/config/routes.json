@@ -1,0 +1,18 @@
+{
+    "candidates": "/candidates",
+    "interview": "/interview/:candidateId",
+    "interview_result": "/interview/:candidateId/result",
+    "employees": "/employees",
+    "generateCV": "/generate-cv",
+    "generateCVchoosePerson": "/generate-cv/choose-person",
+    "generateCVCandidatePage": "/generate-cv/choose-person/candidate/:id",
+    "generateCVcandidateList": "/generate-cv/choose-person/candidate-list",
+    "generateCVtechnicalInterview": "/generate-cv/candidate/:id/tech-interview",
+    "generateCVsoftskillsInterview": "/generate-cv/candidate/:id/soft-interview",
+    "generateCVemployeesList": "/generate-cv/choose-person/employee-list",
+    "listOfCVs": "/cv-list",
+    "candidate": "/generate-cv/choose-person/candidate/:id",
+    "employee": "/generate-cv/choose-person/employee/:id",
+    "generateCVtechnicalInterviewResult":
+      "/generate-cv/candidate/:candidateId/tech-interview/result"
+}

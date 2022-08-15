@@ -1,0 +1,10 @@
+{
+    "apiUrl": "http://localhost:3000",
+    "getAllLevels": "/levels",
+    "getSkillMatrix": "/skillgroups",
+    "softSkill": "/softskill",
+    "softSkillInterview": "/softinterviews",
+    "getAllRoles": "/roles",
+    "interviews": "/interviews",
+    "employee": "/employee"
+  }
