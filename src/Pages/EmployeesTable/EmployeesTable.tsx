@@ -28,7 +28,7 @@ import {
   EMPLOYEE_TABLE_KEYS,
 } from 'constants/employees';
 import { EMPLOYEES, ACTIONS } from 'constants/titles';
-import { IEmployee } from 'interfaces/employees.interface';
+import { IEmployee } from 'models/IEmployee';
 import { paths } from 'routes/paths';
 
 const { Column } = Table;
