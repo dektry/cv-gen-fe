@@ -4,12 +4,22 @@ import { useDispatch } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
+import app from './redusers/app';
 import candidates from './redusers/candidates';
 import employees from './redusers/employees';
+import interview from './redusers/interview';
+import levels from './redusers/levels';
+import positions from './redusers/positions';
+import softskillsInterview from './redusers/softskillsInterview';
 
 const rootReducer = combineReducers({
+  app,
   candidates,
   employees,
+  interview,
+  levels,
+  positions,
+  softskillsInterview,
 });
 
 const persistConfig = {

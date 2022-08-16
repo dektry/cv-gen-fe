@@ -1,0 +1,10 @@
+export const defaultUserColor = 'lime';
+export const firstName = 'firstName';
+export const avatarFileName = 'avatarFileName';
+export const lastName = 'lastName';
+export const email = 'email';
+export const birthday = 'birthday';
+export const position = 'position';
+export const level = 'level';
+export const projects = 'projects';
+export const id_key = 'id';

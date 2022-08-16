@@ -1,0 +1,73 @@
+import { ITemplate, ITemplatesTasks } from 'interfaces/onboardings.interfaces';
+import { IDBLevels, IDBPosition, IDBUser } from 'interfaces/users.interface';
+
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
+export const INIT = 'INIT';
+export const ACCESS_TOKEN = 'access-token';
+
+export const defaultGroup = {
+  name: '',
+  color: '',
+};
+
+export const defaultPosition: IDBPosition = {
+  level: '',
+  from: '',
+  to: '',
+  duties: '',
+  id: '',
+  name: 'undefined',
+  requirements: '',
+  salaryMaxLimit: 2000,
+  salaryMinLimit: 500,
+  group: defaultGroup,
+};
+
+export const defaultLevel: IDBLevels = {
+  id: '',
+  name: 'undefined',
+  requirements: '',
+  from: '',
+  to: '',
+  level: '',
+  group: defaultGroup,
+};
+
+export const defaultUser: IDBUser = {
+  id: '',
+  password: '',
+  email: '',
+  firstName: '',
+  lastName: '',
+  birthday: '1997-01-01T22:00:00.000Z',
+  role: {
+    id: '',
+    name: '',
+    permissions: [{ name: '', id: '' }],
+  },
+  career: [],
+  avatarFileName: 'default_admin.png',
+  position: defaultPosition,
+  level: defaultLevel,
+  isActive: true,
+  projects: [],
+  projectsHistory: [],
+  balance: 160,
+};
+
+export const defaultTemplate: ITemplate = {
+  name: '',
+  tasks: [],
+  write: [],
+  read: [],
+  target: null,
+};
+
+export const defaultTask: ITemplatesTasks = {
+  task: {
+    title: '',
+    description: '',
+  },
+  index: 0,
+};
