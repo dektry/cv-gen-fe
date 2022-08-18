@@ -1,8 +1,8 @@
 import { Typography } from 'antd';
-import { ProfilePreview } from 'components/Molecules/ProfilePreview/ProfilePreview';
+import { ProfilePreview } from '../ProfilePreview';
 import { useStyles } from './styles';
 import { useSelector } from 'react-redux';
-import { appSelector } from 'store/app';
+import { appSelector } from 'store/reducers/app';
 
 const { Title } = Typography;
 

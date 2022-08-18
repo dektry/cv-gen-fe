@@ -3,12 +3,11 @@ import {
   ChangeEvent,
   useCallback,
   MutableRefObject,
-  RefObject,
 } from 'react';
 import { debounce } from 'lodash';
 import { Input } from 'antd';
 
-import { defaultCurrentPage, defaultPageSize } from 'constants/employees';
+import { defaultCurrentPage, defaultPageSize } from './utils/constants';
 
 type SearchWithAutocompleteProps = {
   onChange: (props: Record<string, unknown>) => void;

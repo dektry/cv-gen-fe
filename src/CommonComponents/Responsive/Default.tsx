@@ -1,8 +1,7 @@
-import { MediaQueryProps } from 'react-responsive';
-// eslint-disable-next-line import/no-cycle
+import { IProps } from './utils/constants';
 import { useIsMobile } from './Mobile';
 
-export const Default = ({ children, ...config }: MediaQueryProps) => {
+export const Default = ({ children, ...config }: IProps) => {
   const isMobile = useIsMobile(config);
 
   if (typeof children === 'function') {

@@ -1,15 +1,15 @@
-import { MediaQueryProps, useMediaQuery } from 'react-responsive';
-// eslint-disable-next-line import/no-cycle
-import { desktopBreakpoints } from 'theme/breakpoints';
+import { MediaQueryTypes, useMediaQuery } from 'react-responsive';
+import { IProps } from './utils/constants';
+import { desktopBreakpoints } from 'theme/constants';
 
 const width = desktopBreakpoints[1] - 1;
 
 export const useIsTablet = (
-  config?: MediaQueryProps,
+  config?: MediaQueryTypes,
   customMaxDeviceWidth = width,
 ) => useMediaQuery({ maxWidth: customMaxDeviceWidth, ...config });
 
-export const Tablet = ({ children, ...config }: MediaQueryProps) => {
+export const Tablet = ({ children, ...config }: IProps) => {
   const isMobileOrTablet = useIsTablet(config);
 
   if (typeof children === 'function') {

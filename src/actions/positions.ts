@@ -7,60 +7,61 @@ import endpoints from '../config/endpoint.json';
 const { headerWithJWT } = Helper;
 
 export const getAllPositionGroups = async () => {
-  const allGroups = await fetch(`${apiUrl}/position-groups`, {
-    method: 'GET',
-    mode: 'cors',
-  })
-    .then(data => {
-      return data.json();
-    })
-    .catch(error => error);
+  try {
+    const { data } = await apiClient.get(endpoints.positionGroups);
 
-  if (allGroups.length > 1) {
-    return allGroups;
+    if (data.length > 1) {
+      return data;
+    }
+    return [
+      {
+        name: 'none',
+        color: 'green',
+      },
+    ];
+  } catch(error) {
+    console.error('[API CLIENT ERROR]', error);
+    message.error(`Server error. Please contact admin`);
   }
-  return [
-    {
-      name: 'none',
-      color: 'green',
-    },
-  ];
+
+
 };
 
 export const getAllPositions = async () => {
-  const allPositions = await fetch(`${apiUrl}/positions`, {
-    method: 'GET',
-    mode: 'cors',
-    headers: headerWithJWT(),
-  }).then(getAuthCheckedResponse);
-
-  if (allPositions.length > 1) {
-    return allPositions;
+  try {
+    const { data } = await apiClient.get(endpoints.positions);
+  
+    if (data.length > 1) {
+      return data;
+    }
+    return [
+      {
+        name: 'Front-end developer',
+        duties: 'Some duties',
+        requirements: 'Some skills',
+        salaryMinLimit: 100,
+        salaryMaxLimit: 1000,
+        group: {
+          name: 'none',
+          color: 'green',
+        },
+      },
+      {
+        name: 'Back-end developer',
+        duties: 'Some duties',
+        requirements: 'Some skills',
+        salaryMinLimit: 100,
+        salaryMaxLimit: 1000,
+        group: {
+          name: 'none',
+          color: 'green',
+        },
+      },
+    ];
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+    message.error(`Server error. Please contact admin`);
   }
-  return [
-    {
-      name: 'Front-end developer',
-      duties: 'Some duties',
-      requirements: 'Some skills',
-      salaryMinLimit: 100,
-      salaryMaxLimit: 1000,
-      group: {
-        name: 'none',
-        color: 'green',
-      },
-    },
-    {
-      name: 'Back-end developer',
-      duties: 'Some duties',
-      requirements: 'Some skills',
-      salaryMinLimit: 100,
-      salaryMaxLimit: 1000,
-      group: {
-        name: 'none',
-        color: 'green',
-      },
-    },
-  ];
 };
 
 export const updatePositionRequest = async (id: string, data: any) => {
@@ -68,7 +69,7 @@ export const updatePositionRequest = async (id: string, data: any) => {
     ...data,
     group: data.group.id,
   };
-  const response = await fetch(`${REACT_APP_BE_URI}/positions/${id}`, {
+  const response = await fetch(`${process.env.PUBLIC_URL}/positions/${id}`, {
     method: 'PUT',
     mode: 'cors',
     headers: headerWithJWT(),
@@ -78,7 +79,7 @@ export const updatePositionRequest = async (id: string, data: any) => {
 };
 
 export const createPositionRequest = async (data: any) => {
-  const response = await fetch(`${REACT_APP_BE_URI}/positions`, {
+  const response = await fetch(`${process.env.REACT_APP_BE_URI}/positions`, {
     method: 'POST',
     mode: 'cors',
     headers: headerWithJWT(),
@@ -88,7 +89,7 @@ export const createPositionRequest = async (data: any) => {
 };
 
 export const deletePosition = async (id: string) => {
-  const response = await fetch(`${REACT_APP_BE_URI}/positions/${id}`, {
+  const response = await fetch(`${process.env.REACT_APP_BE_URI}/positions/${id}`, {
     method: 'DELETE',
     mode: 'cors',
     headers: headerWithJWT(),

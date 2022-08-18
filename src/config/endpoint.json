@@ -6,5 +6,7 @@
     "softSkillInterview": "/softinterviews",
     "getAllRoles": "/roles",
     "interviews": "/interviews",
-    "employee": "/employee"
+    "employee": "/employee",
+    "positionGroups": "/position-groups",
+    "positions": "/positions"
   }

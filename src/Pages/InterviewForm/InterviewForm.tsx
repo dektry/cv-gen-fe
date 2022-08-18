@@ -8,6 +8,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { PositionSkillsModal } from '../PositionSkillsModal/PositionSkillsModal';
 
+import { useAppDispatch } from 'store';
 import {
   chooseInterviewLevel,
   chooseInterviewPosition,
@@ -17,26 +18,24 @@ import {
   setSkillID,
   finishInterview,
   saveChangesToInterview,
-} from 'store/interview';
-import { softSkillInterviewSelector } from 'store/softskillsInterview';
-import { loadSkillMatrix, positionsSelector } from 'store/positions';
-import { candidatesSelector } from 'store/candidates';
-import { levelsSelector } from 'store/levels';
-import { useAppDispatch } from 'store/store';
+} from 'store/reducers/interview';
+import { softSkillInterviewSelector } from 'store/reducers/softskillsInterview';
+import { loadSkillMatrix, positionsSelector } from 'store/reducers/positions';
+import { candidatesSelector } from 'store/reducers/candidates';
+import { levelsSelector } from 'store/reducers/levels';
 
-import { processAnswers } from 'utils/processAnswers';
+import { processAnswers } from './utils/helpers/processAnswers';
 import { useStyles } from './styles';
-import { paths } from 'routes/paths';
+import paths from 'config/routes.json';
 
 import {
   IInterviewAnswers,
   LevelTypesEnum,
   IInterviewSkill,
   ICompleteInterview,
-} from 'interfaces/interview.interface';
+} from 'models/IInterview';
 
-import { levelTypes } from 'constants/interview';
-import { INTERVIEW } from 'constants/titles';
+import { levelTypes, INTERVIEW } from './utils/constants';
 
 export const InterviewForm = () => {
   const classes = useStyles();

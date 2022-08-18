@@ -1,6 +1,6 @@
 import React from 'react';
-import { navigationKeys } from 'constants/navigationKeys';
-import { useIsMobile } from 'components/Responsive/Mobile';
+import { navigationKeys } from './utils/constants/navigationKeys';
+import { useIsMobile } from 'CommonComponents/Responsive';
 import classNames from 'classnames';
 
 interface IProps {

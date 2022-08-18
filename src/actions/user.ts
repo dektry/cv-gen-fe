@@ -1,8 +1,14 @@
 import { message } from 'antd';
 
+import { AppDispatch } from 'store';
+
 import { apiClient } from 'services/apiService';
 import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
+import { CANT_LOGIN, AUTH_OUTDATED } from './constants';
+
+import { IDBUser } from 'models/IUser';
+import { ICredentials, ILoginResponse } from 'models/ILogin';
 
 const { headerWithJWT } = Helper;
 
@@ -115,7 +121,7 @@ export const getActualUser = async (
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   try {
-    return await fetch(`${REACT_APP_BE_URI}/users/${response.id}`, {
+    return await fetch(`${process.env.REACT_APP_BE_URI}/users/${response.id}`, {
       method: 'GET',
       mode: 'cors',
       headers: headerWithJWT(),
@@ -136,7 +142,7 @@ export const getActualUser = async (
       });
   } catch (error) {
     localStorage.clear();
-    throw new Error(error);
+    throw new Error(String(error));
   }
 };
 
@@ -151,7 +157,7 @@ export const loginFromJwt = async (
   const jwtFromStorage = localStorage.getItem('jwt') || undefined;
   const getUser = async () => {
     const user: IDBUser | null = await fetch(
-      `${REACT_APP_BE_URI}/auth/profile`,
+      `${process.env.REACT_APP_BE_URI}/auth/profile`,
       {
         method: 'GET',
         mode: 'cors',
@@ -180,7 +186,7 @@ export const loginFromJwt = async (
     setCurrentUser(user);
   };
   if (currentUser !== undefined) {
-    dispatch(setUser(currentUser));
+    setCurrentUser(currentUser);
     if (jwtFromStorage && currentUser === null) {
       localStorage.clear();
       message.error(AUTH_OUTDATED);
@@ -236,4 +242,10 @@ export const handleCorrectUserSubmit = async (
     );
   }
   setIsUpdatingUser(false);
+};
+
+export const getAvatarUrl = (fileName: string | undefined) => {
+  return fileName
+    ? `${process.env.REACT_APP_BE_URI}/users/avatars/${fileName}`
+    : `${process.env.REACT_APP_BE_URI}/users/avatars/default_admin.png`;
 };

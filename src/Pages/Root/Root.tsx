@@ -1,77 +1,29 @@
-import { hot } from 'react-hot-loader/root';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, memo } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { Routes } from './Routes';
-import { Navigation } from 'components/Organisms/Navigation/Navigation';
-import { permissions } from 'constants/permissions';
+// import { Routes } from './Routes'; // TODO: fix routers import
+import { Navigation } from '../Navigation';
+import { permissions } from '../Navigation/utils/constants';
 import { Layout, Drawer } from 'antd';
-import { AuthCheck } from 'scenes/Root/AuthCheck';
-import { PermissionGate } from 'scenes/Root/PermissionGate';
-import { ErrorBoundary } from 'scenes/Root/ErrorBoundary';
+import { AuthCheck } from '../AuthCheck';
+import { PermissionGate } from '../PermissionGate';
+import { ErrorBoundary } from '../ErrorBoundary';
 import 'antd/dist/antd.css';
 import { MenuOutlined } from '@ant-design/icons';
 import logo from 'images/logo.svg';
 import shortLogo from 'images/favicon.png';
-import { createUseStyles } from 'react-jss';
-import { useIsMobile } from 'components/Responsive/Mobile';
-import { PreLoader } from 'components/Molecules/PreLoader/PreLoader';
-import { desktopBreakpoints } from 'theme/breakpoints';
+
+import { useIsMobile } from 'CommonComponents/Responsive';
+import { PreLoader } from 'CommonComponents/PreLoader';
+
 import { StartUp } from '../StartUp/StartUp';
 import { Provider } from 'react-redux';
-import { store, persistor } from 'store/store';
+import { store, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import { useStyles } from './styles';
+
 const { Content, Sider, Header } = Layout;
-const useStyles = createUseStyles({
-  header: {
-    background: '#fff',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0px 30px',
-    position: 'sticky',
-    top: '0px',
-    zIndex: '10',
-    [`@media (max-width: ${desktopBreakpoints[0] - 1}px)`]: {
-      height: '55px',
-      padding: '0px 22px',
-    },
-  },
-  drawer: {
-    height: '100vh',
-  },
-  global: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '& button': {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  },
-  logo: {
-    margin: '15px auto',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  sidebar: {
-    position: 'fixed',
-    minWidth: 0,
-    minHeight: '100vh',
-    transition: 'all 0.2s',
-  },
-  content: {
-    marginLeft: '200px',
-    [`@media (max-width: ${desktopBreakpoints[1] - 1}px)`]: {
-      marginLeft: '75px',
-    },
-    [`@media (max-width: ${desktopBreakpoints[0] - 1}px)`]: {
-      marginLeft: '25px',
-    },
-  },
-});
+
 
 export const RootUnwrapped = () => {
   const isMobile = useIsMobile();
@@ -146,9 +98,9 @@ export const RootUnwrapped = () => {
                           </Sider>
                         )}
                       </PermissionGate>
-                      <Content className={classes.content}>
+                      {/* <Content className={classes.content}>
                         <Routes />
-                      </Content>
+                      </Content> */}
                     </Layout>
                   </AuthCheck>
                 </StartUp>
@@ -161,4 +113,4 @@ export const RootUnwrapped = () => {
   );
 };
 
-export const Root = hot(RootUnwrapped);
+export const Root = memo(RootUnwrapped);

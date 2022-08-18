@@ -3,31 +3,31 @@ import { useParams, Link } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
 
 import { useSelector } from 'react-redux';
-import { Form, Input, Image, Button, Typography, Space } from 'antd';
+import { Form, Input, Button, Typography, Space } from 'antd';
 
-import { useAppDispatch } from 'store/store';
-import { loadInterviewResult } from 'store/interview';
-import { loadPositions } from 'store/positions';
-import { loadLevels } from 'store/levels';
+import { useAppDispatch } from 'store';
+import { loadInterviewResult } from 'store/reducers/interview';
+import { loadPositions } from 'store/reducers/positions';
+import { loadLevels } from 'store/reducers/levels';
 import {
   loadSoftSkillsList,
   loadSoftSkillInterview,
-} from 'store/softskillsInterview';
+} from 'store/reducers/softskillsInterview';
 import {
   loadOneCandidate,
   candidatesSelector,
   setCandidate,
   setCandidatesIsLoading,
-} from 'store/candidates';
+} from 'store/reducers/candidates';
 
-import { paths } from 'routes/paths';
-import { GET_CANDIDATE } from 'constants/messages';
-import { Languages, LanguageLevels } from 'constants/vocabularies';
+import paths from 'config/routes.json';
+import { GET_CANDIDATE } from 'Pages/AuthCheck/utils/constants';
+import { Languages, LanguageLevels } from '../../utils/constants';
 
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
-import { ComponentLoader } from 'components/Molecules/ComponentLoader/ComponentLoader';
-import { ICandidate } from 'interfaces/candidates.interface';
-import { updateCandidate } from '../../../../api/utils';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { ComponentLoader } from 'CommonComponents/ComponentLoader';
+import { ICandidate } from 'models/ICandidate';
+import { updateCandidate } from 'actions/candidate';
 import { useStyles } from './styles';
 
 function cleanCandidateFields(
@@ -50,13 +50,16 @@ export const Candidate = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
+    if (id) {
+      dispatch(loadOneCandidate(id));
+      dispatch(loadSoftSkillInterview(id));
+      dispatch(loadInterviewResult(id));
+    }
+
     dispatch(setCandidatesIsLoading(true));
-    dispatch(loadOneCandidate(id));
     dispatch(loadPositions());
     dispatch(loadLevels());
     dispatch(loadSoftSkillsList());
-    dispatch(loadSoftSkillInterview(id));
-    dispatch(loadInterviewResult(id));
     dispatch(setCandidatesIsLoading(true));
   }, [dispatch, id]);
 
@@ -89,11 +92,6 @@ export const Candidate = () => {
               placeholder={'Name'}
               addonBefore="Full Name"
               value={`${currentCandidate.fullName || ''}`}
-            />
-            <Image
-              width={150}
-              height={100}
-              src="https://flyclipart.com/thumb2/human-human-avatar-male-icon-with-png-and-vector-format-for-free-19807.png"
             />
           </Form.Item>
           <Form.Item>
@@ -198,14 +196,14 @@ export const Candidate = () => {
             <div className={classes.interviewButtons}>
               <Button className={classes.button}>
                 <Link
-                  to={paths.generateCVtechnicalInterview.replace(':id', id)}
+                  to={paths.generateCVtechnicalInterview.replace(':id', id ? id : '')}
                 >
                   Start tech interview
                 </Link>
               </Button>
               <Button className={classes.button}>
                 <Link
-                  to={paths.generateCVsoftskillsInterview.replace(':id', id)}
+                  to={paths.generateCVsoftskillsInterview.replace(':id', id ? id : '')}
                 >
                   Start softskills interview
                 </Link>

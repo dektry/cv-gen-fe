@@ -1,17 +1,17 @@
 import { Select } from 'antd';
 
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import {
   chooseInterviewPosition,
   chooseInterviewLevel,
   interviewSelector,
-} from 'store/interview';
-import { candidatesSelector } from 'store/candidates';
-import { IDBLevels, IDBPosition } from 'interfaces/users.interface';
+} from 'store/reducers/interview';
+import { candidatesSelector } from 'store/reducers/candidates';
+import { IDBLevels, IDBPosition } from 'models/IUser';
 
 import { useStyles } from './styles';
-import { INTERVIEW } from 'constants/titles';
+import { INTERVIEW } from '../InterviewForm/utils/constants';
 
 type CardOptions = 'level' | 'position';
 

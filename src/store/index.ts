@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import app from './redusers/app';
-import candidates from './redusers/candidates';
-import employees from './redusers/employees';
-import interview from './redusers/interview';
-import levels from './redusers/levels';
-import positions from './redusers/positions';
-import softskillsInterview from './redusers/softskillsInterview';
+import app from './reducers/app';
+import candidates from './reducers/candidates';
+import employees from './reducers/employees';
+import interview from './reducers/interview';
+import levels from './reducers/levels';
+import positions from './reducers/positions';
+import softskillsInterview from './reducers/softskillsInterview';
 
 const rootReducer = combineReducers({
   app,

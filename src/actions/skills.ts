@@ -4,6 +4,9 @@ import { apiClient } from 'services/apiService';
 import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
 
+import { ISoftSkillInterview, ISoftSkill } from 'models/ISoftSkillsInterview';
+import { IMatrixUpdate } from 'models/IUser';
+
 const { headerWithJWT } = Helper;
 
 export const getSkillMatrixByPositionId = async (positionId: string) => {

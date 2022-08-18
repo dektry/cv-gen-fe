@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
-import { interviewSelector } from 'store/interview';
-
 import { Table } from 'antd';
 
-import { IInterviewResultAnswers } from 'interfaces/interview.interface';
-import { levelTypes, levelTypesPriority } from 'constants/interview';
+import { useSelector } from 'react-redux';
+import { interviewSelector } from 'store/reducers/interview';
+
+import { IInterviewResultAnswers } from 'models/IInterview';
+import { levelTypes, levelTypesPriority } from '../InterviewForm/utils/constants';
 import { useStyles } from './styles';
 
 export const InterviewResultsTable = () => {

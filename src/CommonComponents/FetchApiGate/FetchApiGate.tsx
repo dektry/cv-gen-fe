@@ -1,10 +1,10 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Result, Button } from 'antd';
 import { useStyles } from './styles';
-import { REFRESH } from 'constants/buttons';
+import { REFRESH } from './utils/constants';
 
 interface IProps {
-  children: React.ReactNode | null;
+  children: ReactNode | null;
   isSuccess: boolean;
   message: string;
   title: string;

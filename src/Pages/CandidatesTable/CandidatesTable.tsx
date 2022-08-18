@@ -1,19 +1,19 @@
 import { useEffect, useCallback } from 'react';
-import { generatePath, useHistory } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
 
-import { ICandidateTable } from 'interfaces/candidates.interface';
+import { ICandidateTable } from 'models/ICandidate';
 
 import { useSelector } from 'react-redux';
 import {
   setSoftSkillsInterview,
   setSoftSkillsList,
-} from 'store/softskillsInterview';
+} from 'store/reducers/softskillsInterview';
 import {
   chooseInterviewLevel,
   chooseInterviewPosition,
   setInterviewResult,
-} from 'store/interview';
+} from 'store/reducers/interview';
 import {
   candidatesSelector,
   loadCandidates,
@@ -21,26 +21,27 @@ import {
   setCandidatesIsLoading,
   setCandidatesPageSize,
   setCandidate,
-} from 'store/candidates';
-import { useAppDispatch } from 'store/store';
+} from 'store/reducers/candidates';
+import { useAppDispatch } from 'store';
 
 import { Button, Space, Table } from 'antd';
 import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 import { TablePaginationConfig } from 'antd/es/table/Table';
 import { SorterResult } from 'antd/es/table/interface';
 
-import { ACTIONS, CANDIDATES } from 'constants/titles';
-import {
+import { 
+  ACTIONS,
+  CANDIDATES, 
   CANDIDATE_TABLE_KEYS,
+  GET_CANDIDATES,
   defaultPageSize,
   defaultCandidate,
-} from 'constants/candidates';
-import { GET_CANDIDATES } from '../../../constants/messages';
+} from './utils/constants';
 
-import { paths } from 'routes/paths';
-import { useIsMobile } from '../../Responsive';
-import { CandidateShortCard } from '../CandidateShortCard/CandidateShortCard';
-import { ComponentLoader } from 'components/Molecules/ComponentLoader/ComponentLoader';
+import paths from 'config/routes.json';
+import { useIsMobile } from 'CommonComponents/Responsive';
+import { CandidateShortCard } from '../CandidateShortCard';
+import { ComponentLoader } from 'CommonComponents/ComponentLoader';
 
 import { useStyles } from './styles';
 
@@ -90,7 +91,7 @@ export const CandidatesTable = ({
 
   const classes = useStyles();
   const isMobile = useIsMobile();
-  const history = useHistory();
+  const navigation = useNavigate();
 
   const handleChange = async (
     pagination: TablePaginationConfig,
@@ -118,7 +119,7 @@ export const CandidatesTable = ({
         <Button
           type="primary"
           onClick={() =>
-            history.push(
+            navigation(
               generatePath(paths.interview, {
                 candidateId: record.id || '',
               }),
@@ -156,7 +157,7 @@ export const CandidatesTable = ({
         ...(editAction
           ? {
               onClick: () => {
-                history.push(
+                navigation(
                   generatePath(paths.candidate, {
                     id: record.id || '',
                   }),

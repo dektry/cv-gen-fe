@@ -1,4 +1,4 @@
-import { PreLoader } from 'components/Molecules/PreLoader/PreLoader';
+import { PreLoader } from '../PreLoader';
 import { useStyles } from './styles';
 
 interface IProps {

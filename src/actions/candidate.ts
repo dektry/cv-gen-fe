@@ -1,11 +1,9 @@
 import { SortOrder } from 'antd/es/table/interface';
-import { message } from 'antd';
 
 import { ICandidateTable, ICandidate } from 'models/ICandidate';
 import endpoints from 'config/endpoint.json';
 
 import Helper from 'helper';
-import { apiClient } from 'services/apiService';
 
 export interface ILoadCandidateProps {
   limit?: number;

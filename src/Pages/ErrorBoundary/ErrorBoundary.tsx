@@ -1,7 +1,7 @@
 import React from 'react';
 import { Result, Collapse, Button, Alert } from 'antd';
 import { Link } from 'react-router-dom';
-import { paths } from 'routes/paths';
+import paths from 'config/routes.json';
 
 const { Panel } = Collapse;
 interface Props {
