@@ -2,17 +2,20 @@ import React, { ChangeEvent, Fragment } from 'react';
 import { Button, Input, Select } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
+import { cloneDeep } from 'lodash';
+
 import {
   ILevelsSchema,
   IMatrix,
   ISkillGroup,
   ISkill,
-} from 'interfaces/users.interface';
-import { useStyles } from './styles';
-import { levelTypes } from 'constants/interview';
-import { LevelTypesEnum } from 'interfaces/interview.interface';
-import { cloneDeep } from 'lodash';
+} from 'models/IUser';
+import { LevelTypesEnum } from 'models/IInterview';
+
+import { levelTypes } from '../InterviewForm/utils/constants';
 import { StateProps } from './PositionSkillsModal';
+
+import { useStyles } from './styles';
 
 const { Option } = Select;
 
@@ -233,7 +236,7 @@ export const SkillMatrix = ({
                       skillGroup.uuid,
                       value,
                       idx,
-                      level.id,
+                      level.id ? level.id : '',
                     )
                   }
                 >

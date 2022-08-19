@@ -1,9 +1,9 @@
-import { PreLoader } from 'components/Molecules/PreLoader/PreLoader';
+import { PreLoader } from '../PreLoader';
 import { useStyles } from './styles';
 
 interface IProps {
   isLoading: boolean;
-  children: any;
+  children: React.ReactNode;
   loaderStatus: string;
 }
 

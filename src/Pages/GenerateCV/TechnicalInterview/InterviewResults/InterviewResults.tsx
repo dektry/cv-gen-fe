@@ -1,23 +1,24 @@
 import { useParams } from 'react-router-dom';
 
-import { paths } from 'routes/paths';
+import paths from 'config/routes.json';
 
 import { useSelector } from 'react-redux';
-import { candidatesSelector } from 'store/candidates';
+import { candidatesSelector } from 'store/reducers/candidates';
 
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
-import { InterviewResult } from 'components/Molecules/InterviewResult/InterviewResult';
-import { ButtonWithLink } from 'components/Atoms/ButtonWithLink';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { InterviewResult } from 'Pages/InterviewResult';
+import { ButtonWithLink } from 'CommonComponents/ButtonWithLink';
 
 export const InterviewResults = () => {
-  const { currentCandidate } = useSelector(candidatesSelector);
+  const { id } = useParams<{ id: string }>();
+  const { currentCandidate } = useSelector(candidatesSelector)
 
   return (
     <>
       <GenerateCvHeader
         backPath={paths.generateCVtechnicalInterview.replace(
           ':id',
-          currentCandidate.id,
+          id ? id : '',
         )}
       />
       <InterviewResult />

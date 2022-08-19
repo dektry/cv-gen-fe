@@ -1,4 +1,4 @@
-import { IEmployee } from 'interfaces/employees.interface';
+import { IEmployee } from 'models/IEmployee';
 
 export const EMPLOYEE_TABLE_KEYS = {
   id: 'id',

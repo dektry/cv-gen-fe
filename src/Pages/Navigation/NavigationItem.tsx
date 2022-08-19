@@ -1,11 +1,11 @@
 import React from 'react';
-import { navigationKeys } from 'constants/navigationKeys';
-import { useIsMobile } from 'components/Responsive/Mobile';
+import { navigationKeys } from './utils/constants/navigationKeys';
+import { useIsMobile } from 'CommonComponents/Responsive';
 import classNames from 'classnames';
 
 interface IProps {
-  children?: React.ReactChild | React.ReactChild[];
-  icon?: React.ReactChild | React.ReactChild[];
+  children?: React.ReactNode | React.ReactNode[];
+  icon?: React.ReactNode | React.ReactNode[];
   selectedItem: string;
   itemKey: navigationKeys;
   setSelectedItem: React.Dispatch<React.SetStateAction<navigationKeys>>;

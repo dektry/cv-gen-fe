@@ -5,20 +5,20 @@ export interface IDBPermissions {
 
 export interface IDBPosition {
   duties: string;
-  id: string;
+  id?: string;
   name: string;
   requirements: string;
   level: string;
   salaryMaxLimit: number;
   salaryMinLimit: number;
-  group: IDBPositionGroup;
+  group?: IDBPositionGroup;
   from: string;
   to: string | null;
 }
 
 export interface IDBLevels {
   level: string;
-  id: string;
+  id?: string;
   name: string;
   requirements: string;
   group: IDBLevelGroup;
@@ -27,6 +27,7 @@ export interface IDBLevels {
 }
 
 export interface IDBPositionGroup {
+  id: string;
   name: string;
   color: string;
 }
@@ -63,9 +64,7 @@ export interface IDBUser {
   position?: IDBPosition;
   level: IDBLevels;
   isActive: boolean;
-  permissions?: string[];
-  templatesRead?: any[];
-  templatesWrite?: any[];
+  permissions: string[];
   currentPositions?: IDBPosition[];
   balance: number;
 }
@@ -82,10 +81,6 @@ export interface IDBPermission {
   W: boolean;
 }
 
-export interface Action {
-  type: string;
-  payload?: any;
-}
 export interface IRolesColors {
   admin: string;
   user: string;

@@ -1,5 +1,5 @@
 import { createUseStyles } from 'react-jss';
-import { desktopBreakpoints } from 'theme/breakpoints';
+import { desktopBreakpoints } from 'theme/constants';
 
 export const useStyles = createUseStyles({
   page: {

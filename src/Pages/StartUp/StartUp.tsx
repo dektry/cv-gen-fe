@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { PreLoader } from 'components/Molecules/PreLoader/PreLoader';
-import { FetchApiGate } from 'components/Atoms/FetchApiGate/FetchApiGate';
+import { PreLoader } from 'CommonComponents/PreLoader';
+import { FetchApiGate } from 'CommonComponents/FetchApiGate';
 import {
   OOPS,
   POSITION_GROUPS_NOT_FOUND,
   GET_POSITION_GROUPS,
-} from 'constants/messages';
-import { useAppDispatch } from 'store/store';
-import { loadPositionGroups } from 'store/app';
+} from './utils/constants';
+import { useAppDispatch } from 'store';
+import { loadPositionGroups } from 'store/reducers/app';
 
 interface IProps {
   children: React.ReactNode;

@@ -2,15 +2,15 @@ import React, { useRef } from 'react';
 
 import Typography from 'antd/lib/typography';
 
-import { EmployeesTable } from 'components/Molecules/EmployeesTable/EmployeesTable';
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
-import { SearchWithAutocomplete } from 'components/Atoms/SearchWithAutocomplete/SearchWithAutocomplete';
+import { EmployeesTable } from 'Pages/EmployeesTable';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { SearchWithAutocomplete } from 'CommonComponents/SearchWithAutocomplete';
 
-import { paths } from 'routes/paths';
-import { EMPLOYEES } from 'constants/titles';
+import paths from 'config/routes.json';
+import { EMPLOYEES } from 'Pages/EmployeesTable/utils/constants';
 
-import { useAppDispatch } from 'store/store';
-import { getEmployeesList } from 'store/employees';
+import { useAppDispatch } from 'store';
+import { getEmployeesList } from 'store/reducers/employees';
 
 import { useStyles } from './styles';
 

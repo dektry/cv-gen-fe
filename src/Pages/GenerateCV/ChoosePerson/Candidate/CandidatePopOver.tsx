@@ -1,8 +1,9 @@
-import { candidatesSelector } from 'store/candidates';
-import { useSelector } from 'react-redux';
 import { Popover, Typography } from 'antd';
-import { useStyles } from './styles';
 import { InfoCircleOutlined } from '@ant-design/icons';
+
+import { useSelector } from 'react-redux';
+import { candidatesSelector } from 'store/reducers/candidates';
+import { useStyles } from './styles';
 
 export const CandidatePopOver = () => {
   const {

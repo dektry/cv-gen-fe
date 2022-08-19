@@ -1,12 +1,23 @@
 import { message } from 'antd';
 
+import { AppDispatch } from 'store';
+
 import { apiClient } from 'services/apiService';
 import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
+import { CANT_LOGIN, AUTH_OUTDATED } from './constants';
+
+import { IDBCareer, IDBRole, IDBUser, IUpdatePosition } from 'models/IUser';
+import { ICredentials } from 'models/ILogin';
 
 const { headerWithJWT } = Helper;
 
-export const getAuthCheckedResponse = (data: any) => {
+interface IResponse {
+  statusText: string;
+  json: () => object;
+}
+
+export const getAuthCheckedResponse = (data: IResponse) => {
   if (data.statusText === 'Unauthorized') {
     throw new Error(CANT_LOGIN);
   }
@@ -16,9 +27,9 @@ export const getAuthCheckedResponse = (data: any) => {
 export const transformUsers = (users: IDBUser[]) => {
   return users.map((user: IDBUser) => {
     const userPermissions = user.role.permissions.map(
-      (permission: any) => permission.name,
+      (permission: Partial<IDBRole>) => permission.name,
     );
-    const sortedCareer = user.career.sort((a: any, b: any) => {
+    const sortedCareer = user.career.sort((a: IDBCareer, b: IDBCareer) => {
       if (a.to === null) {
         return -1;
       }
@@ -46,7 +57,7 @@ export const getAllRoles = async () => {
   }
 };
 
-export const updateUser = async (id: string, user: any) => {
+export const updateUser = async (id: string, user: IDBUser & IUpdatePosition) => {
   const updatedUser = {
     ...user,
     position: user.positionId,
@@ -61,7 +72,7 @@ export const updateUser = async (id: string, user: any) => {
   return response.json();
 };
 
-export const createUser = async (data: any) => {
+export const createUser = async (data: IDBUser) => {
   const createdUser = {
     ...data,
     roleId: data.role.id,
@@ -86,25 +97,17 @@ export const deleteUser = async (id: string) => {
 };
 
 export const login = async (credentials: ICredentials) => {
-  const response: ILoginResponse | undefined = await fetch(
-    `${process.env.REACT_APP_BE_URI}/auth/login`,
-    {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    },
-  ).then(
-    data => (data.ok ? data.json() : null),
-    () => undefined,
-  );
-  if (response) {
-    localStorage.setItem('jwt', response.jwt.access_token);
-    return transformUsers([response.user])[0];
+  try {
+    const { data } = await apiClient.post(endpoints.login, credentials);
+    if (data) {
+      localStorage.setItem('jwt', data.jwt.access_token);
+      return transformUsers([data.user])[0];
+    }
+    return data;
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+    message.error(`Server error. Please contact admin`);
   }
-  return response;
 };
 
 export const getActualUser = async (
@@ -115,7 +118,7 @@ export const getActualUser = async (
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   try {
-    return await fetch(`${REACT_APP_BE_URI}/users/${response.id}`, {
+    return await fetch(`${process.env.REACT_APP_BE_URI}/users/${response.id}`, {
       method: 'GET',
       mode: 'cors',
       headers: headerWithJWT(),
@@ -136,7 +139,7 @@ export const getActualUser = async (
       });
   } catch (error) {
     localStorage.clear();
-    throw new Error(error);
+    throw new Error(String(error));
   }
 };
 
@@ -151,7 +154,7 @@ export const loginFromJwt = async (
   const jwtFromStorage = localStorage.getItem('jwt') || undefined;
   const getUser = async () => {
     const user: IDBUser | null = await fetch(
-      `${REACT_APP_BE_URI}/auth/profile`,
+      `${process.env.REACT_APP_BE_URI}/auth/profile`,
       {
         method: 'GET',
         mode: 'cors',
@@ -180,7 +183,7 @@ export const loginFromJwt = async (
     setCurrentUser(user);
   };
   if (currentUser !== undefined) {
-    dispatch(setUser(currentUser));
+    setCurrentUser(currentUser);
     if (jwtFromStorage && currentUser === null) {
       localStorage.clear();
       message.error(AUTH_OUTDATED);
@@ -192,48 +195,9 @@ export const loginFromJwt = async (
   }
 };
 
-export const handleCorrectUserSubmit = async (
-  chosenUser: IDBUser,
-  dispatch: React.Dispatch<any>,
-  setIsUpdatingUser: React.Dispatch<React.SetStateAction<boolean>>,
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>,
-  update: () => void,
-) => {
-  setIsUpdatingUser(true);
 
-  let response;
-  if (!chosenUser.id) {
-    const newUser = omit(chosenUser, ['id']);
-    response = await createUser(newUser);
-  } else {
-    response = await updateUser(chosenUser.id, chosenUser);
-  }
-
-  if (!response.error) {
-    await update();
-    setOpenModal(false);
-    dispatch({ type: EDIT_PROFILE, payload: false });
-    dispatch({
-      type: CHOOSE_USER,
-      payload: defaultUser,
-    });
-  }
-
-  if (response.email) {
-    message.success({
-      content: chosenUser.id ? USER_UPDATED : USER_CREATED,
-      duration: 1.5,
-    });
-  } else {
-    const messages = isArray(response.message)
-      ? response.message
-      : [response.message];
-    messages.map((mes: string) =>
-      message.error({
-        content: mes,
-        duration: 2,
-      }),
-    );
-  }
-  setIsUpdatingUser(false);
+export const getAvatarUrl = (fileName: string | undefined) => {
+  return fileName
+    ? `${process.env.REACT_APP_BE_URI}/users/avatars/${fileName}`
+    : `${process.env.REACT_APP_BE_URI}/users/avatars/default_admin.png`;
 };

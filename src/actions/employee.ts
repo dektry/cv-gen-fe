@@ -14,7 +14,7 @@ export interface ILoadEmployeeProps {
   fullName?: string;
 }
 
-export const getAllEmployees = async ({ limit, page, sorter, fullName = '' }: ILoadEmployeeProps) => {
+export const getAllEmployees = async ({ limit = 10, page = 1, sorter, fullName = '' }: ILoadEmployeeProps) => {
   const sort: {
     order?: 'ASC' | 'DESC';
     field?: string;

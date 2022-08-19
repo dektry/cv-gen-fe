@@ -2,43 +2,42 @@ import { useEffect, useMemo } from 'react';
 import {
   generatePath,
   Link,
-  matchPath,
-  useHistory,
+  useNavigate,
   useLocation,
   useParams,
 } from 'react-router-dom';
-import { paths } from 'routes/paths';
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
+import paths from 'config/routes.json';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
 import { useSelector } from 'react-redux';
-import { interviewSelector } from 'store/interview';
-import { candidatesSelector } from 'store/candidates';
+import { interviewSelector } from 'store/reducers/interview';
+import { candidatesSelector } from 'store/reducers/candidates';
 import { useStyles } from './styles';
-import { InterviewForm } from 'components/Molecules/InterviewForm/InterviewForm';
+import { InterviewForm } from 'Pages/InterviewForm';
 import { Button } from 'antd';
-import { CandidatePopOver } from 'scenes/generateCV/ChoosePerson/Candidate/CandidatePopOver';
+import { CandidatePopOver } from 'Pages/GenerateCV/ChoosePerson/Candidate';
 
 export const InterviewSetUp = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const { currentCandidate } = useSelector(candidatesSelector);
   const { id } = useParams<{ id: string }>();
   const { interviewResult } = useSelector(interviewSelector);
 
   const isResultPage = useMemo(
-    () => matchPath(pathname, paths.interview_result)?.isExact,
+    () => pathname === paths.interview_result,
     [pathname],
   );
 
   useEffect(() => {
     if (interviewResult && !isResultPage)
-      history.push(
+    navigate(
         generatePath(paths.generateCVtechnicalInterview, {
           id,
         }),
       );
     if (!interviewResult && isResultPage)
-      history.push(
+    navigate(
         generatePath(paths.generateCVtechnicalInterviewResult, {
           id,
         }),
@@ -47,7 +46,7 @@ export const InterviewSetUp = () => {
 
   return (
     <>
-      <GenerateCvHeader backPath={paths.candidate.replace(':id', id)}>
+      <GenerateCvHeader backPath={paths.candidate.replace(':id', id ? id : '')}>
         <CandidatePopOver />
       </GenerateCvHeader>
       <InterviewForm />

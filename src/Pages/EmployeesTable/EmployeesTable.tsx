@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { generatePath, useHistory } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
 import { Table, Button, Space } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
@@ -7,34 +7,33 @@ import { TablePaginationConfig } from 'antd/es/table/Table';
 import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch } from 'store';
 import {
-  setEmployee,
   setLoading,
-  setNameFilter,
   setPageSize,
-  setSearchQuery,
   setCurrentPage,
   employeesSelector,
   getEmployeesList,
-} from 'store/employees';
+} from 'store/reducers/employees';
 
-import { EmployeeShortCard } from 'components/Atoms/EmployeeShortCard/EmployeeShortCard';
-import { useStyles } from 'components/Molecules/EmployeesTable/styles';
-import { useIsMobile } from 'components/Responsive';
+import { EmployeeShortCard } from '../EmployeeShortCard';
+import { useStyles } from './styles';
+import { useIsMobile } from 'CommonComponents/Responsive';
 import {
   defaultCurrentPage,
   defaultPageSize,
   EMPLOYEE_TABLE_KEYS,
-} from 'constants/employees';
-import { EMPLOYEES, ACTIONS } from 'constants/titles';
+  EMPLOYEES,
+  ACTIONS
+} from './utils/constants';
+
 import { IEmployee } from 'models/IEmployee';
-import { paths } from 'routes/paths';
+import paths from 'config/routes.json';
 
 const { Column } = Table;
 
 export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [load, setLoad] = useState(false)
   const dispatch = useAppDispatch();
   const {
@@ -102,7 +101,7 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
   };
 
   const createPath = (record: IEmployee) => {
-    history.push(
+    navigate(
       generatePath(paths.employee, {
         id: record.id || '',
       }),

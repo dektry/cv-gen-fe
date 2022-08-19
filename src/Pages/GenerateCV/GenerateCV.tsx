@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   matchPath,
-  useHistory,
+  useNavigate,
   generatePath,
   useLocation,
 } from 'react-router-dom';
 import { Tabs } from 'antd';
 
-import { PageNotFound } from 'components/Atoms/PageNotFound/PageNotFound';
-import { Header } from 'components/Organisms/Header/Header';
-import { GenerateCVsteps } from 'constants/generateCV';
-import { GENERATE_CV } from 'constants/titles';
-import { paths } from 'routes/paths';
-import { ChoosePerson } from 'scenes/generateCV/ChoosePerson/ChoosePerson';
-import { useStyles } from 'scenes/generateCV/styles';
-import { TechnicalInterview } from 'scenes/generateCV/TechnicalInterview/TechnicalInterview';
-import { SoftskillsInterview } from './SoftskillsInterview/SoftskillsInterview';
+import { PageNotFound } from 'CommonComponents/PageNotFound';
+import { Header } from 'Pages/Header';
+import { GenerateCVsteps } from './utils/constants';
+import { GENERATE_CV } from 'Pages/CandidatesTable/utils/constants';
+import paths from 'config/routes.json';
+import { ChoosePerson } from './ChoosePerson/ChoosePerson';
+import { TechnicalInterview } from './TechnicalInterview';
+import { SoftskillsInterview } from './SoftskillsInterview';
+import { useStyles } from './styles';
 
 const { TabPane } = Tabs;
-
-type Theme = {
-  deviceRatio: number;
-};
 
 const tabPaths = [
   paths.generateCVchoosePerson,
@@ -32,7 +28,7 @@ const tabPaths = [
 export const GenerateCV = ({ ...props }) => {
   const classes = useStyles(props);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const [currentTab, setCurrentTab] = useState('0');
@@ -55,7 +51,7 @@ export const GenerateCV = ({ ...props }) => {
 
     if (!allowedPaths.some(p => matchPath(location.pathname, p))) {
       if (key === '0') {
-        history.push(paths.generateCVchoosePerson);
+        navigate(paths.generateCVchoosePerson);
         setCurrentTab(key);
       }
       return;
@@ -63,11 +59,11 @@ export const GenerateCV = ({ ...props }) => {
 
     const candidateId = allowedPaths.reduce((acc, path) => {
       return (
-        matchPath<{ id: string }>(location.pathname, path)?.params.id ?? acc
+        matchPath(location.pathname, path)?.params.id ?? acc
       );
     }, '');
 
-    history.push(
+    navigate(
       generatePath(tabPaths[+key], candidateId ? { id: candidateId } : {}),
     );
     setCurrentTab(key);
@@ -94,7 +90,7 @@ export const GenerateCV = ({ ...props }) => {
         </TabPane>
       </Tabs>
       {currentTab === '-1' &&
-      !matchPath(location.pathname, paths.generateCV)?.isExact ? (
+      !(location.pathname === paths.generateCV) ? (
         <PageNotFound />
       ) : null}
     </>

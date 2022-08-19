@@ -1,21 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import { Button, Input, Radio, RadioChangeEvent } from 'antd';
 
-import { useAppDispatch } from 'store/store';
 import { useSelector } from 'react-redux';
-import { interviewSelector, saveChangesToInterview } from 'store/interview';
-import { candidatesSelector } from 'store/candidates';
-import { positionsSelector } from 'store/positions';
-import { levelsSelector } from 'store/levels';
+import { useAppDispatch } from 'store';
+import { interviewSelector, saveChangesToInterview } from 'store/reducers/interview';
+import { candidatesSelector } from 'store/reducers/candidates';
+import { positionsSelector } from 'store/reducers/positions';
+import { levelsSelector } from 'store/reducers/levels';
 
 import { useStyles } from './styles';
-import { INTERVIEW } from 'constants/titles';
+import { INTERVIEW } from '../InterviewForm/utils/constants';
 
 import { InterviewResultsTable } from './InterviewResultsTable';
 import { InterviewInfoCard } from './InterviewInfoCard';
-import { ICompleteInterview } from 'interfaces/interview.interface';
+import { ICompleteInterview } from 'models/IInterview';
 
-import { processAnswers } from 'utils/processAnswers';
+import { processAnswers } from '../InterviewForm/utils/helpers/processAnswers';
 
 export const InterviewResult = () => {
   const dispatch = useAppDispatch();
@@ -92,12 +92,12 @@ export const InterviewResult = () => {
         <InterviewInfoCard
           isEdited={isEdited}
           cardOptions="position"
-          options={allPositions}
+          positions={allPositions}
         />
         <InterviewInfoCard
           isEdited={isEdited}
           cardOptions="level"
-          options={allLevels}
+          levels={allLevels}
         />
         <Button className={classes.editButton} onClick={handleEdit}>
           {isEdited ? 'Disable edit' : 'Edit'}

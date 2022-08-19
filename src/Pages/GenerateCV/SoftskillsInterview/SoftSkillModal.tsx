@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
+import { useAppDispatch } from 'store';
 import {
   addNewSkill,
   addNewSkillToDB,
-  setSoftSkillsList,
-} from 'store/softskillsInterview';
-import { useAppDispatch } from 'store/store';
+} from 'store/reducers/softskillsInterview';
 
 import { Modal, Input, message } from 'antd';
 

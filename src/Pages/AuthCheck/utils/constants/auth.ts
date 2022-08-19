@@ -1,5 +1,4 @@
-import { ITemplate, ITemplatesTasks } from 'interfaces/onboardings.interfaces';
-import { IDBLevels, IDBPosition, IDBUser } from 'interfaces/users.interface';
+import { IDBLevels, IDBPosition, IDBUser } from 'models/IUser';
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
@@ -7,6 +6,7 @@ export const INIT = 'INIT';
 export const ACCESS_TOKEN = 'access-token';
 
 export const defaultGroup = {
+  id: '',
   name: '',
   color: '',
 };
@@ -51,23 +51,7 @@ export const defaultUser: IDBUser = {
   position: defaultPosition,
   level: defaultLevel,
   isActive: true,
-  projects: [],
-  projectsHistory: [],
   balance: 160,
+  permissions: ['']
 };
 
-export const defaultTemplate: ITemplate = {
-  name: '',
-  tasks: [],
-  write: [],
-  read: [],
-  target: null,
-};
-
-export const defaultTask: ITemplatesTasks = {
-  task: {
-    title: '',
-    description: '',
-  },
-  index: 0,
-};

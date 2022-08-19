@@ -1,20 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { PreLoader } from 'components/Molecules/PreLoader/PreLoader';
-import { IDBUser } from 'interfaces/users.interface';
-import { loginFromJwt } from 'api/utils';
-import { FetchApiGate } from 'components/Atoms/FetchApiGate/FetchApiGate';
+import { useSelector } from 'react-redux';
+import { loginFromJwt } from 'actions/user';
+
+import { appSelector } from 'store/reducers/app';
+import { useAppDispatch } from 'store';
+
+import { IDBUser } from 'models/IUser';
 import {
   AWAIT_AUTH,
   OOPS,
   USER_AUTH_SERVER_NOT_FOUND,
-} from 'constants/messages';
-import { useSelector } from 'react-redux';
-import { appSelector, loadPermissions } from 'store/app';
-import { useAppDispatch } from 'store/store';
+} from './utils/constants';
+
+
+import { PreLoader } from 'CommonComponents/PreLoader';
+import { FetchApiGate } from 'CommonComponents/FetchApiGate';
 
 interface IProps {
-  children: React.ReactChild | React.ReactChild[];
+  children: React.ReactNode | React.ReactNode[];
 }
 
 export const AuthCheck = ({ children }: IProps) => {
@@ -28,9 +31,6 @@ export const AuthCheck = ({ children }: IProps) => {
   useEffect(() => {
     loginFromJwt(setIsSuccess, setCurrentUser, dispatch, currentUser);
 
-    if (currentUser?.id) {
-      dispatch(loadPermissions());
-    }
   }, [currentUser]);
 
   if (user === undefined) {

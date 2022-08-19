@@ -18,10 +18,9 @@ export interface ILoginResponse {
 }
 
 export interface IAppState {
-  user?: IDBUser | null;
+  user: IDBUser;
   isHaveTemplates?: boolean | null;
   positionGroups: IDBPositionGroup[];
   levelGroups: IDBLevelGroup[];
-  access?: any[];
   isHavePermissionToOT?: boolean;
 }

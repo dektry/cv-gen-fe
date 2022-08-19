@@ -5,10 +5,10 @@ import { PlusOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useSelector } from 'react-redux';
-import { interviewSelector } from 'store/interview';
+import { interviewSelector } from 'store/reducers/interview';
 
-import { createSkillMatrix } from 'api/utils';
-import { ILevelsSchema, IMatrix, IDBLevels } from 'interfaces/users.interface';
+import { createSkillMatrix } from 'actions/skills';
+import { ILevelsSchema, IMatrix, IDBLevels } from 'models/IUser';
 import { SkillMatrix } from './SkillMatrix';
 import { useStyles } from './styles';
 

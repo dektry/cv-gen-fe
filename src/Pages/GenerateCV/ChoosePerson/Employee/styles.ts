@@ -1,5 +1,4 @@
 import { createUseStyles } from 'react-jss';
-import { flexDirection } from 'styled-system';
 
 export const useStyles = createUseStyles({
   form: {

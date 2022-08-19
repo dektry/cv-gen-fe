@@ -1,4 +1,4 @@
-import { IDBLevels } from '../interfaces/users.interface'
+import { IDBLevels } from 'models/IUser'
 
 interface IOrder {
   [key: string]: number;

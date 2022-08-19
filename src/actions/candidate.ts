@@ -1,29 +1,25 @@
-import { SortOrder } from 'antd/es/table/interface';
-import { message } from 'antd';
-
 import { ICandidateTable, ICandidate } from 'models/ICandidate';
 import endpoints from 'config/endpoint.json';
 
 import Helper from 'helper';
-import { apiClient } from 'services/apiService';
 
 export interface ILoadCandidateProps {
   limit?: number;
   page?: number;
-  sorter?: { order?: SortOrder; field: string };
+  sorter?: { order: string; field: string };
   fullName?: string;
   woInterview?: boolean;
   woSoftInterview?: boolean;
 }
 
 export const getAllCandidates = async ({
-  limit,
-  page,
-  sorter,
+  limit = 10,
+  page = 1,
+  sorter = { order: 'ascend', field: 'name' },
   fullName = '',
   woInterview = false,
   woSoftInterview = false,
-}: ILoadCandidateProps) => {
+}) => {
   const sort: {
     order?: 'ASC' | 'DESC';
     field?: string;
