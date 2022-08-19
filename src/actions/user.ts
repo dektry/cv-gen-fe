@@ -7,12 +7,17 @@ import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
 import { CANT_LOGIN, AUTH_OUTDATED } from './constants';
 
-import { IDBUser } from 'models/IUser';
-import { ICredentials, ILoginResponse } from 'models/ILogin';
+import { IDBCareer, IDBRole, IDBUser, IUpdatePosition } from 'models/IUser';
+import { ICredentials } from 'models/ILogin';
 
 const { headerWithJWT } = Helper;
 
-export const getAuthCheckedResponse = (data: any) => {
+interface IResponse {
+  statusText: string;
+  json: () => object;
+}
+
+export const getAuthCheckedResponse = (data: IResponse) => {
   if (data.statusText === 'Unauthorized') {
     throw new Error(CANT_LOGIN);
   }
@@ -22,9 +27,9 @@ export const getAuthCheckedResponse = (data: any) => {
 export const transformUsers = (users: IDBUser[]) => {
   return users.map((user: IDBUser) => {
     const userPermissions = user.role.permissions.map(
-      (permission: any) => permission.name,
+      (permission: Partial<IDBRole>) => permission.name,
     );
-    const sortedCareer = user.career.sort((a: any, b: any) => {
+    const sortedCareer = user.career.sort((a: IDBCareer, b: IDBCareer) => {
       if (a.to === null) {
         return -1;
       }
@@ -52,7 +57,7 @@ export const getAllRoles = async () => {
   }
 };
 
-export const updateUser = async (id: string, user: any) => {
+export const updateUser = async (id: string, user: IDBUser & IUpdatePosition) => {
   const updatedUser = {
     ...user,
     position: user.positionId,
@@ -67,7 +72,7 @@ export const updateUser = async (id: string, user: any) => {
   return response.json();
 };
 
-export const createUser = async (data: any) => {
+export const createUser = async (data: IDBUser) => {
   const createdUser = {
     ...data,
     roleId: data.role.id,
@@ -92,25 +97,17 @@ export const deleteUser = async (id: string) => {
 };
 
 export const login = async (credentials: ICredentials) => {
-  const response: ILoginResponse | undefined = await fetch(
-    `${process.env.REACT_APP_BE_URI}/auth/login`,
-    {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    },
-  ).then(
-    data => (data.ok ? data.json() : null),
-    () => undefined,
-  );
-  if (response) {
-    localStorage.setItem('jwt', response.jwt.access_token);
-    return transformUsers([response.user])[0];
+  try {
+    const { data } = await apiClient.post(endpoints.login, credentials);
+    if (data) {
+      localStorage.setItem('jwt', data.jwt.access_token);
+      return transformUsers([data.user])[0];
+    }
+    return data;
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+    message.error(`Server error. Please contact admin`);
   }
-  return response;
 };
 
 export const getActualUser = async (

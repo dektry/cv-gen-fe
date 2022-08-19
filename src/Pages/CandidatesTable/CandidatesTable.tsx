@@ -33,7 +33,6 @@ import {
   ACTIONS,
   CANDIDATES, 
   CANDIDATE_TABLE_KEYS,
-  GET_CANDIDATES,
   defaultPageSize,
   defaultCandidate,
 } from './utils/constants';
@@ -41,7 +40,7 @@ import {
 import paths from 'config/routes.json';
 import { useIsMobile } from 'CommonComponents/Responsive';
 import { CandidateShortCard } from '../CandidateShortCard';
-import { ComponentLoader } from 'CommonComponents/ComponentLoader';
+// TODO: implement loader logic
 
 import { useStyles } from './styles';
 
@@ -93,25 +92,26 @@ export const CandidatesTable = ({
   const isMobile = useIsMobile();
   const navigation = useNavigate();
 
-  const handleChange = async (
-    pagination: TablePaginationConfig,
-    filters: any,
-    sorter: SorterResult<ICandidateTable> | SorterResult<ICandidateTable>[],
-  ) => {
-    dispatch(setCandidatesCurrentPage(pagination.current || 1));
-    dispatch(setCandidatesPageSize(pagination.pageSize || defaultPageSize));
-    await dispatch(
-      loadCandidates({
-        page: pagination.current,
-        limit: pagination.pageSize,
-        ...(isArray(sorter)
-          ? {}
-          : {
-              sorter: { order: sorter.order, field: sorter.field as string },
-            }),
-      }),
-    );
-  };
+
+  //TODO: fix sorter types
+  // const handleChange = async (
+  //   pagination: TablePaginationConfig,
+  //   sorter: SorterResult<ICandidateTable> | SorterResult<ICandidateTable>[],
+  // ) => {
+  //   dispatch(setCandidatesCurrentPage(pagination.current || 1));
+  //   dispatch(setCandidatesPageSize(pagination.pageSize || defaultPageSize));
+  //   await dispatch(
+  //     loadCandidates({
+  //       page: pagination.current,
+  //       limit: pagination.pageSize,
+  //       ...(isArray(sorter)
+  //         ? {}
+  //         : {
+  //             sorter: { order: sorter.order, field: sorter.field as string },
+  //           }),
+  //     }),
+  //   );
+  // };
 
   const renderActions = (record: ICandidateTable) => {
     return (
@@ -171,7 +171,6 @@ export const CandidatesTable = ({
   );
 
   return (
-    <ComponentLoader isLoading={isLoading} loaderStatus={GET_CANDIDATES}>
       <Table
         rowKey={'id'}
         size="small"
@@ -216,6 +215,5 @@ export const CandidatesTable = ({
           />
         )}
       </Table>
-    </ComponentLoader>
   );
 };

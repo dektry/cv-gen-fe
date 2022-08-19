@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { apiClient } from 'services/apiService';
 import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
+import { IDBPosition } from 'models/IUser';
 
 const { headerWithJWT } = Helper;
 
@@ -64,10 +65,10 @@ export const getAllPositions = async () => {
   }
 };
 
-export const updatePositionRequest = async (id: string, data: any) => {
+export const updatePositionRequest = async (id: string, data: IDBPosition) => {
   const transformedPosition = {
     ...data,
-    group: data.group.id,
+    group: data.group?.id,
   };
   const response = await fetch(`${process.env.PUBLIC_URL}/positions/${id}`, {
     method: 'PUT',
@@ -78,7 +79,7 @@ export const updatePositionRequest = async (id: string, data: any) => {
   return response.json();
 };
 
-export const createPositionRequest = async (data: any) => {
+export const createPositionRequest = async (data: IDBPosition) => {
   const response = await fetch(`${process.env.REACT_APP_BE_URI}/positions`, {
     method: 'POST',
     mode: 'cors',

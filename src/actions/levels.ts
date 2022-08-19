@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { apiClient } from 'services/apiService';
 import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
+import { IDBLevels } from 'models/IUser';
 
 const { headerWithJWT } = Helper;
 
@@ -19,7 +20,7 @@ export const getAllLevels = async () => {
   }
 };
 
-export const updateLevelRequest = async (name: string, data: any) => {
+export const updateLevelRequest = async (name: string, data: IDBLevels) => {
   const response = await fetch(`${process.env.REACT_APP_BE_URI}/levels`, {
     method: 'PUT',
     mode: 'cors',
@@ -29,7 +30,7 @@ export const updateLevelRequest = async (name: string, data: any) => {
   return response.json();
 };
 
-export const createLevelRequest = async (data: any) => {
+export const createLevelRequest = async (data: IDBLevels) => {
   const response = await fetch(`${process.env.REACT_APP_BE_URI}/levels`, {
     method: 'POST',
     mode: 'cors',

@@ -92,12 +92,12 @@ export const InterviewResult = () => {
         <InterviewInfoCard
           isEdited={isEdited}
           cardOptions="position"
-          options={allPositions}
+          positions={allPositions}
         />
         <InterviewInfoCard
           isEdited={isEdited}
           cardOptions="level"
-          options={allLevels}
+          levels={allLevels}
         />
         <Button className={classes.editButton} onClick={handleEdit}>
           {isEdited ? 'Disable edit' : 'Edit'}

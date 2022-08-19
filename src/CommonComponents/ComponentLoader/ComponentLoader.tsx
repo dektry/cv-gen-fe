@@ -3,7 +3,7 @@ import { useStyles } from './styles';
 
 interface IProps {
   isLoading: boolean;
-  children: any;
+  children: React.ReactNode;
   loaderStatus: string;
 }
 

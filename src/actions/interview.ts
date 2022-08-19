@@ -1,7 +1,6 @@
 import { message } from 'antd';
 
 import { apiClient } from 'services/apiService';
-import Helper from '../helper';
 import endpoints from '../config/endpoint.json';
 
 import { ICompleteInterview } from 'models/IInterview';

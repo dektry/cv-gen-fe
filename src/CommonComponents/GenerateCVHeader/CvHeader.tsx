@@ -8,7 +8,7 @@ import { useStyles } from './styles';
 
 interface IProps {
   backPath: string;
-  children?: React.ReactChild | React.ReactChild[];
+  children?: React.ReactNode | React.ReactNode[];
   disabled?: boolean;
 }
 

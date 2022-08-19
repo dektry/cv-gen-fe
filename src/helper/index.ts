@@ -1,5 +1,9 @@
+interface IParams {
+  [key: string]: number | string | boolean;
+}
+
 class Helper {
-  getQueryString = (params: any) => {
+  getQueryString = (params: IParams) => {
     const esc = encodeURIComponent;
     return Object.keys(params)
       .map((k) => `${esc(k)}=${esc(params[k])}`)

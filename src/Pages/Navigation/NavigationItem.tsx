@@ -4,8 +4,8 @@ import { useIsMobile } from 'CommonComponents/Responsive';
 import classNames from 'classnames';
 
 interface IProps {
-  children?: React.ReactChild | React.ReactChild[];
-  icon?: React.ReactChild | React.ReactChild[];
+  children?: React.ReactNode | React.ReactNode[];
+  icon?: React.ReactNode | React.ReactNode[];
   selectedItem: string;
   itemKey: navigationKeys;
   setSelectedItem: React.Dispatch<React.SetStateAction<navigationKeys>>;

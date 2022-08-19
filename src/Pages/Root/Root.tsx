@@ -22,7 +22,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { useStyles } from './styles';
 
-const { Content, Sider, Header } = Layout;
+const { Sider, Header } = Layout;
 
 
 export const RootUnwrapped = () => {

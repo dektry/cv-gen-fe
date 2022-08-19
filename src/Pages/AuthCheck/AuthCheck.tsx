@@ -17,7 +17,7 @@ import { PreLoader } from 'CommonComponents/PreLoader';
 import { FetchApiGate } from 'CommonComponents/FetchApiGate';
 
 interface IProps {
-  children: React.ReactChild | React.ReactChild[];
+  children: React.ReactNode | React.ReactNode[];
 }
 
 export const AuthCheck = ({ children }: IProps) => {

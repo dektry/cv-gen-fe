@@ -8,5 +8,6 @@
     "interviews": "/interviews",
     "employee": "/employee",
     "positionGroups": "/position-groups",
-    "positions": "/positions"
+    "positions": "/positions",
+    "login": "/auth/login"
   }

@@ -236,7 +236,7 @@ export const SkillMatrix = ({
                       skillGroup.uuid,
                       value,
                       idx,
-                      level.id,
+                      level.id ? level.id : '',
                     )
                   }
                 >

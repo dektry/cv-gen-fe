@@ -18,11 +18,12 @@ type CardOptions = 'level' | 'position';
 interface IProps {
   isEdited: boolean;
   cardOptions: CardOptions;
-  options: IDBLevels[] | IDBPosition[];
+  levels?: IDBLevels[];
+  positions?: IDBPosition[];
 }
 
 export const InterviewInfoCard = (props: IProps) => {
-  const { isEdited, cardOptions, options } = props;
+  const { isEdited, cardOptions, levels, positions } = props;
 
   const classes = useStyles();
 
@@ -57,7 +58,13 @@ export const InterviewInfoCard = (props: IProps) => {
     selectValue,
   } = currentCardOptions;
 
-  const selectedOption = options.find(el => el.id === selectValue);
+  const options = levels ? levels : positions;
+  let selectedOption;
+  if (levels) {
+    selectedOption = levels.find((el: IDBLevels)  => el.id === selectValue);
+  } else if (positions) {
+    selectedOption = positions.find((el: IDBPosition)  => el.id === selectValue);
+  }
   const name = selectedOption?.name;
 
   const handleSelectChange = (value: string) => {
@@ -80,7 +87,7 @@ export const InterviewInfoCard = (props: IProps) => {
             value={selectValue}
             className={classes.select}
           >
-            {options.map((el: IDBLevels | IDBPosition) => (
+            {options?.map((el: IDBLevels | IDBPosition) => (
               <Select.Option value={el.id} key={el.id}>
                 {el.name}
               </Select.Option>

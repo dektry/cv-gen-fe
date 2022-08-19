@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function useInput(initVal: string) {
   const [value, setValue] = useState(initVal);
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
   //type number
-  const onChangeNumber = (event: any) => {
+  const onChangeNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (value === '' || /^\d+$/.test(value)) {
       setValue(value);

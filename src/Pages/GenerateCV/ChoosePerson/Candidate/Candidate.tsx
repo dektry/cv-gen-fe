@@ -21,14 +21,13 @@ import {
 } from 'store/reducers/candidates';
 
 import paths from 'config/routes.json';
-import { GET_CANDIDATE } from 'Pages/AuthCheck/utils/constants';
 import { Languages, LanguageLevels } from '../../utils/constants';
 
 import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
-import { ComponentLoader } from 'CommonComponents/ComponentLoader';
 import { ICandidate } from 'models/ICandidate';
 import { updateCandidate } from 'actions/candidate';
 import { useStyles } from './styles';
+// TODO: implement loader logic
 
 function cleanCandidateFields(
   candidate: Partial<ICandidate>,
@@ -81,8 +80,6 @@ export const Candidate = () => {
   return (
     <div>
       <GenerateCvHeader backPath={paths.generateCVcandidateList} />
-
-      <ComponentLoader isLoading={isLoading} loaderStatus={GET_CANDIDATE}>
         <Form className={classes.form}>
           <Form.Item>
             <Input
@@ -211,7 +208,6 @@ export const Candidate = () => {
             </div>
           </div>
         </Form>
-      </ComponentLoader>
     </div>
   );
 };

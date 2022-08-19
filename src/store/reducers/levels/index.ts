@@ -12,7 +12,7 @@ import {
   ILevelsState,
   IUpdateLevel,
 } from 'models/IUser';
-import { defaultPosition, DELETED_LEVELS } from 'Pages/AuthCheck/utils/constants';
+import { defaultLevel, DELETED_LEVELS } from 'Pages/AuthCheck/utils/constants';
 import {
   createLevelRequest,
   getAllLevels,
@@ -45,7 +45,7 @@ export const updateLevel = createAsyncThunk(
 );
 
 const initialState: ILevelsState = {
-  chosenLevel: defaultPosition,
+  chosenLevel: defaultLevel,
   isEditLevel: false,
   allLevels: [],
   levelsSchema: [],
@@ -80,7 +80,7 @@ const levels = createSlice({
     builder.addCase(loadLevels.fulfilled, (state, { payload }) => {
       state.allLevels = sortLevels(payload);
       state.levelsSchema = payload.map(level => ({
-        id: level.id,
+        id: level.id ? level.id : '',
         name: level.name,
         value: 'none',
       }));

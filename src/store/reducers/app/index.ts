@@ -13,6 +13,7 @@ import {
   loadPositionGroupsAction,
   loginAction,
 } from './actions';
+import { defaultUser } from 'Pages/AuthCheck/utils/constants';
 
 export const logIn = createAsyncThunk(
   loginAction,
@@ -32,6 +33,7 @@ export const loadPositionGroups = createAsyncThunk(
 const initialState: IAppState = {
   positionGroups: [],
   levelGroups: [],
+  user: defaultUser
 };
 
 const app = createSlice({
@@ -43,12 +45,12 @@ const app = createSlice({
     },
     logOut: state => {
       localStorage.clear();
-      state.user = null;
+      state.user = defaultUser;
     },
   },
   extraReducers: builder => {
     builder.addCase(logIn.fulfilled, (state, { payload }) => {
-      state.user = payload;
+        state.user = payload;
     });
     builder.addCase(loadPositionGroups.fulfilled, (state, { payload }) => {
       state.positionGroups = payload;

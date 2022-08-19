@@ -6,6 +6,7 @@ export const INIT = 'INIT';
 export const ACCESS_TOKEN = 'access-token';
 
 export const defaultGroup = {
+  id: '',
   name: '',
   color: '',
 };
@@ -51,5 +52,6 @@ export const defaultUser: IDBUser = {
   level: defaultLevel,
   isActive: true,
   balance: 160,
+  permissions: ['']
 };
 
