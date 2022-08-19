@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
-import { generatePath, useHistory } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { Button, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -40,7 +40,7 @@ import { levelTypes, INTERVIEW } from './utils/constants';
 export const InterviewForm = () => {
   const classes = useStyles();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const { currentCandidate } = useSelector(candidatesSelector);
@@ -120,7 +120,7 @@ export const InterviewForm = () => {
       dispatch(finishInterview(interviewData));
     }
 
-    history.push(
+    navigate(
       generatePath(
         paths.generateCVtechnicalInterviewResult.replace(
           ':candidateId',

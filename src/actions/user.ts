@@ -198,51 +198,6 @@ export const loginFromJwt = async (
   }
 };
 
-export const handleCorrectUserSubmit = async (
-  chosenUser: IDBUser,
-  dispatch: React.Dispatch<any>,
-  setIsUpdatingUser: React.Dispatch<React.SetStateAction<boolean>>,
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>,
-  update: () => void,
-) => {
-  setIsUpdatingUser(true);
-
-  let response;
-  if (!chosenUser.id) {
-    const newUser = omit(chosenUser, ['id']);
-    response = await createUser(newUser);
-  } else {
-    response = await updateUser(chosenUser.id, chosenUser);
-  }
-
-  if (!response.error) {
-    await update();
-    setOpenModal(false);
-    dispatch({ type: EDIT_PROFILE, payload: false });
-    dispatch({
-      type: CHOOSE_USER,
-      payload: defaultUser,
-    });
-  }
-
-  if (response.email) {
-    message.success({
-      content: chosenUser.id ? USER_UPDATED : USER_CREATED,
-      duration: 1.5,
-    });
-  } else {
-    const messages = isArray(response.message)
-      ? response.message
-      : [response.message];
-    messages.map((mes: string) =>
-      message.error({
-        content: mes,
-        duration: 2,
-      }),
-    );
-  }
-  setIsUpdatingUser(false);
-};
 
 export const getAvatarUrl = (fileName: string | undefined) => {
   return fileName

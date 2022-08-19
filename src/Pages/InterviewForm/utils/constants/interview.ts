@@ -1,4 +1,4 @@
-import { LevelTypesEnum } from 'interfaces/interview.interface';
+import { LevelTypesEnum } from 'models/IInterview';
 
 export const levelTypes: { [key in LevelTypesEnum]: string } = {
   [LevelTypesEnum.None]: 'None',

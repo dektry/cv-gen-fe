@@ -180,7 +180,7 @@ export const CandidatesTable = ({
         expandable={expandableParams}
         pagination={paginationObj}
         loading={isLoading}
-        onChange={handleChange}
+        // onChange={handleChange} // TODO: fix problem with onChange types
       >
         <Column
           title={CANDIDATES.FULLNAME}

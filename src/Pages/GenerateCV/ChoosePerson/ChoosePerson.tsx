@@ -1,35 +1,35 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-import { PageNotFound } from 'components/Atoms/PageNotFound/PageNotFound';
+import { PageNotFound } from 'CommonComponents/PageNotFound';
 
-import { paths } from 'routes/paths';
-import { Candidate } from 'scenes/generateCV/ChoosePerson/Candidate/Candidate';
-import { Candidates } from 'scenes/generateCV/ChoosePerson/Candidates/Candidates';
-import { ListOfOptions } from 'scenes/generateCV/ChoosePerson/ListOfOptions/ListOfOptions';
+import paths from 'config/routes.json';
+import { Candidate } from '../ChoosePerson/Candidate';
+import { Candidates } from '../ChoosePerson/Candidates';
+import { ListOfOptions } from './ListOfOptions';
 import { Employees } from './Employees/Employees';
 import { Employee } from './Employee/Employee';
 
 export const ChoosePerson = () => {
   return (
-    <Switch>
-      <Route exact path={paths.generateCVchoosePerson}>
+    <Routes>
+      <Route path={paths.generateCVchoosePerson}>
         <ListOfOptions />
       </Route>
-      <Route exact path={paths.generateCVcandidateList}>
+      <Route path={paths.generateCVcandidateList}>
         <Candidates />
       </Route>
-      <Route exact path={paths.candidate}>
+      <Route path={paths.candidate}>
         <Candidate />
       </Route>
-      <Route exact path={paths.generateCVemployeesList}>
+      <Route path={paths.generateCVemployeesList}>
         <Employees />
       </Route>
-      <Route exact path={paths.employee}>
+      <Route path={paths.employee}>
         <Employee />
       </Route>
       <Route path="*">
         <PageNotFound />
       </Route>
-    </Switch>
+    </Routes>
   );
 };

@@ -1,15 +1,15 @@
 import { useState, useCallback, Dispatch, SetStateAction } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 
-import { ISoftSkill } from 'interfaces/softskillsInterview.interface';
+import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch } from 'store';
 import {
   softSkillInterviewSelector,
   setSoftSkillsInterview,
   setSoftSkillsList,
-} from 'store/softskillsInterview';
+} from 'store/reducers/softskillsInterview';
 
 import Checkbox from 'antd/lib/checkbox';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';

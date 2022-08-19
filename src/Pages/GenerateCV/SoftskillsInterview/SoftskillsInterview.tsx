@@ -2,35 +2,36 @@ import React, { useCallback, useState, useEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'store/store';
-import { candidatesSelector } from 'store/candidates';
-import { interviewSelector } from 'store/interview';
+import { useAppDispatch } from 'store';
+import { candidatesSelector } from 'store/reducers/candidates';
+import { interviewSelector } from 'store/reducers/interview';
 import {
   setSoftSkillsInterview,
   softSkillInterviewSelector,
   finishSoftSkillInterview,
   saveChangesToSoftSkillsInterview,
   setSoftSkillInterviewSkillsList,
-} from 'store/softskillsInterview';
+} from 'store/reducers/softskillsInterview';
 
 import { useStyles } from './styles';
-import Input from 'antd/lib/input';
-import Button from 'antd/lib/button';
+import { Input , Button } from 'antd';
 
-import { paths } from 'routes/paths';
+import paths from 'config/routes.json';
 import { CandidatePopOver } from '../ChoosePerson/Candidate/CandidatePopOver';
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
 import { SkillWithCheckbox } from './SkillWithCheckbox';
 import { SelectPositions } from './SelectPositions';
 import { SoftSkillModal } from './SoftSkillModal';
-import { ButtonWithLink } from 'components/Atoms/ButtonWithLink';
-import { ISoftSkill } from 'interfaces/softskillsInterview.interface';
+import { ButtonWithLink } from 'CommonComponents/ButtonWithLink';
+import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
-import { SOFT_SKILL_INTERVIEW } from 'constants/titles';
+import { SOFT_SKILL_INTERVIEW } from 'Pages/CandidatesTable/utils/constants';
 
 const { TextArea } = Input;
 
-type InputProps = HTMLTextAreaElement & Input;
+type IProps = {props: { id: string }};
+
+type InputProps = HTMLTextAreaElement & typeof Input & IProps;
 
 export const SoftskillsInterview = () => {
   const dispatch = useAppDispatch();

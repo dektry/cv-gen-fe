@@ -2,7 +2,7 @@ import {
   IInterviewAnswers,
   IInterviewResult,
   IInterviewMatrix,
-} from 'interfaces/interview.interface';
+} from 'models/IInterview';
 
 export const processAnswers = (
   interviewResult: IInterviewResult,

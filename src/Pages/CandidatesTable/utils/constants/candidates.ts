@@ -1,4 +1,4 @@
-import { ICandidate } from '../interfaces/candidates.interface';
+import { ICandidate } from 'models/ICandidate';
 
 export const CANDIDATE_TABLE_KEYS = {
   id: 'id',

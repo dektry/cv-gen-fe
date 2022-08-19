@@ -1,20 +1,20 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import {
   chooseInterviewPosition,
   chooseInterviewLevel,
   softSkillInterviewSelector,
-} from 'store/softskillsInterview';
-import * as interviewStore from 'store/interview';
-import { positionsSelector } from 'store/positions';
-import { levelsSelector } from 'store/levels';
+} from 'store/reducers/softskillsInterview';
+import * as interviewStore from 'store/reducers/interview';
+import { positionsSelector } from 'store/reducers/positions';
+import { levelsSelector } from 'store/reducers/levels';
 
 import { Select, Button } from 'antd';
 
 import { useStyles } from './styles';
-import { SOFT_SKILL_INTERVIEW } from 'constants/titles';
+import { SOFT_SKILL_INTERVIEW } from 'Pages/CandidatesTable/utils/constants';
 
 interface IProps {
   setFieldsDisabled: Dispatch<SetStateAction<boolean>>;

@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
-import { paths } from 'routes/paths';
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
+import { useRef } from 'react';
+import paths from 'config/routes.json';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
 import { useStyles } from './styles';
-import { CandidatesTable } from 'components/Molecules/CandidatesTable/CandidatesTable';
-import { SearchWithAutocomplete } from 'components/Atoms/SearchWithAutocomplete/SearchWithAutocomplete';
-import { loadCandidates } from 'store/candidates';
-import { useAppDispatch } from 'store/store';
-import { CANDIDATES } from 'constants/titles';
+import { CandidatesTable } from 'Pages/CandidatesTable';
+import { SearchWithAutocomplete } from 'CommonComponents/SearchWithAutocomplete';
+import { loadCandidates } from 'store/reducers/candidates';
+import { useAppDispatch } from 'store';
+import { CANDIDATES } from 'Pages/CandidatesTable/utils/constants';
 import { Typography } from 'antd';
-import { SelectCandidateType } from 'components/Atoms/SelectCandidateType/SelectCandidateType';
+import { SelectCandidateType } from 'Pages/SelectCandidateType';
 
 export const Candidates = () => {
   const classes = useStyles();

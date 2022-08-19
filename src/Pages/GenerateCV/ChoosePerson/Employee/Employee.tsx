@@ -4,17 +4,17 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Form, Input, Image, Button, Space } from 'antd';
 
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch } from 'store';
 import {
   employeesSelector,
   loadEmployee,
   setEmployee,
   saveChangesToEmployee,
-} from 'store/employees';
+} from 'store/reducers/employees';
 
 import { useStyles } from './styles';
-import { paths } from 'routes/paths';
-import { GenerateCvHeader } from 'components/Molecules/GenerateCVHeader/CvHeader';
+import paths from 'config/routes.json';
+import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
 
 export const Employee = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,7 +26,9 @@ export const Employee = () => {
   const { currentEmployee } = useSelector(employeesSelector);
 
   useEffect(() => {
-    dispatch(loadEmployee(id));
+    if(id) {
+      dispatch(loadEmployee(id));
+    }
   }, [id, dispatch]);
 
   const handleChange = useCallback(

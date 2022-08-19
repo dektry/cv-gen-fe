@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { loginFromJwt } from 'actions/user';
 
-import { appSelector, loadPermissions } from 'store/reducers/app';
+import { appSelector } from 'store/reducers/app';
 import { useAppDispatch } from 'store';
 
 import { IDBUser } from 'models/IUser';
@@ -31,9 +31,6 @@ export const AuthCheck = ({ children }: IProps) => {
   useEffect(() => {
     loginFromJwt(setIsSuccess, setCurrentUser, dispatch, currentUser);
 
-    if (currentUser?.id) {
-      dispatch(loadPermissions());
-    }
   }, [currentUser]);
 
   if (user === undefined) {
