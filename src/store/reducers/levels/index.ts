@@ -12,13 +12,13 @@ import {
   ILevelsState,
   IUpdateLevel,
 } from 'models/IUser';
-import { defaultLevel, DELETED_LEVELS } from 'Pages/AuthCheck/utils/constants';
+import { defaultLevel, DELETED_LEVELS } from 'pages/AuthCheck/utils/constants';
 import {
   createLevelRequest,
   getAllLevels,
   updateLevelRequest,
 } from 'actions/levels';
-import { sortLevels } from 'Pages/InterviewForm/utils/helpers/sortLevels';
+import { sortLevels } from 'pages/InterviewForm/utils/helpers/sortLevels';
 
 
 export const loadLevels = createAsyncThunk(

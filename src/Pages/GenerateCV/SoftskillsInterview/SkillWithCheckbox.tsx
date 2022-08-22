@@ -14,7 +14,7 @@ import {
 import Checkbox from 'antd/lib/checkbox';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
-import { useStyles } from './styles';
+import { useStyles } from 'pages/GenerateCV/SoftskillsInterview/styles';
 
 interface IProps {
   skill: ISoftSkill;

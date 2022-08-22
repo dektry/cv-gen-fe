@@ -1,0 +1,1 @@
+export * from 'pages/GenerateCV/ChoosePerson/Employee/Employee';

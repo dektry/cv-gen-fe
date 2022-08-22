@@ -1,1 +1,1 @@
-export * from './Header';
+export * from 'pages/Header/Header';

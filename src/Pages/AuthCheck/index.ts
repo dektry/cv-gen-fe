@@ -1,1 +1,1 @@
-export * from './AuthCheck';
+export * from 'pages/AuthCheck/AuthCheck';

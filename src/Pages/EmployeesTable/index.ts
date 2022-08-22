@@ -1,1 +1,1 @@
-export * from './EmployeesTable';
+export * from 'pages/EmployeesTable/EmployeesTable';

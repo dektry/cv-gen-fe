@@ -1,1 +1,1 @@
-export * from './ListOfOptions';
+export * from 'pages/GenerateCV/ChoosePerson/ListOfOptions/ListOfOptions';

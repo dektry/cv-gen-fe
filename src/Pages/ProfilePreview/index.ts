@@ -1,1 +1,1 @@
-export * from './ProfilePreview';
+export * from 'pages/ProfilePreview/ProfilePreview';

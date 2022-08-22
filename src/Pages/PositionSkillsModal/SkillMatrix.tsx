@@ -12,10 +12,10 @@ import {
 } from 'models/IUser';
 import { LevelTypesEnum } from 'models/IInterview';
 
-import { levelTypes } from '../InterviewForm/utils/constants';
-import { StateProps } from './PositionSkillsModal';
+import { levelTypes } from 'pages/InterviewForm/utils/constants';
+import { StateProps } from 'pages/PositionSkillsModal/PositionSkillsModal';
 
-import { useStyles } from './styles';
+import { useStyles } from 'pages/PositionSkillsModal/styles';
 
 const { Option } = Select;
 

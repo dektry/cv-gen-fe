@@ -5,9 +5,9 @@ import paths from 'config/routes.json';
 import { useSelector } from 'react-redux';
 import { candidatesSelector } from 'store/reducers/candidates';
 
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
-import { InterviewResult } from 'Pages/InterviewResult';
-import { ButtonWithLink } from 'CommonComponents/ButtonWithLink';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
+import { InterviewResult } from 'pages/InterviewResult';
+import { ButtonWithLink } from 'common-components/ButtonWithLink';
 
 export const InterviewResults = () => {
   const { id } = useParams<{ id: string }>();

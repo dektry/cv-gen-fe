@@ -1,8 +1,8 @@
 import { message } from 'antd';
 
 import { apiClient } from 'services/apiService';
-import Helper from '../helper';
-import endpoints from '../config/endpoint.json';
+import Helper from 'helper';
+import endpoints from 'config/endpoint.json';
 import { IDBPosition } from 'models/IUser';
 
 const { headerWithJWT } = Helper;

@@ -1,1 +1,1 @@
-export * from './CandidateShortCard';
+export * from 'pages/CandidateShortCard/CandidateShortCard';

@@ -21,12 +21,12 @@ import {
 } from 'store/reducers/candidates';
 
 import paths from 'config/routes.json';
-import { Languages, LanguageLevels } from '../../utils/constants';
+import { Languages, LanguageLevels } from 'pages/GenerateCV/utils/constants';
 
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { ICandidate } from 'models/ICandidate';
 import { updateCandidate } from 'actions/candidate';
-import { useStyles } from './styles';
+import { useStyles } from 'pages/GenerateCV/ChoosePerson/Candidate/styles';
 // TODO: implement loader logic
 
 function cleanCandidateFields(

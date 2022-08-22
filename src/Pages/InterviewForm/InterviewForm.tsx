@@ -6,7 +6,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { Button, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { PositionSkillsModal } from '../PositionSkillsModal/PositionSkillsModal';
+import { PositionSkillsModal } from 'pages/PositionSkillsModal';
 
 import { useAppDispatch } from 'store';
 import {
@@ -24,8 +24,8 @@ import { loadSkillMatrix, positionsSelector } from 'store/reducers/positions';
 import { candidatesSelector } from 'store/reducers/candidates';
 import { levelsSelector } from 'store/reducers/levels';
 
-import { processAnswers } from './utils/helpers/processAnswers';
-import { useStyles } from './styles';
+import { processAnswers } from 'pages/InterviewForm/utils/helpers/processAnswers';
+import { useStyles } from 'pages/InterviewForm/styles';
 import paths from 'config/routes.json';
 
 import {
@@ -35,7 +35,7 @@ import {
   ICompleteInterview,
 } from 'models/IInterview';
 
-import { levelTypes, INTERVIEW } from './utils/constants';
+import { levelTypes, INTERVIEW } from 'pages/InterviewForm/utils/constants';
 
 export const InterviewForm = () => {
   const classes = useStyles();

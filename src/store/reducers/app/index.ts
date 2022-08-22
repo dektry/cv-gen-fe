@@ -13,7 +13,7 @@ import {
   loadPositionGroupsAction,
   loginAction,
 } from './actions';
-import { defaultUser } from 'Pages/AuthCheck/utils/constants';
+import { defaultUser } from 'pages/AuthCheck/utils/constants';
 
 export const logIn = createAsyncThunk(
   loginAction,

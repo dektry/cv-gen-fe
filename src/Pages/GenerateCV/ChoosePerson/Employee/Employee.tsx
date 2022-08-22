@@ -12,9 +12,9 @@ import {
   saveChangesToEmployee,
 } from 'store/reducers/employees';
 
-import { useStyles } from './styles';
+import { useStyles } from 'pages/GenerateCV/ChoosePerson/Employee/styles';
 import paths from 'config/routes.json';
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 
 export const Employee = () => {
   const { id } = useParams<{ id: string }>();

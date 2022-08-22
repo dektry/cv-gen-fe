@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -9,8 +9,8 @@ import { interviewSelector } from 'store/reducers/interview';
 
 import { createSkillMatrix } from 'actions/skills';
 import { ILevelsSchema, IMatrix, IDBLevels } from 'models/IUser';
-import { SkillMatrix } from './SkillMatrix';
-import { useStyles } from './styles';
+import { SkillMatrix } from 'pages/PositionSkillsModal/SkillMatrix';
+import { useStyles } from 'pages/PositionSkillsModal/styles';
 
 export interface StateProps {
   levels: ILevelsSchema[];

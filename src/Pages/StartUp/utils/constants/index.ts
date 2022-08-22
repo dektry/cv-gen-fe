@@ -1,1 +1,1 @@
-export * from './messages';
+export * from 'pages/StartUp/utils/constants/messages';

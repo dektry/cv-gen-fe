@@ -1,1 +1,1 @@
-export * from './InterviewForm';
+export * from 'pages/InterviewForm/InterviewForm';

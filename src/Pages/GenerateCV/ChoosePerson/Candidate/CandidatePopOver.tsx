@@ -3,7 +3,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { candidatesSelector } from 'store/reducers/candidates';
-import { useStyles } from './styles';
+import { useStyles } from 'pages/GenerateCV/ChoosePerson/Candidate/styles';
 
 export const CandidatePopOver = () => {
   const {

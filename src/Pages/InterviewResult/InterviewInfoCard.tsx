@@ -10,8 +10,8 @@ import {
 import { candidatesSelector } from 'store/reducers/candidates';
 import { IDBLevels, IDBPosition } from 'models/IUser';
 
-import { useStyles } from './styles';
-import { INTERVIEW } from '../InterviewForm/utils/constants';
+import { useStyles } from 'pages/InterviewResult/styles';
+import { INTERVIEW } from 'pages/InterviewForm/utils/constants';
 
 type CardOptions = 'level' | 'position';
 

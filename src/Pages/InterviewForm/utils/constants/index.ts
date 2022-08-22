@@ -1,2 +1,2 @@
-export * from './interview';
-export * from './titles';
+export * from 'pages/InterviewForm/utils/constants/interview';
+export * from 'pages/InterviewForm/utils/constants/titles';

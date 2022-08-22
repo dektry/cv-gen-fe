@@ -1,1 +1,1 @@
-export * from './PositionSkillsModal';
+export * from 'pages/PositionSkillsModal/PositionSkillsModal';

@@ -16,14 +16,14 @@ import { ImportOutlined, LineChartOutlined } from '@ant-design/icons';
 import { getAvatarUrl } from 'actions/user';
 import { IDBUser } from 'models/IUser';
 
-import { JobPositionTag } from '../JobPositionTag';
+import { JobPositionTag } from 'pages/JobPositionTag';
 
-import { CAREER, CLOSE, LOGOUT as LOGOUT_STR } from './utils/constants';
-import { MY_CAREER } from '../EmployeesTable/utils/constants';
+import { CAREER, CLOSE, LOGOUT as LOGOUT_STR } from 'pages/ProfilePreview/utils/constants';
+import { MY_CAREER } from 'pages/EmployeesTable/utils/constants';
 import paths from 'config/routes.json';
 import { useAppDispatch } from 'store';
 import { logOut } from 'store/reducers/app';
-import { useStyles } from './styles';
+import { useStyles } from 'pages/ProfilePreview/styles';
 
 interface IProps {
   chosenUser: IDBUser | null | undefined;

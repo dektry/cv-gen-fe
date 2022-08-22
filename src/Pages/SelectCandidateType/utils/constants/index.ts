@@ -1,1 +1,1 @@
-export * from './forms';
+export * from 'pages/SelectCandidateType/utils/constants/forms';

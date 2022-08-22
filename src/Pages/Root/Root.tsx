@@ -1,26 +1,26 @@
 import { Suspense, useState, memo } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 // import { Routes } from './Routes'; // TODO: fix routers import
-import { Navigation } from '../Navigation';
-import { permissions } from '../Navigation/utils/constants';
+import { Navigation } from 'pages/Navigation';
+import { permissions } from 'pages/Navigation/utils/constants';
 import { Layout, Drawer } from 'antd';
-import { AuthCheck } from '../AuthCheck';
-import { PermissionGate } from '../PermissionGate';
-import { ErrorBoundary } from '../ErrorBoundary';
+import { AuthCheck } from 'pages/AuthCheck';
+import { PermissionGate } from 'pages/PermissionGate';
+import { ErrorBoundary } from 'pages/ErrorBoundary';
 import 'antd/dist/antd.css';
 import { MenuOutlined } from '@ant-design/icons';
 import logo from 'images/logo.svg';
 import shortLogo from 'images/favicon.png';
 
-import { useIsMobile } from 'CommonComponents/Responsive';
-import { PreLoader } from 'CommonComponents/PreLoader';
+import { useIsMobile } from 'common-components/Responsive';
+import { PreLoader } from 'common-components/PreLoader';
 
-import { StartUp } from '../StartUp/StartUp';
+import { StartUp } from 'pages/StartUp/StartUp';
 import { Provider } from 'react-redux';
 import { store, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { useStyles } from './styles';
+import { useStyles } from 'pages/Root/styles';
 
 const { Sider, Header } = Layout;
 

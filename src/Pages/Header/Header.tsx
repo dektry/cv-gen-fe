@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
-import { ProfilePreview } from '../ProfilePreview';
-import { useStyles } from './styles';
+import { ProfilePreview } from 'pages/ProfilePreview';
+import { useStyles } from 'pages/Header/styles';
 import { useSelector } from 'react-redux';
 import { appSelector } from 'store/reducers/app';
 

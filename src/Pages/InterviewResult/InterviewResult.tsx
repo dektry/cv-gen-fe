@@ -8,14 +8,14 @@ import { candidatesSelector } from 'store/reducers/candidates';
 import { positionsSelector } from 'store/reducers/positions';
 import { levelsSelector } from 'store/reducers/levels';
 
-import { useStyles } from './styles';
-import { INTERVIEW } from '../InterviewForm/utils/constants';
+import { useStyles } from 'pages/InterviewResult/styles';
+import { INTERVIEW } from 'pages/InterviewForm/utils/constants';
 
 import { InterviewResultsTable } from './InterviewResultsTable';
-import { InterviewInfoCard } from './InterviewInfoCard';
+import { InterviewInfoCard } from 'pages/InterviewResult/InterviewInfoCard';
 import { ICompleteInterview } from 'models/IInterview';
 
-import { processAnswers } from '../InterviewForm/utils/helpers/processAnswers';
+import { processAnswers } from 'pages/InterviewForm/utils/helpers/processAnswers';
 
 export const InterviewResult = () => {
   const dispatch = useAppDispatch();

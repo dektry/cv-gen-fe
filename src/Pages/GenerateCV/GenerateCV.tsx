@@ -7,15 +7,14 @@ import {
 } from 'react-router-dom';
 import { Tabs } from 'antd';
 
-import { PageNotFound } from 'CommonComponents/PageNotFound';
-import { Header } from 'Pages/Header';
-import { GenerateCVsteps } from './utils/constants';
-import { GENERATE_CV } from 'Pages/CandidatesTable/utils/constants';
+import { PageNotFound } from 'common-components/PageNotFound';
+import { Header } from 'pages/Header';
+import { GenerateCVsteps, GENERATE_CV } from './utils/constants';
 import paths from 'config/routes.json';
-import { ChoosePerson } from './ChoosePerson/ChoosePerson';
-import { TechnicalInterview } from './TechnicalInterview';
-import { SoftskillsInterview } from './SoftskillsInterview';
-import { useStyles } from './styles';
+import { ChoosePerson } from 'pages/GenerateCV/ChoosePerson/ChoosePerson';
+import { TechnicalInterview } from 'pages/GenerateCV/TechnicalInterview/TechnicalInterview';
+import { SoftskillsInterview } from 'pages/GenerateCV/SoftskillsInterview';
+import { useStyles } from 'pages/GenerateCV/styles';
 
 const { TabPane } = Tabs;
 
