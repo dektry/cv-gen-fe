@@ -20,7 +20,6 @@ import {
 } from 'actions/levels';
 import { sortLevels } from 'pages/InterviewForm/utils/helpers/sortLevels';
 
-
 export const loadLevels = createAsyncThunk(
   loadLevelsAction,
   async (): Promise<IDBLevels[]> => {
