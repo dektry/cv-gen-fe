@@ -9,10 +9,10 @@ import { positionsSelector } from 'store/reducers/positions';
 import { levelsSelector } from 'store/reducers/levels';
 
 import { useStyles } from './styles';
-import { INTERVIEW } from '../InterviewForm/utils/constants';
+import { INTERVIEW } from './utils/constants';
 
 import { InterviewResultsTable } from './InterviewResultsTable';
-import { InterviewInfoCard } from './InterviewInfoCard';
+import { InterviewInfoCard } from '../InterviewResult/InterviewInfoCard';
 import { ICompleteInterview } from 'models/IInterview';
 
 import { processAnswers } from '../InterviewForm/utils/helpers/processAnswers';

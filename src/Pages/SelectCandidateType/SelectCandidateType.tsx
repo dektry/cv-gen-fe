@@ -4,8 +4,7 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
-import { defaultCurrentPage, defaultPageSize } from 'Pages/EmployeesTable/utils/constants';
-import { CandidatesSelectFilter } from './utils/constants';
+import { CandidatesSelectFilter, defaultCurrentPage, defaultPageSize } from './utils/constants';
 
 type SelectCandidateProps = {
   onChange: (props: Record<string, unknown>) => void;

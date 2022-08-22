@@ -17,15 +17,15 @@ import { useStyles } from './styles';
 import { Input , Button } from 'antd';
 
 import paths from 'config/routes.json';
-import { CandidatePopOver } from '../ChoosePerson/Candidate/CandidatePopOver';
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
-import { SkillWithCheckbox } from './SkillWithCheckbox';
-import { SelectPositions } from './SelectPositions';
-import { SoftSkillModal } from './SoftSkillModal';
-import { ButtonWithLink } from 'CommonComponents/ButtonWithLink';
+import { CandidatePopOver } from '../ChoosePerson/Candidate';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
+import { SkillWithCheckbox } from '../SoftskillsInterview';
+import { SelectPositions } from '../SoftskillsInterview';
+import { SoftSkillModal } from '../SoftskillsInterview';
+import { ButtonWithLink } from 'common-components/ButtonWithLink';
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
-import { SOFT_SKILL_INTERVIEW } from 'Pages/CandidatesTable/utils/constants';
+import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
 
 const { TextArea } = Input;
 

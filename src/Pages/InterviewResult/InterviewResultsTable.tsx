@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { interviewSelector } from 'store/reducers/interview';
 
 import { IInterviewResultAnswers } from 'models/IInterview';
-import { levelTypes, levelTypesPriority } from '../InterviewForm/utils/constants';
+import { levelTypes, levelTypesPriority } from './utils/constants';
 import { useStyles } from './styles';
 
 export const InterviewResultsTable = () => {

@@ -12,7 +12,7 @@ import {
 } from 'models/IUser';
 import { LevelTypesEnum } from 'models/IInterview';
 
-import { levelTypes } from '../InterviewForm/utils/constants';
+import { levelTypes } from './utils/constants';
 import { StateProps } from './PositionSkillsModal';
 
 import { useStyles } from './styles';

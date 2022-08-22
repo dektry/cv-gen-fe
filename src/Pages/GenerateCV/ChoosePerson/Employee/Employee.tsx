@@ -14,7 +14,7 @@ import {
 
 import { useStyles } from './styles';
 import paths from 'config/routes.json';
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 
 export const Employee = () => {
   const { id } = useParams<{ id: string }>();

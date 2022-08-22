@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { createUseStyles } from 'react-jss';
 import { Link, useLocation } from 'react-router-dom';
 
 import { 
@@ -8,43 +7,13 @@ import {
   GENERATE_CV,
   LIST_OF_CV,
  } from './utils/constants';
-import { desktopBreakpoints } from 'theme/constants';
 
 import { NavigationItem } from './NavigationItem';
 import classNames from 'classnames';
 
 import paths from 'config/routes.json';
 
-const useStyles = createUseStyles({
-  menu: {
-    [`@media (max-width: ${desktopBreakpoints[0] - 1}px)`]: {
-      margin: '-24px',
-      width: 'calc(100% + 48px)',
-      height: 'calc(100% + 48px)',
-    },
-    display: 'flex',
-    flexDirection: 'column',
-    '& li.ant-menu-item': {
-      display: 'flex',
-      alignItems: 'center',
-      paddingLeft: '24px',
-      '& a:hover': {
-        textDecoration: 'none',
-      },
-    },
-    '& li.ant-menu-item-hidden': {
-      display: 'none',
-    },
-    '&.ant-menu-inline-collapsed li.ant-menu-item': {
-      [`@media (min-width: ${desktopBreakpoints[0]}px)`]: {
-        padding: '0 calc(50% - 16px / 2)',
-      },
-    },
-    '& .ant-menu-inline-collapsed .ant-menu-submenu-title': {
-      paddingLeft: 'calc(50% - 16px / 2) !important',
-    },
-  },
-});
+import { useStyles } from './styles';
 
 
 interface IProps {

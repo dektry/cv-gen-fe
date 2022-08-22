@@ -11,7 +11,7 @@ import { candidatesSelector } from 'store/reducers/candidates';
 import { IDBLevels, IDBPosition } from 'models/IUser';
 
 import { useStyles } from './styles';
-import { INTERVIEW } from '../InterviewForm/utils/constants';
+import { INTERVIEW } from './utils/constants';
 
 type CardOptions = 'level' | 'position';
 

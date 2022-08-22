@@ -6,7 +6,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { Button, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { PositionSkillsModal } from '../PositionSkillsModal/PositionSkillsModal';
+import { PositionSkillsModal } from '../PositionSkillsModal';
 
 import { useAppDispatch } from 'store';
 import {

@@ -33,12 +33,11 @@ import {
   ACTIONS,
   CANDIDATES, 
   CANDIDATE_TABLE_KEYS,
-  defaultPageSize,
   defaultCandidate,
 } from './utils/constants';
 
 import paths from 'config/routes.json';
-import { useIsMobile } from 'CommonComponents/Responsive';
+import { useIsMobile } from 'common-components/Responsive';
 import { CandidateShortCard } from '../CandidateShortCard';
 // TODO: implement loader logic
 

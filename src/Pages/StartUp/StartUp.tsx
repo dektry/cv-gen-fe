@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { PreLoader } from 'CommonComponents/PreLoader';
-import { FetchApiGate } from 'CommonComponents/FetchApiGate';
+import { PreLoader } from 'common-components/PreLoader';
+import { FetchApiGate } from 'common-components/FetchApiGate';
 import {
   OOPS,
   POSITION_GROUPS_NOT_FOUND,

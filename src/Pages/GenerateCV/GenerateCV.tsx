@@ -7,10 +7,9 @@ import {
 } from 'react-router-dom';
 import { Tabs } from 'antd';
 
-import { PageNotFound } from 'CommonComponents/PageNotFound';
-import { Header } from 'Pages/Header';
-import { GenerateCVsteps } from './utils/constants';
-import { GENERATE_CV } from 'Pages/CandidatesTable/utils/constants';
+import { PageNotFound } from 'common-components/PageNotFound';
+import { Header } from '../Header';
+import { GenerateCVsteps, GENERATE_CV } from './utils/constants';
 import paths from 'config/routes.json';
 import { ChoosePerson } from './ChoosePerson/ChoosePerson';
 import { TechnicalInterview } from './TechnicalInterview';

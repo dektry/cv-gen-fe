@@ -2,12 +2,12 @@ import React, { useRef } from 'react';
 
 import Typography from 'antd/lib/typography';
 
-import { EmployeesTable } from 'Pages/EmployeesTable';
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
-import { SearchWithAutocomplete } from 'CommonComponents/SearchWithAutocomplete';
+import { EmployeesTable } from '../../../EmployeesTable';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
+import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 
 import paths from 'config/routes.json';
-import { EMPLOYEES } from 'Pages/EmployeesTable/utils/constants';
+import { EMPLOYEES } from '../../utils/constants';
 
 import { useAppDispatch } from 'store';
 import { getEmployeesList } from 'store/reducers/employees';

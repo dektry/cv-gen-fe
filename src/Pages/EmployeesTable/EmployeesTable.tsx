@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
 import { Table, Button, Space } from 'antd';
@@ -17,8 +17,8 @@ import {
 } from 'store/reducers/employees';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
-import { useStyles } from './styles';
-import { useIsMobile } from 'CommonComponents/Responsive';
+import { useStyles } from '../EmployeesTable/styles';
+import { useIsMobile } from 'common-components/Responsive';
 import {
   defaultCurrentPage,
   defaultPageSize,
@@ -34,7 +34,6 @@ const { Column } = Table;
 
 export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
   const navigate = useNavigate();
-  const [load, setLoad] = useState(false)
   const dispatch = useAppDispatch();
   const {
     employees,

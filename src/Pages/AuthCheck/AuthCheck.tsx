@@ -12,9 +12,8 @@ import {
   USER_AUTH_SERVER_NOT_FOUND,
 } from './utils/constants';
 
-
-import { PreLoader } from 'CommonComponents/PreLoader';
-import { FetchApiGate } from 'CommonComponents/FetchApiGate';
+import { PreLoader } from 'common-components/PreLoader';
+import { FetchApiGate } from 'common-components/FetchApiGate';
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[];

@@ -7,14 +7,14 @@ import {
   useParams,
 } from 'react-router-dom';
 import paths from 'config/routes.json';
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { useSelector } from 'react-redux';
 import { interviewSelector } from 'store/reducers/interview';
 import { candidatesSelector } from 'store/reducers/candidates';
-import { useStyles } from './styles';
-import { InterviewForm } from 'Pages/InterviewForm';
+import { InterviewForm } from '../../../InterviewForm';
 import { Button } from 'antd';
-import { CandidatePopOver } from 'Pages/GenerateCV/ChoosePerson/Candidate';
+import { CandidatePopOver } from '../../ChoosePerson/Candidate';
+import { useStyles } from './styles';
 
 export const InterviewSetUp = () => {
   const classes = useStyles();

@@ -23,7 +23,7 @@ import {
 import paths from 'config/routes.json';
 import { Languages, LanguageLevels } from '../../utils/constants';
 
-import { GenerateCvHeader } from 'CommonComponents/GenerateCVHeader';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { ICandidate } from 'models/ICandidate';
 import { updateCandidate } from 'actions/candidate';
 import { useStyles } from './styles';

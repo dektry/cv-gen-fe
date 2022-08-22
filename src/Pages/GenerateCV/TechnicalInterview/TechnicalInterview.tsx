@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
-import { PageNotFound } from 'CommonComponents/PageNotFound';
+import { PageNotFound } from 'common-components/PageNotFound';
 
 import paths from 'config/routes.json';
 import { InterviewResults } from './InterviewResults';
-import { InterviewSetUp } from './InterviewSetUP/InterviewSetUp';
+import { InterviewSetUp } from './InterviewSetUP';
 
 export const TechnicalInterview = () => {
   return (

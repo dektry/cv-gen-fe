@@ -14,7 +14,7 @@ import {
   IPositionsState,
   IUpdatePosition,
 } from 'models/IUser';
-import { defaultPosition, DELETED_POSITION } from 'Pages/AuthCheck/utils/constants';
+import { defaultPosition, DELETED_POSITION } from 'store/constants';
 import {
   createPositionRequest,
   getAllPositions,

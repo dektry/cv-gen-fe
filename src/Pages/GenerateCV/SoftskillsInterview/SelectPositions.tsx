@@ -14,7 +14,7 @@ import { levelsSelector } from 'store/reducers/levels';
 import { Select, Button } from 'antd';
 
 import { useStyles } from './styles';
-import { SOFT_SKILL_INTERVIEW } from 'Pages/CandidatesTable/utils/constants';
+import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
 
 interface IProps {
   setFieldsDisabled: Dispatch<SetStateAction<boolean>>;
