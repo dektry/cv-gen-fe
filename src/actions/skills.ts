@@ -1,13 +1,10 @@
 import { message } from 'antd';
 
 import { apiClient } from 'services/apiService';
-import Helper from 'helper';
 import endpoints from 'config/endpoint.json';
 
 import { ISoftSkillInterview, ISoftSkill } from 'models/ISoftSkillsInterview';
 import { IMatrixUpdate } from 'models/IUser';
-
-const { headerWithJWT } = Helper;
 
 export const getSkillMatrixByPositionId = async (positionId: string) => {
   try {
@@ -97,13 +94,13 @@ export const uploadNewSkill = async (data: Partial<ISoftSkill>) => {
   }
 };
 
-export const createSkillMatrix = async (data: IMatrixUpdate) => {
-  const response = await fetch(`${process.env.REACT_APP_BE_URI}/skillgroups`, {
-    method: 'POST',
-    mode: 'cors',
-    headers: headerWithJWT(),
-    body: JSON.stringify(data),
-  });
-  return response.json();
+export const createSkillMatrix = async (request: IMatrixUpdate) => {
+  try {
+    const { data } = await apiClient.post(endpoints.getSkillMatrix, request);
+    return data;
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
 };
 

@@ -58,18 +58,18 @@ export const getAllRoles = async () => {
 };
 
 export const updateUser = async (id: string, user: IDBUser & IUpdatePosition) => {
-  const updatedUser = {
-    ...user,
-    position: user.positionId,
-    roleId: user.role.id,
-  };
-  const response = await fetch(`${process.env.REACT_APP_BE_URI}/users/${id}`, {
-    method: 'PUT',
-    mode: 'cors',
-    headers: headerWithJWT(),
-    body: JSON.stringify(updatedUser),
-  });
-  return response.json();
+  try {
+    const updatedUser = {
+      ...user,
+      position: user.positionId,
+      roleId: user.role.id,
+    };
+    const { data } = await apiClient.put(`${endpoints.users}/${id}`, updatedUser);
+    return data;
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
 };
 
 export const createUser = async (data: IDBUser) => {
