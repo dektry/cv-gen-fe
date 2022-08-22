@@ -12,7 +12,7 @@ import {
   saveChangesToEmployee,
 } from 'store/reducers/employees';
 
-import { useStyles } from 'pages/GenerateCV/ChoosePerson/Employee/styles';
+import { useStyles } from './styles';
 import paths from 'config/routes.json';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 

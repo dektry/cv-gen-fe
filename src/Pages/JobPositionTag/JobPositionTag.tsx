@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
 import classNames from 'classnames';
-import { defaultUserColor, NONE } from 'pages/JobPositionTag/utils/constants';
+import { defaultUserColor, NONE } from './utils/constants';
 import { useStyles } from './styles';
 import { IDBPosition } from 'models/IUser';
 

@@ -12,10 +12,10 @@ import { useStyles } from 'pages/InterviewResult/styles';
 import { INTERVIEW } from './utils/constants';
 
 import { InterviewResultsTable } from './InterviewResultsTable';
-import { InterviewInfoCard } from 'pages/InterviewResult/InterviewInfoCard';
+import { InterviewInfoCard } from '../InterviewResult/InterviewInfoCard';
 import { ICompleteInterview } from 'models/IInterview';
 
-import { processAnswers } from 'pages/InterviewForm/utils/helpers/processAnswers';
+import { processAnswers } from '../InterviewForm/utils/helpers/processAnswers';
 
 export const InterviewResult = () => {
   const dispatch = useAppDispatch();

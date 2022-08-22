@@ -11,9 +11,9 @@ import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { useSelector } from 'react-redux';
 import { interviewSelector } from 'store/reducers/interview';
 import { candidatesSelector } from 'store/reducers/candidates';
-import { InterviewForm } from 'pages/InterviewForm';
+import { InterviewForm } from '../../../InterviewForm';
 import { Button } from 'antd';
-import { CandidatePopOver } from 'pages/GenerateCV/ChoosePerson/Candidate';
+import { CandidatePopOver } from '../../ChoosePerson/Candidate';
 import { useStyles } from './styles';
 
 export const InterviewSetUp = () => {

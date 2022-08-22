@@ -16,8 +16,8 @@ import {
   getEmployeesList,
 } from 'store/reducers/employees';
 
-import { EmployeeShortCard } from 'pages/EmployeeShortCard';
-import { useStyles } from 'pages/EmployeesTable/styles';
+import { EmployeeShortCard } from '../EmployeeShortCard';
+import { useStyles } from '../EmployeesTable/styles';
 import { useIsMobile } from 'common-components/Responsive';
 import {
   defaultCurrentPage,

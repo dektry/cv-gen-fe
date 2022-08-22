@@ -8,7 +8,7 @@ import {
   LIST_OF_CV,
  } from './utils/constants';
 
-import { NavigationItem } from 'pages/Navigation/NavigationItem';
+import { NavigationItem } from './NavigationItem';
 import classNames from 'classnames';
 
 import paths from 'config/routes.json';

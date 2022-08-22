@@ -8,13 +8,13 @@ import {
 import { Tabs } from 'antd';
 
 import { PageNotFound } from 'common-components/PageNotFound';
-import { Header } from 'pages/Header';
+import { Header } from '../Header';
 import { GenerateCVsteps, GENERATE_CV } from './utils/constants';
 import paths from 'config/routes.json';
-import { ChoosePerson } from 'pages/GenerateCV/ChoosePerson/ChoosePerson';
-import { TechnicalInterview } from 'pages/GenerateCV/TechnicalInterview/TechnicalInterview';
-import { SoftskillsInterview } from 'pages/GenerateCV/SoftskillsInterview';
-import { useStyles } from 'pages/GenerateCV/styles';
+import { ChoosePerson } from './ChoosePerson/ChoosePerson';
+import { TechnicalInterview } from './TechnicalInterview';
+import { SoftskillsInterview } from './SoftskillsInterview';
+import { useStyles } from './styles';
 
 const { TabPane } = Tabs;
 

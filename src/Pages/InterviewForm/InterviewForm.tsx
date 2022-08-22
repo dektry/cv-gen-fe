@@ -35,7 +35,7 @@ import {
   ICompleteInterview,
 } from 'models/IInterview';
 
-import { levelTypes, INTERVIEW } from 'pages/InterviewForm/utils/constants';
+import { levelTypes, INTERVIEW } from './utils/constants';
 
 export const InterviewForm = () => {
   const classes = useStyles();

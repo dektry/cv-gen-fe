@@ -1,6 +1,6 @@
 import { Descriptions } from 'antd';
 
-import { EMPLOYEES } from 'pages/EmployeesTable/utils/constants';
+import { EMPLOYEES } from '../EmployeesTable/utils/constants';
 import { IEmployee } from 'models/IEmployee';
 
 interface IProps {

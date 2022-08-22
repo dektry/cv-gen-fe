@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 
 import Typography from 'antd/lib/typography';
 
-import { EmployeesTable } from 'pages/EmployeesTable';
+import { EmployeesTable } from '../../../EmployeesTable';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 
@@ -12,7 +12,7 @@ import { EMPLOYEES } from '../../utils/constants';
 import { useAppDispatch } from 'store';
 import { getEmployeesList } from 'store/reducers/employees';
 
-import { useStyles } from 'pages/GenerateCV/ChoosePerson/Employees/styles';
+import { useStyles } from './styles';
 
 export const Employees = () => {
   const classes = useStyles();

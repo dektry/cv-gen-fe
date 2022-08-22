@@ -38,7 +38,7 @@ import {
 
 import paths from 'config/routes.json';
 import { useIsMobile } from 'common-components/Responsive';
-import { CandidateShortCard } from 'pages/CandidateShortCard';
+import { CandidateShortCard } from '../CandidateShortCard';
 // TODO: implement loader logic
 
 import { useStyles } from './styles';

@@ -26,7 +26,7 @@ import { Languages, LanguageLevels } from '../../utils/constants';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { ICandidate } from 'models/ICandidate';
 import { updateCandidate } from 'actions/candidate';
-import { useStyles } from 'pages/GenerateCV/ChoosePerson/Candidate/styles';
+import { useStyles } from './styles';
 // TODO: implement loader logic
 
 function cleanCandidateFields(
