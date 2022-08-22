@@ -1,6 +1,6 @@
 import { Descriptions } from 'antd';
 
-import { CANDIDATES } from 'pages/CandidatesTable/utils/constants';
+import { CANDIDATES } from './utils/constants';
 import { ICandidateTable } from 'models/ICandidate';
 
 interface IProps {
