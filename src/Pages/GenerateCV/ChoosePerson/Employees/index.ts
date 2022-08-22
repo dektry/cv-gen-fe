@@ -1,1 +1,1 @@
-export * from 'pages/GenerateCV/ChoosePerson/Employees/Employees';
+export * from './Employees';

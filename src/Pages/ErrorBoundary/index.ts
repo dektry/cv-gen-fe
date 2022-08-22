@@ -1,1 +1,1 @@
-export * from 'pages/ErrorBoundary/ErrorBoundary';
+export * from './ErrorBoundary';

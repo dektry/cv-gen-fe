@@ -1,1 +1,1 @@
-export * from 'pages/EmployeeShortCard/EmployeeShortCard'
+export * from './EmployeeShortCard'
