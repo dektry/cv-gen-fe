@@ -1,6 +1,6 @@
 import { Spin } from 'antd';
-import { useStyles } from './styles';
 import classNames from 'classnames';
+import { useStyles } from 'common-components/PreLoader/styles';
 
 interface IProps {
   status?: string;

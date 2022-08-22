@@ -12,7 +12,7 @@ import {
   ILevelsState,
   IUpdateLevel,
 } from 'models/IUser';
-import { defaultLevel, DELETED_LEVELS } from 'pages/AuthCheck/utils/constants';
+import { defaultLevel, DELETED_LEVELS } from 'store/constants';
 import {
   createLevelRequest,
   getAllLevels,

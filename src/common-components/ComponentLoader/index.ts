@@ -1,1 +1,1 @@
-export * from './ComponentLoader';
+export * from 'common-components/ComponentLoader/ComponentLoader';

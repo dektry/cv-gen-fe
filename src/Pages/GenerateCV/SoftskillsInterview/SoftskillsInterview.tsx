@@ -25,7 +25,7 @@ import { SoftSkillModal } from 'pages/GenerateCV/SoftskillsInterview';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
-import { SOFT_SKILL_INTERVIEW } from 'pages/CandidatesTable/utils/constants';
+import { SOFT_SKILL_INTERVIEW } from 'pages/GenerateCV/utils/constants';
 
 const { TextArea } = Input;
 

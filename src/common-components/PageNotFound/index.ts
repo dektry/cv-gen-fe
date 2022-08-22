@@ -1,1 +1,1 @@
-export * from './PageNotFound';
+export * from 'common-components/PageNotFound/PageNotFound';

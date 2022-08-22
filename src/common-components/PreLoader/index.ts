@@ -1,1 +1,1 @@
-export * from './PreLoader';
+export * from 'common-components/PreLoader/PreLoader';

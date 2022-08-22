@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import paths from 'config/routes.json';
-import { CANDIDATES, EMPLOYEES, ASSESSMENT } from 'pages/CandidatesTable/utils/constants';
+import { CANDIDATES, EMPLOYEES, ASSESSMENT } from 'pages/GenerateCV/utils/constants';
 import { useStyles } from './styles';
 
 export const ListOfOptions = () => {

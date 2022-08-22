@@ -1,1 +1,1 @@
-export * from './Mobile';
+export * from 'common-components/Responsive/Mobile';

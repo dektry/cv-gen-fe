@@ -4,7 +4,7 @@ import Button from 'antd/lib/button';
 
 import { ICandidate } from 'models/ICandidate';
 
-import { useStyles } from './styles';
+import { useStyles } from 'common-components/ButtonWithLink/styles';
 
 interface IProps {
   candidate: ICandidate;

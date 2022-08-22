@@ -1,1 +1,1 @@
-export * from './CvHeader';
+export * from 'common-components/GenerateCVHeader/CvHeader';

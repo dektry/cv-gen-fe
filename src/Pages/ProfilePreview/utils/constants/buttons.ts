@@ -1,14 +1,4 @@
-export const CANCEL = 'Cancel';
-export const SUBMIT = 'Submit';
-export const ADD = 'Add';
 export const CLOSE = 'Close';
-export const RESET = 'Reset';
-export const CREATE_FIRST = 'Create first?';
-export const HOME_PAGE = 'Home page';
 export const LOGOUT = 'Logout';
-export const REFRESH = 'Refresh';
 export const CAREER = 'Career';
-export const NEW_TEMPLATE = 'New template';
-export const ADD_FROM_EXIST = 'Add from exist';
-export const CREATE_NEW = 'Create new';
-export const ADD_NEW_TASK = 'Add new task';
+

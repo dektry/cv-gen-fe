@@ -1,3 +1,1 @@
-import { ButtonWithLink } from './ButtonWithLink';
-
-export { ButtonWithLink };
+export * from 'common-components/ButtonWithLink/ButtonWithLink'

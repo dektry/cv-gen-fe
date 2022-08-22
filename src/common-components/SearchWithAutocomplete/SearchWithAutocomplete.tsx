@@ -7,7 +7,7 @@ import {
 import { debounce } from 'lodash';
 import { Input } from 'antd';
 
-import { defaultCurrentPage, defaultPageSize } from './utils/constants';
+import { defaultCurrentPage, defaultPageSize } from 'common-components/SearchWithAutocomplete/utils/constants';
 
 type SearchWithAutocompleteProps = {
   onChange: (props: Record<string, unknown>) => void;

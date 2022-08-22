@@ -1,1 +1,1 @@
-export * from './FetchApiGate';
+export * from 'common-components/FetchApiGate/FetchApiGate';

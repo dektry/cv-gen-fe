@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { Result, Button } from 'antd';
-import { useStyles } from './styles';
-import { REFRESH } from './utils/constants';
+
+import { REFRESH } from 'common-components/FetchApiGate/utils/constants';
+import { useStyles } from 'common-components/FetchApiGate/styles';
 
 interface IProps {
   children: ReactNode | null;

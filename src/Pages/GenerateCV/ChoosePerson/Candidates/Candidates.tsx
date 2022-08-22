@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import paths from 'config/routes.json';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { useStyles } from 'pages/GenerateCV/ChoosePerson/Candidates/styles';
 import { CandidatesTable } from 'pages/CandidatesTable';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 import { loadCandidates } from 'store/reducers/candidates';
@@ -9,6 +8,7 @@ import { useAppDispatch } from 'store';
 import { CANDIDATES } from 'pages/CandidatesTable/utils/constants';
 import { Typography } from 'antd';
 import { SelectCandidateType } from 'pages/SelectCandidateType';
+import { useStyles } from 'pages/GenerateCV/ChoosePerson/Candidates/styles';
 
 export const Candidates = () => {
   const classes = useStyles();

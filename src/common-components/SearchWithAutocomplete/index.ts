@@ -1,1 +1,1 @@
-export * from './SearchWithAutocomplete';
+export * from 'common-components/SearchWithAutocomplete/SearchWithAutocomplete';

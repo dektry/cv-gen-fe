@@ -1,5 +1,5 @@
-import { PreLoader } from '../PreLoader';
-import { useStyles } from './styles';
+import { PreLoader } from 'common-components/PreLoader';
+import { useStyles } from 'common-components/ComponentLoader/styles';
 
 interface IProps {
   isLoading: boolean;

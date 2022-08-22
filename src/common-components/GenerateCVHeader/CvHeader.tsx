@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
-import { useStyles } from './styles';
+import { useStyles } from 'common-components/GenerateCVHeader/styles';
 
 interface IProps {
   backPath: string;
