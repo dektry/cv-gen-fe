@@ -10,7 +10,7 @@ import {
   AWAIT_AUTH,
   OOPS,
   USER_AUTH_SERVER_NOT_FOUND,
-} from 'pages/AuthCheck/utils/constants';
+} from './utils/constants';
 
 
 import { PreLoader } from 'common-components/PreLoader';
