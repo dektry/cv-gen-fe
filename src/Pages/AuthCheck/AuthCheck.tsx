@@ -12,7 +12,6 @@ import {
   USER_AUTH_SERVER_NOT_FOUND,
 } from './utils/constants';
 
-
 import { PreLoader } from 'common-components/PreLoader';
 import { FetchApiGate } from 'common-components/FetchApiGate';
 
