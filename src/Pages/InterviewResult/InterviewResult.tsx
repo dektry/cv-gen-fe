@@ -8,7 +8,7 @@ import { candidatesSelector } from 'store/reducers/candidates';
 import { positionsSelector } from 'store/reducers/positions';
 import { levelsSelector } from 'store/reducers/levels';
 
-import { useStyles } from 'pages/InterviewResult/styles';
+import { useStyles } from './styles';
 import { INTERVIEW } from './utils/constants';
 
 import { InterviewResultsTable } from './InterviewResultsTable';

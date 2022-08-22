@@ -16,7 +16,7 @@ import { ImportOutlined, LineChartOutlined } from '@ant-design/icons';
 import { getAvatarUrl } from 'actions/user';
 import { IDBUser } from 'models/IUser';
 
-import { JobPositionTag } from 'pages/JobPositionTag';
+import { JobPositionTag } from '../JobPositionTag';
 
 import { MY_CAREER, CAREER, CLOSE, LOGOUT as LOGOUT_STR } from './utils/constants';
 import paths from 'config/routes.json';
