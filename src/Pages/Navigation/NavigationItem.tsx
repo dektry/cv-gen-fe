@@ -1,5 +1,5 @@
 import React from 'react';
-import { navigationKeys } from 'pages/Navigation/utils/constants';
+import { navigationKeys } from './utils/constants';
 import { useIsMobile } from 'common-components/Responsive';
 import classNames from 'classnames';
 

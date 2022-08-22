@@ -18,7 +18,7 @@ import { IDBUser } from 'models/IUser';
 
 import { JobPositionTag } from 'pages/JobPositionTag';
 
-import { MY_CAREER, CAREER, CLOSE, LOGOUT as LOGOUT_STR } from 'pages/ProfilePreview/utils/constants';
+import { MY_CAREER, CAREER, CLOSE, LOGOUT as LOGOUT_STR } from './utils/constants';
 import paths from 'config/routes.json';
 import { useAppDispatch } from 'store';
 import { logOut } from 'store/reducers/app';

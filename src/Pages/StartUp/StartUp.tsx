@@ -5,7 +5,7 @@ import {
   OOPS,
   POSITION_GROUPS_NOT_FOUND,
   GET_POSITION_GROUPS,
-} from 'pages/StartUp/utils/constants';
+} from './utils/constants';
 import { useAppDispatch } from 'store';
 import { loadPositionGroups } from 'store/reducers/app';
 

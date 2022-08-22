@@ -6,7 +6,7 @@ import {
   mainPath,
   GENERATE_CV,
   LIST_OF_CV,
- } from 'pages/Navigation/utils/constants';
+ } from './utils/constants';
 
 import { NavigationItem } from 'pages/Navigation/NavigationItem';
 import classNames from 'classnames';
