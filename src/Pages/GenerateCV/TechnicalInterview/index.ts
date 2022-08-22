@@ -1,1 +1,1 @@
-export * from 'pages/GenerateCV/TechnicalInterview/TechnicalInterview';
+export * from './TechnicalInterview';

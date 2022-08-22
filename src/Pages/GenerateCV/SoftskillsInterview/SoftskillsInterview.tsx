@@ -13,19 +13,19 @@ import {
   setSoftSkillInterviewSkillsList,
 } from 'store/reducers/softskillsInterview';
 
-import { useStyles } from 'pages/GenerateCV/SoftskillsInterview/styles';
+import { useStyles } from './styles';
 import { Input , Button } from 'antd';
 
 import paths from 'config/routes.json';
-import { CandidatePopOver } from 'pages/GenerateCV/ChoosePerson/Candidate';
+import { CandidatePopOver } from '../ChoosePerson/Candidate';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { SkillWithCheckbox } from 'pages/GenerateCV/SoftskillsInterview';
-import { SelectPositions } from 'pages/GenerateCV/SoftskillsInterview';
-import { SoftSkillModal } from 'pages/GenerateCV/SoftskillsInterview';
+import { SkillWithCheckbox } from '../SoftskillsInterview';
+import { SelectPositions } from '../SoftskillsInterview';
+import { SoftSkillModal } from '../SoftskillsInterview';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
-import { SOFT_SKILL_INTERVIEW } from 'pages/GenerateCV/utils/constants';
+import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
 
 const { TextArea } = Input;
 

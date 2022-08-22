@@ -1,1 +1,1 @@
-export * from 'pages/SelectCandidateType/SelectCandidateType';
+export * from './SelectCandidateType';

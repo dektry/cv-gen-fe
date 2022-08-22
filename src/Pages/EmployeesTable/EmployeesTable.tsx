@@ -25,7 +25,7 @@ import {
   EMPLOYEE_TABLE_KEYS,
   EMPLOYEES,
   ACTIONS
-} from 'pages/EmployeesTable/utils/constants';
+} from './utils/constants';
 
 import { IEmployee } from 'models/IEmployee';
 import paths from 'config/routes.json';

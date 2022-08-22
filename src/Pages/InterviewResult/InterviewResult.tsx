@@ -9,7 +9,7 @@ import { positionsSelector } from 'store/reducers/positions';
 import { levelsSelector } from 'store/reducers/levels';
 
 import { useStyles } from 'pages/InterviewResult/styles';
-import { INTERVIEW } from 'pages/InterviewForm/utils/constants';
+import { INTERVIEW } from './utils/constants';
 
 import { InterviewResultsTable } from './InterviewResultsTable';
 import { InterviewInfoCard } from 'pages/InterviewResult/InterviewInfoCard';

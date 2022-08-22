@@ -1,1 +1,1 @@
-export * from 'pages/JobPositionTag/JobPositionTag';
+export * from './JobPositionTag';

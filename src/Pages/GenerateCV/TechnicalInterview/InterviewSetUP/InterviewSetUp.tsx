@@ -14,7 +14,7 @@ import { candidatesSelector } from 'store/reducers/candidates';
 import { InterviewForm } from 'pages/InterviewForm';
 import { Button } from 'antd';
 import { CandidatePopOver } from 'pages/GenerateCV/ChoosePerson/Candidate';
-import { useStyles } from 'pages/GenerateCV/TechnicalInterview/InterviewSetUP/styles';
+import { useStyles } from './styles';
 
 export const InterviewSetUp = () => {
   const classes = useStyles();

@@ -9,8 +9,8 @@ import { interviewSelector } from 'store/reducers/interview';
 
 import { createSkillMatrix } from 'actions/skills';
 import { ILevelsSchema, IMatrix, IDBLevels } from 'models/IUser';
-import { SkillMatrix } from 'pages/PositionSkillsModal/SkillMatrix';
-import { useStyles } from 'pages/PositionSkillsModal/styles';
+import { SkillMatrix } from './SkillMatrix';
+import { useStyles } from './styles';
 
 export interface StateProps {
   levels: ILevelsSchema[];

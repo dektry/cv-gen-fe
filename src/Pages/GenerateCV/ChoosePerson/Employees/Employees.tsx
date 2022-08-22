@@ -7,7 +7,7 @@ import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 
 import paths from 'config/routes.json';
-import { EMPLOYEES } from 'pages/EmployeesTable/utils/constants';
+import { EMPLOYEES } from '../../utils/constants';
 
 import { useAppDispatch } from 'store';
 import { getEmployeesList } from 'store/reducers/employees';

@@ -3,11 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import { PageNotFound } from 'common-components/PageNotFound';
 
 import paths from 'config/routes.json';
-import { Candidate } from 'pages/GenerateCV/ChoosePerson/Candidate';
-import { Candidates } from 'pages/GenerateCV/ChoosePerson/Candidates';
-import { ListOfOptions } from 'pages/GenerateCV/ChoosePerson/ListOfOptions';
-import { Employees } from 'pages/GenerateCV/ChoosePerson/Employees';
-import { Employee } from 'pages/GenerateCV/ChoosePerson/Employee';
+import { Candidate } from '../ChoosePerson/Candidate';
+import { Candidates } from '../ChoosePerson/Candidates';
+import { ListOfOptions } from '../ChoosePerson/ListOfOptions';
+import { Employees } from '../ChoosePerson/Employees';
+import { Employee } from '../ChoosePerson/Employee';
 
 export const ChoosePerson = () => {
   return (

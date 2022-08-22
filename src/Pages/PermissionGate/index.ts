@@ -1,1 +1,1 @@
-export * from 'pages/PermissionGate/PermissionGate';
+export * from './PermissionGate';

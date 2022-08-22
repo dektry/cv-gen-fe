@@ -1,1 +1,1 @@
-export * from 'pages/Navigation/Navigation';
+export * from './Navigation';

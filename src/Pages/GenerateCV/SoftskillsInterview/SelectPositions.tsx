@@ -13,8 +13,8 @@ import { levelsSelector } from 'store/reducers/levels';
 
 import { Select, Button } from 'antd';
 
-import { useStyles } from 'pages/GenerateCV/SoftskillsInterview/styles';
-import { SOFT_SKILL_INTERVIEW } from 'pages/GenerateCV/utils/constants';
+import { useStyles } from './styles';
+import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
 
 interface IProps {
   setFieldsDisabled: Dispatch<SetStateAction<boolean>>;

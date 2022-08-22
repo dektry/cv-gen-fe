@@ -24,8 +24,8 @@ import { loadSkillMatrix, positionsSelector } from 'store/reducers/positions';
 import { candidatesSelector } from 'store/reducers/candidates';
 import { levelsSelector } from 'store/reducers/levels';
 
-import { processAnswers } from 'pages/InterviewForm/utils/helpers/processAnswers';
-import { useStyles } from 'pages/InterviewForm/styles';
+import { processAnswers } from './utils/helpers/processAnswers';
+import { useStyles } from './styles';
 import paths from 'config/routes.json';
 
 import {

@@ -13,7 +13,7 @@ import classNames from 'classnames';
 
 import paths from 'config/routes.json';
 
-import { useStyles } from 'pages/Navigation/styles';
+import { useStyles } from './styles';
 
 
 interface IProps {

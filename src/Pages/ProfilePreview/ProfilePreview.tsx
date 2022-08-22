@@ -22,7 +22,7 @@ import { MY_CAREER, CAREER, CLOSE, LOGOUT as LOGOUT_STR } from 'pages/ProfilePre
 import paths from 'config/routes.json';
 import { useAppDispatch } from 'store';
 import { logOut } from 'store/reducers/app';
-import { useStyles } from 'pages/ProfilePreview/styles';
+import { useStyles } from './styles';
 
 interface IProps {
   chosenUser: IDBUser | null | undefined;

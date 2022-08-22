@@ -34,7 +34,7 @@ import {
   CANDIDATES, 
   CANDIDATE_TABLE_KEYS,
   defaultCandidate,
-} from 'pages/CandidatesTable/utils/constants';
+} from './utils/constants';
 
 import paths from 'config/routes.json';
 import { useIsMobile } from 'common-components/Responsive';

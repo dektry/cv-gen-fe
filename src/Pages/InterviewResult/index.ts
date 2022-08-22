@@ -1,3 +1,3 @@
-export * from 'pages/InterviewResult/InterviewInfoCard';
-export * from 'pages/InterviewResult/InterviewResult';
-export * from 'pages/InterviewResult/InterviewResultsTable';
+export * from './InterviewInfoCard';
+export * from './InterviewResult';
+export * from './InterviewResultsTable';

@@ -21,7 +21,7 @@ import {
 } from 'store/reducers/candidates';
 
 import paths from 'config/routes.json';
-import { Languages, LanguageLevels } from 'pages/GenerateCV/utils/constants';
+import { Languages, LanguageLevels } from '../../utils/constants';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { ICandidate } from 'models/ICandidate';

@@ -15,12 +15,12 @@ import shortLogo from 'images/favicon.png';
 import { useIsMobile } from 'common-components/Responsive';
 import { PreLoader } from 'common-components/PreLoader';
 
-import { StartUp } from 'pages/StartUp/StartUp';
+import { StartUp } from 'pages/StartUp';
 import { Provider } from 'react-redux';
 import { store, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { useStyles } from 'pages/Root/styles';
+import { useStyles } from './styles';
 
 const { Sider, Header } = Layout;
 
