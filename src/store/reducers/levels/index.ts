@@ -18,7 +18,7 @@ import {
   getAllLevels,
   updateLevelRequest,
 } from 'actions/levels';
-import { sortLevels } from 'pages/InterviewForm/utils/helpers/sortLevels';
+import { sortLevels } from 'store/helpers/sortLevels';
 
 export const loadLevels = createAsyncThunk(
   loadLevelsAction,
