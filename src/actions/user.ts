@@ -56,7 +56,7 @@ export const getAllRoles = async () => {
     const { data } = await apiClient.get(endpoints.getAllRoles);
     return data;
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_GET_ALL_ROLES_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -71,7 +71,7 @@ export const updateUser = async (id: string, user: IDBUser & IUpdatePosition) =>
     const { data } = await apiClient.put(`${endpoints.users}/${id}`, updatedUser);
     return data;
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_UPDATE_USER_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -85,7 +85,7 @@ export const createUser = async (request: IDBUser) => {
     const { data } = await apiClient.post(endpoints.users, createdUser);
     return data;
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_CREATE_USER_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -100,7 +100,7 @@ export const login = async (credentials: ICredentials) => {
     }
     return data;
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_LOGIN_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -124,7 +124,7 @@ export const getActualUser = async (
   } catch (error) {
     localStorage.clear();
     setIsSuccess(false);
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_GET_ACTUAL_USER_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -154,7 +154,7 @@ export const loginFromJwt = async (
           }
           return response;
       } catch (error) {
-        console.error('[API CLIENT ERROR]', error);
+        console.error('[API_LOGIN_FROM_JWT_ERROR]', error);
         message.error(`Server error. Please contact admin`);
       }
   };

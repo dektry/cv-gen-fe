@@ -12,7 +12,7 @@ export const getAllLevels = async () => {
       return data;
     }
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_GET_ALL_LEVELS_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -22,7 +22,7 @@ export const updateLevelRequest = async (id: string, request: IDBLevels) => {
     const { data } = await apiClient.put(`${endpoints.levels}/${id}`, request);
     return data;
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_UPDATE_LEVEL_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -32,7 +32,7 @@ export const createLevelRequest = async (request: IDBLevels) => {
     const { data } = await apiClient.post(endpoints.levels, request);
     return data;
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_CREATE_LEVEL_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
