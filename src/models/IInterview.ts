@@ -6,14 +6,15 @@ import {
   ISkillGroup,
 } from './IUser';
 import { ICandidate, ICandidateTable } from './ICandidate';
+import { NullableField } from './TNullableField';
 
 export interface IInterviewState {
   isLoading: boolean;
   interviewMatrix: IInterviewMatrix;
-  candidate: ICandidate | null;
+  candidate: NullableField<ICandidate>;
   chosenPosition?: string;
   chosenLevel?: string;
-  interviewResult: IInterviewResult | null;
+  interviewResult: NullableField<IInterviewResult>;
   skillId?: string;
 }
 

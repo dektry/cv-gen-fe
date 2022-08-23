@@ -1,3 +1,5 @@
+import { NullableField } from './TNullableField';
+
 export interface IDBPermissions {
   id: string;
   name: string;
@@ -13,7 +15,7 @@ export interface IDBPosition {
   salaryMinLimit: number;
   group?: IDBPositionGroup;
   from: string;
-  to: string | null;
+  to: NullableField<string>;
 }
 
 export interface IDBLevels {
@@ -23,7 +25,7 @@ export interface IDBLevels {
   requirements: string;
   group: IDBLevelGroup;
   from: string;
-  to: string | null;
+  to: NullableField<string>;
 }
 
 export interface IDBPositionGroup {
@@ -40,7 +42,7 @@ export interface IDBLevelGroup {
 export interface IDBCareer {
   id: string;
   from: string;
-  to: string | null;
+  to: NullableField<string>;
   salary: number;
   position?: IDBPosition;
   tempId?: string;
@@ -101,15 +103,15 @@ export interface IQuestion {
 export interface ISkill {
   uuid: string;
   value: string;
-  levels: Array<ILevelsSchema>;
-  questions: Array<IQuestion>;
+  levels: ILevelsSchema[];
+  questions: IQuestion[];
 }
 
 export interface ISkillGroup {
   uuid: string;
   position_id: string;
   value: string;
-  skills: Array<ISkill>;
+  skills: ISkill[];
 }
 
 export type IMatrix = ISkillGroup[];
@@ -117,20 +119,6 @@ export type IMatrix = ISkillGroup[];
 export interface IMatrixUpdate {
   matrixTree: IMatrix;
   position_id: string;
-}
-
-export interface IUsersContext {
-  users: IDBUser[];
-  chosenUser: IDBUser;
-  isEditProfile: boolean;
-  selectedCareer: string;
-  allPositions: IDBPosition[];
-  allLevels: IDBLevels[];
-  isValidForm: boolean;
-  isLoading: boolean;
-  onPageCount: number;
-  usersCount: number;
-  currentPage: number;
 }
 
 export interface IPositionsState {
