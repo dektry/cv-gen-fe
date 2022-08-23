@@ -47,7 +47,7 @@ export const getAllCandidates = async ({
     const [candidates, count]: [ICandidateTable[], number] = data;
     return { candidates, count };
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_GET_ALL_CANDIDATES_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -57,7 +57,7 @@ export const getCandidate = async (id: string): Promise<ICandidate | undefined> 
     const { data } = await apiClient.get(`${endpoints.candidates}/${id}`);
     return {...data};
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_GET_CANDIDATE_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
@@ -67,7 +67,7 @@ export const updateCandidate = async (candidateInfo: Partial<ICandidate>) => {
     const { data } = await apiClient.put(`${endpoints.candidates}/${candidateInfo.id}`, candidateInfo);
     return {...data};
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_UPDATE_CANDIDATE_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
