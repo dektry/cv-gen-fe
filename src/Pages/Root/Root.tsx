@@ -10,8 +10,8 @@ import { ErrorBoundary } from '../ErrorBoundary';
 import { StartUp } from '../StartUp';
 import 'antd/dist/antd.css';
 import { MenuOutlined } from '@ant-design/icons';
-import logo from 'images/logo.svg';
-import shortLogo from 'images/favicon.png';
+import logo from 'public/images/logo.svg';
+import shortLogo from 'public/images/favicon.png';
 
 import { useIsMobile } from 'common-components/Responsive';
 import { PreLoader } from 'common-components/PreLoader';

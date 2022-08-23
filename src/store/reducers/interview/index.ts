@@ -110,7 +110,9 @@ const interview = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(loadCandidate.fulfilled, (state, { payload }) => {
-      state.candidate = payload;
+      if(payload) {
+        state.candidate = payload;
+      }
     });
     builder.addCase(loadInterviewResult.fulfilled, (state, { payload }) => {
       state.interviewResult = payload;
