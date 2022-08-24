@@ -3,12 +3,12 @@ import { createUseStyles } from 'react-jss';
 type RuleNames = 'tabsContainer';
 
 interface TabsProps {
-  deviceRatio?: number;
+  devicePixelRatio?: number;
 }
 
 export const useStyles = createUseStyles<RuleNames, TabsProps>({
   tabsContainer: {
-    padding: ({ deviceRatio }) => `calc(24px - ${deviceRatio}px)`,
+    padding: ({ devicePixelRatio }) => `calc(24px - ${devicePixelRatio}px)`,
     '& .ant-tabs-tab-active': {
       '&:after': {
         borderColor: `transparent transparent transparent white`,
@@ -39,7 +39,8 @@ export const useStyles = createUseStyles<RuleNames, TabsProps>({
         borderColor: 'transparent transparent transparent black',
         borderWidth: '19px',
       },
-      width: '100%',
+      maxWidth: '100%',
+      minWidth: '100%',
       '& div': { margin: '0 auto' },
     },
   },

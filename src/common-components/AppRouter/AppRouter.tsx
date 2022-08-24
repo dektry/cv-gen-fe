@@ -1,4 +1,3 @@
-import React, { FC } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { PageNotFound } from '../PageNotFound';
