@@ -26,9 +26,7 @@ export const getAuthCheckedResponse = (data: IResponse) => {
 
 export const transformUsers = (users: IDBUser[]) => {
   return users.map((user: IDBUser) => {
-    const userPermissions = user.role.permissions.map(
-      (permission: Partial<IDBRole>) => permission.name,
-    );
+    const userPermissions = user.role.permissions.map((permission: Partial<IDBRole>) => permission.name);
     const sortedCareer = user.career.sort((a: IDBCareer, b: IDBCareer) => {
       if (a.to === null) {
         return -1;
@@ -112,10 +110,8 @@ export const login = async (credentials: ICredentials) => {
 
 export const getActualUser = async (
   response: IDBUser,
-  setCurrentUser: React.Dispatch<
-    React.SetStateAction<IDBUser | null | undefined>
-  >,
-  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+  setCurrentUser: React.Dispatch<React.SetStateAction<IDBUser | null | undefined>>,
+  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   try {
     return await fetch(`${process.env.REACT_APP_BE_URI}/users/${response.id}`, {
@@ -123,7 +119,7 @@ export const getActualUser = async (
       mode: 'cors',
       headers: headerWithJWT(),
     })
-      .then(data => {
+      .then((data) => {
         if (data.status === 404) {
           localStorage.clear();
           message.error(AUTH_OUTDATED);
@@ -132,7 +128,7 @@ export const getActualUser = async (
         }
         return data.ok ? data.json() : null;
       })
-      .catch(error => {
+      .catch((error) => {
         localStorage.clear();
         setIsSuccess(false);
         return error;
@@ -145,38 +141,29 @@ export const getActualUser = async (
 
 export const loginFromJwt = async (
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>,
-  setCurrentUser: React.Dispatch<
-    React.SetStateAction<IDBUser | null | undefined>
-  >,
+  setCurrentUser: React.Dispatch<React.SetStateAction<IDBUser | null | undefined>>,
   dispatch: AppDispatch,
-  currentUser: IDBUser | null | undefined,
+  currentUser: IDBUser | null | undefined
 ) => {
   const jwtFromStorage = localStorage.getItem('jwt') || undefined;
   const getUser = async () => {
-    const user: IDBUser | null = await fetch(
-      `${process.env.REACT_APP_BE_URI}/auth/profile`,
-      {
-        method: 'GET',
-        mode: 'cors',
-        headers: headerWithJWT(),
-      },
-    )
-      .then(data => {
+    const user: IDBUser | null = await fetch(`${process.env.REACT_APP_BE_URI}/auth/profile`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: headerWithJWT(),
+    })
+      .then((data) => {
         return data.ok ? data.json() : null;
       })
       .then(async (response: IDBUser | null) => {
         if (response) {
-          const actualUserProfile = await getActualUser(
-            response,
-            setCurrentUser,
-            setIsSuccess,
-          );
+          const actualUserProfile = await getActualUser(response, setCurrentUser, setIsSuccess);
           setIsSuccess(true);
           return transformUsers([actualUserProfile])[0];
         }
         return response;
       })
-      .catch(error => {
+      .catch((error) => {
         setIsSuccess(false);
         return error;
       });
@@ -195,6 +182,14 @@ export const loginFromJwt = async (
   }
 };
 
+export const auth = async () => {
+  try {
+    const { data } = await apiClient.get(endpoints.auth);
+    return data;
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+  }
+};
 
 export const getAvatarUrl = (fileName: string | undefined) => {
   return fileName

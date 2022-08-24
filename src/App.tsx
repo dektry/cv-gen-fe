@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { LoginContainer } from 'Pages/Login/LoginContainer';
+import AppRouter from 'common-components/AppRouter';
+import { PreLoader } from 'common-components/PreLoader';
+
+import { useAppDispatch } from 'store';
+import { useSelector } from 'react-redux';
+
+import { authUser, appSelector } from 'store/reducers/app';
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  const { isLoading, isAuth } = useSelector(appSelector);
+
+  useEffect(() => {
+    dispatch(authUser());
+  }, []);
+  if (isLoading) return <PreLoader status="Loading..." />;
   return (
-    <div className="App">
-      <LoginContainer />
+    <div>
+      <AppRouter isAuth={true} />
     </div>
   );
 }

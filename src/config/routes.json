@@ -1,4 +1,5 @@
 {
+    "any": "*",
     "home": "/",
     "candidates": "/candidates",
     "interview": "/interview/:candidateId",

@@ -29,7 +29,7 @@ export interface LoginFormFields extends FieldValues {
   password: string;
 }
 
-export const LoginContainer = () => {
+const LoginContainer = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -57,6 +57,7 @@ export const LoginContainer = () => {
   };
 
   const onSubmit = async (data: LoginFormFields) => {
+    console.log(data);
     const key = 'updatable';
     const credentials = {
       username: data.email,
@@ -113,3 +114,5 @@ export const LoginContainer = () => {
     />
   );
 };
+
+export default LoginContainer;

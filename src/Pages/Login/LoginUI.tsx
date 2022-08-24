@@ -32,7 +32,7 @@ export function LoginUI({
   return (
     <div className={classes.page}>
       <Card className={classes.card} title={LOGIN_STR} bordered={false}>
-        <Form onFinish={() => handleSubmit({ onSubmit, onFailedSubmit })}>
+        <Form onFinish={() => handleSubmit(onSubmit)}>
           <Form.Item hasFeedback validateStatus={emailValidateStatus}>
             <Controller
               rules={{ pattern: /^\S+@\S+$/i, minLength: 3, required: true }}

@@ -8,24 +8,12 @@ import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import {
-  setLoading,
-  setPageSize,
-  setCurrentPage,
-  employeesSelector,
-  getEmployeesList,
-} from 'store/reducers/employees';
+import { setLoading, setPageSize, setCurrentPage, employeesSelector, getEmployeesList } from 'store/reducers/employees';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
 import { useStyles } from '../EmployeesTable/styles';
-import { useIsMobile } from 'common-components/Responsive';
-import {
-  defaultCurrentPage,
-  defaultPageSize,
-  EMPLOYEE_TABLE_KEYS,
-  EMPLOYEES,
-  ACTIONS
-} from './utils/constants';
+import { useIsMobile } from 'theme/Responsive';
+import { defaultCurrentPage, defaultPageSize, EMPLOYEE_TABLE_KEYS, EMPLOYEES, ACTIONS } from './utils/constants';
 
 import { IEmployee } from 'models/IEmployee';
 import paths from 'config/routes.json';
@@ -35,14 +23,7 @@ const { Column } = Table;
 export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {
-    employees,
-    currentPage,
-    pageSize,
-    totalItems,
-    query,
-    isLoading,
-  } = useSelector(employeesSelector);
+  const { employees, currentPage, pageSize, totalItems, query, isLoading } = useSelector(employeesSelector);
 
   const classes = useStyles();
   const isMobile = useIsMobile();
@@ -53,14 +34,14 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
       getEmployeesList({
         page: currentPage || 1,
         limit: pageSize || 10,
-      }),
+      })
     );
     dispatch(setLoading(false));
   }, []);
 
   const handleChange = async (
     pagination: TablePaginationConfig,
-    sorter: SorterResult<IEmployee> | SorterResult<IEmployee>[],
+    sorter: SorterResult<IEmployee> | SorterResult<IEmployee>[]
   ) => {
     dispatch(setLoading(true));
     dispatch(setCurrentPage(pagination.current ?? defaultCurrentPage));
@@ -72,10 +53,10 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
         ...(isArray(sorter)
           ? {}
           : {
-            sorter: { order: sorter.order, field: sorter.field as string },
-          }),
+              sorter: { order: sorter.order, field: sorter.field as string },
+            }),
         fullName: query,
-      }),
+      })
     );
     dispatch(setLoading(false));
   };
@@ -86,10 +67,10 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
 
   const expandbleParams = isMobile
     ? {
-      columnWidth: '16px',
-      expandRowByClick: true,
-      expandedRowRender: renderMobileEmployeeCard,
-    }
+        columnWidth: '16px',
+        expandRowByClick: true,
+        expandedRowRender: renderMobileEmployeeCard,
+      }
     : undefined;
 
   const paginationParams = {
@@ -103,18 +84,14 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
     navigate(
       generatePath(paths.employee, {
         id: record.id || '',
-      }),
+      })
     );
   };
 
   const renderActions = (record: IEmployee) => {
     return (
       <Space>
-        <Button
-          type="primary"
-          onClick={() => createPath(record)}
-          icon={<DiffOutlined />}
-        />
+        <Button type="primary" onClick={() => createPath(record)} icon={<DiffOutlined />} />
         <Button type="primary" onClick={() => false} icon={<EditOutlined />} />
       </Space>
     );
@@ -125,12 +102,12 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
       return {
         ...(editAction
           ? {
-            onClick: () => createPath(record),
-          }
+              onClick: () => createPath(record),
+            }
           : {}),
       };
     },
-    [editAction, history],
+    [editAction, history]
   );
 
   return (
@@ -142,7 +119,7 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
       pagination={paginationParams}
       loading={isLoading}
       onChange={handleChange}
-      onRow={record => handleRowClick(record)}
+      onRow={(record) => handleRowClick(record)}
     >
       <Column
         title={EMPLOYEES.FULLNAME}
@@ -170,13 +147,7 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
         key={EMPLOYEE_TABLE_KEYS.location}
         sorter
       />
-      {!hideActions && (
-        <Column
-          className={classes.tableActions}
-          title={ACTIONS}
-          render={renderActions}
-        />
-      )}
+      {!hideActions && <Column className={classes.tableActions} title={ACTIONS} render={renderActions} />}
     </Table>
   );
 };

@@ -9,5 +9,6 @@
     "employee": "/employee",
     "positionGroups": "/position-groups",
     "positions": "/positions",
-    "login": "/auth/login"
+    "login": "/auth/login",
+    "auth": "/auth"
   }

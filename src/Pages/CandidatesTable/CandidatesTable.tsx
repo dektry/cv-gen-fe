@@ -5,15 +5,8 @@ import { isArray } from 'lodash';
 import { ICandidateTable } from 'models/ICandidate';
 
 import { useSelector } from 'react-redux';
-import {
-  setSoftSkillsInterview,
-  setSoftSkillsList,
-} from 'store/reducers/softskillsInterview';
-import {
-  chooseInterviewLevel,
-  chooseInterviewPosition,
-  setInterviewResult,
-} from 'store/reducers/interview';
+import { setSoftSkillsInterview, setSoftSkillsList } from 'store/reducers/softskillsInterview';
+import { chooseInterviewLevel, chooseInterviewPosition, setInterviewResult } from 'store/reducers/interview';
 import {
   candidatesSelector,
   loadCandidates,
@@ -29,15 +22,10 @@ import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 import { TablePaginationConfig } from 'antd/es/table/Table';
 import { SorterResult } from 'antd/es/table/interface';
 
-import { 
-  ACTIONS,
-  CANDIDATES, 
-  CANDIDATE_TABLE_KEYS,
-  defaultCandidate,
-} from './utils/constants';
+import { ACTIONS, CANDIDATES, CANDIDATE_TABLE_KEYS, defaultCandidate } from './utils/constants';
 
 import paths from 'config/routes.json';
-import { useIsMobile } from 'common-components/Responsive';
+import { useIsMobile } from 'theme/Responsive';
 import { CandidateShortCard } from '../CandidateShortCard';
 // TODO: implement loader logic
 
@@ -45,19 +33,10 @@ import { useStyles } from './styles';
 
 const { Column } = Table;
 
-export const CandidatesTable = ({
-  hideActions = false,
-  editAction = false,
-}) => {
+export const CandidatesTable = ({ hideActions = false, editAction = false }) => {
   const dispatch = useAppDispatch();
-  const {
-    currentPage,
-    pageSize,
-    isLoading,
-    candidates,
-    totalItems,
-    currentCandidate,
-  } = useSelector(candidatesSelector);
+  const { currentPage, pageSize, isLoading, candidates, totalItems, currentCandidate } =
+    useSelector(candidatesSelector);
 
   useEffect(() => {
     dispatch(setCandidate(defaultCandidate));
@@ -77,7 +56,7 @@ export const CandidatesTable = ({
           position: undefined,
           positionId: '',
           levelId: '',
-        }),
+        })
       );
       dispatch(setSoftSkillsList([]));
       dispatch(setInterviewResult(null));
@@ -90,7 +69,6 @@ export const CandidatesTable = ({
   const classes = useStyles();
   const isMobile = useIsMobile();
   const navigation = useNavigate();
-
 
   //TODO: fix sorter types
   // const handleChange = async (
@@ -121,7 +99,7 @@ export const CandidatesTable = ({
             navigation(
               generatePath(paths.interview, {
                 candidateId: record.id || '',
-              }),
+              })
             )
           }
           icon={<DiffOutlined />}
@@ -159,60 +137,54 @@ export const CandidatesTable = ({
                 navigation(
                   generatePath(paths.candidate, {
                     id: record.id || '',
-                  }),
+                  })
                 );
               },
             }
           : {}),
       };
     },
-    [editAction, history],
+    [editAction, history]
   );
 
   return (
-      <Table
-        rowKey={'id'}
-        size="small"
-        onRow={handleRowClick}
-        dataSource={candidates}
-        expandable={expandableParams}
-        pagination={paginationObj}
-        loading={isLoading}
-        // onChange={handleChange} // TODO: fix problem with onChange types
-      >
-        <Column
-          title={CANDIDATES.FULLNAME}
-          dataIndex={CANDIDATE_TABLE_KEYS.fullName}
-          key={CANDIDATE_TABLE_KEYS.fullName}
-          sorter
-        />
-        <Column
-          title={CANDIDATES.POSITION}
-          dataIndex={CANDIDATE_TABLE_KEYS.position}
-          key={CANDIDATE_TABLE_KEYS.position}
-          sorter
-        />
-        <Column
-          className={classes.displayNoneMobile}
-          title={CANDIDATES.LEVEL}
-          dataIndex={CANDIDATE_TABLE_KEYS.level}
-          key={CANDIDATE_TABLE_KEYS.level}
-          sorter
-        />
-        <Column
-          className={classes.displayNoneMobile}
-          title={CANDIDATES.LOCATION}
-          dataIndex={CANDIDATE_TABLE_KEYS.location}
-          key={CANDIDATE_TABLE_KEYS.location}
-          sorter
-        />
-        {!hideActions && (
-          <Column
-            className={classes.tableActions}
-            title={ACTIONS}
-            render={renderActions}
-          />
-        )}
-      </Table>
+    <Table
+      rowKey={'id'}
+      size="small"
+      onRow={handleRowClick}
+      dataSource={candidates}
+      expandable={expandableParams}
+      pagination={paginationObj}
+      loading={isLoading}
+      // onChange={handleChange} // TODO: fix problem with onChange types
+    >
+      <Column
+        title={CANDIDATES.FULLNAME}
+        dataIndex={CANDIDATE_TABLE_KEYS.fullName}
+        key={CANDIDATE_TABLE_KEYS.fullName}
+        sorter
+      />
+      <Column
+        title={CANDIDATES.POSITION}
+        dataIndex={CANDIDATE_TABLE_KEYS.position}
+        key={CANDIDATE_TABLE_KEYS.position}
+        sorter
+      />
+      <Column
+        className={classes.displayNoneMobile}
+        title={CANDIDATES.LEVEL}
+        dataIndex={CANDIDATE_TABLE_KEYS.level}
+        key={CANDIDATE_TABLE_KEYS.level}
+        sorter
+      />
+      <Column
+        className={classes.displayNoneMobile}
+        title={CANDIDATES.LOCATION}
+        dataIndex={CANDIDATE_TABLE_KEYS.location}
+        key={CANDIDATE_TABLE_KEYS.location}
+        sorter
+      />
+      {!hideActions && <Column className={classes.tableActions} title={ACTIONS} render={renderActions} />}
+    </Table>
   );
 };
