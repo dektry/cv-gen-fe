@@ -10,5 +10,8 @@
     "positionGroups": "/position-groups",
     "positions": "/positions",
     "login": "/auth/login",
+    "levels": "/levels",
+    "candidates": "/candidates",
+    "users": "/users",
     "auth": "/auth"
   }

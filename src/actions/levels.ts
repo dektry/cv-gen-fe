@@ -1,11 +1,8 @@
 import { message } from 'antd';
 
 import { apiClient } from 'services/apiService';
-import Helper from 'helper';
 import endpoints from 'config/endpoint.json';
 import { IDBLevels } from 'models/IUser';
-
-const { headerWithJWT } = Helper;
 
 export const getAllLevels = async () => {
   try {
@@ -15,36 +12,27 @@ export const getAllLevels = async () => {
       return data;
     }
   } catch (error) {
-    console.error('[API CLIENT ERROR]', error);
+    console.error('[API_CLIENT_GET_ALL_LEVELS_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };
 
-export const updateLevelRequest = async (name: string, data: IDBLevels) => {
-  const response = await fetch(`${process.env.REACT_APP_BE_URI}/levels`, {
-    method: 'PUT',
-    mode: 'cors',
-    headers: headerWithJWT(),
-    body: JSON.stringify(data),
-  });
-  return response.json();
+export const updateLevelRequest = async (id: string, request: IDBLevels) => {
+  try {
+    const { data } = await apiClient.put(`${endpoints.levels}/${id}`, request);
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_UPDATE_LEVEL_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
 };
 
-export const createLevelRequest = async (data: IDBLevels) => {
-  const response = await fetch(`${process.env.REACT_APP_BE_URI}/levels`, {
-    method: 'POST',
-    mode: 'cors',
-    headers: headerWithJWT(),
-    body: JSON.stringify(data),
-  });
-  return response.json();
-};
-
-export const deleteLevel = async (id: string) => {
-  const response = await fetch(`${process.env.REACT_APP_BE_URI}/levels/${id}`, {
-    method: 'DELETE',
-    mode: 'cors',
-    headers: headerWithJWT(),
-  });
-  return response.json();
+export const createLevelRequest = async (request: IDBLevels) => {
+  try {
+    const { data } = await apiClient.post(endpoints.levels, request);
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_CREATE_LEVEL_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
 };

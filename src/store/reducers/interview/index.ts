@@ -13,54 +13,35 @@ import { getCandidate } from 'actions/candidate';
 
 import { getSkillMatrixByIds } from 'actions/skills';
 
-import {
-  loadInterviewResultRequest, 
-  completeInterview,
-  editInterview
- } from 'actions/interview';
+import { loadInterviewResultRequest, completeInterview, editInterview } from 'actions/interview';
 
-import {
-  IInterviewMatrix,
-  IInterviewResult,
-  IInterviewState,
-  ICompleteInterview,
-} from 'models/IInterview';
+import { IInterviewMatrix, IInterviewResult, IInterviewState, ICompleteInterview } from 'models/IInterview';
 
-export const loadCandidate = createAsyncThunk(
-  loadCandidateAction,
-  (candidateId: string) => {
-    return getCandidate(candidateId);
-  },
-);
+export const loadCandidate = createAsyncThunk(loadCandidateAction, (candidateId: string) => {
+  return getCandidate(candidateId);
+});
 
-export const loadInterviewResult = createAsyncThunk(
-  loadInterviewResultAction,
-  async (candidateId: string) => {
-    const { interview, answers } = await loadInterviewResultRequest(
-      candidateId,
-    );
-    if (interview) {
-      return { ...interview, answers };
-    }
-    return null;
-  },
-);
+export const loadInterviewResult = createAsyncThunk(loadInterviewResultAction, async (candidateId: string) => {
+  const { interview, answers } = await loadInterviewResultRequest(candidateId);
+  if (interview) {
+    return { ...interview, answers };
+  }
+  return null;
+});
 
 export const loadInterviewMatrix = createAsyncThunk(
   loadInterviewMatrixAction,
   ({ positionId, levelId }: { positionId: string; levelId: string }) => {
     return getSkillMatrixByIds(positionId, levelId);
-  },
+  }
 );
 
-export const finishInterview = createAsyncThunk(
-  finishInterviewAction,
-  (interview: ICompleteInterview) => completeInterview(interview),
+export const finishInterview = createAsyncThunk(finishInterviewAction, (interview: ICompleteInterview) =>
+  completeInterview(interview)
 );
 
-export const saveChangesToInterview = createAsyncThunk(
-  editInterviewAction,
-  (interview: ICompleteInterview) => editInterview(interview),
+export const saveChangesToInterview = createAsyncThunk(editInterviewAction, (interview: ICompleteInterview) =>
+  editInterview(interview)
 );
 
 const initialState: IInterviewState = {
@@ -77,28 +58,16 @@ const interview = createSlice({
   name: appStoreName,
   initialState,
   reducers: {
-    setInterviewMatrix: (
-      state,
-      { payload }: PayloadAction<IInterviewMatrix>,
-    ) => {
+    setInterviewMatrix: (state, { payload }: PayloadAction<IInterviewMatrix>) => {
       state.interviewMatrix = payload;
     },
-    setInterviewResult: (
-      state,
-      { payload }: PayloadAction<IInterviewResult | null>,
-    ) => {
+    setInterviewResult: (state, { payload }: PayloadAction<IInterviewResult | null>) => {
       state.interviewResult = payload;
     },
-    chooseInterviewPosition: (
-      state,
-      { payload }: PayloadAction<string | undefined>,
-    ) => {
+    chooseInterviewPosition: (state, { payload }: PayloadAction<string | undefined>) => {
       state.chosenPosition = payload;
     },
-    chooseInterviewLevel: (
-      state,
-      { payload }: PayloadAction<string | undefined>,
-    ) => {
+    chooseInterviewLevel: (state, { payload }: PayloadAction<string | undefined>) => {
       state.chosenLevel = payload;
     },
     setInterviewIsLoading: (state, { payload }: PayloadAction<boolean>) => {
@@ -108,9 +77,11 @@ const interview = createSlice({
       state.skillId = payload;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addCase(loadCandidate.fulfilled, (state, { payload }) => {
-      state.candidate = payload;
+      if (payload) {
+        state.candidate = payload;
+      }
     });
     builder.addCase(loadInterviewResult.fulfilled, (state, { payload }) => {
       state.interviewResult = payload;
@@ -139,8 +110,7 @@ const interview = createSlice({
 
 export default interview.reducer;
 
-export const interviewSelector = (state: RootState): IInterviewState =>
-  state.interview;
+export const interviewSelector = (state: RootState): IInterviewState => state.interview;
 
 export const {
   chooseInterviewLevel,

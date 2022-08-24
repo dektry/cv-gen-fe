@@ -57,15 +57,17 @@ const candidates = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loadCandidates.fulfilled, (state, { payload }) => {
-      state.candidates = payload.candidates;
-      state.totalItems = payload.count;
+      if (payload) {
+        state.candidates = payload.candidates;
+        state.totalItems = payload.count;
+      }
     });
     builder.addCase(loadOneCandidate.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(loadOneCandidate.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      if (payload.fullName) {
+      if (payload?.fullName) {
         state.currentCandidate = payload;
       }
       if (payload?.experience?.length) {
