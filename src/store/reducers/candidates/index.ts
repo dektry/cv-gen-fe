@@ -57,7 +57,7 @@ const candidates = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loadCandidates.fulfilled, (state, { payload }) => {
-      if(payload) {
+      if (payload) {
         state.candidates = payload.candidates;
         state.totalItems = payload.count;
       }

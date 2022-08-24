@@ -23,4 +23,6 @@ export interface IAppState {
   positionGroups: IDBPositionGroup[];
   levelGroups: IDBLevelGroup[];
   isHavePermissionToOT?: boolean;
+  isLoading: boolean;
+  isAuth: boolean;
 }

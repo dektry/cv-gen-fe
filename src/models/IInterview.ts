@@ -1,10 +1,4 @@
-import {
-  IDBLevels,
-  IDBPosition,
-  IQuestion,
-  ISkill,
-  ISkillGroup,
-} from './IUser';
+import { IDBLevels, IDBPosition, IQuestion, ISkill, ISkillGroup } from './IUser';
 import { ICandidate, ICandidateTable } from './ICandidate';
 import { NullableField } from './TNullableField';
 
@@ -22,15 +16,13 @@ export interface IInterviewQuestion extends Omit<IQuestion, 'uuid'> {
   id: string;
 }
 
-export interface IInterviewSkill
-  extends Omit<ISkill, 'uuid' | 'questions' | 'levels'> {
+export interface IInterviewSkill extends Omit<ISkill, 'uuid' | 'questions' | 'levels'> {
   id: string;
   questions: IInterviewQuestion[];
   levels: Array<{ value: LevelTypesEnum }>;
 }
 
-export interface IInterviewSkillGroup
-  extends Omit<ISkillGroup, 'uuid' | 'skills' | 'position_id'> {
+export interface IInterviewSkillGroup extends Omit<ISkillGroup, 'uuid' | 'skills' | 'position_id'> {
   id: string;
   skills: IInterviewSkill[];
 }

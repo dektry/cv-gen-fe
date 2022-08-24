@@ -13,5 +13,5 @@
     "levels": "/levels",
     "candidates": "/candidates",
     "users": "/users",
-    "auth": "/auth/profile"
+    "auth": "/auth"
   }

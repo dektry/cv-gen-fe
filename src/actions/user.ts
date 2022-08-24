@@ -21,7 +21,6 @@ export const getAuthCheckedResponse = (data: IResponse) => {
   return data.json();
 };
 
-
 export const getAvatarUrl = (fileName: string | undefined) => {
   return fileName
     ? `${process.env.REACT_APP_BE_URI}/users/avatars/${fileName}`
@@ -30,9 +29,7 @@ export const getAvatarUrl = (fileName: string | undefined) => {
 
 export const transformUsers = (users: IDBUser[]) => {
   return users.map((user: IDBUser) => {
-    const userPermissions = user.role.permissions.map(
-      (permission: Partial<IDBRole>) => permission.name,
-    );
+    const userPermissions = user.role.permissions.map((permission: Partial<IDBRole>) => permission.name);
     const sortedCareer = user.career.sort((a: IDBCareer, b: IDBCareer) => {
       if (a.to === null) {
         return -1;
@@ -90,7 +87,6 @@ export const createUser = async (request: IDBUser) => {
   }
 };
 
-
 export const login = async (credentials: ICredentials) => {
   try {
     const { data } = await apiClient.post(endpoints.login, credentials);
@@ -107,10 +103,8 @@ export const login = async (credentials: ICredentials) => {
 
 export const getActualUser = async (
   request: IDBUser,
-  setCurrentUser: React.Dispatch<
-    React.SetStateAction<IDBUser | null | undefined>
-  >,
-  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+  setCurrentUser: React.Dispatch<React.SetStateAction<IDBUser | null | undefined>>,
+  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   try {
     const response = await apiClient.get(`${endpoints.users}/${request.id}`);
@@ -131,34 +125,28 @@ export const getActualUser = async (
 
 export const loginFromJwt = async (
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>,
-  setCurrentUser: React.Dispatch<
-    React.SetStateAction<IDBUser | null | undefined>
-  >,
+  setCurrentUser: React.Dispatch<React.SetStateAction<IDBUser | null | undefined>>,
   dispatch: AppDispatch,
-  currentUser: IDBUser | null | undefined,
+  currentUser: IDBUser | null | undefined
 ) => {
   const jwtFromStorage = localStorage.getItem('jwt') || undefined;
   const getUser = async () => {
     try {
       const { data } = await apiClient.get(endpoints.auth);
       const response = data || null;
-          if (response) {
-            const actualUserProfile = await getActualUser(
-              response,
-              setCurrentUser,
-              setIsSuccess,
-            );
-            setIsSuccess(true);
-            setCurrentUser(response);
-            return transformUsers([actualUserProfile])[0];
-          }
-          return response;
-      } catch (error) {
-        console.error('[API_LOGIN_FROM_JWT_ERROR]', error);
-        message.error(`Server error. Please contact admin`);
+      if (response) {
+        const actualUserProfile = await getActualUser(response, setCurrentUser, setIsSuccess);
+        setIsSuccess(true);
+        setCurrentUser(response);
+        return transformUsers([actualUserProfile])[0];
       }
+      return response;
+    } catch (error) {
+      console.error('[API_LOGIN_FROM_JWT_ERROR]', error);
+      message.error(`Server error. Please contact admin`);
+    }
   };
-  // 
+  //
   if (currentUser !== undefined) {
     setCurrentUser(currentUser);
     if (jwtFromStorage && currentUser === null) {
@@ -172,3 +160,11 @@ export const loginFromJwt = async (
   }
 };
 
+export const auth = async () => {
+  try {
+    const { data } = await apiClient.get(endpoints.auth);
+    return data;
+  } catch (error) {
+    console.error('[API CLIENT ERROR]', error);
+  }
+};

@@ -26,7 +26,7 @@ export const getAllEmployees = async ({ limit = 10, page = 1, sorter, fullName =
   }
 
   const params = Helper.getQueryString({ limit, page, ...sort, query: fullName });
-  
+
   try {
     const { data } = await apiClient.get(`${endpoints.employee}?${params}`);
     const [employees, count]: [IEmployee[], number] = data;

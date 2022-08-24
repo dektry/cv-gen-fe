@@ -55,7 +55,7 @@ export const getAllCandidates = async ({
 export const getCandidate = async (id: string): Promise<ICandidate | undefined> => {
   try {
     const { data } = await apiClient.get(`${endpoints.candidates}/${id}`);
-    return {...data};
+    return { ...data };
   } catch (error) {
     console.error('[API_CLIENT_GET_CANDIDATE_ERROR]', error);
     message.error(`Server error. Please contact admin`);
@@ -65,7 +65,7 @@ export const getCandidate = async (id: string): Promise<ICandidate | undefined> 
 export const updateCandidate = async (candidateInfo: Partial<ICandidate>) => {
   try {
     const { data } = await apiClient.put(`${endpoints.candidates}/${candidateInfo.id}`, candidateInfo);
-    return {...data};
+    return { ...data };
   } catch (error) {
     console.error('[API_CLIENT_UPDATE_CANDIDATE_ERROR]', error);
     message.error(`Server error. Please contact admin`);

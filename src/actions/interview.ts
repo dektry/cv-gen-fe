@@ -25,9 +25,7 @@ export const editInterview = async (interview: ICompleteInterview) => {
   }
 };
 
-export const loadInterviewResultRequest = async (
-  candidateId: string,
-) => {
+export const loadInterviewResultRequest = async (candidateId: string) => {
   try {
     const { data } = await apiClient.get(`${endpoints.interviews}/${candidateId}`);
     return data;

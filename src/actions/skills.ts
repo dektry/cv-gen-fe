@@ -8,9 +8,7 @@ import { IMatrixUpdate } from 'models/IUser';
 
 export const getSkillMatrixByPositionId = async (positionId: string) => {
   try {
-    const { data } = await apiClient.get(
-      `${endpoints.getSkillMatrix}/${positionId}`,
-    );
+    const { data } = await apiClient.get(`${endpoints.getSkillMatrix}/${positionId}`);
     if (data.length) {
       return data;
     }
@@ -21,14 +19,9 @@ export const getSkillMatrixByPositionId = async (positionId: string) => {
   }
 };
 
-export const getSkillMatrixByIds = async (
-  positionId: string,
-  levelId: string,
-) => {
+export const getSkillMatrixByIds = async (positionId: string, levelId: string) => {
   try {
-    const { data } = await apiClient.get(
-      `${endpoints.getSkillMatrix}/${positionId}/${levelId}`,
-    );
+    const { data } = await apiClient.get(`${endpoints.getSkillMatrix}/${positionId}/${levelId}`);
 
     return data;
   } catch (error) {
@@ -50,9 +43,7 @@ export const getSoftSkillsList = async () => {
 
 export const getSoftSkillInterview = async (id: string) => {
   try {
-    const { data } = await apiClient.get(
-      `${endpoints.softSkillInterview}/${id}`,
-    );
+    const { data } = await apiClient.get(`${endpoints.softSkillInterview}/${id}`);
 
     return data;
   } catch (error) {
@@ -61,9 +52,7 @@ export const getSoftSkillInterview = async (id: string) => {
   }
 };
 
-export const completeSoftSkillsInterview = async (
-  data: ISoftSkillInterview,
-) => {
+export const completeSoftSkillsInterview = async (data: ISoftSkillInterview) => {
   try {
     const response = await apiClient.post(endpoints.softSkillInterview, data);
 
@@ -103,4 +92,3 @@ export const createSkillMatrix = async (request: IMatrixUpdate) => {
     message.error(`Server error. Please contact admin`);
   }
 };
-

@@ -18,18 +18,16 @@ export const getAllPositionGroups = async () => {
         color: 'green',
       },
     ];
-  } catch(error) {
+  } catch (error) {
     console.error('[API_CLIENT_GET_ALL_POSITIONS_GROUPS_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
-
-
 };
 
 export const getAllPositions = async () => {
   try {
     const { data } = await apiClient.get(endpoints.positions);
-  
+
     if (data.length > 1) {
       return data;
     }
