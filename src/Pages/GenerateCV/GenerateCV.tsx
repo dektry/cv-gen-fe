@@ -6,9 +6,6 @@ import { PageNotFound } from 'common-components/PageNotFound';
 
 import { GenerateCVsteps } from './utils/constants';
 import paths from 'config/routes.json';
-import { ChoosePerson } from './ChoosePerson/ChoosePerson';
-import { TechnicalInterview } from './TechnicalInterview';
-import { SoftskillsInterview } from './SoftskillsInterview';
 import { useStyles } from './styles';
 
 const { TabPane } = Tabs;
@@ -62,21 +59,14 @@ export const GenerateCV = ({ ...props }) => {
         type="card"
         onTabClick={handleTabClick}
       >
-        <TabPane tab={GenerateCVsteps.CHOOSE_A_PERSON} key="0">
-          <ChoosePerson />
-        </TabPane>
-        <TabPane tab={GenerateCVsteps.TECHNICAL_INTERVIEW} key="1">
-          <TechnicalInterview />
-        </TabPane>
-        <TabPane tab={GenerateCVsteps.SOFT_SKILLS_INTERVIEW} key="2">
-          <SoftskillsInterview />
-        </TabPane>
+        <TabPane tab={GenerateCVsteps.CHOOSE_A_PERSON} key="0" />
+        <TabPane tab={GenerateCVsteps.TECHNICAL_INTERVIEW} key="1" />
+        <TabPane tab={GenerateCVsteps.SOFT_SKILLS_INTERVIEW} key="2" />
       </Tabs>
-      {currentTab === '-1' && !(location.pathname === paths.generateCV) ? <PageNotFound /> : null}
     </>
   );
 };
 
 GenerateCV.defaultProps = {
-  deviceRatio: window.devicePixelRatio,
+  devicePixelRatio: window.devicePixelRatio,
 };
