@@ -4,6 +4,7 @@ import { desktopBreakpoints } from 'theme/constants';
 export const useStyles = createUseStyles({
   container: {
     width: 'calc(100% / 3)',
+    padding: `calc(24px - ${window.devicePixelRatio}px)`,
   },
   candidatesMenu: {
     margin: '1rem 1rem 1rem 0',

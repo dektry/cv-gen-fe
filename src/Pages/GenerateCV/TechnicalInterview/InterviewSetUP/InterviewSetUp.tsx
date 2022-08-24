@@ -15,6 +15,7 @@ import { InterviewForm } from '../../../InterviewForm';
 import { Button } from 'antd';
 import { CandidatePopOver } from '../../ChoosePerson/Candidate';
 import { useStyles } from './styles';
+import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
 
 export const InterviewSetUp = () => {
   const classes = useStyles();
@@ -46,6 +47,7 @@ export const InterviewSetUp = () => {
 
   return (
     <>
+      <GenerateCV />
       <GenerateCvHeader backPath={paths.candidate.replace(':id', id ? id : '')}>
         <CandidatePopOver />
       </GenerateCvHeader>

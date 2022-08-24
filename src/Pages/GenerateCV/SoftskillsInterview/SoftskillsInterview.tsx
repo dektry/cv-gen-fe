@@ -23,6 +23,7 @@ import { SkillWithCheckbox } from '../SoftskillsInterview';
 import { SelectPositions } from '../SoftskillsInterview';
 import { SoftSkillModal } from '../SoftskillsInterview';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
+import { GenerateCV } from '../GenerateCV';
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
 import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
@@ -114,6 +115,7 @@ export const SoftskillsInterview = () => {
 
   return (
     <>
+      <GenerateCV />
       <GenerateCvHeader backPath={backPath} disabled={isChanged}>
         <CandidatePopOver />
       </GenerateCvHeader>

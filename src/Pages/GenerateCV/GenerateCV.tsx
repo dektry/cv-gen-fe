@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { matchPath, useNavigate, generatePath, useLocation } from 'react-router-dom';
 import { Tabs } from 'antd';
 
-import { PageNotFound } from 'common-components/PageNotFound';
-
 import { GenerateCVsteps } from './utils/constants';
 import paths from 'config/routes.json';
 import { useStyles } from './styles';
@@ -25,8 +23,14 @@ export const GenerateCV = ({ ...props }) => {
   const [currentTab, setCurrentTab] = useState('0');
 
   useEffect(() => {
-    const tabFromPath = tabPaths.findIndex((p) => !!matchPath(location.pathname, p));
-    setCurrentTab(`${tabFromPath}`);
+    let tabFromPath = '0';
+    if (location.pathname.includes('tech-interview')) {
+      tabFromPath = '1'
+    } else if (location.pathname.includes('soft-interview')) {
+      tabFromPath = '2'
+    }
+    
+    setCurrentTab(tabFromPath);
   }, [location.pathname]);
 
   const handleTabClick = (key: string) => {

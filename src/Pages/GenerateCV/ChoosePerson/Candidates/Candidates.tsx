@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import paths from 'config/routes.json';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { CandidatesTable } from '../../../CandidatesTable';
+import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 import { loadCandidates } from 'store/reducers/candidates';
 import { useAppDispatch } from 'store';
@@ -18,6 +19,8 @@ export const Candidates = () => {
   const softRef = useRef<boolean>(false);
 
   return (
+    <>
+      <GenerateCV />
     <div className={classes.page}>
       <div className={classes.cust}>
         <GenerateCvHeader backPath={paths.generateCVchoosePerson}>
@@ -40,5 +43,6 @@ export const Candidates = () => {
       </div>
       <CandidatesTable hideActions editAction />
     </div>
+    </>
   );
 };

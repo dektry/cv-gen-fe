@@ -9,6 +9,7 @@ import { Layout, Drawer } from 'antd';
 import { ErrorBoundary } from './ErrorBoundary';
 import { MenuOutlined } from '@ant-design/icons';
 import {Header as AppHeader} from './Header';
+import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
 
 import { useIsMobile } from 'theme/Responsive';
 

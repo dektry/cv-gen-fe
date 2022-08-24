@@ -8,6 +8,7 @@ import { candidatesSelector } from 'store/reducers/candidates';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { InterviewResult } from '../../../InterviewResult';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
+import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
 
 export const InterviewResults = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ export const InterviewResults = () => {
 
   return (
     <>
+      <GenerateCV />
       <GenerateCvHeader
         backPath={paths.generateCVtechnicalInterview.replace(
           ':id',

@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import Typography from 'antd/lib/typography';
 
 import { EmployeesTable } from '../../../EmployeesTable';
+import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 
@@ -21,15 +22,18 @@ export const Employees = () => {
 
   return (
     <>
-      <GenerateCvHeader backPath={paths.generateCVchoosePerson}>
-        <Typography className={classes.title}>{EMPLOYEES.TITLE}</Typography>
-        <SearchWithAutocomplete
-          className={classes.search}
-          onChange={props => dispatch(getEmployeesList(props))}
-          fullNameRef={fullNameRef}
-        />
-      </GenerateCvHeader>
-      <EmployeesTable hideActions editAction />
+      <GenerateCV />
+      <div className={classes.container}>
+        <GenerateCvHeader backPath={paths.generateCVchoosePerson}>
+          <Typography className={classes.title}>{EMPLOYEES.TITLE}</Typography>
+          <SearchWithAutocomplete
+            className={classes.search}
+            onChange={props => dispatch(getEmployeesList(props))}
+            fullNameRef={fullNameRef}
+          />
+        </GenerateCvHeader>
+        <EmployeesTable hideActions editAction />
+      </div>
     </>
   );
 };
