@@ -20,7 +20,7 @@ import { useAppDispatch } from 'store';
 import { Button, Space, Table } from 'antd';
 import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 import { TablePaginationConfig } from 'antd/es/table/Table';
-import { FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
+import { SorterResult, SortOrder } from 'antd/es/table/interface';
 
 import { ACTIONS, CANDIDATES, CANDIDATE_TABLE_KEYS, defaultCandidate, defaultPageSize, defaultCurrentPage } from './utils/constants';
 
@@ -78,7 +78,7 @@ export const CandidatesTable = ({ hideActions = false, editAction = false }) => 
         limit: pagination.pageSize || defaultPageSize,
         sorter: isArray(sorter)
           ? { order: 'ascend', field: 'name' }
-          :  { order: sorter.order as SortOrder, field: sorter.field },
+          :  { order: sorter.order, field: sorter.field },
       }),
     );
   };

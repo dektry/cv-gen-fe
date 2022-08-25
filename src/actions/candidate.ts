@@ -8,9 +8,9 @@ import Helper from 'helper';
 import { apiClient } from 'services/apiService';
 
 export interface ILoadCandidateProps {
-  limit: number;
-  page: number;
-  sorter?: { order: SortOrder; field: Key | readonly Key[] | undefined };
+  limit?: number;
+  page?: number;
+  sorter?: { order?: SortOrder; field: Key | readonly Key[] | undefined};
   fullName?: string;
   woInterview?: boolean;
   woSoftInterview?: boolean;
@@ -27,7 +27,7 @@ export const getAllCandidates = async ({
   try {
     const sort: {
       order?: 'ASC' | 'DESC';
-      field?: string;
+      field?: Key | readonly Key[] | undefined;
     } = {};
 
     if (sorter?.order) {

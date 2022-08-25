@@ -8,8 +8,8 @@ import Helper from 'helper';
 import { apiClient } from 'services/apiService';
 
 export interface ILoadEmployeeProps {
-  limit: number;
-  page: number;
+  limit?: number;
+  page?: number;
   sorter?: { order: SortOrder; field: Key | readonly Key[] | undefined };
   fullName?: string;
 }
