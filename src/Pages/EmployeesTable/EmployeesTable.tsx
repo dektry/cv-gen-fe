@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
 import { Table, Button, Space } from 'antd';
-import { SorterResult } from 'antd/es/table/interface';
+import { SorterResult, SortOrder } from 'antd/es/table/interface';
 import { TablePaginationConfig } from 'antd/es/table/Table';
 import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 
@@ -32,8 +32,8 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
     dispatch(setLoading(true));
     dispatch(
       getEmployeesList({
-        page: currentPage || 1,
-        limit: pageSize || 10,
+        page: currentPage || defaultCurrentPage,
+        limit: pageSize || defaultPageSize,
       })
     );
     dispatch(setLoading(false));
@@ -44,17 +44,15 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
     sorter: SorterResult<IEmployee> | SorterResult<IEmployee>[]
   ) => {
     dispatch(setLoading(true));
-    dispatch(setCurrentPage(pagination.current ?? defaultCurrentPage));
-    dispatch(setPageSize(pagination.pageSize ?? defaultPageSize));
+    dispatch(setCurrentPage(pagination.current || defaultCurrentPage));
+    dispatch(setPageSize(pagination.pageSize || defaultPageSize));
     await dispatch(
       getEmployeesList({
-        page: pagination.current,
-        limit: pagination.pageSize,
-        ...(isArray(sorter)
-          ? {}
-          : {
-              sorter: { order: sorter.order, field: sorter.field as string },
-            }),
+        page: pagination.current || defaultCurrentPage,
+        limit: pagination.pageSize || defaultPageSize,
+        sorter: isArray(sorter)
+          ? { order: 'ascend', field: 'name' }
+          :  { order: sorter.order as SortOrder, field: sorter.field },
         fullName: query,
       })
     );

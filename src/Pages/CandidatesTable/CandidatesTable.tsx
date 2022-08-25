@@ -20,9 +20,9 @@ import { useAppDispatch } from 'store';
 import { Button, Space, Table } from 'antd';
 import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 import { TablePaginationConfig } from 'antd/es/table/Table';
-import { SorterResult } from 'antd/es/table/interface';
+import { FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
 
-import { ACTIONS, CANDIDATES, CANDIDATE_TABLE_KEYS, defaultCandidate } from './utils/constants';
+import { ACTIONS, CANDIDATES, CANDIDATE_TABLE_KEYS, defaultCandidate, defaultPageSize, defaultCurrentPage } from './utils/constants';
 
 import paths from 'config/routes.json';
 import { useIsMobile } from 'theme/Responsive';
@@ -45,7 +45,7 @@ export const CandidatesTable = ({ hideActions = false, editAction = false }) => 
   useEffect(() => {
     (async () => {
       dispatch(setCandidatesIsLoading(true));
-      await dispatch(loadCandidates({ page: currentPage, limit: pageSize }));
+      await dispatch(loadCandidates({ page: currentPage, limit: pageSize, sorter: { order: 'ascend', field: 'fullName' } }));
       dispatch(
         setSoftSkillsInterview({
           softSkills: [],
@@ -66,29 +66,27 @@ export const CandidatesTable = ({ hideActions = false, editAction = false }) => 
     })();
   }, [dispatch, currentCandidate]);
 
+  const handleChange = async (
+    pagination: TablePaginationConfig,
+    sorter: SorterResult<ICandidateTable> | SorterResult<ICandidateTable>[],
+  ) => {
+    dispatch(setCandidatesCurrentPage(pagination.current || defaultCurrentPage));
+    dispatch(setCandidatesPageSize(pagination.pageSize || defaultPageSize));
+    await dispatch(
+      loadCandidates({
+        page: pagination.current || defaultCurrentPage,
+        limit: pagination.pageSize || defaultPageSize,
+        sorter: isArray(sorter)
+          ? { order: 'ascend', field: 'name' }
+          :  { order: sorter.order as SortOrder, field: sorter.field },
+      }),
+    );
+  };
+
   const classes = useStyles();
   const isMobile = useIsMobile();
   const navigation = useNavigate();
 
-  //TODO: fix sorter types
-  // const handleChange = async (
-  //   pagination: TablePaginationConfig,
-  //   sorter: SorterResult<ICandidateTable> | SorterResult<ICandidateTable>[],
-  // ) => {
-  //   dispatch(setCandidatesCurrentPage(pagination.current || 1));
-  //   dispatch(setCandidatesPageSize(pagination.pageSize || defaultPageSize));
-  //   await dispatch(
-  //     loadCandidates({
-  //       page: pagination.current,
-  //       limit: pagination.pageSize,
-  //       ...(isArray(sorter)
-  //         ? {}
-  //         : {
-  //             sorter: { order: sorter.order, field: sorter.field as string },
-  //           }),
-  //     }),
-  //   );
-  // };
 
   const renderActions = (record: ICandidateTable) => {
     return (
@@ -156,7 +154,7 @@ export const CandidatesTable = ({ hideActions = false, editAction = false }) => 
       expandable={expandableParams}
       pagination={paginationObj}
       loading={isLoading}
-      // onChange={handleChange} // TODO: fix problem with onChange types
+      onChange={handleChange}
     >
       <Column
         title={CANDIDATES.FULLNAME}

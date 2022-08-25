@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { Key, SortOrder } from 'antd/es/table/interface';
 
 import { ICandidate, ICandidateTable } from 'models/ICandidate';
 import endpoints from 'config/endpoint.json';
@@ -7,9 +8,9 @@ import Helper from 'helper';
 import { apiClient } from 'services/apiService';
 
 export interface ILoadCandidateProps {
-  limit?: number;
-  page?: number;
-  sorter?: { order: string; field: string };
+  limit: number;
+  page: number;
+  sorter?: { order: SortOrder; field: Key | readonly Key[] | undefined };
   fullName?: string;
   woInterview?: boolean;
   woSoftInterview?: boolean;
