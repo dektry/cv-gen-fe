@@ -19,7 +19,7 @@ function App() {
   if (isLoading) return <PreLoader status="Loading..." />;
   return (
     <div>
-      <AppRouter isAuth={true} />
+      <AppRouter isAuth={isAuth} />
     </div>
   );
 }
