@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import { PageNotFound } from '../PageNotFound';
+import { PageNotFound } from 'Pages/PageNotFound';
 import { AppRootPublicContainer } from './components/AppRootPublicContainer';
 
 import { publicRoutes, privateRoutes, IRoute } from './utils/constants';

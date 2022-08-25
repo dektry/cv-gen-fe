@@ -43,6 +43,7 @@ const app = createSlice({
     logOut: (state) => {
       localStorage.clear();
       state.user = defaultUser;
+      state.isAuth = false;
     },
     setAppIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
@@ -51,6 +52,7 @@ const app = createSlice({
   extraReducers: (builder) => {
     builder.addCase(logIn.fulfilled, (state, { payload }) => {
       state.user = payload;
+      if (payload) state.isAuth = true;
     });
     builder.addCase(loadPositionGroups.fulfilled, (state, { payload }) => {
       state.positionGroups = payload;
@@ -62,7 +64,7 @@ const app = createSlice({
       state.isLoading = false;
 
       if (payload) {
-        state.user = payload;
+        state.user = payload.payload;
         state.isAuth = true;
 
         saveLocalStorage('jwt', payload.jwt.access_token);
