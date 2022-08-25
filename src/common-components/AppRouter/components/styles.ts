@@ -19,6 +19,12 @@ export const useStyles = createUseStyles({
   drawer: {
     height: '100vh',
   },
+  layout: {
+    minHeight: '100vh',
+  },
+  outlet_container: {
+    paddingTop: '50px',
+  },
   global: {
     display: 'flex',
     justifyContent: 'center',
