@@ -10,8 +10,6 @@ export const defaultPageSize = 10;
 
 export const defaultCurrentPage = 1;
 
-export const ACTIONS = 'Actions';
-
 export const EMPLOYEES = {
   TITLE: 'Employees',
   FULLNAME: 'Full Name',

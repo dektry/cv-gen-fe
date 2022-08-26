@@ -1,5 +1,5 @@
-import { SortOrder } from 'antd/es/table/interface';
 import { message } from 'antd';
+import { SortOrder, Key } from 'antd/lib/table/interface';
 
 import { IEmployee } from 'models/IEmployee';
 import endpoints from 'config/endpoint.json';
@@ -10,15 +10,18 @@ import { apiClient } from 'services/apiService';
 export interface ILoadEmployeeProps {
   limit?: number;
   page?: number;
-  sorter?: { order?: SortOrder; field: string };
+  sorter?: { order: SortOrder; field: Key | readonly Key[] | undefined };
   fullName?: string;
 }
 
 export const getAllEmployees = async ({ limit = 10, page = 1, sorter, fullName = '' }: ILoadEmployeeProps) => {
   const sort: {
-    order?: 'ASC' | 'DESC';
-    field?: string;
-  } = {};
+    order: 'ASC' | 'DESC';
+    field: Key | readonly Key[] | undefined;
+  } = {
+    order: 'ASC',
+    field: 'fullName'
+  };
 
   if (sorter?.order) {
     sort.order = sorter.order === 'ascend' ? 'ASC' : 'DESC';

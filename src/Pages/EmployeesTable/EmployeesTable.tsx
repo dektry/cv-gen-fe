@@ -1,39 +1,36 @@
 import React, { useEffect, useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
-import { Table, Button, Space } from 'antd';
-import { SorterResult } from 'antd/es/table/interface';
+import { SorterResult, SortOrder } from 'antd/es/table/interface';
 import { TablePaginationConfig } from 'antd/es/table/Table';
-import { EditOutlined, DiffOutlined } from '@ant-design/icons';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { setLoading, setPageSize, setCurrentPage, employeesSelector, getEmployeesList } from 'store/reducers/employees';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
-import { useStyles } from '../EmployeesTable/styles';
 import { useIsMobile } from 'theme/Responsive';
-import { defaultCurrentPage, defaultPageSize, EMPLOYEE_TABLE_KEYS, EMPLOYEES, ACTIONS } from './utils/constants';
+import { defaultCurrentPage, defaultPageSize, EMPLOYEE_TABLE_KEYS, EMPLOYEES } from './utils/constants';
 
 import { IEmployee } from 'models/IEmployee';
+import { ITableParams, IExpandableParams } from 'models/ICommon';
 import paths from 'config/routes.json';
 
-const { Column } = Table;
+import { TableComponent as Table } from 'common-components/Table';
 
-export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
+export const EmployeesTable = ({ editAction = false }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { employees, currentPage, pageSize, totalItems, query, isLoading } = useSelector(employeesSelector);
 
-  const classes = useStyles();
   const isMobile = useIsMobile();
 
   useEffect(() => {
     dispatch(setLoading(true));
     dispatch(
       getEmployeesList({
-        page: currentPage || 1,
-        limit: pageSize || 10,
+        page: currentPage || defaultCurrentPage,
+        limit: pageSize || defaultPageSize,
       })
     );
     dispatch(setLoading(false));
@@ -44,17 +41,15 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
     sorter: SorterResult<IEmployee> | SorterResult<IEmployee>[]
   ) => {
     dispatch(setLoading(true));
-    dispatch(setCurrentPage(pagination.current ?? defaultCurrentPage));
-    dispatch(setPageSize(pagination.pageSize ?? defaultPageSize));
+    dispatch(setCurrentPage(pagination.current || defaultCurrentPage));
+    dispatch(setPageSize(pagination.pageSize || defaultPageSize));
     await dispatch(
       getEmployeesList({
-        page: pagination.current,
-        limit: pagination.pageSize,
-        ...(isArray(sorter)
-          ? {}
-          : {
-              sorter: { order: sorter.order, field: sorter.field as string },
-            }),
+        page: pagination.current || defaultCurrentPage,
+        limit: pagination.pageSize || defaultPageSize,
+        sorter: isArray(sorter)
+          ? { order: 'ascend', field: 'name' }
+          :  { order: sorter.order as SortOrder, field: sorter.field },
         fullName: query,
       })
     );
@@ -65,7 +60,7 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
     return <EmployeeShortCard record={record} />;
   };
 
-  const expandbleParams = isMobile
+  const expandableParams: IExpandableParams<IEmployee> | undefined = isMobile
     ? {
         columnWidth: '16px',
         expandRowByClick: true,
@@ -73,7 +68,7 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
       }
     : undefined;
 
-  const paginationParams = {
+  const paginationObj = {
     pageSize,
     total: totalItems,
     current: currentPage,
@@ -88,66 +83,32 @@ export const EmployeesTable = ({ hideActions = false, editAction = false }) => {
     );
   };
 
-  const renderActions = (record: IEmployee) => {
-    return (
-      <Space>
-        <Button type="primary" onClick={() => createPath(record)} icon={<DiffOutlined />} />
-        <Button type="primary" onClick={() => false} icon={<EditOutlined />} />
-      </Space>
-    );
-  };
-
+  
   const handleRowClick = useCallback(
     (record: IEmployee) => {
       return {
         ...(editAction
           ? {
-              onClick: () => createPath(record),
-            }
+            onClick: () => createPath(record),
+          }
           : {}),
-      };
-    },
-    [editAction, history]
-  );
+        };
+      },
+      [editAction, history]
+      );
+    
+      const params: ITableParams<IEmployee> = {
+        handleChange,
+        entity: EMPLOYEES,
+        tableKeys: EMPLOYEE_TABLE_KEYS,
+        dataSource: employees,
+        expandableParams,
+        handleRowClick,
+        paginationObj,
+        loading: isLoading,
+      }
 
   return (
-    <Table
-      rowKey={'id'}
-      size="small"
-      dataSource={employees}
-      expandable={expandbleParams}
-      pagination={paginationParams}
-      loading={isLoading}
-      onChange={handleChange}
-      onRow={(record) => handleRowClick(record)}
-    >
-      <Column
-        title={EMPLOYEES.FULLNAME}
-        dataIndex={EMPLOYEE_TABLE_KEYS.fullName}
-        key={EMPLOYEE_TABLE_KEYS.fullName}
-        sorter
-      />
-      <Column
-        title={EMPLOYEES.POSITION}
-        dataIndex={EMPLOYEE_TABLE_KEYS.position}
-        key={EMPLOYEE_TABLE_KEYS.position}
-        sorter
-      />
-      <Column
-        className={classes.displayNoneMobile}
-        title={EMPLOYEES.LEVEL}
-        dataIndex={EMPLOYEE_TABLE_KEYS.level}
-        key={EMPLOYEE_TABLE_KEYS.level}
-        sorter
-      />
-      <Column
-        className={classes.displayNoneMobile}
-        title={EMPLOYEES.LOCATION}
-        dataIndex={EMPLOYEE_TABLE_KEYS.location}
-        key={EMPLOYEE_TABLE_KEYS.location}
-        sorter
-      />
-      {!hideActions && <Column className={classes.tableActions} title={ACTIONS} render={renderActions} />}
-    </Table>
+    <Table<IEmployee> params={ params } />
   );
 };

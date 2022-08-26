@@ -32,7 +32,7 @@ export const Employees = () => {
             fullNameRef={fullNameRef}
           />
         </GenerateCvHeader>
-        <EmployeesTable hideActions editAction />
+        <EmployeesTable editAction />
       </div>
     </>
   );

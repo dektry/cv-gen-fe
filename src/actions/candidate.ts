@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { Key, SortOrder } from 'antd/es/table/interface';
 
 import { ICandidate, ICandidateTable } from 'models/ICandidate';
 import endpoints from 'config/endpoint.json';
@@ -9,7 +10,7 @@ import { apiClient } from 'services/apiService';
 export interface ILoadCandidateProps {
   limit?: number;
   page?: number;
-  sorter?: { order: string; field: string };
+  sorter?: { order?: SortOrder; field: Key | readonly Key[] | undefined};
   fullName?: string;
   woInterview?: boolean;
   woSoftInterview?: boolean;
@@ -22,11 +23,11 @@ export const getAllCandidates = async ({
   fullName = '',
   woInterview = false,
   woSoftInterview = false,
-}) => {
+} : ILoadCandidateProps) => {
   try {
     const sort: {
-      order?: 'ASC' | 'DESC';
-      field?: string;
+      order?: 'ASC' | 'DESC' | null | undefined;
+      field?: Key | readonly Key[] | undefined;
     } = {};
 
     if (sorter?.order) {
