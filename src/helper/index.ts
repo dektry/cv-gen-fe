@@ -1,12 +1,14 @@
+import { SortOrder } from 'antd/lib/table/interface';
+
 type Params = {
-  [key: string]: string | number | boolean | React.Key | readonly React.Key[] | undefined;
+  [key: string]: string | number | boolean | React.Key | readonly React.Key[] | undefined | SortOrder;
 }
 
 class Helper {
   getQueryString = (params: Params) => {
     const esc = encodeURIComponent;
     return Object.keys(params)
-      .map((k) => {`${esc(k)}=${esc(params[k])}`})
+      .map((k) => {`${esc(k)}=${esc(String(params[k]))}`})
       .join('&');
   };
   headerWithJWT = () => {

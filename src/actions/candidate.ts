@@ -23,10 +23,19 @@ export const getAllCandidates = async ({
   fullName = '',
   woInterview = false,
   woSoftInterview = false,
+} : {
+  limit?: number;
+  page?: number;
+  sorter?: {
+    order?: SortOrder; field: Key | readonly Key[] | undefined
+  };
+  fullName?: string;
+  woInterview?: boolean;
+  woSoftInterview?: boolean;
 }) => {
   try {
     const sort: {
-      order?: 'ASC' | 'DESC';
+      order?: 'ASC' | 'DESC' | null | undefined;
       field?: Key | readonly Key[] | undefined;
     } = {};
 
