@@ -41,7 +41,7 @@ export const Candidates = () => {
             />
           </GenerateCvHeader>
         </div>
-        <CandidatesTable hideActions editAction />
+        <CandidatesTable editAction />
       </div>
     </>
   );

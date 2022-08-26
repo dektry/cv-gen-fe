@@ -8,7 +8,7 @@ class Helper {
   getQueryString = (params: Params) => {
     const esc = encodeURIComponent;
     return Object.keys(params)
-      .map((k) => {`${esc(k)}=${esc(String(params[k]))}`})
+      .map((k) => `${esc(k)}=${esc(String(params[k]))}`)
       .join('&');
   };
   headerWithJWT = () => {

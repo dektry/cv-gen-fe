@@ -57,7 +57,6 @@ export const GET_CANDIDATES = 'Get candidates...';
 
 export const articlePageSizeOptions = ['5', '10', '20', '50'];
 
-export const ACTIONS = 'Actions';
 export const CANDIDATES = {
   TITLE: 'Candidates',
   FULLNAME: 'Full Name',
