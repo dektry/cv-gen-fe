@@ -23,16 +23,7 @@ export const getAllCandidates = async ({
   fullName = '',
   woInterview = false,
   woSoftInterview = false,
-} : {
-  limit?: number;
-  page?: number;
-  sorter?: {
-    order?: SortOrder; field: Key | readonly Key[] | undefined
-  };
-  fullName?: string;
-  woInterview?: boolean;
-  woSoftInterview?: boolean;
-}) => {
+} : ILoadCandidateProps) => {
   try {
     const sort: {
       order?: 'ASC' | 'DESC' | null | undefined;
