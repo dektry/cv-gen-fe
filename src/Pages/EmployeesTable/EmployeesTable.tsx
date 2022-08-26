@@ -9,7 +9,6 @@ import { useAppDispatch } from 'store';
 import { setLoading, setPageSize, setCurrentPage, employeesSelector, getEmployeesList } from 'store/reducers/employees';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
-import { useStyles } from '../EmployeesTable/styles';
 import { useIsMobile } from 'theme/Responsive';
 import { defaultCurrentPage, defaultPageSize, EMPLOYEE_TABLE_KEYS, EMPLOYEES } from './utils/constants';
 
@@ -24,7 +23,6 @@ export const EmployeesTable = ({ editAction = false }) => {
   const dispatch = useAppDispatch();
   const { employees, currentPage, pageSize, totalItems, query, isLoading } = useSelector(employeesSelector);
 
-  const classes = useStyles();
   const isMobile = useIsMobile();
 
   useEffect(() => {

@@ -27,7 +27,6 @@ import paths from 'config/routes.json';
 import { useIsMobile } from 'theme/Responsive';
 import { CandidateShortCard } from '../CandidateShortCard';
 import { TableComponent as Table } from 'common-components/Table';
-import { IEmployee } from 'models/IEmployee';
 // TODO: implement loader logic
 
 export const CandidatesTable = ({ editAction = false }) => {

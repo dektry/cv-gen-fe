@@ -46,7 +46,7 @@ export const Candidate = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [isChanged, setIsChanged] = useState(false);
-  const { currentCandidate, isLoading } = useSelector(candidatesSelector);
+  const { currentCandidate } = useSelector(candidatesSelector);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
