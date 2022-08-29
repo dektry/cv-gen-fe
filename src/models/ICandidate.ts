@@ -52,4 +52,5 @@ export interface ICandidatesState extends ITableExtension {
   chosenCandidate: NullableField<ICandidateTable>;
   candidates: ICandidateTable[];
   isLoading: boolean;
+  isLoadingOneCandidate: boolean;
 }

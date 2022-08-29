@@ -25,11 +25,11 @@ export const GenerateCV = ({ ...props }) => {
   useEffect(() => {
     let tabFromPath = '0';
     if (location.pathname.includes('tech-interview')) {
-      tabFromPath = '1'
+      tabFromPath = '1';
     } else if (location.pathname.includes('soft-interview')) {
-      tabFromPath = '2'
+      tabFromPath = '2';
     }
-    
+
     setCurrentTab(tabFromPath);
   }, [location.pathname]);
 

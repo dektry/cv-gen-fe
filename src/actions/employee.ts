@@ -20,7 +20,7 @@ export const getAllEmployees = async ({ limit = 10, page = 1, sorter, fullName =
     field: Key | readonly Key[] | undefined;
   } = {
     order: 'ASC',
-    field: 'fullName'
+    field: 'fullName',
   };
 
   if (sorter?.order) {
@@ -53,6 +53,7 @@ export const getEmployee = async (id: string) => {
 export const updateEmployee = async (employee: IEmployee) => {
   try {
     const { data } = await apiClient.put(`${endpoints.employee}/${employee.id}`, employee);
+    message.success('Employee has been successfully updated!');
     return data;
   } catch (error) {
     console.error('[API_CLIENT_UPDATE_EMPLOYEE_ERROR]', error);

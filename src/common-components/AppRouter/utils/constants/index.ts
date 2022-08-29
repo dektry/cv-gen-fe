@@ -1,8 +1,8 @@
 import React from 'react';
 
 import LoginContainer from 'Pages/Login';
-import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
-import { ListOfOptions } from 'Pages/GenerateCV/ChoosePerson/ListOfOptions';
+import { GenerateCV } from 'Pages/GenerateCV/common-components/GenerateCv';
+import { ListOfOptions } from 'Pages/GenerateCV/common-components/ListOfOptions';
 import { Candidates } from 'Pages/GenerateCV/ChoosePerson/Candidates';
 import { Candidate } from 'Pages/GenerateCV/ChoosePerson/Candidate';
 import { Employees } from 'Pages/GenerateCV/ChoosePerson/Employees';
@@ -11,7 +11,6 @@ import { InterviewSetUp } from 'Pages/GenerateCV/TechnicalInterview/InterviewSet
 import { SoftskillsInterview } from 'Pages/GenerateCV/SoftskillsInterview';
 import { InterviewResult } from 'Pages/InterviewResult';
 
-
 import routes from 'config/routes.json';
 
 export interface IRoute {
@@ -19,9 +18,7 @@ export interface IRoute {
   component: React.ComponentType;
 }
 
-export const publicRoutes: IRoute[] = [
-  { path: routes.login, component: LoginContainer }
-];
+export const publicRoutes: IRoute[] = [{ path: routes.login, component: LoginContainer }];
 export const privateRoutes: IRoute[] = [
   { path: routes.generateCV, component: GenerateCV },
   { path: routes.generateCVchoosePerson, component: ListOfOptions },
