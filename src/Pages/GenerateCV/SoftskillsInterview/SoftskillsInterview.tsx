@@ -85,10 +85,7 @@ export const SoftskillsInterview = () => {
     [softskillsInterview, dispatch, setIsChanged],
   );
 
-  const isLevelAndPosition =
-    (interviewResult?.level.id && interviewResult.position.id) ||
-    (softskillsInterview.positionId && softskillsInterview.levelId);
-  const saveDisabled = !(isLevelAndPosition && isChanged);
+  const saveDisabled = !isChanged;
 
   const skillsToView = softskillsInterview.successfullySaved
     ? softskillsInterview.softSkills
