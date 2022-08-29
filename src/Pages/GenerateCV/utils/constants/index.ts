@@ -26,12 +26,6 @@ export const SOFT_SKILL_INTERVIEW = {
 export const ASSESSMENT = 'Assessment';
 export const GENERATE_CV = 'Generate CV';
 
-export enum GenerateCVsteps {
-  CHOOSE_A_PERSON = 'Choose a person',
-  TECHNICAL_INTERVIEW = 'Technical interview',
-  SOFT_SKILLS_INTERVIEW = 'Soft skills interview',
-}
-
 // Info source: https://www.loc.gov/standards/iso639-2/php/code_list.php
 export const Languages: Record<string, string> = {
   aa: 'Afar',

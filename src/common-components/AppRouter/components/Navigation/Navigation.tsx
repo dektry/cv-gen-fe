@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+import { FileAddOutlined } from '@ant-design/icons';
+import { OrderedListOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
+
 import { navigationKeys, mainPath, GENERATE_CV, LIST_OF_CV } from './utils/constants';
 
 import { NavigationItem } from './NavigationItem';
@@ -36,16 +40,22 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
           itemKey={navigationKeys['/generate-cv']}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
+          icon={<FileAddOutlined />}
         >
-          <Link to={paths.generateCV}>{GENERATE_CV}</Link>
+          <Tooltip placement="right" title={collapsed ? GENERATE_CV : ''}>
+            <Link to={paths.generateCV}>{GENERATE_CV}</Link>
+          </Tooltip>
         </NavigationItem>
         <NavigationItem
           selectedItem={selectedItem}
           itemKey={navigationKeys['/cv-list']}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
+          icon={<OrderedListOutlined />}
         >
-          <Link to={paths.listOfCVs}>{LIST_OF_CV}</Link>
+          <Tooltip placement="right" title={collapsed ? LIST_OF_CV : ''}>
+            <Link to={paths.listOfCVs}>{LIST_OF_CV}</Link>
+          </Tooltip>
         </NavigationItem>
       </ul>
     </>

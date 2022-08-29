@@ -10,7 +10,7 @@ import { apiClient } from 'services/apiService';
 export interface ILoadCandidateProps {
   limit?: number;
   page?: number;
-  sorter?: { order?: SortOrder; field: Key | readonly Key[] | undefined};
+  sorter?: { order?: SortOrder; field: Key | readonly Key[] | undefined };
   fullName?: string;
   woInterview?: boolean;
   woSoftInterview?: boolean;
@@ -23,7 +23,7 @@ export const getAllCandidates = async ({
   fullName = '',
   woInterview = false,
   woSoftInterview = false,
-} : ILoadCandidateProps) => {
+}: ILoadCandidateProps) => {
   try {
     const sort: {
       order?: 'ASC' | 'DESC' | null | undefined;
@@ -66,6 +66,7 @@ export const getCandidate = async (id: string): Promise<ICandidate | undefined> 
 export const updateCandidate = async (candidateInfo: Partial<ICandidate>) => {
   try {
     const { data } = await apiClient.put(`${endpoints.candidates}/${candidateInfo.id}`, candidateInfo);
+    message.success('Candidate has been successfully updated!');
     return { ...data };
   } catch (error) {
     console.error('[API_CLIENT_UPDATE_CANDIDATE_ERROR]', error);

@@ -7,7 +7,7 @@ export const useStyles = createUseStyles({
     [`@media (max-width: ${desktopBreakpoints[0] - 1}px)`]: {
       margin: '10px 0px',
     },
-    margin: '24px',
+    // margin: '24px',
   },
   modal: {
     [`@media (max-width: ${desktopBreakpoints[0] - 1}px)`]: {

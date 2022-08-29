@@ -14,32 +14,30 @@ import {
 } from 'store/reducers/softskillsInterview';
 
 import { useStyles } from './styles';
-import { Input , Button } from 'antd';
+import { Input, Button } from 'antd';
 
 import paths from 'config/routes.json';
-import { CandidatePopOver } from '../ChoosePerson/Candidate';
+import { CandidatePopOver } from '../common-components/PopOver';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SkillWithCheckbox } from '../SoftskillsInterview';
 import { SelectPositions } from '../SoftskillsInterview';
 import { SoftSkillModal } from '../SoftskillsInterview';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
-import { GenerateCV } from '../GenerateCV';
+import { GenerateCV } from '../common-components/GenerateCv';
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
 import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
 
 const { TextArea } = Input;
 
-type IProps = {props: { id: string }};
+type IProps = { props: { id: string } };
 
 type InputProps = HTMLTextAreaElement & typeof Input & IProps;
 
 export const SoftskillsInterview = () => {
   const dispatch = useAppDispatch();
   const { currentCandidate } = useSelector(candidatesSelector);
-  const { softskillsInterview, softSkillsList } = useSelector(
-    softSkillInterviewSelector,
-  );
+  const { softskillsInterview, softSkillsList } = useSelector(softSkillInterviewSelector);
   const { interviewResult } = useSelector(interviewSelector);
 
   const [isOpenSkillModal, setOpenSkillModal] = useState(false);
@@ -82,7 +80,7 @@ export const SoftskillsInterview = () => {
       dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
       setIsChanged(true);
     },
-    [softskillsInterview, dispatch, setIsChanged],
+    [softskillsInterview, dispatch, setIsChanged]
   );
 
   const isLevelAndPosition =
@@ -90,9 +88,7 @@ export const SoftskillsInterview = () => {
     (softskillsInterview.positionId && softskillsInterview.levelId);
   const saveDisabled = !(isLevelAndPosition && isChanged);
 
-  const skillsToView = softskillsInterview.successfullySaved
-    ? softskillsInterview.softSkills
-    : softSkillsList;
+  const skillsToView = softskillsInterview.successfullySaved ? softskillsInterview.softSkills : softSkillsList;
 
   const saveButtonText = softskillsInterview.successfullySaved
     ? SOFT_SKILL_INTERVIEW.SAVE_CHANGES
@@ -108,10 +104,7 @@ export const SoftskillsInterview = () => {
     setFieldsDisabled(true);
   };
 
-  const backPath = paths.generateCVCandidatePage.replace(
-    ':id',
-    currentCandidate.id,
-  );
+  const backPath = paths.generateCVCandidatePage.replace(':id', currentCandidate.id);
 
   return (
     <>
@@ -119,18 +112,10 @@ export const SoftskillsInterview = () => {
       <GenerateCvHeader backPath={backPath} disabled={isChanged}>
         <CandidatePopOver />
       </GenerateCvHeader>
-      <SelectPositions
-        setFieldsDisabled={setFieldsDisabled}
-        fieldsDisabled={fieldsDisabled}
-      />
+      <SelectPositions setFieldsDisabled={setFieldsDisabled} fieldsDisabled={fieldsDisabled} />
       {skillsToView &&
         skillsToView.map((el: ISoftSkill) => (
-          <SkillWithCheckbox
-            key={el.id}
-            skill={el}
-            setIsChanged={setIsChanged}
-            disabled={fieldsDisabled}
-          />
+          <SkillWithCheckbox key={el.id} skill={el} setIsChanged={setIsChanged} disabled={fieldsDisabled} />
         ))}
       <TextArea
         id="hobby"
@@ -166,10 +151,7 @@ export const SoftskillsInterview = () => {
         text={'Start tech interview'}
         candidate={currentCandidate}
       />
-      <SoftSkillModal
-        isOpenSkillModal={isOpenSkillModal}
-        onClose={() => setOpenSkillModal(false)}
-      />
+      <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
     </>
   );
 };

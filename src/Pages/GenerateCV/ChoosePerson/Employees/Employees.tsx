@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import Typography from 'antd/lib/typography';
 
 import { EmployeesTable } from '../../../EmployeesTable';
-import { GenerateCV } from 'Pages/GenerateCV/GenerateCV';
+import { GenerateCV } from '../../common-components/GenerateCv';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 
@@ -28,7 +28,7 @@ export const Employees = () => {
           <Typography className={classes.title}>{EMPLOYEES.TITLE}</Typography>
           <SearchWithAutocomplete
             className={classes.search}
-            onChange={props => dispatch(getEmployeesList(props))}
+            onChange={(props) => dispatch(getEmployeesList(props))}
             fullNameRef={fullNameRef}
           />
         </GenerateCvHeader>

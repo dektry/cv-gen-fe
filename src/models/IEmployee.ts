@@ -39,5 +39,6 @@ export interface IEmployeesState extends ITableExtension {
   chosenEmployee: NullableField<IEmployee>;
   employees: IEmployee[];
   isLoading: boolean;
+  isLoadingOneEmployee: boolean;
   query?: string;
 }
