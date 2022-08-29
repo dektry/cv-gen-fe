@@ -4,6 +4,7 @@ export const useStyles = createUseStyles({
   selectsWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
+    padding: `calc(24px - ${window.devicePixelRatio}px)`,
   },
   selects: {
     width: '10rem',
