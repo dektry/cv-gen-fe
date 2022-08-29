@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { candidatesSelector } from 'store/reducers/candidates';
-import { interviewSelector } from 'store/reducers/interview';
+
 import {
   setSoftSkillsInterview,
   softSkillInterviewSelector,
@@ -40,7 +40,6 @@ export const SoftskillsInterview = () => {
   const { softskillsInterview, softSkillsList } = useSelector(
     softSkillInterviewSelector,
   );
-  const { interviewResult } = useSelector(interviewSelector);
 
   const [isOpenSkillModal, setOpenSkillModal] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -85,10 +84,7 @@ export const SoftskillsInterview = () => {
     [softskillsInterview, dispatch, setIsChanged],
   );
 
-  const isLevelAndPosition =
-    (interviewResult?.level.id && interviewResult.position.id) ||
-    (softskillsInterview.positionId && softskillsInterview.levelId);
-  const saveDisabled = !(isLevelAndPosition && isChanged);
+  const saveDisabled = !isChanged;
 
   const skillsToView = softskillsInterview.successfullySaved
     ? softskillsInterview.softSkills
