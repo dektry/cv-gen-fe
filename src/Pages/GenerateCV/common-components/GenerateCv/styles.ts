@@ -8,7 +8,6 @@ interface TabsProps {
 
 export const useStyles = createUseStyles<RuleNames, TabsProps>({
   tabsContainer: {
-    padding: ({ devicePixelRatio }) => `calc(24px - ${devicePixelRatio}px)`,
     '& .ant-tabs-tab-active': {
       '&:after': {
         borderColor: `transparent transparent transparent white`,

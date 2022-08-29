@@ -3,10 +3,10 @@ import moment from 'moment';
 
 import { RootState } from '../..';
 
-import { appStoreName, loadCandidatesAction, loadOneCandidateAction } from './actions';
-import { getAllCandidates, ILoadCandidateProps, getCandidate } from 'actions/candidate';
+import { appStoreName, loadCandidatesAction, loadOneCandidateAction, updateCandidateAction } from './actions';
+import { getAllCandidates, ILoadCandidateProps, getCandidate, updateCandidate } from 'actions/candidate';
 
-import { ICandidate, ICandidatesState, ICandidateTable } from 'models/ICandidate';
+import { ICandidate, ICandidateExperience, ICandidatesState, ICandidateTable } from 'models/ICandidate';
 
 import { defaultCandidate, defaultCurrentPage, defaultPageSize } from 'store/constants';
 
@@ -17,6 +17,21 @@ export const loadCandidates = createAsyncThunk(loadCandidatesAction, (props: ILo
 export const loadOneCandidate = createAsyncThunk(loadOneCandidateAction, (id: string) => {
   return getCandidate(id);
 });
+export const updateOneCandidate = createAsyncThunk(updateCandidateAction, (candidateInfo: Partial<ICandidate>) => {
+  return updateCandidate(candidateInfo);
+});
+
+const calculateExperience = (experience: Array<ICandidateExperience>): number => {
+  const sortedArray = experience.sort((a, b) => {
+    const startA = moment(a.starts_on);
+    const startB = moment(b.starts_on);
+    return startA.unix() - startB.unix();
+  });
+  const startCareer = moment(sortedArray[0].starts_on);
+  const previousJob = moment(sortedArray[sortedArray.length - 1].ends_on);
+
+  return previousJob.diff(startCareer, 'years');
+};
 
 const initialState: ICandidatesState = {
   currentCandidate: defaultCandidate,
@@ -27,6 +42,7 @@ const initialState: ICandidatesState = {
   pageSize: defaultPageSize,
   nameFilter: '',
   isLoading: false,
+  isLoadingOneCandidate: false,
 };
 
 const candidates = createSlice({
@@ -63,23 +79,25 @@ const candidates = createSlice({
       }
     });
     builder.addCase(loadOneCandidate.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingOneCandidate = true;
     });
     builder.addCase(loadOneCandidate.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
+      state.isLoadingOneCandidate = false;
       if (payload?.fullName) {
         state.currentCandidate = payload;
       }
-      if (payload?.experience?.length) {
-        const sortedArray = payload.experience.sort((a, b) => {
-          const startA = moment(a.starts_on);
-          const startB = moment(b.starts_on);
-          return startA.unix() - startB.unix();
-        });
-        const startCareer = moment(sortedArray[0].starts_on);
-        const previousJob = moment(sortedArray[sortedArray.length - 1].ends_on);
-        state.currentCandidate.yearsOfExperience = previousJob.diff(startCareer, 'years');
-      }
+      if (payload?.experience?.length)
+        state.currentCandidate.yearsOfExperience = calculateExperience(payload?.experience);
+    });
+    builder.addCase(updateOneCandidate.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateOneCandidate.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      // if (payload?.fullName) state.currentCandidate = payload;
+
+      // if (payload?.experience?.length)
+      //   state.currentCandidate.yearsOfExperience = calculateExperience(payload?.experience);
     });
   },
 });

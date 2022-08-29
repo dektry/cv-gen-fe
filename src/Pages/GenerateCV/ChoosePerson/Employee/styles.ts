@@ -61,6 +61,10 @@ export const useStyles = createUseStyles({
     maxHeight: '7rem',
     marginBottom: '-4rem',
     marginRight: '6vw',
-    alignSelf: 'flex-end'
-  }
+    alignSelf: 'flex-end',
+  },
+  editButton: {
+    marginRight: '2rem',
+    width: '6rem',
+  },
 });

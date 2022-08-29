@@ -48,7 +48,9 @@ export const useStyles = createUseStyles({
     transition: 'all 0.2s',
   },
   content: {
-    marginLeft: '200px',
+    marginLeft: '225px',
+    marginTop: '25px',
+    marginRight: '25px',
     [`@media (max-width: ${desktopBreakpoints[1] - 1}px)`]: {
       marginLeft: '75px',
     },

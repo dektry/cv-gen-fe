@@ -2,9 +2,7 @@ import { createUseStyles } from 'react-jss';
 import { desktopBreakpoints } from 'theme/constants';
 
 export const useStyles = createUseStyles({
-  container: {
-    padding: `calc(24px - ${window.devicePixelRatio}px)`,
-  },
+  container: {},
   page: {
     height: 'calc(100% - 95px)',
     [`@media (max-width: ${desktopBreakpoints[0] - 1}px)`]: {

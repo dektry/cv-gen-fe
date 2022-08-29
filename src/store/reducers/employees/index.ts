@@ -10,7 +10,6 @@ import { IEmployeesState, IEmployee } from 'models/IEmployee';
 
 import { defaultEmployee, defaultCurrentPage, defaultPageSize } from 'store/constants';
 
-
 export const getEmployeesList = createAsyncThunk(
   loadEmployeesListAction,
   ({ limit, page, sorter, fullName }: ILoadEmployeeProps) => {
@@ -33,6 +32,7 @@ const initialState: IEmployeesState = {
   pageSize: defaultPageSize,
   nameFilter: '',
   isLoading: false,
+  isLoadingOneEmployee: false,
   query: '',
 };
 
@@ -69,11 +69,18 @@ const employees = createSlice({
         state.totalItems = payload.count;
       }
     });
+    builder.addCase(loadEmployee.pending, (state, { payload }) => {
+      state.isLoadingOneEmployee = true;
+    });
     builder.addCase(loadEmployee.fulfilled, (state, { payload }) => {
-      state.currentEmployee = payload;
+      state.isLoadingOneEmployee = false;
+      if (payload) state.currentEmployee = payload;
+    });
+    builder.addCase(saveChangesToEmployee.pending, (state, { payload }) => {
+      state.isLoading = true;
     });
     builder.addCase(saveChangesToEmployee.fulfilled, (state, { payload }) => {
-      console.log(payload);
+      state.isLoading = false;
     });
   },
 });
