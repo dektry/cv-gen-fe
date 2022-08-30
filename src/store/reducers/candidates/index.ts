@@ -94,10 +94,10 @@ const candidates = createSlice({
     });
     builder.addCase(updateOneCandidate.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      if (payload?.fullName) state.currentCandidate = payload;
+      // if (payload?.fullName) state.currentCandidate = payload;
 
-      if (payload?.experience?.length)
-        state.currentCandidate.yearsOfExperience = calculateExperience(payload?.experience);
+      // if (payload?.experience?.length)
+      //   state.currentCandidate.yearsOfExperience = calculateExperience(payload?.experience);
     });
   },
 });
