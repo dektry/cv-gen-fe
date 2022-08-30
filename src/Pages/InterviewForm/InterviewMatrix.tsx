@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, generatePath } from 'react-router-dom';
+import { useState } from 'react';
 
 import { Select, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -7,16 +6,13 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 
-import { candidatesSelector } from 'store/reducers/candidates';
 import { interviewSelector } from 'store/reducers/interview';
-import { saveChangesToInterview, finishInterview, setSkillID, setInterviewMatrix } from 'store/reducers/interview';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
-import { IInterviewSkill, IInterviewAnswers, ICompleteInterview } from 'models/IInterview';
+import { IInterviewSkill, IInterviewAnswers } from 'models/IInterview';
 import { LevelTypesEnum } from 'models/IInterview';
 
 import { INTERVIEW, levelTypes } from './utils/constants';
-import paths from 'config/routes.json';
 
 import { useStyles } from './styles';
 
@@ -27,85 +23,40 @@ interface IProps {
   setOpenMatrixModal: React.Dispatch<React.SetStateAction<boolean>>;
   isStarted: boolean;
   setIsSelectDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  handleFinishInterview: () => Promise<void>;
+  isEditActive: boolean;
+  handleSkillClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }
 
 export const InterviewMatrix = (props: IProps) => {
-
-  const [isEditActive, setIsEditActive] = useState(false);
+  
   const [isTreeChanged, setIsTreeChanged] = useState(false);
 
-  const navigate = useNavigate();
-
-  const { isShowInterviewQuestions, answers, setAnswers, setOpenMatrixModal, isStarted, setIsSelectDisabled } = props;
+  const { 
+    isShowInterviewQuestions, 
+    answers, 
+    setAnswers, 
+    setOpenMatrixModal, 
+    isStarted, 
+    handleFinishInterview, 
+    isEditActive,
+    handleSkillClick 
+  } = props;
 
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
 
-  const { currentCandidate } = useSelector(candidatesSelector);
   const {
-    chosenLevel,
     chosenPosition,
     interviewMatrix,
     interviewResult,
   } = useSelector(interviewSelector);
 
-
-  const handleFinishInterview = async () => {
-    const interviewData: ICompleteInterview = {
-      candidateId: currentCandidate.id,
-      levelId: chosenLevel || '',
-      positionId: chosenPosition || '',
-      answers,
-    };
-    if (interviewResult) {
-      dispatch(saveChangesToInterview(interviewData));
-    } else {
-      dispatch(finishInterview(interviewData));
-    }
-
-    navigate(
-      generatePath(
-        paths.generateCVtechnicalInterviewResult.replace(
-          ':candidateId',
-          currentCandidate.id,
-        ),
-        {
-          id: currentCandidate.id,
-        },
-      ),
-    );
-  };
-
-  useEffect(() => {
-    if (!interviewResult) {
-      setIsEditActive(true);
-    } else {
-      setIsSelectDisabled(true);
-    }
-  }, [interviewResult?.answers?.length]);
-  useEffect(() => {
-    return function clear() {
-      dispatch(setInterviewMatrix([]));
-    };
-  }, []);
-
-  const handleSkillClick = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<void> => {
-    if (chosenPosition) {
-      const button: HTMLButtonElement = e.currentTarget;
-      dispatch(setSkillID(button.id));
-      await dispatch(loadSkillMatrix(chosenPosition));
-      setOpenMatrixModal(true);
-    }
-  };
-
   const handleSkillChange = (level: LevelTypesEnum, skill: IInterviewSkill) => {
     setAnswers({ ...answers, [skill.id]: level });
     setIsTreeChanged(true);
   };
-
 
   const handleMatrixModalOpen = async () => {
     if (chosenPosition) {

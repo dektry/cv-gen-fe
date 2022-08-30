@@ -36,7 +36,7 @@ export const SkillMatrix = ({
   const handleClickAddSkill = (group: ISkillGroup) => {
     const matrixCopy = cloneDeep(skillMatrix);
     const currentSkillGroupIdx = matrixCopy.findIndex(
-      item => group.uuid === item.uuid,
+      item => group?.uuid === item.uuid,
     );
 
     const currentSkillGroup = matrixCopy[currentSkillGroupIdx];
@@ -58,7 +58,7 @@ export const SkillMatrix = ({
     const matrixTreeCopy: IMatrix = cloneDeep(skillMatrix);
     for (const group of matrixTreeCopy) {
       const currentSkillIdx = group.skills.findIndex(
-        item => skill.uuid === item.uuid,
+        item => skill?.uuid === item.uuid,
       );
       const currentSkill = group.skills[currentSkillIdx];
       if (currentSkill) {
@@ -82,7 +82,7 @@ export const SkillMatrix = ({
     if (group.skills.length) {
       const matrixTreeCopy = cloneDeep(skillMatrix);
       const newMatrix = matrixTreeCopy.map(item => {
-        if (group.uuid === item.uuid) {
+        if (group?.uuid === item.uuid) {
           return {
             ...item,
             skills: [...item.skills.filter(i => i.uuid !== skill.uuid)],
@@ -99,7 +99,7 @@ export const SkillMatrix = ({
       const matrixTreeCopy = cloneDeep(skillMatrix);
       for (const group of matrixTreeCopy) {
         group.skills.map(skill => {
-          if (currentSkill.uuid === skill.uuid) {
+          if (currentSkill?.uuid === skill.uuid) {
             skill.questions = [
               ...skill.questions.filter(el => el.uuid !== uuid),
             ];
@@ -163,7 +163,7 @@ export const SkillMatrix = ({
     );
     matrixTreeCopy[currentSkillGroupIdx].skills[idx].levels.map(
       (level: ILevelsSchema) => {
-        if (level.id === levelId) {
+        if (level?.id === levelId) {
           level.value = value;
         }
         return level;

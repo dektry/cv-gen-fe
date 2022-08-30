@@ -1,37 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, generatePath } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
-
-import { Button, Select } from 'antd';
 
 import { PositionSkillsModal } from '../PositionSkillsModal';
 
 import { useAppDispatch } from 'store';
+import { candidatesSelector } from 'store/reducers/candidates';
 import {
-  chooseInterviewLevel,
-  chooseInterviewPosition,
   interviewSelector,
   loadInterviewMatrix,
   setInterviewMatrix,
   setSkillID,
+  finishInterview,
+  saveChangesToInterview
 } from 'store/reducers/interview';
 import { softSkillInterviewSelector } from 'store/reducers/softskillsInterview';
-import { positionsSelector } from 'store/reducers/positions';
+import { positionsSelector, loadSkillMatrix } from 'store/reducers/positions';
 import { levelsSelector } from 'store/reducers/levels';
 
 import { processAnswers } from './utils/helpers/processAnswers';
-import { useStyles } from './styles';
 
-import { IInterviewAnswers } from 'models/IInterview';
+import { IInterviewAnswers, ICompleteInterview } from 'models/IInterview';
 
-import { INTERVIEW } from './utils/constants';
+import paths from 'config/routes.json';
 
 import { InterviewMatrix } from './InterviewMatrix';
+import { InterviewSelect } from './InterviewSelect';
 
 export const InterviewForm = () => {
-  const classes = useStyles();
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { currentCandidate } = useSelector(candidatesSelector);
 
   const {
     chosenLevel,
@@ -69,7 +71,7 @@ export const InterviewForm = () => {
   };
 
   // button handlers
-  const handleStartInterview = async () => {
+  const handleStartInterview = () => {
     console.log(
       'chosenLevel: ',
       chosenLevel,
@@ -96,20 +98,47 @@ export const InterviewForm = () => {
     }
   };
 
+  const handleFinishInterview = async () => {
+    const interviewData: ICompleteInterview = {
+      candidateId: currentCandidate.id,
+      levelId: chosenLevel || '',
+      positionId: chosenPosition || '',
+      answers,
+    };
+    if (interviewResult) {
+      dispatch(saveChangesToInterview(interviewData));
+    } else {
+      dispatch(finishInterview(interviewData));
+    }
+
+    navigate(
+      generatePath(
+        paths.generateCVtechnicalInterviewResult.replace(
+          ':candidateId',
+          currentCandidate.id,
+        ),
+        {
+          id: currentCandidate.id,
+        },
+      ),
+    );
+  };
+
+  const handleSkillClick = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ): Promise<void> => {
+    if (chosenPosition || interviewResult?.position?.id) {
+      const button: HTMLButtonElement = e.currentTarget;
+      dispatch(setSkillID(button.id));
+      dispatch(loadSkillMatrix(String(chosenPosition || interviewResult?.position?.id)));
+      setOpenMatrixModal(true);
+    }
+  };
+
   // modal handlers
   const handleMatrixModalClose = () => {
     dispatch(setSkillID(''));
     setOpenMatrixModal(false);
-  };
-
-  // select handlers
-  const handleChangePosition = (value: string) => {
-    dispatch(chooseInterviewPosition(value));
-    setCurrentPosition(value);
-  };
-  const handleChangeInterviewLevel = (value: string) => {
-    dispatch(chooseInterviewLevel(value));
-    setCurrentLevel(value);
   };
 
   useEffect(() => {
@@ -130,6 +159,7 @@ export const InterviewForm = () => {
       setIsSelectDisabled(true);
     }
   }, [interviewResult?.answers?.length]);
+
   useEffect(() => {
     return function clear() {
       dispatch(setInterviewMatrix([]));
@@ -138,50 +168,17 @@ export const InterviewForm = () => {
 
   return (
     <>
-      <div className={classes.selectsWrapper}>
-        <Select
-          onChange={handleChangePosition}
-          placeholder={INTERVIEW.POSITION_PLACEHOLDER}
-          className={classes.selects}
-          value={currentPosition || softskillsInterview.position?.id}
-          disabled={isSelectDisabled}
-        >
-          {allPositions.map(position => (
-            <Select.Option value={position.id} key={position.id}>
-              {position.name}
-            </Select.Option>
-          ))}
-        </Select>
-        <Select
-          onChange={handleChangeInterviewLevel}
-          placeholder={INTERVIEW.LEVEL_PLACEHOLDER}
-          className={classes.selects}
-          value={currentLevel || softskillsInterview.level?.id}
-          disabled={isSelectDisabled}
-        >
-          {allLevels.map(level => (
-            <Select.Option value={level.id} key={level.id}>
-              {level.name}
-            </Select.Option>
-          ))}
-        </Select>
-        <Button
-          type="primary"
-          onClick={handleStartInterview}
-          disabled={disableStartInterview}
-        >
-          {INTERVIEW.START}
-        </Button>
-        {interviewResult?.answers && (
-          <Button
-            type="primary"
-            className={classes.finishButton}
-            onClick={() => setIsEditActive(!isEditActive)}
-          >
-            {isEditActive ? INTERVIEW.STOP_EDIT : INTERVIEW.START_EDIT}
-          </Button>
-        )}
-      </div>
+      <InterviewSelect
+        isSelectDisabled={isSelectDisabled}
+        isEditActive={isEditActive}
+        setIsEditActive={setIsEditActive}
+        disableStartInterview={disableStartInterview}
+        setCurrentPosition={setCurrentPosition}
+        setCurrentLevel={setCurrentLevel}
+        handleStartInterview={handleStartInterview}
+        currentLevel={currentLevel}
+        currentPosition={currentPosition}
+      />
       <InterviewMatrix 
         isShowInterviewQuestions={isShowInterviewQuestions}
         answers={answers}
@@ -189,6 +186,9 @@ export const InterviewForm = () => {
         setOpenMatrixModal={setOpenMatrixModal}
         isStarted={isStarted}
         setIsSelectDisabled={setIsSelectDisabled}
+        handleFinishInterview={handleFinishInterview}
+        isEditActive={isEditActive}
+        handleSkillClick={handleSkillClick}
       />
       <PositionSkillsModal
         modalTitle={

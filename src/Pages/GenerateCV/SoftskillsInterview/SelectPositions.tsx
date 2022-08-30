@@ -36,12 +36,12 @@ export const SelectPositions = (props: IProps) => {
   const { interviewResult } = useSelector(interviewStore.interviewSelector);
 
   useEffect(() => {
-    if (interviewResult || successfullySaved) {
+    if (interviewResult) {
       setIsSelectDisabled(true);
     } else {
       setIsSelectDisabled(false);
     }
-  }, [interviewResult, successfullySaved]);
+  }, [interviewResult]);
 
   const handleClick = () => {
     setFieldsDisabled(!fieldsDisabled);
