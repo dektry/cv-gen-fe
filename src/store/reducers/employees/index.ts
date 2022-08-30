@@ -69,17 +69,17 @@ const employees = createSlice({
         state.totalItems = payload.count;
       }
     });
-    builder.addCase(loadEmployee.pending, (state, { payload }) => {
+    builder.addCase(loadEmployee.pending, (state) => {
       state.isLoadingOneEmployee = true;
     });
     builder.addCase(loadEmployee.fulfilled, (state, { payload }) => {
       state.isLoadingOneEmployee = false;
       if (payload) state.currentEmployee = payload;
     });
-    builder.addCase(saveChangesToEmployee.pending, (state, { payload }) => {
+    builder.addCase(saveChangesToEmployee.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(saveChangesToEmployee.fulfilled, (state, { payload }) => {
+    builder.addCase(saveChangesToEmployee.fulfilled, (state) => {
       state.isLoading = false;
     });
   },

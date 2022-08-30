@@ -11,6 +11,7 @@ export const useStyles = createUseStyles({
     marginRight: '1rem',
   },
   interviewForm: {
+    margin: `calc(24px - ${window.devicePixelRatio}px)`,
     marginTop: '2rem',
     backgroundColor: 'white',
     padding: '1rem',
