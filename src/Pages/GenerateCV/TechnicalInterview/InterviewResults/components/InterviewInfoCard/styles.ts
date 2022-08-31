@@ -1,5 +1,4 @@
 import { createUseStyles } from 'react-jss';
-import { desktopBreakpoints } from 'theme/constants';
 
 export const useStyles = createUseStyles({
   informationTitle: {
