@@ -24,7 +24,7 @@ export const Employees = () => {
     <>
       <GenerateCV />
       <div className={classes.container}>
-        <GenerateCvHeader backPath={paths.generateCVchoosePerson}>
+        <GenerateCvHeader backPath={paths.home}>
           <Typography className={classes.title}>{EMPLOYEES.TITLE}</Typography>
           <SearchWithAutocomplete
             className={classes.search}

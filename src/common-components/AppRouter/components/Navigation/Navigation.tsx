@@ -37,18 +37,18 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
       <ul className={classNames(defaultMenuClasses, collapsed ? menuCollapsedClasses : menuNotCollapsedClasses)}>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={navigationKeys['/generate-cv']}
+          itemKey={[navigationKeys['/'], navigationKeys['/generate-cv']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
           icon={<FileAddOutlined />}
         >
           <Tooltip placement="right" title={collapsed ? GENERATE_CV : ''}>
-            <Link to={paths.generateCV}>{GENERATE_CV}</Link>
+            <Link to={paths.home}>{GENERATE_CV}</Link>
           </Tooltip>
         </NavigationItem>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={navigationKeys['/cv-list']}
+          itemKey={[navigationKeys['/cv-list']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
           icon={<OrderedListOutlined />}

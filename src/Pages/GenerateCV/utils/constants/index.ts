@@ -23,7 +23,6 @@ export const SOFT_SKILL_INTERVIEW = {
   POSITION_PLACEHOLDER: 'Choose position',
 };
 
-export const ASSESSMENT = 'Assessment';
 export const GENERATE_CV = 'Generate CV';
 
 // Info source: https://www.loc.gov/standards/iso639-2/php/code_list.php
