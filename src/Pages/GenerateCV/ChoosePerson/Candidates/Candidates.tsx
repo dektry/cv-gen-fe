@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 import paths from 'config/routes.json';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { CandidatesTable } from '../../../CandidatesTable';
+import { CandidatesTable } from './components/CandidatesTable';
 import { GenerateCV } from '../../common-components/GenerateCv';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 import { loadCandidates } from 'store/reducers/candidates';
 import { useAppDispatch } from 'store';
 import { CANDIDATES } from '../../utils/constants';
 import { Typography } from 'antd';
-import { SelectCandidateType } from '../../../SelectCandidateType';
+import { SelectCandidateType } from './components/SelectCandidateType';
 import { useStyles } from './styles';
 
 export const Candidates = () => {

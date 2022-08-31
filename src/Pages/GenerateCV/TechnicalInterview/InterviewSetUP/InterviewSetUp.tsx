@@ -5,7 +5,7 @@ import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { useSelector } from 'react-redux';
 import { interviewSelector } from 'store/reducers/interview';
 import { candidatesSelector } from 'store/reducers/candidates';
-import { InterviewForm } from '../../../InterviewForm';
+import { InterviewForm } from './components/InterviewForm';
 import { Button } from 'antd';
 import { CandidatePopOver } from '../../common-components/PopOver';
 import { useStyles } from './styles';

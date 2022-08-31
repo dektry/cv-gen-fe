@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { candidatesSelector } from 'store/reducers/candidates';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { InterviewResult } from '../../../InterviewResult';
+import { InterviewResult } from './components/InterviewResult';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
 import { GenerateCV } from '../../common-components/GenerateCv';
 

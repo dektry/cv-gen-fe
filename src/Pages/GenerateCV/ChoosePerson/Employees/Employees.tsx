@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 
 import Typography from 'antd/lib/typography';
 
-import { EmployeesTable } from '../../../EmployeesTable';
+import { EmployeesTable } from './components/EmployeesTable';
 import { GenerateCV } from '../../common-components/GenerateCv';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
