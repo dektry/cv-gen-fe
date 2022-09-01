@@ -1,29 +1,30 @@
 import { ITableExtension } from './ICommon';
+import { NullableField } from './TNullableField';
 
 export interface ICandidateEducation {
-  id: string | null;
+  id: NullableField<string>;
   pfId: number;
   school: string;
   name: string;
   from_year: number;
-  to_year: number | null;
+  to_year: NullableField<number>;
   subject: string;
   description: string;
 }
 
 export interface ICandidateExperience {
-  id: string | null;
+  id: NullableField<string>;
   pfId: number;
   title: string;
   company: string;
   starts_on: string;
-  ends_on: string | null;
-  location: string | null;
+  ends_on: NullableField<string>;
+  location: NullableField<string>;
   description: string;
 }
 
 export interface ICandidateLanguage {
-  id: string | null;
+  id: NullableField<string>;
   code: string;
   level: string;
 }
@@ -33,10 +34,10 @@ export interface ICandidate {
   pfId: number;
   pfUpdatedAt: string;
   fullName: string;
-  position: string | null;
-  level: string | null;
-  location: string | null;
-  timezone: string | null;
+  position: NullableField<string>;
+  level: NullableField<string>;
+  location: NullableField<string>;
+  timezone: NullableField<string>;
   email?: string;
   education: ICandidateEducation[];
   experience: ICandidateExperience[];
@@ -48,7 +49,8 @@ export type ICandidateTable = Omit<ICandidate, 'education' | 'experience' | 'lan
 
 export interface ICandidatesState extends ITableExtension {
   currentCandidate: ICandidate;
-  chosenCandidate: ICandidateTable | null;
+  chosenCandidate: NullableField<ICandidateTable>;
   candidates: ICandidateTable[];
   isLoading: boolean;
+  isLoadingOneCandidate: boolean;
 }

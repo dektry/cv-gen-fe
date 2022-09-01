@@ -1,8 +1,8 @@
 {
-    "candidates": "/candidates",
+    "any": "*",
+    "home": "/",
     "interview": "/interview/:candidateId",
     "interview_result": "/interview/:candidateId/result",
-    "employees": "/employees",
     "generateCV": "/generate-cv",
     "generateCVchoosePerson": "/generate-cv/choose-person",
     "generateCVCandidatePage": "/generate-cv/choose-person/candidate/:id",
@@ -14,5 +14,7 @@
     "candidate": "/generate-cv/choose-person/candidate/:id",
     "employee": "/generate-cv/choose-person/employee/:id",
     "generateCVtechnicalInterviewResult":
-      "/generate-cv/candidate/:candidateId/tech-interview/result"
+      "/generate-cv/candidate/:candidateId/tech-interview/result",
+    "login": "/login",
+    "users": "/users"
 }
