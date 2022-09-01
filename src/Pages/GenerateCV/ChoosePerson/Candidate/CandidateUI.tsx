@@ -7,6 +7,7 @@ import paths from 'config/routes.json';
 import { Languages, LanguageLevels } from '../../utils/constants';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
+import { ButtonWithLink } from 'common-components/ButtonWithLink';
 import { GenerateCV } from '../../common-components/GenerateCv';
 
 import { ICandidate } from 'models/ICandidate';
@@ -164,16 +165,20 @@ export const CandidateUI = ({
             )}
 
             <div className={classes.interviewButtons}>
-              <Button className={classes.button}>
-                <Link to={paths.generateCVtechnicalInterview.replace(':id', candidateId ? candidateId : '')}>
-                  Start tech interview
-                </Link>
-              </Button>
-              <Button className={classes.button}>
-                <Link to={paths.generateCVsoftskillsInterview.replace(':id', candidateId ? candidateId : '')}>
-                  Start softskills interview
-                </Link>
-              </Button>
+              <div style={{ width: '100%' }}>
+                <ButtonWithLink
+                  id={candidateId}
+                  path={paths.generateCVtechnicalInterview}
+                  text="Start tech interview    "
+                />
+              </div>
+              <div style={{ width: '100%' }}>
+                <ButtonWithLink
+                  id={candidateId}
+                  path={paths.generateCVsoftskillsInterview}
+                  text="Start softskills interview"
+                />
+              </div>
             </div>
           </div>
         </Form>

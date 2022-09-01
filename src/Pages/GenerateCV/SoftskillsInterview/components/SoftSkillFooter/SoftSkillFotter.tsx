@@ -76,7 +76,7 @@ export const SoftSkillFotter = ({
       <ButtonWithLink
         path={paths.generateCVtechnicalInterview}
         text={'Start tech interview'}
-        candidate={currentCandidate}
+        id={currentCandidate?.id}
       />
     </div>
   );
