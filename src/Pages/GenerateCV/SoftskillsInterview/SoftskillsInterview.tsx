@@ -13,29 +13,20 @@ import {
   setSoftSkillInterviewSkillsList,
 } from 'store/reducers/softskillsInterview';
 
-import { useStyles } from './styles';
-import { Input, Button } from 'antd';
-
-import paths from 'config/routes.json';
 import { CandidatePopOver } from '../common-components/PopOver';
+import { SelectPositions } from './components/SelectPositions';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SkillWithCheckbox } from './components/SelectWithCheckbox';
-import { SelectPositions } from './components/SelectPositions';
 import { SoftSkillModal } from './components/SoftSkillModal';
-import { ButtonWithLink } from 'common-components/ButtonWithLink';
 import { GenerateCV } from '../common-components/GenerateCv';
+import { SoftSkillFotter } from './components/SoftSkillFooter';
+
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
-
-import { SOFT_SKILL_INTERVIEW } from '../utils/constants';
-
-const { TextArea } = Input;
-
-type IProps = { props: { id: string } };
-
-type InputProps = HTMLTextAreaElement & typeof Input & IProps;
+import paths from 'config/routes.json';
 
 export const SoftskillsInterview = () => {
   const dispatch = useAppDispatch();
+
   const { currentCandidate } = useSelector(candidatesSelector);
   const { softskillsInterview, softSkillsList } = useSelector(softSkillInterviewSelector);
 
@@ -45,28 +36,13 @@ export const SoftskillsInterview = () => {
   const [comment, setComment] = useState(softskillsInterview.comment);
   const [fieldsDisabled, setFieldsDisabled] = useState(false);
 
-  const classes = useStyles();
-
-  useEffect(() => {
-    if (softskillsInterview.successfullySaved) {
-      setFieldsDisabled(true);
-    } else {
-      setFieldsDisabled(false);
-    }
-  }, [softskillsInterview.successfullySaved]);
-
-  useEffect(() => {
-    const softskillsInterviewCopy = cloneDeep(softskillsInterview);
-    softskillsInterviewCopy.candidateId = currentCandidate.id;
-    dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
-  }, [currentCandidate]);
+  const backPath = paths.generateCVCandidatePage.replace(':id', currentCandidate.id);
+  const skillsToView = softskillsInterview.successfullySaved ? softskillsInterview.softSkills : softSkillsList;
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<InputProps>) => {
-      const {
-        props: { id },
-        value,
-      } = e.target;
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      const id = e.target.id;
 
       const softskillsInterviewCopy = cloneDeep(softskillsInterview);
       if (id === 'hobby') {
@@ -82,14 +58,6 @@ export const SoftskillsInterview = () => {
     [softskillsInterview, dispatch, setIsChanged]
   );
 
-  const saveDisabled = !isChanged;
-
-  const skillsToView = softskillsInterview.successfullySaved ? softskillsInterview.softSkills : softSkillsList;
-
-  const saveButtonText = softskillsInterview.successfullySaved
-    ? SOFT_SKILL_INTERVIEW.SAVE_CHANGES
-    : SOFT_SKILL_INTERVIEW.SAVE;
-
   const handleSaveChanges = async () => {
     const saveButtonThunk = softskillsInterview.successfullySaved
       ? saveChangesToSoftSkillsInterview
@@ -100,7 +68,19 @@ export const SoftskillsInterview = () => {
     setFieldsDisabled(true);
   };
 
-  const backPath = paths.generateCVCandidatePage.replace(':id', currentCandidate.id);
+  useEffect(() => {
+    if (softskillsInterview.successfullySaved) {
+      setFieldsDisabled(true);
+    } else {
+      setFieldsDisabled(false);
+    }
+  }, [softskillsInterview.successfullySaved]);
+
+  useEffect(() => {
+    const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+    softskillsInterviewCopy.candidateId = currentCandidate.id;
+    dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
+  }, [currentCandidate]);
 
   return (
     <>
@@ -113,41 +93,18 @@ export const SoftskillsInterview = () => {
         skillsToView.map((el: ISoftSkill) => (
           <SkillWithCheckbox key={el.id} skill={el} setIsChanged={setIsChanged} disabled={fieldsDisabled} />
         ))}
-      <TextArea
-        id="hobby"
-        rows={2}
-        placeholder="Hobbies"
-        className={classes.textArea}
-        onChange={handleChange}
-        value={hobby}
-        disabled={fieldsDisabled}
-      />
-      <Button
-        title="Add a skill"
-        type="primary"
-        onClick={() => setOpenSkillModal(true)}
-        disabled={softskillsInterview.successfullySaved}
-      >
-        +
-      </Button>
-      <TextArea
-        id="comment"
-        rows={2}
-        placeholder="Comment"
-        className={classes.textArea}
-        onChange={handleChange}
-        value={comment}
-        disabled={fieldsDisabled}
-      />
-      <Button disabled={saveDisabled} onClick={handleSaveChanges}>
-        {saveButtonText}
-      </Button>
-      <ButtonWithLink
-        path={paths.generateCVtechnicalInterview}
-        text={'Start tech interview'}
-        candidate={currentCandidate}
-      />
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
+      <SoftSkillFotter
+        setOpenSkillModal={setOpenSkillModal}
+        handleSaveChanges={handleSaveChanges}
+        handleChange={handleChange}
+        hobby={hobby}
+        comment={comment}
+        fieldsDisabled={fieldsDisabled}
+        saveDisabled={!isChanged}
+        successfullySaved={softskillsInterview.successfullySaved}
+        currentCandidate={currentCandidate}
+      />
     </>
   );
 };

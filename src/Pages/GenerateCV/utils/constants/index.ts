@@ -21,6 +21,7 @@ export const SOFT_SKILL_INTERVIEW = {
   DISABLE_EDIT: 'Disable edit soft skill',
   LEVEL_PLACEHOLDER: 'Choose level',
   POSITION_PLACEHOLDER: 'Choose position',
+  NEW_SKILL: 'Add new soft skill',
 };
 
 export const GENERATE_CV = 'Generate CV';
