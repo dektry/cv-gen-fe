@@ -2,8 +2,6 @@ import { Link, generatePath } from 'react-router-dom';
 
 import Button from 'antd/lib/button';
 
-import { ICandidate } from 'models/ICandidate';
-
 import { useStyles } from 'common-components/ButtonWithLink/styles';
 
 interface IProps {
