@@ -6,13 +6,13 @@ interface IOrder {
 
 export const sortLevels = (levels: IDBLevels[]) => {
   const order: IOrder = {
-    Trainee: 0,
-    Junior: 1,
-    'Regular (Junior+)': 2,
-    Middle: 3,
-    'Middle+': 4,
-    Senior: 5,
-    Lead: 6,
+    Trainee: 1,
+    Junior: 2,
+    'Regular (Junior+)': 3,
+    Middle: 4,
+    'Middle+': 5,
+    Senior: 6,
+    Lead: 7,
     default: 100,
   };
 
