@@ -21,7 +21,7 @@ export const InterviewResults = () => {
       <InterviewResult />
       <ButtonWithLink
         path={paths.generateCVsoftskillsInterview}
-        candidate={currentCandidate}
+        id={currentCandidate?.id}
         text={'Start soft skills interview'}
       />
     </>

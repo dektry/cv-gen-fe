@@ -8,4 +8,11 @@ export const useStyles = createUseStyles({
     maxWidth: '40rem',
     borderRadius: '8px',
   },
+  footer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  plusButton: {
+    width: '40px',
+  },
 });

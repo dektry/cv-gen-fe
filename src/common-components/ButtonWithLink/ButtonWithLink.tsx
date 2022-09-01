@@ -2,17 +2,15 @@ import { Link, generatePath } from 'react-router-dom';
 
 import Button from 'antd/lib/button';
 
-import { ICandidate } from 'models/ICandidate';
-
 import { useStyles } from 'common-components/ButtonWithLink/styles';
 
 interface IProps {
-  candidate: ICandidate;
+  id: string | undefined;
   path: string;
   text: string;
 }
 
-export const ButtonWithLink = ({ candidate, path, text }: IProps) => {
+export const ButtonWithLink = ({ id, path, text }: IProps) => {
   const classes = useStyles();
 
   return (
@@ -20,7 +18,7 @@ export const ButtonWithLink = ({ candidate, path, text }: IProps) => {
       <Button className={classes.linkToResults}>
         <Link
           to={generatePath(path, {
-            id: candidate.id,
+            id: id ?? '',
           })}
         >
           {text}
