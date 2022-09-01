@@ -7,7 +7,7 @@ interface IProps {
   children?: React.ReactNode | React.ReactNode[];
   icon?: React.ReactNode | React.ReactNode[];
   selectedItem: string;
-  itemKey: navigationKeys;
+  itemKey: Array<navigationKeys>;
   setSelectedItem: React.Dispatch<React.SetStateAction<navigationKeys>>;
   onClickAction?: () => void;
   className?: string;
@@ -26,7 +26,7 @@ export const NavigationItem = ({
   setCollapse,
   disabled,
 }: IProps) => {
-  const isSelected = selectedItem.includes(itemKey);
+  const isSelected = selectedItem.includes(itemKey[0]) || selectedItem.includes(itemKey[1]);
   const itemClasses: string = classNames(
     isSelected ? 'ant-menu-item ant-menu-item-selected' : 'ant-menu-item',
     disabled ? 'ant-menu-item-hidden' : '',
@@ -39,7 +39,7 @@ export const NavigationItem = ({
         className={itemClasses}
         onClick={() => {
           if (!disabled) {
-            setSelectedItem(itemKey);
+            setSelectedItem(itemKey[0]);
             if (onClickAction) {
               onClickAction();
             }

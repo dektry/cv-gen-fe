@@ -92,7 +92,7 @@ const candidates = createSlice({
     builder.addCase(updateOneCandidate.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(updateOneCandidate.fulfilled, (state, { payload }) => {
+    builder.addCase(updateOneCandidate.fulfilled, (state) => {
       state.isLoading = false;
       // if (payload?.fullName) state.currentCandidate = payload;
 

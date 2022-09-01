@@ -8,11 +8,7 @@ import { useStyles } from './styles';
 
 const { TabPane } = Tabs;
 
-const tabPaths = [
-  paths.generateCVchoosePerson,
-  paths.generateCVtechnicalInterview,
-  paths.generateCVsoftskillsInterview,
-];
+const tabPaths = [paths.home, paths.generateCVtechnicalInterview, paths.generateCVsoftskillsInterview];
 
 export const GenerateCV = ({ ...props }) => {
   const classes = useStyles(props);
@@ -40,7 +36,7 @@ export const GenerateCV = ({ ...props }) => {
 
     if (!allowedPaths.some((p) => matchPath(location.pathname, p))) {
       if (key === '0') {
-        navigate(paths.generateCVchoosePerson);
+        navigate(paths.home);
         setCurrentTab(key);
       }
       return;
@@ -64,8 +60,8 @@ export const GenerateCV = ({ ...props }) => {
         onTabClick={handleTabClick}
       >
         <TabPane tab={GenerateCVsteps.CHOOSE_A_PERSON} key="0" />
-        <TabPane tab={GenerateCVsteps.TECHNICAL_INTERVIEW} key="1" />
-        <TabPane tab={GenerateCVsteps.SOFT_SKILLS_INTERVIEW} key="2" />
+        <TabPane tab={GenerateCVsteps.TECHNICAL_INTERVIEW} key="1" disabled={true} />
+        <TabPane tab={GenerateCVsteps.SOFT_SKILLS_INTERVIEW} key="2" disabled={true} />
       </Tabs>
     </>
   );
