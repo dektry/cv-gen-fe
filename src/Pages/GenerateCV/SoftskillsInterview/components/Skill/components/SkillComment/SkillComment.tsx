@@ -3,30 +3,29 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { Input } from 'antd';
 import { debounce, cloneDeep } from 'lodash';
 
-import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 
 import { 
-  softSkillInterviewSelector, 
   setSoftSkillsInterview, 
   setSoftSkillsList, 
   saveChangesToSoftSkillsInterview
  } from 'store/reducers/softskillsInterview';
 
-import { ISoftSkill } from 'models/ISoftSkillsInterview';
+import { ISoftSkill, ISoftSkillInterview } from 'models/ISoftSkillsInterview';
 
 import { useStyles } from './styles';
 
 interface IProps {
   id?: string;
   comment?: string;
+  softskillsInterview: ISoftSkillInterview;
+  softSkillsList: [] | ISoftSkill[];
 }
 export const SkillComment = (props: IProps) => {
 
-  const { comment, id } = props;
+  const { comment, id, softskillsInterview, softSkillsList } = props;
 
   const dispatch = useAppDispatch();
-  const { softskillsInterview, softSkillsList } = useSelector(softSkillInterviewSelector);
 
   const classes = useStyles();
 

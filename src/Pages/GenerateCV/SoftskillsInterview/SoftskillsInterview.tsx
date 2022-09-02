@@ -10,7 +10,7 @@ import {
   softSkillInterviewSelector,
   finishSoftSkillInterview,
   saveChangesToSoftSkillsInterview,
-  setSoftSkillInterviewSkillsList,
+  setSoftSkillInterviewSkillsList
 } from 'store/reducers/softskillsInterview';
 
 import { CandidatePopOver } from '../common-components/PopOver';
@@ -91,7 +91,12 @@ export const SoftskillsInterview = () => {
       <SelectPositions setFieldsDisabled={setFieldsDisabled} fieldsDisabled={fieldsDisabled} />
       {skillsToView &&
         skillsToView.map((el: ISoftSkill) => (
-          <Skill key={el.id} skill={el} />
+          <Skill 
+            key={el.id} 
+            skill={el}
+            softskillsInterview={softskillsInterview}
+            softSkillsList={softSkillsList}
+          />
         ))}
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
       <SoftSkillFotter
