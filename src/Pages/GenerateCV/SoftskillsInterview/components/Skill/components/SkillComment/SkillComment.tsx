@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 import { Input } from 'antd';
 import { debounce, cloneDeep } from 'lodash';
@@ -20,11 +20,14 @@ interface IProps {
   comment?: string;
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
+  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SkillComment = (props: IProps) => {
 
-  const { comment, id, softskillsInterview, softSkillsList } = props;
+  const { comment, id, softskillsInterview, softSkillsList, setIsChanged } = props;
+
+  const [commentState, setCommentState] = useState(comment);
 
   const dispatch = useAppDispatch();
 
@@ -53,6 +56,7 @@ export const SkillComment = (props: IProps) => {
         });
         dispatch(setSoftSkillsList(processedSkills));
       }
+      setIsChanged(true);
     }, 600)
   ).current;
 
@@ -65,13 +69,14 @@ export const SkillComment = (props: IProps) => {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       debouncedComment(e);
+      setCommentState(e.target.value);
     }, [debouncedComment, dispatch]
   );
 
   return <Input
     id={id}
     className={classes.skillComment}
-    value={comment} 
+    value={commentState} 
     placeholder='Comment'
     onChange={handleChange}
   />;

@@ -21,10 +21,11 @@ interface IProps {
   score?: number;
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
+  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SkillRadioButtons = (props: IProps) => {
-  const { softskillsInterview, softSkillsList, id, score } = props;
+  const { softskillsInterview, softSkillsList, id, score, setIsChanged } = props;
   const [value, setValue] = useState(score ?? 1);
 
   const dispatch = useAppDispatch();
@@ -54,6 +55,7 @@ export const SkillRadioButtons = (props: IProps) => {
       dispatch(setSoftSkillsList(processedSkills));
     }
     setValue(e.target.value);
+    setIsChanged(true);
   }, [dispatch, softSkillsList, softskillsInterview, value])
 
   return (

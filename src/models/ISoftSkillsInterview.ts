@@ -1,5 +1,5 @@
 export interface ISoftSkill {
-  isActive: boolean;
+  isActive?: boolean;
   id?: string;
   value: string;
   question?: string;

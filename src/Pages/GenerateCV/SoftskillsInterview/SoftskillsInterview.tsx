@@ -38,6 +38,10 @@ export const SoftskillsInterview = () => {
   const backPath = paths.generateCVCandidatePage.replace(':id', currentCandidate.id);
   const skillsToView = softskillsInterview.successfullySaved ? softskillsInterview.softSkills : softSkillsList;
 
+
+  console.log('SKILLLLS', softskillsInterview.softSkills);
+  
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const value = e.target.value;
@@ -94,6 +98,7 @@ export const SoftskillsInterview = () => {
             skill={el}
             softskillsInterview={softskillsInterview}
             softSkillsList={softSkillsList}
+            setIsChanged={setIsChanged}
           />
         ))}
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />

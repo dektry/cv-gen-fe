@@ -14,6 +14,7 @@ interface IProps {
   skill: ISoftSkill;
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
+  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Skill = (props: IProps) => {
@@ -23,6 +24,7 @@ export const Skill = (props: IProps) => {
     skill: { id, value, question, comment, score },
     softskillsInterview,
     softSkillsList,
+    setIsChanged,
   } = props;
 
   return (
@@ -33,12 +35,14 @@ export const Skill = (props: IProps) => {
         score={score}
         softskillsInterview={softskillsInterview}
         softSkillsList={softSkillsList}
+        setIsChanged={setIsChanged}
       />
       <SkillComment 
         id={id} 
         comment={comment}
         softskillsInterview={softskillsInterview}
         softSkillsList={softSkillsList}
+        setIsChanged={setIsChanged}
       />
     </div>
   );
