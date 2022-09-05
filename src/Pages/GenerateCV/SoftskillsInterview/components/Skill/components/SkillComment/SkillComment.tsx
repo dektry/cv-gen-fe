@@ -21,6 +21,7 @@ interface IProps {
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
 }
+
 export const SkillComment = (props: IProps) => {
 
   const { comment, id, softskillsInterview, softSkillsList } = props;

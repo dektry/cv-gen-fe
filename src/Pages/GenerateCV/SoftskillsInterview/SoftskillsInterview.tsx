@@ -14,7 +14,6 @@ import {
 } from 'store/reducers/softskillsInterview';
 
 import { CandidatePopOver } from '../common-components/PopOver';
-import { SelectPositions } from './components/SelectPositions';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { Skill } from './components/Skill';
 import { SoftSkillModal } from './components/SoftSkillModal';
@@ -88,7 +87,6 @@ export const SoftskillsInterview = () => {
       <GenerateCvHeader backPath={backPath} disabled={isChanged}>
         <CandidatePopOver />
       </GenerateCvHeader>
-      <SelectPositions setFieldsDisabled={setFieldsDisabled} fieldsDisabled={fieldsDisabled} />
       {skillsToView &&
         skillsToView.map((el: ISoftSkill) => (
           <Skill 

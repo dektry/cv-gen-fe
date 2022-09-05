@@ -8,7 +8,7 @@ export const useStyles = createUseStyles({
     alignItems: 'flex-start',
     margin: '0.7rem',
     marginLeft: '0',
-    width: '25%',
+    width: '35%',
     maxWidth: '40rem',
     maxHeight: '7rem',
     background: '#ffffff',

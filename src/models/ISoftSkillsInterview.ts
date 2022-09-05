@@ -4,6 +4,7 @@ export interface ISoftSkill {
   value: string;
   question?: string;
   comment?: string;
+  score?: number;
 }
 interface ISoftSkillID {
   id: string;

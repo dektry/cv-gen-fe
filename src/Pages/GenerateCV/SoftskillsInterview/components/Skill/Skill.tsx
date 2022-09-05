@@ -3,6 +3,7 @@ import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
 import { SkillCard } from './components/SkillCard';
 import { SkillComment } from './components/SkillComment';
+import { SkillRadioButtons } from './components/SkillRadioButtons';
 
 import { ISoftSkillInterview } from 'models/ISoftSkillsInterview';
 
@@ -19,7 +20,7 @@ export const Skill = (props: IProps) => {
   const classes = useStyles();
 
   const {
-    skill: { id, value, question, comment },
+    skill: { id, value, question, comment, score },
     softskillsInterview,
     softSkillsList,
   } = props;
@@ -27,6 +28,12 @@ export const Skill = (props: IProps) => {
   return (
     <div className={classes.skillContainer}>
       <SkillCard value={value} question={question} />
+      <SkillRadioButtons 
+        id={id}
+        score={score}
+        softskillsInterview={softskillsInterview}
+        softSkillsList={softSkillsList}
+      />
       <SkillComment 
         id={id} 
         comment={comment}
