@@ -5,29 +5,13 @@ import { isArray } from 'lodash';
 import { ICandidateTable } from 'models/ICandidate';
 import { ITableParams, IExpandableParams } from 'models/ICommon';
 
-import { useSelector } from 'react-redux';
-import { setSoftSkillsInterview, setSoftSkillsList } from 'store/reducers/softskillsInterview';
-import { chooseInterviewLevel, chooseInterviewPosition, setInterviewResult } from 'store/reducers/interview';
-import {
-  candidatesSelector,
-  loadCandidates,
-  setCandidatesCurrentPage,
-  setCandidatesIsLoading,
-  setCandidatesPageSize,
-  setCandidate,
-} from 'store/reducers/candidates';
+import { loadCandidates, setCandidatesCurrentPage, setCandidatesPageSize } from 'store/reducers/candidates';
 import { useAppDispatch } from 'store';
 
 import { TablePaginationConfig } from 'antd/es/table/Table';
 import { SorterResult } from 'antd/es/table/interface';
 
-import {
-  CANDIDATES,
-  CANDIDATE_TABLE_KEYS,
-  defaultCandidate,
-  defaultPageSize,
-  defaultCurrentPage,
-} from './utils/constants';
+import { CANDIDATES, CANDIDATE_TABLE_KEYS, defaultPageSize, defaultCurrentPage } from './utils/constants';
 
 import paths from 'config/routes.json';
 import { useIsMobile } from 'theme/Responsive';
@@ -35,36 +19,24 @@ import { CandidateShortCard } from '../CandidateShortCard';
 import { TableComponent as Table } from 'common-components/Table';
 // TODO: implement loader logic
 
-export const CandidatesTable = ({ editAction = false }) => {
+interface ICandidateTableProps {
+  editAction: boolean;
+  pageSize: number;
+  currentPage: number;
+  totalItems: number;
+  isLoading: boolean;
+  candidates: ICandidateTable[];
+}
+
+export const CandidatesTable = ({
+  editAction = false,
+  pageSize,
+  currentPage,
+  totalItems,
+  isLoading,
+  candidates,
+}: ICandidateTableProps) => {
   const dispatch = useAppDispatch();
-  const { currentPage, pageSize, isLoading, candidates, totalItems, currentCandidate } =
-    useSelector(candidatesSelector);
-
-  useEffect(() => {
-    dispatch(setCandidate(defaultCandidate));
-  }, []);
-
-  useEffect(() => {
-    dispatch(setCandidatesIsLoading(true));
-    dispatch(loadCandidates({ page: currentPage, limit: pageSize, sorter: { order: 'ascend', field: 'fullName' } }));
-    dispatch(
-      setSoftSkillsInterview({
-        softSkills: [],
-        hobby: '',
-        comment: '',
-        candidateId: '',
-        level: undefined,
-        position: undefined,
-        positionId: '',
-        levelId: '',
-      })
-    );
-    dispatch(setSoftSkillsList([]));
-    dispatch(setInterviewResult(null));
-    dispatch(chooseInterviewLevel(undefined));
-    dispatch(chooseInterviewPosition(undefined));
-    dispatch(setCandidatesIsLoading(false));
-  }, [dispatch, currentCandidate]);
 
   const handleChange = async (
     pagination: TablePaginationConfig,

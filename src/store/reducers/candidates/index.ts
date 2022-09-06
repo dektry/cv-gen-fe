@@ -72,7 +72,11 @@ const candidates = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(loadCandidates.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(loadCandidates.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
       if (payload) {
         state.candidates = payload.candidates;
         state.totalItems = payload.count;
@@ -92,7 +96,7 @@ const candidates = createSlice({
     builder.addCase(updateOneCandidate.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(updateOneCandidate.fulfilled, (state) => {
+    builder.addCase(updateOneCandidate.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       // if (payload?.fullName) state.currentCandidate = payload;
 
