@@ -1,4 +1,4 @@
-import { Card, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 
 import { useStyles } from './styles';
 

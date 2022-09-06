@@ -4,7 +4,7 @@ import { Input, Button, Tooltip } from 'antd';
 
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
 
-import { SOFT_SKILL_INTERVIEW } from '../../../utils/constants';
+import { SOFT_SKILL_INTERVIEW } from '../../../../utils/constants';
 import paths from 'config/routes.json';
 import { ICandidate } from 'models/ICandidate';
 
@@ -17,7 +17,6 @@ interface ISoftSkillFotterProps {
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleSaveChanges: () => Promise<void>;
   currentCandidate: ICandidate;
-  hobby: string | undefined;
   comment: string | undefined;
   fieldsDisabled: boolean;
   saveDisabled: boolean;
@@ -27,7 +26,6 @@ interface ISoftSkillFotterProps {
 export const SoftSkillFotter = ({
   setOpenSkillModal,
   handleChange,
-  hobby,
   comment,
   fieldsDisabled,
   saveDisabled,
@@ -53,18 +51,9 @@ export const SoftSkillFotter = ({
         </Button>
       </Tooltip>
       <TextArea
-        id="hobby"
-        rows={2}
-        placeholder="Hobbies"
-        className={classes.textArea}
-        onChange={handleChange}
-        value={hobby}
-        disabled={fieldsDisabled}
-      />
-      <TextArea
         id="comment"
         rows={2}
-        placeholder="Comment"
+        placeholder="Feedback field"
         className={classes.textArea}
         onChange={handleChange}
         value={comment}
@@ -73,6 +62,11 @@ export const SoftSkillFotter = ({
       <Button style={{ width: '100px' }} disabled={saveDisabled} onClick={handleSaveChanges}>
         {saveButtonText}
       </Button>
+      <ButtonWithLink
+        path={paths.generateCVsoftskillsInterviewResult}
+        text={'See results'}
+        id={currentCandidate?.id}
+      />
       <ButtonWithLink
         path={paths.generateCVtechnicalInterview}
         text={'Start tech interview'}

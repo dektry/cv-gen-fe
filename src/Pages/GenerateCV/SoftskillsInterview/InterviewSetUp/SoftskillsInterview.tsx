@@ -13,11 +13,11 @@ import {
   setSoftSkillInterviewSkillsList
 } from 'store/reducers/softskillsInterview';
 
-import { CandidatePopOver } from '../common-components/PopOver';
+import { CandidatePopOver } from '../../common-components/PopOver';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { Skill } from './components/Skill';
 import { SoftSkillModal } from './components/SoftSkillModal';
-import { GenerateCV } from '../common-components/GenerateCv';
+import { GenerateCV } from '../../common-components/GenerateCv';
 import { SoftSkillFotter } from './components/SoftSkillFooter';
 
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
@@ -31,7 +31,6 @@ export const SoftskillsInterview = () => {
 
   const [isOpenSkillModal, setOpenSkillModal] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const [hobby, setHobby] = useState(softskillsInterview.hobby);
   const [comment, setComment] = useState(softskillsInterview.comment);
   const [fieldsDisabled, setFieldsDisabled] = useState(false);
 
@@ -39,22 +38,12 @@ export const SoftskillsInterview = () => {
   const skillsToView = softskillsInterview.successfullySaved ? softskillsInterview.softSkills : softSkillsList;
 
 
-  console.log('SKILLLLS', softskillsInterview.softSkills);
-  
-
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const value = e.target.value;
-      const id = e.target.id;
-
       const softskillsInterviewCopy = cloneDeep(softskillsInterview);
-      if (id === 'hobby') {
-        softskillsInterviewCopy.hobby = value;
-        setHobby(value);
-      } else if (id === 'comment') {
-        softskillsInterviewCopy.comment = value;
-        setComment(value);
-      }
+      softskillsInterviewCopy.comment = value;
+      setComment(value);
       dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
       setIsChanged(true);
     },
@@ -106,7 +95,6 @@ export const SoftskillsInterview = () => {
         setOpenSkillModal={setOpenSkillModal}
         handleSaveChanges={handleSaveChanges}
         handleChange={handleChange}
-        hobby={hobby}
         comment={comment}
         fieldsDisabled={fieldsDisabled}
         saveDisabled={!isChanged}

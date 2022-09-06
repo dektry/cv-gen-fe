@@ -15,6 +15,8 @@
     "employee": "/generate-cv/choose-person/employee/:id",
     "generateCVtechnicalInterviewResult":
       "/generate-cv/candidate/:candidateId/tech-interview/result",
+    "generateCVsoftskillsInterviewResult": 
+      "/generate-cv/candidate/:id/soft-interview/result",
     "login": "/login",
     "users": "/users"
 }
