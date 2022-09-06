@@ -1,4 +1,3 @@
-
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
 import { SkillCard } from './components/SkillCard';
@@ -7,7 +6,6 @@ import { SkillComment } from './components/SkillComment';
 import { ISoftSkillInterview } from 'models/ISoftSkillsInterview';
 
 import { useStyles } from './styles';
-
 
 interface IProps {
   skill: ISoftSkill;
@@ -27,12 +25,12 @@ export const Skill = (props: IProps) => {
   return (
     <div className={classes.skillContainer}>
       <SkillCard value={value} question={question} />
-      <SkillComment 
-        id={id} 
+      <SkillComment
+        id={id}
         comment={comment}
         softskillsInterview={softskillsInterview}
         softSkillsList={softSkillsList}
       />
     </div>
   );
-}
+};

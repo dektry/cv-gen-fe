@@ -1,14 +1,13 @@
-import { Button, Select } from 'antd';
+import { Button, Select, Spin } from 'antd';
 
-import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 
-import { chooseInterviewLevel, chooseInterviewPosition, interviewSelector } from 'store/reducers/interview';
-import { positionsSelector } from 'store/reducers/positions';
-import { levelsSelector } from 'store/reducers/levels';
-import { softSkillInterviewSelector } from 'store/reducers/softskillsInterview';
+import { chooseInterviewLevel, chooseInterviewPosition } from 'store/reducers/interview';
 
 import { INTERVIEW } from '../InterviewForm/utils/constants';
+import { IInterviewResult } from 'models/IInterview';
+import { NullableField } from 'models/TNullableField';
+import { IDBLevels, IDBPosition } from 'models/IUser';
 
 import { useStyles } from './styles';
 
@@ -22,6 +21,10 @@ interface IProps {
   handleStartInterview: () => void;
   currentLevel?: string;
   currentPosition?: string;
+  interviewResult: NullableField<IInterviewResult>;
+  allLevels: IDBLevels[];
+  allPositions: IDBPosition[];
+  isLoadingInterviewMatrix: boolean;
 }
 
 export const InterviewSelect = (props: IProps) => {
@@ -35,12 +38,11 @@ export const InterviewSelect = (props: IProps) => {
     setIsEditActive,
     currentLevel,
     currentPosition,
+    interviewResult,
+    allLevels,
+    allPositions,
+    isLoadingInterviewMatrix,
   } = props;
-
-  const { interviewResult } = useSelector(interviewSelector);
-  const { allPositions } = useSelector(positionsSelector);
-  const { allLevels } = useSelector(levelsSelector);
-  const { softskillsInterview } = useSelector(softSkillInterviewSelector);
 
   const dispatch = useAppDispatch();
 
@@ -62,7 +64,7 @@ export const InterviewSelect = (props: IProps) => {
         onChange={handleChangePosition}
         placeholder={INTERVIEW.POSITION_PLACEHOLDER}
         className={classes.selects}
-        value={currentPosition || softskillsInterview.position?.id}
+        value={currentPosition}
         disabled={isSelectDisabled}
       >
         {allPositions.map((position) => (
@@ -75,7 +77,7 @@ export const InterviewSelect = (props: IProps) => {
         onChange={handleChangeInterviewLevel}
         placeholder={INTERVIEW.LEVEL_PLACEHOLDER}
         className={classes.selects}
-        value={currentLevel || softskillsInterview.level?.id}
+        value={currentLevel}
         disabled={isSelectDisabled}
       >
         {allLevels.map((level) => (
@@ -84,9 +86,15 @@ export const InterviewSelect = (props: IProps) => {
           </Select.Option>
         ))}
       </Select>
-      <Button type="primary" onClick={handleStartInterview} disabled={disableStartInterview}>
-        {INTERVIEW.START}
-      </Button>
+
+      {!isLoadingInterviewMatrix ? (
+        <Button type="primary" onClick={handleStartInterview} disabled={disableStartInterview}>
+          {INTERVIEW.START}
+        </Button>
+      ) : (
+        <Spin size="small" tip={'Loading interview matrix...'} />
+      )}
+
       {interviewResult?.answers && (
         <Button type="primary" className={classes.finishButton} onClick={() => setIsEditActive(!isEditActive)}>
           {isEditActive ? INTERVIEW.STOP_EDIT : INTERVIEW.START_EDIT}

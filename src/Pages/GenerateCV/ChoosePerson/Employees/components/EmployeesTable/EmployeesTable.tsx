@@ -1,12 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
 import { SorterResult, SortOrder } from 'antd/es/table/interface';
 import { TablePaginationConfig } from 'antd/es/table/Table';
 
-import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { setLoading, setPageSize, setCurrentPage, employeesSelector, getEmployeesList } from 'store/reducers/employees';
+import { setLoading, setPageSize, setCurrentPage, getEmployeesList } from 'store/reducers/employees';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
 import { useIsMobile } from 'theme/Responsive';
@@ -18,23 +17,29 @@ import paths from 'config/routes.json';
 
 import { TableComponent as Table } from 'common-components/Table';
 
-export const EmployeesTable = ({ editAction = false }) => {
+interface IEmployeeTableProps {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  query: string | undefined;
+  isLoading: boolean;
+  editAction: boolean;
+  employees: IEmployee[];
+}
+
+export const EmployeesTable = ({
+  editAction = false,
+  currentPage,
+  pageSize,
+  totalItems,
+  query,
+  isLoading,
+  employees,
+}: IEmployeeTableProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { employees, currentPage, pageSize, totalItems, query, isLoading } = useSelector(employeesSelector);
 
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    dispatch(setLoading(true));
-    dispatch(
-      getEmployeesList({
-        page: currentPage || defaultCurrentPage,
-        limit: pageSize || defaultPageSize,
-      })
-    );
-    dispatch(setLoading(false));
-  }, []);
 
   const handleChange = async (
     pagination: TablePaginationConfig,

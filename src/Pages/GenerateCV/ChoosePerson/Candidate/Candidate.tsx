@@ -3,10 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from 'store';
-import { loadInterviewResult } from 'store/reducers/interview';
-import { loadPositions } from 'store/reducers/positions';
-import { loadLevels } from 'store/reducers/levels';
-import { loadSoftSkillsList, loadSoftSkillInterview } from 'store/reducers/softskillsInterview';
 import { loadOneCandidate, updateOneCandidate, candidatesSelector, setCandidate } from 'store/reducers/candidates';
 
 import { Spin } from 'antd';
@@ -48,12 +44,6 @@ export const Candidate = () => {
   useEffect(() => {
     if (id) {
       dispatch(loadOneCandidate(id));
-      dispatch(loadSoftSkillInterview(id));
-      dispatch(loadInterviewResult(id));
-
-      dispatch(loadPositions());
-      dispatch(loadLevels());
-      dispatch(loadSoftSkillsList());
     }
   }, [dispatch, id]);
 
