@@ -1,4 +1,4 @@
-import { Card } from 'antd';
+import { Card, Tooltip } from 'antd';
 
 import { useStyles } from './styles';
 
@@ -13,8 +13,10 @@ export const SkillCard = (props: IProps) => {
   const { value, question } = props;
 
   return (
-    <Card title={value} bordered={true} className={classes.skillCard}>
-      {question ?? 'There will be question to this softskill'}
-    </Card>
+    <Tooltip title={question ?? 'There will be question to this skill'} placement='bottom'>
+      <div className={classes.skillCard}>
+        {value}
+      </div>
+    </Tooltip>
   );
 };
