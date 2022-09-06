@@ -1,16 +1,16 @@
 import { createUseStyles } from 'react-jss';
 
 export const useStyles = createUseStyles({
-  skillContainer: {
+  skillCard: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0.3rem 0.7rem',
+    alignItems: 'flex-start',
     margin: '0.7rem',
     marginLeft: '0',
-    height: '2.5rem',
-    width: '45%',
+    width: '25%',
     maxWidth: '40rem',
+    maxHeight: '7rem',
     background: '#ffffff',
     borderRadius: '8px',
   },

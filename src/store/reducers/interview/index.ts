@@ -16,7 +16,6 @@ import { getSkillMatrixByIds } from 'actions/skills';
 import { loadInterviewResultRequest, completeInterview, editInterview } from 'actions/interview';
 
 import { IInterviewMatrix, IInterviewResult, IInterviewState, ICompleteInterview } from 'models/IInterview';
-import { stat } from 'fs';
 
 export const loadCandidate = createAsyncThunk(loadCandidateAction, (candidateId: string) => {
   return getCandidate(candidateId);

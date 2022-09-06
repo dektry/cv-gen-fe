@@ -24,7 +24,7 @@ import { loadOneCandidate } from 'store/reducers/candidates';
 import { CandidatePopOver } from '../common-components/PopOver';
 import { SelectPositions } from './components/SelectPositions';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { SkillWithCheckbox } from './components/SelectWithCheckbox';
+import { Skill } from './components/Skill';
 import { SoftSkillModal } from './components/SoftSkillModal';
 import { GenerateCV } from '../common-components/GenerateCv';
 import { SoftSkillFotter } from './components/SoftSkillFooter';
@@ -118,7 +118,7 @@ export const SoftskillsInterview = () => {
       <SelectPositions setFieldsDisabled={setFieldsDisabled} fieldsDisabled={fieldsDisabled} />
       {skillsToView &&
         skillsToView.map((el: ISoftSkill) => (
-          <SkillWithCheckbox key={el.id} skill={el} setIsChanged={setIsChanged} disabled={fieldsDisabled} />
+          <Skill key={el.id} skill={el} softskillsInterview={softskillsInterview} softSkillsList={softSkillsList} />
         ))}
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
       <SoftSkillFotter

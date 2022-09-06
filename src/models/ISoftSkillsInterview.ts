@@ -2,10 +2,13 @@ export interface ISoftSkill {
   isActive: boolean;
   id?: string;
   value: string;
+  question?: string;
+  comment?: string;
 }
 interface ISoftSkillID {
   id: string;
   value: string;
+  comment: string;
 }
 
 export interface ISoftSkillFromDB {

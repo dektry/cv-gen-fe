@@ -24,6 +24,7 @@ import {
   ISoftSkillFromDB,
   IPositionOrLevel,
 } from 'models/ISoftSkillsInterview';
+import { message } from 'antd';
 
 export const loadSoftSkillsList = createAsyncThunk(loadSoftSkillsListAction, () => getSoftSkillsList());
 
@@ -100,6 +101,7 @@ const softskillsInterview = createSlice({
           isActive: false,
           id: skill.id,
           value: skill.value,
+          comment: skill.comment,
         };
       });
       state.softSkillsList = processedSkills;
@@ -115,6 +117,7 @@ const softskillsInterview = createSlice({
             isActive: skill.isActive,
             id: skill.soft_skill_id.id,
             value: skill.soft_skill_id.value,
+            comment: skill.soft_skill_id.comment,
           };
         });
         delete payload.skills;
@@ -125,6 +128,9 @@ const softskillsInterview = createSlice({
     });
     builder.addCase(finishSoftSkillInterview.fulfilled, (state) => {
       state.softskillsInterview.successfullySaved = true;
+    });
+    builder.addCase(saveChangesToSoftSkillsInterview.rejected, () => {
+      message.error('Server error. Please contact admin');
     });
   },
 });
