@@ -1,9 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { candidatesSelector } from 'store/reducers/candidates';
+
+import { Spin } from 'antd';
 
 import {
   setSoftSkillsInterview,
@@ -11,7 +14,12 @@ import {
   finishSoftSkillInterview,
   saveChangesToSoftSkillsInterview,
   setSoftSkillInterviewSkillsList,
+  loadSoftSkillsList,
+  loadSoftSkillInterview,
 } from 'store/reducers/softskillsInterview';
+import { loadPositions } from 'store/reducers/positions';
+import { loadLevels } from 'store/reducers/levels';
+import { loadOneCandidate } from 'store/reducers/candidates';
 
 import { CandidatePopOver } from '../common-components/PopOver';
 import { SelectPositions } from './components/SelectPositions';
@@ -25,10 +33,15 @@ import { ISoftSkill } from 'models/ISoftSkillsInterview';
 import paths from 'config/routes.json';
 
 export const SoftskillsInterview = () => {
+  const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
-  const { currentCandidate } = useSelector(candidatesSelector);
-  const { softskillsInterview, softSkillsList } = useSelector(softSkillInterviewSelector);
+  const { currentCandidate, isLoadingOneCandidate } = useSelector(candidatesSelector);
+  const {
+    softskillsInterview,
+    softSkillsList,
+    isLoading: isLoadingSoftInterview,
+  } = useSelector(softSkillInterviewSelector);
 
   const [isOpenSkillModal, setOpenSkillModal] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -81,6 +94,20 @@ export const SoftskillsInterview = () => {
     softskillsInterviewCopy.candidateId = currentCandidate.id;
     dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
   }, [currentCandidate]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(loadOneCandidate(id));
+      dispatch(loadSoftSkillInterview(id));
+
+      dispatch(loadPositions());
+      dispatch(loadLevels());
+      dispatch(loadSoftSkillsList());
+    }
+  }, [dispatch, id]);
+
+  if (isLoadingOneCandidate || isLoadingSoftInterview)
+    return <Spin size="large" tip={'Loading soft skills interview...'} />;
 
   return (
     <>

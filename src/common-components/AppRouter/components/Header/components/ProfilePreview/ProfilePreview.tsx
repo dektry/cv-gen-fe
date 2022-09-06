@@ -33,7 +33,7 @@ export const ProfilePreview = ({ chosenUser }: IProps) => {
 
   const handleLogout = () => {
     dispatch(logOut());
-    navigate(paths.login);
+    navigate(paths.home);
   };
 
   return chosenUser ? (

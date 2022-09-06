@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import { PageNotFound } from 'Pages/PageNotFound';
 import { AppRootPublicContainer } from './components/AppRootPublicContainer';
@@ -17,7 +17,7 @@ const AppRouter = ({ isAuth }: IAppRouterProps) => {
         {publicRoutes.map((route: IRoute) => (
           <Route path={route.path} element={<route.component />} key={route.path} />
         ))}
-        <Route path={routes.any} element={<Navigate to={routes.login} />} />
+        <Route path={routes.any} element={<PageNotFound />} />
       </Routes>
     );
   return (
@@ -27,7 +27,6 @@ const AppRouter = ({ isAuth }: IAppRouterProps) => {
           <Route path={route.path} element={<route.component />} key={route.path} />
         ))}
       </Route>
-
       <Route path={routes.any} element={<PageNotFound />} />
     </Routes>
   );
