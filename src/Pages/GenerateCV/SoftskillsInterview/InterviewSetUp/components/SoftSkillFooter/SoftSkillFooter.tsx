@@ -15,11 +15,9 @@ const { TextArea } = Input;
 interface ISoftSkillFotterProps {
   setOpenSkillModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSaveChanges: () => Promise<void>;
   currentCandidate: ICandidate;
   comment: string | undefined;
   fieldsDisabled: boolean;
-  saveDisabled: boolean;
   successfullySaved: boolean | undefined;
 }
 
@@ -28,14 +26,11 @@ export const SoftSkillFotter = ({
   handleChange,
   comment,
   fieldsDisabled,
-  saveDisabled,
-  handleSaveChanges,
   currentCandidate,
   successfullySaved,
 }: ISoftSkillFotterProps) => {
   const classes = useStyles();
 
-  const saveButtonText = successfullySaved ? SOFT_SKILL_INTERVIEW.SAVE_CHANGES : SOFT_SKILL_INTERVIEW.SAVE;
 
   return (
     <div className={classes.footer}>
@@ -59,9 +54,6 @@ export const SoftSkillFotter = ({
         value={comment}
         disabled={fieldsDisabled}
       />
-      <Button style={{ width: '100px' }} disabled={saveDisabled} onClick={handleSaveChanges}>
-        {saveButtonText}
-      </Button>
       <ButtonWithLink
         path={paths.generateCVsoftskillsInterviewResult}
         text={'See results'}

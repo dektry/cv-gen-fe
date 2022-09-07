@@ -93,11 +93,9 @@ export const SoftskillsInterview = () => {
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
       <SoftSkillFotter
         setOpenSkillModal={setOpenSkillModal}
-        handleSaveChanges={handleSaveChanges}
         handleChange={handleChange}
         comment={comment}
         fieldsDisabled={fieldsDisabled}
-        saveDisabled={!isChanged}
         successfullySaved={softskillsInterview.successfullySaved}
         currentCandidate={currentCandidate}
       />
