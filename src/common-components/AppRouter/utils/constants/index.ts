@@ -18,7 +18,7 @@ export interface IRoute {
   component: React.ComponentType;
 }
 
-export const publicRoutes: IRoute[] = [{ path: routes.login, component: LoginContainer }];
+export const publicRoutes: IRoute[] = [{ path: routes.home, component: LoginContainer }];
 export const privateRoutes: IRoute[] = [
   { path: routes.home, component: HomePage },
   { path: routes.generateCVcandidateList, component: Candidates },

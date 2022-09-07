@@ -1,4 +1,3 @@
-
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 
 import { SkillCard } from './components/SkillCard';
@@ -8,7 +7,6 @@ import { SkillRadioButtons } from './components/SkillRadioButtons';
 import { ISoftSkillInterview } from 'models/ISoftSkillsInterview';
 
 import { useStyles } from './styles';
-
 
 interface IProps {
   skill: ISoftSkill;
@@ -46,4 +44,4 @@ export const Skill = (props: IProps) => {
       />
     </div>
   );
-}
+};

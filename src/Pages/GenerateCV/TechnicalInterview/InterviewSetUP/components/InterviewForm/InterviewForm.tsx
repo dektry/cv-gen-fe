@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { PositionSkillsModal } from '../PositionSkillsModal';
 
 import { useAppDispatch } from 'store';
-import { candidatesSelector } from 'store/reducers/candidates';
 import {
   interviewSelector,
   loadInterviewMatrix,
@@ -15,29 +14,40 @@ import {
   finishInterview,
   saveChangesToInterview,
 } from 'store/reducers/interview';
-import { softSkillInterviewSelector } from 'store/reducers/softskillsInterview';
-import { positionsSelector, loadSkillMatrix } from 'store/reducers/positions';
-import { levelsSelector } from 'store/reducers/levels';
+import { loadSkillMatrix } from 'store/reducers/positions';
 
 import { processAnswers } from './utils/helpers/processAnswers';
 
 import { IInterviewAnswers, ICompleteInterview } from 'models/IInterview';
 
 import paths from 'config/routes.json';
+import { ICandidate } from 'models/ICandidate';
+import { IDBLevels, IDBPosition, ILevelsSchema, IMatrix } from 'models/IUser';
 
 import { InterviewMatrix } from '../InterviewMatrix';
 import { InterviewSelect } from '../InterviewSelect';
 
-export const InterviewForm = () => {
+interface IInterviewFormProps {
+  currentCandidate: ICandidate;
+  allLevels: IDBLevels[];
+  allPositions: IDBPosition[];
+  levelsSchema: ILevelsSchema[];
+  skillMatrix: IMatrix;
+  isLoadingInterviewMatrix: boolean;
+}
+
+export const InterviewForm = ({
+  currentCandidate,
+  allLevels,
+  allPositions,
+  levelsSchema,
+  skillMatrix,
+  isLoadingInterviewMatrix,
+}: IInterviewFormProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { currentCandidate } = useSelector(candidatesSelector);
-
   const { chosenLevel, chosenPosition, interviewMatrix, interviewResult } = useSelector(interviewSelector);
-  const { softskillsInterview } = useSelector(softSkillInterviewSelector);
-  const { allPositions, skillMatrix } = useSelector(positionsSelector);
-  const { allLevels, levelsSchema } = useSelector(levelsSelector);
 
   const [answers, setAnswers] = useState<IInterviewAnswers>({});
   const [isStarted, setIsStarted] = useState(false);
@@ -48,9 +58,7 @@ export const InterviewForm = () => {
   const [isEditActive, setIsEditActive] = useState(false);
   const [isSelectDisabled, setIsSelectDisabled] = useState(false);
 
-  const disableStartInterview =
-    (!(currentLevel && currentPosition) && !(softskillsInterview.position && softskillsInterview.level)) ||
-    !!interviewMatrix.length;
+  const disableStartInterview = !(currentLevel && currentPosition) || !!interviewMatrix.length;
   const isShowInterviewQuestions = currentLevel && currentPosition && !!interviewMatrix?.length;
 
   const positionSkillModalState = {
@@ -155,6 +163,10 @@ export const InterviewForm = () => {
         handleStartInterview={handleStartInterview}
         currentLevel={currentLevel}
         currentPosition={currentPosition}
+        interviewResult={interviewResult}
+        allLevels={allLevels}
+        allPositions={allPositions}
+        isLoadingInterviewMatrix={isLoadingInterviewMatrix}
       />
       <InterviewMatrix
         isShowInterviewQuestions={isShowInterviewQuestions}
@@ -166,6 +178,10 @@ export const InterviewForm = () => {
         handleFinishInterview={handleFinishInterview}
         isEditActive={isEditActive}
         handleSkillClick={handleSkillClick}
+        chosenPosition={chosenPosition}
+        interviewResult={interviewResult}
+        interviewMatrix={interviewMatrix}
+        isLoadingInterviewMatrix={isLoadingInterviewMatrix}
       />
       <PositionSkillsModal
         modalTitle={allPositions.find(({ id }) => chosenPosition === id)?.name || ''}

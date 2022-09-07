@@ -4,6 +4,7 @@ import { NullableField } from './TNullableField';
 
 export interface IInterviewState {
   isLoading: boolean;
+  isLoadingInterviewMatrix: boolean;
   interviewMatrix: IInterviewMatrix;
   candidate: NullableField<ICandidate>;
   chosenPosition?: string;

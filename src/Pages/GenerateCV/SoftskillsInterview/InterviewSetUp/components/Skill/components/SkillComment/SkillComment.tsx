@@ -5,11 +5,11 @@ import { debounce, cloneDeep } from 'lodash';
 
 import { useAppDispatch } from 'store';
 
-import { 
-  setSoftSkillsInterview, 
-  setSoftSkillsList, 
-  saveChangesToSoftSkillsInterview
- } from 'store/reducers/softskillsInterview';
+import {
+  setSoftSkillsInterview,
+  setSoftSkillsList,
+  saveChangesToSoftSkillsInterview,
+} from 'store/reducers/softskillsInterview';
 
 import { ISoftSkill, ISoftSkillInterview } from 'models/ISoftSkillsInterview';
 
@@ -24,10 +24,7 @@ interface IProps {
 }
 
 export const SkillComment = (props: IProps) => {
-
-  const { comment, id, softskillsInterview, softSkillsList, setIsChanged } = props;
-
-  const [commentState, setCommentState] = useState(comment);
+  const { comment, id, softskillsInterview, softSkillsList } = props;
 
   const dispatch = useAppDispatch();
 
@@ -65,19 +62,15 @@ export const SkillComment = (props: IProps) => {
       debouncedComment.cancel();
     };
   }, [debouncedComment]);
-  
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       debouncedComment(e);
-      setCommentState(e.target.value);
-    }, [debouncedComment, dispatch]
+    },
+    [debouncedComment, dispatch]
   );
 
-  return <Input
-    id={id}
-    className={classes.skillComment}
-    value={commentState} 
-    placeholder='Comment'
-    onChange={handleChange}
-  />;
-}
+  return (
+    <Input id={id} className={classes.skillComment} value={comment} placeholder="Comment" onChange={handleChange} />
+  );
+};

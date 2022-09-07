@@ -1,16 +1,20 @@
 import { useState } from 'react';
 
-import { Select, Button } from 'antd';
+import { Select, Button, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 
-import { interviewSelector } from 'store/reducers/interview';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
-import { IInterviewSkill, IInterviewAnswers } from 'models/IInterview';
-import { LevelTypesEnum } from 'models/IInterview';
+import {
+  IInterviewSkill,
+  IInterviewAnswers,
+  IInterviewResult,
+  LevelTypesEnum,
+  IInterviewMatrix,
+} from 'models/IInterview';
+import { NullableField } from 'models/TNullableField';
 
 import { INTERVIEW, levelTypes } from '../InterviewForm/utils/constants';
 
@@ -26,6 +30,10 @@ interface IProps {
   handleFinishInterview: () => Promise<void>;
   isEditActive: boolean;
   handleSkillClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  chosenPosition: string | undefined;
+  interviewResult: NullableField<IInterviewResult>;
+  interviewMatrix: IInterviewMatrix;
+  isLoadingInterviewMatrix: boolean;
 }
 
 export const InterviewMatrix = (props: IProps) => {
@@ -40,13 +48,15 @@ export const InterviewMatrix = (props: IProps) => {
     handleFinishInterview,
     isEditActive,
     handleSkillClick,
+    chosenPosition,
+    interviewResult,
+    interviewMatrix,
+    isLoadingInterviewMatrix,
   } = props;
 
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
-
-  const { chosenPosition, interviewMatrix, interviewResult } = useSelector(interviewSelector);
 
   const handleSkillChange = (level: LevelTypesEnum, skill: IInterviewSkill) => {
     setAnswers({ ...answers, [skill.id]: level });
@@ -131,8 +141,10 @@ export const InterviewMatrix = (props: IProps) => {
             )}
           </div>
         </section>
-      ) : (
+      ) : !isLoadingInterviewMatrix ? (
         <section className={classes.interviewForm} />
+      ) : (
+        <Spin size="small" tip={'Loading interview matrix...'} />
       )}
     </>
   );
