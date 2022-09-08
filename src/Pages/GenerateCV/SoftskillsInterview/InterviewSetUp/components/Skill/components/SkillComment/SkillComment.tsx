@@ -7,8 +7,8 @@ import { useAppDispatch } from 'store';
 
 import {
   setSoftSkillsInterview,
-  setSoftSkillsList,
   saveChangesToSoftSkillsInterview,
+  finishSoftSkillInterview,
 } from 'store/reducers/softskillsInterview';
 
 import { ISoftSkill, ISoftSkillInterview } from 'models/ISoftSkillsInterview';
@@ -20,11 +20,13 @@ interface IProps {
   comment?: string;
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
-  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
+  candidateId?: string;
 }
 
 export const SkillComment = (props: IProps) => {
-  const { comment, id, softskillsInterview, softSkillsList } = props;
+  const { comment, id, softskillsInterview, softSkillsList, candidateId } = props;
+
+  const [currentComment, setCurrentComment] = useState(comment);
 
   const dispatch = useAppDispatch();
 
@@ -32,28 +34,32 @@ export const SkillComment = (props: IProps) => {
 
   const debouncedComment = useRef(
     debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-      if (softskillsInterview?.softSkills?.length) {
-        const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+      const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+      softskillsInterviewCopy.candidateId = candidateId;
+      
+      const skillAlreadyChosen = softskillsInterviewCopy?.softSkills?.findIndex(el => el.id === id) !== -1;
+      
+      if(skillAlreadyChosen) {
+        const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
+        if (el.id === e.target.id) {
+          el.comment = e.target.value;
+        }
+          return el;
+        });
+        softskillsInterviewCopy.softSkills = processedSkills;
+      } else {
         const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
           if (el.id === e.target.id) {
             el.comment = e.target.value;
           }
-          return el;
-        });
+            return el;
+          });
         softskillsInterviewCopy.softSkills = processedSkills;
-        dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
-        dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy));
-      } else {
-        const softSkillsListCopy = cloneDeep(softSkillsList);
-        const processedSkills = softSkillsListCopy.map((el: ISoftSkill) => {
-          if (el.id === e.target.id) {
-            el.comment = e.target.value;
-          }
-          return el;
-        });
-        dispatch(setSoftSkillsList(processedSkills));
       }
-      setIsChanged(true);
+      (softskillsInterview?.softSkills?.length || softskillsInterview?.comment) ?
+        dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
+        dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
+      dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
     }, 600)
   ).current;
 
@@ -66,11 +72,12 @@ export const SkillComment = (props: IProps) => {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       debouncedComment(e);
+      setCurrentComment(e.target.value);
     },
     [debouncedComment, dispatch]
   );
 
   return (
-    <Input id={id} className={classes.skillComment} value={comment} placeholder="Comment" onChange={handleChange} />
+    <Input id={id} className={classes.skillComment} value={currentComment} placeholder="Comment" onChange={handleChange} />
   );
 };

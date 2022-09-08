@@ -17,17 +17,13 @@ interface ISoftSkillFotterProps {
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   currentCandidate: ICandidate;
   comment: string | undefined;
-  fieldsDisabled: boolean;
-  successfullySaved: boolean | undefined;
 }
 
 export const SoftSkillFotter = ({
   setOpenSkillModal,
   handleChange,
   comment,
-  fieldsDisabled,
   currentCandidate,
-  successfullySaved,
 }: ISoftSkillFotterProps) => {
   const classes = useStyles();
 
@@ -40,7 +36,6 @@ export const SoftSkillFotter = ({
           type="primary"
           onClick={() => setOpenSkillModal(true)}
           className={classes.plusButton}
-          disabled={successfullySaved}
         >
           +
         </Button>
@@ -52,7 +47,6 @@ export const SoftSkillFotter = ({
         className={classes.textArea}
         onChange={handleChange}
         value={comment}
-        disabled={fieldsDisabled}
       />
       <ButtonWithLink
         path={paths.generateCVsoftskillsInterviewResult}

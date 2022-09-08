@@ -1,19 +1,28 @@
-export interface ISoftSkill {
-  isActive?: boolean;
-  id?: string;
+export interface ISoftSkillScore {
+  id: string;
+  key: string;
   value: string;
-  question?: string;
-  comment?: string;
-  score?: number;
+  title: string;
 }
+
 interface ISoftSkillID {
   id: string;
   value: string;
   comment: string;
+  question: string;
+  score: ISoftSkillScore
+}
+
+export interface ISoftSkill {
+  id?: string;
+  value: string;
+  question?: string;
+  comment?: string;
+  score?: ISoftSkillScore;
+  softSkillScoreId?: string;
 }
 
 export interface ISoftSkillFromDB {
-  isActive: boolean;
   soft_skill_id: ISoftSkillID;
 }
 
@@ -27,15 +36,12 @@ export interface ISoftSkillInterview {
   comment?: string;
   candidateId?: string;
   softSkills?: ISoftSkill[];
-  positionId: string;
-  levelId: string;
-  position?: IPositionOrLevel;
-  level?: IPositionOrLevel;
   successfullySaved?: boolean;
 }
 
 export interface ISoftSkillsInterviewState {
   isLoading: boolean;
   softSkillsList: ISoftSkill[] | [];
+  scores: ISoftSkillScore[] | [];
   softskillsInterview: ISoftSkillInterview;
 }

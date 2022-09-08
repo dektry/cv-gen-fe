@@ -17,7 +17,7 @@ export const useStyles = createUseStyles({
     border: '1px solid #d9d9d9',
     borderRadius: '8px',
     '&:hover': {
-      border: '1px solid #1890ff',
+      border: '1px solid #1890ff'
     },
   },
 });

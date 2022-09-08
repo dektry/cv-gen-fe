@@ -5,6 +5,7 @@ import {
   getSoftSkillInterview,
   editSoftSkillsInterview,
   uploadNewSkill,
+  getSoftSkillScores,
 } from 'actions/skills';
 
 import { RootState } from 'store';
@@ -15,6 +16,7 @@ import {
   completeSoftSkillInterviewResultAction,
   editSoftSkillInterviewResultAction,
   addNewSkillAction,
+  loadSoftSkillScores,
 } from './actions';
 
 import {
@@ -22,7 +24,6 @@ import {
   ISoftSkillsInterviewState,
   ISoftSkill,
   ISoftSkillFromDB,
-  IPositionOrLevel,
 } from 'models/ISoftSkillsInterview';
 import { message } from 'antd';
 
@@ -44,18 +45,17 @@ export const loadSoftSkillInterview = createAsyncThunk(loadSoftskillInterviewRes
 
 export const addNewSkillToDB = createAsyncThunk(addNewSkillAction, (data: Partial<ISoftSkill>) => uploadNewSkill(data));
 
+export const softSkillScores = createAsyncThunk(loadSoftSkillScores, () => getSoftSkillScores());
+
 const initialState: ISoftSkillsInterviewState = {
   isLoading: false,
   softSkillsList: [],
+  scores: [],
   softskillsInterview: {
     softSkills: [],
     hobby: '',
     comment: '',
     candidateId: '',
-    level: undefined,
-    position: undefined,
-    positionId: '',
-    levelId: '',
   },
 };
 
@@ -77,18 +77,6 @@ const softskillsInterview = createSlice({
       softSkillsList.push(payload);
       state.softSkillsList = softSkillsList;
     },
-    chooseInterviewPosition: (state, { payload }: PayloadAction<IPositionOrLevel>) => {
-      state.softskillsInterview.position = payload;
-      if (payload.id) {
-        state.softskillsInterview.positionId = payload.id;
-      }
-    },
-    chooseInterviewLevel: (state, { payload }: PayloadAction<IPositionOrLevel>) => {
-      state.softskillsInterview.level = payload;
-      if (payload.id) {
-        state.softskillsInterview.levelId = payload.id;
-      }
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadSoftSkillsList.pending, (state) => {
@@ -98,13 +86,14 @@ const softskillsInterview = createSlice({
       state.isLoading = false;
       const processedSkills = payload.map((skill: ISoftSkill) => {
         return {
-          isActive: false,
           id: skill.id,
           value: skill.value,
           comment: skill.comment,
+          question: skill.question,
+          score: skill.score,
         };
       });
-      state.softSkillsList = processedSkills;
+      state.softskillsInterview.softSkills = processedSkills;
     });
     builder.addCase(loadSoftSkillInterview.pending, (state) => {
       state.isLoading = true;
@@ -114,10 +103,10 @@ const softskillsInterview = createSlice({
       if (payload && typeof payload !== 'string') {
         const processedSkills = payload?.skills?.map((skill: ISoftSkillFromDB) => {
           return {
-            isActive: skill.isActive,
             id: skill.soft_skill_id.id,
             value: skill.soft_skill_id.value,
             comment: skill.soft_skill_id.comment,
+            question: skill.soft_skill_id.question,
           };
         });
         delete payload.skills;
@@ -132,6 +121,9 @@ const softskillsInterview = createSlice({
     builder.addCase(saveChangesToSoftSkillsInterview.rejected, () => {
       message.error('Server error. Please contact admin');
     });
+    builder.addCase(softSkillScores.fulfilled, (state, { payload }) => {
+      state.scores = payload;
+    });
   },
 });
 
@@ -142,8 +134,6 @@ export const softSkillInterviewSelector = (state: RootState): ISoftSkillsIntervi
 export const {
   setSoftSkillsInterview,
   addNewSkill,
-  chooseInterviewPosition,
-  chooseInterviewLevel,
   setSoftSkillsList,
   setSoftSkillInterviewSkillsList,
 } = softskillsInterview.actions;

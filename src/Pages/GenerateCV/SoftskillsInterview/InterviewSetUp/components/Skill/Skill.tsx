@@ -1,4 +1,4 @@
-import { ISoftSkill } from 'models/ISoftSkillsInterview';
+import { ISoftSkill, ISoftSkillScore } from 'models/ISoftSkillsInterview';
 
 import { SkillCard } from './components/SkillCard';
 import { SkillComment } from './components/SkillComment';
@@ -12,17 +12,19 @@ interface IProps {
   skill: ISoftSkill;
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
-  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
+  scores: ISoftSkillScore[];
+  candidateId?: string;
 }
 
 export const Skill = (props: IProps) => {
   const classes = useStyles();
 
   const {
-    skill: { id, value, question, comment, score },
+    skill: { id, value, question, comment },
     softskillsInterview,
     softSkillsList,
-    setIsChanged,
+    scores,
+    candidateId,
   } = props;
 
   return (
@@ -30,17 +32,17 @@ export const Skill = (props: IProps) => {
       <SkillCard value={value} question={question} />
       <SkillRadioButtons 
         id={id}
-        score={score}
+        scores={scores}
         softskillsInterview={softskillsInterview}
         softSkillsList={softSkillsList}
-        setIsChanged={setIsChanged}
+        candidateId={candidateId}
       />
       <SkillComment 
         id={id} 
         comment={comment}
         softskillsInterview={softskillsInterview}
         softSkillsList={softSkillsList}
-        setIsChanged={setIsChanged}
+        candidateId={candidateId}
       />
     </div>
   );

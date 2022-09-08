@@ -9,72 +9,66 @@ import { useAppDispatch } from 'store';
 
 import { 
   setSoftSkillsInterview, 
-  setSoftSkillsList, 
-  saveChangesToSoftSkillsInterview
+  saveChangesToSoftSkillsInterview,
+  finishSoftSkillInterview
  } from 'store/reducers/softskillsInterview';
 
-import { ISoftSkill, ISoftSkillInterview } from 'models/ISoftSkillsInterview';
+import { ISoftSkill, ISoftSkillInterview, ISoftSkillScore } from 'models/ISoftSkillsInterview';
 
 
 interface IProps {
   id?: string;
-  score?: number;
+  scores?: ISoftSkillScore[];
+  currentScore?: ISoftSkillScore;
   softskillsInterview: ISoftSkillInterview;
   softSkillsList: [] | ISoftSkill[];
-  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
+  candidateId?: string;
 }
 
 export const SkillRadioButtons = (props: IProps) => {
-  const { softskillsInterview, softSkillsList, id, score, setIsChanged } = props;
-  const [value, setValue] = useState(score ?? 1);
+  const { softskillsInterview, softSkillsList, id, scores, currentScore, candidateId } = props;
+  const [value, setValue] = useState(Number(currentScore?.value) ?? 1);
 
   const dispatch = useAppDispatch();
 
-
   const handleChange = useCallback((e: RadioChangeEvent) => {
+    const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+    softskillsInterviewCopy.candidateId = candidateId;
+    const skillAlreadyChosen = softskillsInterviewCopy?.softSkills?.findIndex(el => el.id === id) !== -1;
     
-    if (softskillsInterview?.softSkills?.length) {
-      const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+    if(skillAlreadyChosen) {
       const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
-        if (el.id === e.target.id) {
-          el.score = e.target.value;
-        }
+      if (el.id === e.target.id) {
+        el.softSkillScoreId = e.target.id;
+      }
         return el;
       });
       softskillsInterviewCopy.softSkills = processedSkills;
-      dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
-      dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy));
     } else {
-      const softSkillsListCopy = cloneDeep(softSkillsList);
-      const processedSkills = softSkillsListCopy.map((el: ISoftSkill) => {
+      const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
         if (el.id === e.target.id) {
-          el.score = e.target.value;
+          el.softSkillScoreId = e.target.id;
         }
-        return el;
-      });
-      dispatch(setSoftSkillsList(processedSkills));
+          return el;
+        });
+      softskillsInterviewCopy.softSkills = processedSkills;
     }
+    (softskillsInterview?.softSkills?.length || softskillsInterview?.comment) ?
+      dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
+      dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
+    dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
     setValue(e.target.value);
-    setIsChanged(true);
   }, [dispatch, softSkillsList, softskillsInterview, value])
 
   return (
     <Radio.Group value={value} onChange={handleChange}>
-      <Tooltip title='There will be score explanation'>
-        <Radio id={id} value={1}>1</Radio>
-      </Tooltip>
-      <Tooltip title='There will be score explanation'>
-        <Radio id={id} value={2}>2</Radio>
-      </Tooltip>
-      <Tooltip title='There will be score explanation'>
-        <Radio id={id} value={3}>3</Radio>
-      </Tooltip>
-      <Tooltip title='There will be score explanation'>
-        <Radio id={id} value={4}>4</Radio>
-      </Tooltip>
-      <Tooltip title='There will be score explanation'>
-        <Radio id={id} value={5}>5</Radio>
-      </Tooltip>
+        {scores?.length && scores?.map(score => {
+          return (
+            <Tooltip key={score.id} title={score.title}>
+              <Radio id={score.id} value={score}>{Number(score.value)}</Radio>
+            </Tooltip>
+          );
+        })}
     </Radio.Group>
   );
 }

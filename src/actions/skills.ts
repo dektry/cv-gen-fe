@@ -52,6 +52,17 @@ export const getSoftSkillInterview = async (id: string) => {
   }
 };
 
+export const getSoftSkillScores = async () => {
+  try {
+    const { data } = await apiClient.get(`${endpoints.softSkill}/score`);
+
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_SOFT_SKILL_SCORES_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+}
+
 export const completeSoftSkillsInterview = async (data: ISoftSkillInterview) => {
   try {
     const response = await apiClient.post(endpoints.softSkillInterview, data);
