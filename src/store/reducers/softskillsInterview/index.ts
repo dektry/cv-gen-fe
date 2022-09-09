@@ -105,7 +105,7 @@ const softskillsInterview = createSlice({
           return {
             id: skill.soft_skill_id.id,
             value: skill.soft_skill_id.value,
-            comment: skill.soft_skill_id.comment,
+            comment: skill.comment,
             question: skill.soft_skill_id.question,
           };
         });
