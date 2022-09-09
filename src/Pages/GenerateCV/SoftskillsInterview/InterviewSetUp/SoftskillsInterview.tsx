@@ -47,7 +47,7 @@ export const SoftskillsInterview = () => {
   const [comment, setComment] = useState(softskillsInterview.comment);
 
   const backPath = paths.generateCVCandidatePage.replace(':id', currentCandidate.id);
-  const skillsToView = softskillsInterview.softSkills;
+  const skillsToView = softskillsInterview?.softSkills?.length ? softskillsInterview.softSkills : softSkillsList;
 
   const debouncedFeedback = useRef(
     debounce((e: React.ChangeEvent<HTMLTextAreaElement>) => {
