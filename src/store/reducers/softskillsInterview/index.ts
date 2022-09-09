@@ -93,7 +93,7 @@ const softskillsInterview = createSlice({
           score: skill.score,
         };
       });
-      state.softskillsInterview.softSkills = processedSkills;
+      state.softSkillsList = processedSkills;
     });
     builder.addCase(loadSoftSkillInterview.pending, (state) => {
       state.isLoading = true;

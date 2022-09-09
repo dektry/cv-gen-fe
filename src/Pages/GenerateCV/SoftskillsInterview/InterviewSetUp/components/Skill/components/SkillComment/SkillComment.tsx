@@ -48,7 +48,8 @@ export const SkillComment = (props: IProps) => {
         });
         softskillsInterviewCopy.softSkills = processedSkills;
       } else {
-        const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
+        const softSkillsListCopy = cloneDeep(softSkillsList);
+        const processedSkills = softSkillsListCopy.map((el) => {
           if (el.id === e.target.id) {
             el.comment = e.target.value;
           }

@@ -26,6 +26,7 @@ export const Skill = (props: IProps) => {
     scores,
     candidateId,
   } = props;
+  
 
   return (
     <div className={classes.skillContainer}>
