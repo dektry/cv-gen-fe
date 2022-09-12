@@ -10,7 +10,7 @@ interface ISoftSkillID {
   value: string;
   comment: string;
   question: string;
-  score: ISoftSkillScore
+  score: ISoftSkillScore;
 }
 
 export interface ISoftSkill {

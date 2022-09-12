@@ -132,9 +132,5 @@ export default softskillsInterview.reducer;
 
 export const softSkillInterviewSelector = (state: RootState): ISoftSkillsInterviewState => state.softskillsInterview;
 
-export const {
-  setSoftSkillsInterview,
-  addNewSkill,
-  setSoftSkillsList,
-  setSoftSkillInterviewSkillsList,
-} = softskillsInterview.actions;
+export const { setSoftSkillsInterview, addNewSkill, setSoftSkillsList, setSoftSkillInterviewSkillsList } =
+  softskillsInterview.actions;

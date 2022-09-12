@@ -61,7 +61,7 @@ export const getSoftSkillScores = async () => {
     console.error('[API_CLIENT_GET_SOFT_SKILL_SCORES_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
-}
+};
 
 export const completeSoftSkillsInterview = async (data: ISoftSkillInterview) => {
   try {
