@@ -10,6 +10,7 @@ import { InterviewSetUp } from 'Pages/GenerateCV/TechnicalInterview/InterviewSet
 import { SoftskillsInterview } from 'Pages/GenerateCV/SoftskillsInterview/InterviewSetUp';
 import { InterviewResults } from 'Pages/GenerateCV/TechnicalInterview/InterviewResults';
 import { SoftSkillsInterviewResults } from 'Pages/GenerateCV/SoftskillsInterview/InterviewResults';
+import { Settings } from 'Pages/Settings';
 
 import routes from 'config/routes.json';
 
@@ -29,4 +30,5 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVtechnicalInterviewResult, component: InterviewResults },
   { path: routes.generateCVsoftskillsInterview, component: SoftskillsInterview },
   { path: routes.generateCVsoftskillsInterviewResult, component: SoftSkillsInterviewResults },
+  { path: routes.settings, component: Settings },
 ];
