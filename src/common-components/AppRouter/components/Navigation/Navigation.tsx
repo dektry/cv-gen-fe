@@ -5,7 +5,7 @@ import { FileAddOutlined } from '@ant-design/icons';
 import { OrderedListOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 
-import { navigationKeys, mainPath, GENERATE_CV, LIST_OF_CV } from './utils/constants';
+import { navigationKeys, mainPath, GENERATE_CV, LIST_OF_CV, CANDIDATES } from './utils/constants';
 
 import { NavigationItem } from './NavigationItem';
 import classNames from 'classnames';
@@ -54,7 +54,7 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
           icon={<OrderedListOutlined />}
         >
           <Tooltip placement="right" title={collapsed ? LIST_OF_CV : ''}>
-            <Link to={paths.listOfCVs}>{LIST_OF_CV}</Link>
+            <Link to={paths.listOfCVs}>{CANDIDATES}</Link>
           </Tooltip>
         </NavigationItem>
       </ul>

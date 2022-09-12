@@ -77,3 +77,4 @@ export const mainPath = /^\/[\dA-z-]*/;
 
 export const LIST_OF_CV = 'List of CVs';
 export const GENERATE_CV = 'Generate CV';
+export const CANDIDATES = 'Candidates';
