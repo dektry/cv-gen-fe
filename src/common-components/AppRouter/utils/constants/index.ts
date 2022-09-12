@@ -1,7 +1,6 @@
 import React from 'react';
 
 import LoginContainer from 'Pages/Login';
-import { HomePage } from 'Pages/HomePage';
 import { Candidates } from 'Pages/GenerateCV/ChoosePerson/Candidates';
 import { Candidate } from 'Pages/GenerateCV/ChoosePerson/Candidate';
 import { Employees } from 'Pages/GenerateCV/ChoosePerson/Employees';
@@ -20,7 +19,6 @@ export interface IRoute {
 
 export const publicRoutes: IRoute[] = [{ path: routes.home, component: LoginContainer }];
 export const privateRoutes: IRoute[] = [
-  { path: routes.home, component: HomePage },
   { path: routes.generateCVcandidateList, component: Candidates },
   { path: routes.candidate, component: Candidate },
   { path: routes.generateCVemployeesList, component: Employees },
