@@ -63,7 +63,11 @@ const employees = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getEmployeesList.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(getEmployeesList.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
       if (payload) {
         state.employees = payload.employees;
         state.totalItems = payload.count;

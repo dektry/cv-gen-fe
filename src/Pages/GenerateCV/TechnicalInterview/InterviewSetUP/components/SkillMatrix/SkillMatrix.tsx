@@ -14,8 +14,7 @@ interface ISkillProps extends StateProps {
 }
 
 export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, allLevels }: ISkillProps) => {
-
-
+  
   // skill groups handlers
   const handleChangeSkillGroup = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.target;

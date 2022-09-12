@@ -7,8 +7,9 @@ import { Candidate } from 'Pages/GenerateCV/ChoosePerson/Candidate';
 import { Employees } from 'Pages/GenerateCV/ChoosePerson/Employees';
 import { Employee } from 'Pages/GenerateCV/ChoosePerson/Employee';
 import { InterviewSetUp } from 'Pages/GenerateCV/TechnicalInterview/InterviewSetUP';
-import { SoftskillsInterview } from 'Pages/GenerateCV/SoftskillsInterview';
+import { SoftskillsInterview } from 'Pages/GenerateCV/SoftskillsInterview/InterviewSetUp';
 import { InterviewResults } from 'Pages/GenerateCV/TechnicalInterview/InterviewResults';
+import { SoftSkillsInterviewResults } from 'Pages/GenerateCV/SoftskillsInterview/InterviewResults';
 
 import routes from 'config/routes.json';
 
@@ -17,7 +18,7 @@ export interface IRoute {
   component: React.ComponentType;
 }
 
-export const publicRoutes: IRoute[] = [{ path: routes.login, component: LoginContainer }];
+export const publicRoutes: IRoute[] = [{ path: routes.home, component: LoginContainer }];
 export const privateRoutes: IRoute[] = [
   { path: routes.home, component: HomePage },
   { path: routes.generateCVcandidateList, component: Candidates },
@@ -27,4 +28,5 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVtechnicalInterview, component: InterviewSetUp },
   { path: routes.generateCVtechnicalInterviewResult, component: InterviewResults },
   { path: routes.generateCVsoftskillsInterview, component: SoftskillsInterview },
+  { path: routes.generateCVsoftskillsInterviewResult, component: SoftSkillsInterviewResults },
 ];

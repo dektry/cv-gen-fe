@@ -13,7 +13,10 @@ interface IProps {
 
 export const SoftSkillModal = ({ isOpenSkillModal, onClose, onSubmit }: IProps) => {
   const dispatch = useAppDispatch();
-  const [newSkill, setNewSkill] = useState('');
+  const [newSkill, setNewSkill] = useState({
+    value: '',
+    question: ''
+  });
 
   const handleSubmit = async () => {
     try {
@@ -21,13 +24,13 @@ export const SoftSkillModal = ({ isOpenSkillModal, onClose, onSubmit }: IProps) 
         message.warning("Skill can't be empty");
       }
 
-      const allSkills = (await dispatch(addNewSkillToDB({ value: newSkill }))).payload;
+      const allSkills = (await dispatch(addNewSkillToDB(newSkill))).payload;
       if (allSkills && !allSkills.error) {
         dispatch(
           addNewSkill({
-            isActive: false,
             id: allSkills[allSkills.length - 1].id,
             value: allSkills[allSkills.length - 1].value,
+            question: allSkills[allSkills.length - 1].question,
           })
         );
         onSubmit?.();
@@ -49,7 +52,14 @@ export const SoftSkillModal = ({ isOpenSkillModal, onClose, onSubmit }: IProps) 
       onOk={handleSubmit}
       destroyOnClose
     >
-      <Input placeholder="Enter soft skill name here" onChange={(e) => setNewSkill(e.target.value)} />
+      <Input placeholder="Enter soft skill name here" onChange={(e) => setNewSkill({
+        ...newSkill,
+        value: e.target.value
+      })} />
+      <Input placeholder="Enter question to soft skill here" onChange={(e) => setNewSkill({
+        ...newSkill,
+        question: e.target.value
+      })} />
     </Modal>
   );
 };

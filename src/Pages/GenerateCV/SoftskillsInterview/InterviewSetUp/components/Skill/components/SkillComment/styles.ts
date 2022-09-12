@@ -1,16 +1,17 @@
 import { createUseStyles } from 'react-jss';
 
 export const useStyles = createUseStyles({
-  skillContainer: {
+  skillComment: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0.3rem 0.7rem',
+    alignItems: 'flex-start',
     margin: '0.7rem',
     marginLeft: '0',
-    height: '2.5rem',
-    width: '45%',
+    padding: '1.5rem',
+    width: '35%',
     maxWidth: '40rem',
+    height: '4rem',
     background: '#ffffff',
     borderRadius: '8px',
   },
