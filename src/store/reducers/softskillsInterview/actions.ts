@@ -5,3 +5,4 @@ export const completeSoftSkillInterviewResultAction = `${appStoreName}/interview
 export const editSoftSkillInterviewResultAction = `${appStoreName}/interviewEdit`;
 export const loadSoftSkillsListAction = `${appStoreName}/softskillsList`;
 export const addNewSkillAction = `${appStoreName}/addNewSkill`;
+export const loadSoftSkillScores = `${appStoreName}/loadSoftSkillScores`;
