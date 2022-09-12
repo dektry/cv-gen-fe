@@ -55,7 +55,7 @@ export const SoftskillsInterview = () => {
       const softskillsInterviewCopy = cloneDeep(softskillsInterview);
       softskillsInterviewCopy.comment = value;
       softskillsInterviewCopy.candidateId = id;
-      (softskillsInterview?.softSkills?.length || softskillsInterview?.comment) ?
+      softskillsInterview?.successfullySaved ?
         dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
         dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
       dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
@@ -118,7 +118,7 @@ export const SoftskillsInterview = () => {
       <SoftSkillFotter
         setOpenSkillModal={setOpenSkillModal}
         handleChange={handleChange}
-        comment={softskillsInterview.comment}
+        comment={comment}
         currentCandidate={currentCandidate}
       />
     </>

@@ -60,7 +60,7 @@ export const SkillRadioButtons = (props: IProps) => {
         });
       softskillsInterviewCopy.softSkills = processedSkills;
     }
-    (softskillsInterview?.softSkills?.length || softskillsInterview?.comment) ?
+    softskillsInterview?.successfullySaved ?
       dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
       dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
     dispatch(setSoftSkillsInterview(softskillsInterviewCopy));

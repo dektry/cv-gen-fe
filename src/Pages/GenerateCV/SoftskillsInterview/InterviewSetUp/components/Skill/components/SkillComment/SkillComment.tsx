@@ -57,7 +57,9 @@ export const SkillComment = (props: IProps) => {
           });
         softskillsInterviewCopy.softSkills = processedSkills;
       }
-      (softskillsInterview?.softSkills?.length || softskillsInterview?.comment) ?
+      console.log(softskillsInterview?.successfullySaved);
+      
+      softskillsInterview?.successfullySaved ?
         dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
         dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
       dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
