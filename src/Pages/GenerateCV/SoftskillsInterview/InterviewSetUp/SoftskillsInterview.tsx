@@ -1,6 +1,6 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep, debounce } from 'lodash';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
@@ -11,22 +11,21 @@ import { Spin } from 'antd';
 import {
   setSoftSkillsInterview,
   softSkillInterviewSelector,
-  finishSoftSkillInterview,
-  saveChangesToSoftSkillsInterview,
-  setSoftSkillInterviewSkillsList,
   loadSoftSkillsList,
   loadSoftSkillInterview,
+  softSkillScores, 
+  finishSoftSkillInterview,
+  saveChangesToSoftSkillsInterview
 } from 'store/reducers/softskillsInterview';
 import { loadPositions } from 'store/reducers/positions';
 import { loadLevels } from 'store/reducers/levels';
 import { loadOneCandidate } from 'store/reducers/candidates';
 
-import { CandidatePopOver } from '../common-components/PopOver';
-import { SelectPositions } from './components/SelectPositions';
+import { CandidatePopOver } from '../../common-components/PopOver';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { Skill } from './components/Skill';
 import { SoftSkillModal } from './components/SoftSkillModal';
-import { GenerateCV } from '../common-components/GenerateCv';
+import { GenerateCV } from '../../common-components/GenerateCv';
 import { SoftSkillFotter } from './components/SoftSkillFooter';
 
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
@@ -41,53 +40,35 @@ export const SoftskillsInterview = () => {
     softskillsInterview,
     softSkillsList,
     isLoading: isLoadingSoftInterview,
+    scores
   } = useSelector(softSkillInterviewSelector);
 
   const [isOpenSkillModal, setOpenSkillModal] = useState(false);
-  const [isChanged, setIsChanged] = useState(false);
-  const [hobby, setHobby] = useState(softskillsInterview.hobby);
   const [comment, setComment] = useState(softskillsInterview.comment);
-  const [fieldsDisabled, setFieldsDisabled] = useState(false);
 
   const backPath = paths.generateCVCandidatePage.replace(':id', currentCandidate.id);
-  const skillsToView = softskillsInterview.successfullySaved ? softskillsInterview.softSkills : softSkillsList;
+  const skillsToView = softskillsInterview?.softSkills?.length ? softskillsInterview.softSkills : softSkillsList;
+
+  const debouncedFeedback = useRef(
+    debounce((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+      softskillsInterviewCopy.comment = value;
+      softskillsInterviewCopy.candidateId = id;
+      softskillsInterview?.successfullySaved ?
+        dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
+        dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
+      dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
+    }, 600)
+  ).current;
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const value = e.target.value;
-      const id = e.target.id;
-
-      const softskillsInterviewCopy = cloneDeep(softskillsInterview);
-      if (id === 'hobby') {
-        softskillsInterviewCopy.hobby = value;
-        setHobby(value);
-      } else if (id === 'comment') {
-        softskillsInterviewCopy.comment = value;
-        setComment(value);
-      }
-      dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
-      setIsChanged(true);
+      setComment(e.target.value);
+      debouncedFeedback(e);
     },
-    [softskillsInterview, dispatch, setIsChanged]
+    [debouncedFeedback]
   );
-
-  const handleSaveChanges = async () => {
-    const saveButtonThunk = softskillsInterview.successfullySaved
-      ? saveChangesToSoftSkillsInterview
-      : finishSoftSkillInterview;
-    dispatch(setSoftSkillInterviewSkillsList(softSkillsList));
-    dispatch(saveButtonThunk(softskillsInterview));
-    setIsChanged(false);
-    setFieldsDisabled(true);
-  };
-
-  useEffect(() => {
-    if (softskillsInterview.successfullySaved) {
-      setFieldsDisabled(true);
-    } else {
-      setFieldsDisabled(false);
-    }
-  }, [softskillsInterview.successfullySaved]);
 
   useEffect(() => {
     const softskillsInterviewCopy = cloneDeep(softskillsInterview);
@@ -103,8 +84,15 @@ export const SoftskillsInterview = () => {
       dispatch(loadPositions());
       dispatch(loadLevels());
       dispatch(loadSoftSkillsList());
+      dispatch(softSkillScores());
     }
   }, [dispatch, id]);
+
+  useEffect(() => {
+    return () => {
+      debouncedFeedback.cancel();
+    };
+  }, [debouncedFeedback]);
 
   if (isLoadingOneCandidate || isLoadingSoftInterview)
     return <Spin size="large" tip={'Loading soft skills interview...'} />;
@@ -112,24 +100,25 @@ export const SoftskillsInterview = () => {
   return (
     <>
       <GenerateCV />
-      <GenerateCvHeader backPath={backPath} disabled={isChanged}>
+      <GenerateCvHeader backPath={backPath}>
         <CandidatePopOver />
       </GenerateCvHeader>
-      <SelectPositions setFieldsDisabled={setFieldsDisabled} fieldsDisabled={fieldsDisabled} />
       {skillsToView &&
         skillsToView.map((el: ISoftSkill) => (
-          <Skill key={el.id} skill={el} softskillsInterview={softskillsInterview} softSkillsList={softSkillsList} />
+          <Skill 
+            key={el.id} 
+            skill={el} 
+            softskillsInterview={softskillsInterview} 
+            softSkillsList={softSkillsList} 
+            scores={scores}
+            candidateId={id}
+          />
         ))}
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
       <SoftSkillFotter
         setOpenSkillModal={setOpenSkillModal}
-        handleSaveChanges={handleSaveChanges}
         handleChange={handleChange}
-        hobby={hobby}
         comment={comment}
-        fieldsDisabled={fieldsDisabled}
-        saveDisabled={!isChanged}
-        successfullySaved={softskillsInterview.successfullySaved}
         currentCandidate={currentCandidate}
       />
     </>
