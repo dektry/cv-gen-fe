@@ -18,5 +18,6 @@
     "generateCVsoftskillsInterviewResult": 
       "/generate-cv/candidate/:id/soft-interview/result",
     "login": "/login",
-    "users": "/users"
+    "users": "/users",
+    "settings": "/settings"
 }

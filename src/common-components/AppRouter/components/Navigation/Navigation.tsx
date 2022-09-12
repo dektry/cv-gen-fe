@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { FileAddOutlined } from '@ant-design/icons';
-import { OrderedListOutlined } from '@ant-design/icons';
+import { StarFilled } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 
-import { navigationKeys, mainPath, GENERATE_CV, LIST_OF_CV } from './utils/constants';
+import { navigationKeys, mainPath, CANDIDATES, EMPLOYEES, SETTINGS } from './utils/constants';
 
 import { NavigationItem } from './NavigationItem';
 import classNames from 'classnames';
@@ -37,24 +36,35 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
       <ul className={classNames(defaultMenuClasses, collapsed ? menuCollapsedClasses : menuNotCollapsedClasses)}>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={[navigationKeys['/'], navigationKeys['/generate-cv']]}
+          itemKey={[navigationKeys['/candidates']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
-          icon={<FileAddOutlined />}
+          icon={<StarFilled />}
         >
-          <Tooltip placement="right" title={collapsed ? GENERATE_CV : ''}>
-            <Link to={paths.home}>{GENERATE_CV}</Link>
+          <Tooltip placement="right" title={collapsed ? CANDIDATES : ''}>
+            <Link to={paths.generateCVcandidateList}>{CANDIDATES}</Link>
           </Tooltip>
         </NavigationItem>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={[navigationKeys['/cv-list']]}
+          itemKey={[navigationKeys['/employees']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
-          icon={<OrderedListOutlined />}
+          icon={<StarFilled />}
         >
-          <Tooltip placement="right" title={collapsed ? LIST_OF_CV : ''}>
-            <Link to={paths.listOfCVs}>{LIST_OF_CV}</Link>
+          <Tooltip placement="right" title={collapsed ? EMPLOYEES : ''}>
+            <Link to={paths.generateCVemployeesList}>{EMPLOYEES}</Link>
+          </Tooltip>
+        </NavigationItem>
+        <NavigationItem
+          selectedItem={selectedItem}
+          itemKey={[navigationKeys['/settings']]}
+          setSelectedItem={setSelectedItem}
+          setCollapse={setCollapse}
+          icon={<StarFilled />}
+        >
+          <Tooltip placement="right" title={collapsed ? SETTINGS : ''}>
+            <Link to={paths.settings}>{SETTINGS}</Link>
           </Tooltip>
         </NavigationItem>
       </ul>
