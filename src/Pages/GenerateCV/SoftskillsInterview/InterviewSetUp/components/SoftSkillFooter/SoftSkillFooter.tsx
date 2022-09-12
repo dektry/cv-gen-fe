@@ -12,7 +12,7 @@ import { useStyles } from './styles';
 
 const { TextArea } = Input;
 
-interface ISoftSkillFotterProps {
+interface ISoftSkillFooterProps {
   setOpenSkillModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   currentCandidate: ICandidate;
@@ -24,7 +24,7 @@ export const SoftSkillFotter = ({
   handleChange,
   comment,
   currentCandidate,
-}: ISoftSkillFotterProps) => {
+}: ISoftSkillFooterProps) => {
   const classes = useStyles();
 
 

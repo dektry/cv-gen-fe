@@ -107,6 +107,7 @@ const softskillsInterview = createSlice({
             value: skill.soft_skill_id.value,
             comment: skill.comment,
             question: skill.soft_skill_id.question,
+            softSkillScoreId: skill.softSkillScoreId,
           };
         });
         delete payload.skills;

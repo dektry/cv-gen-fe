@@ -13,7 +13,7 @@ export const SkillCard = (props: IProps) => {
   const { value, question } = props;
 
   return (
-    <Tooltip title={question ?? 'There will be question to this skill'} placement='bottom'>
+    <Tooltip title={question || 'There will be question to this skill'} placement='bottom'>
       <div className={classes.skillCard}>
         {value}
       </div>

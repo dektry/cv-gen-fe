@@ -118,7 +118,7 @@ export const SoftskillsInterview = () => {
       <SoftSkillFotter
         setOpenSkillModal={setOpenSkillModal}
         handleChange={handleChange}
-        comment={comment}
+        comment={softskillsInterview.comment}
         currentCandidate={currentCandidate}
       />
     </>

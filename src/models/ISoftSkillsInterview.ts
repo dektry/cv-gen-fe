@@ -24,6 +24,7 @@ export interface ISoftSkill {
 
 export interface ISoftSkillFromDB {
   comment?: string;
+  softSkillScoreId?: string;
   soft_skill_id: ISoftSkillID;
 }
 

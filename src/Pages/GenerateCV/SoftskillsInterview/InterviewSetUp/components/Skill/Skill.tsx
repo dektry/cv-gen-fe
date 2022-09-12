@@ -20,14 +20,13 @@ export const Skill = (props: IProps) => {
   const classes = useStyles();
 
   const {
-    skill: { id, value, question, comment },
+    skill: { id, value, question, comment, softSkillScoreId },
     softskillsInterview,
     softSkillsList,
     scores,
     candidateId,
   } = props;
   
-
   return (
     <div className={classes.skillContainer}>
       <SkillCard value={value} question={question} />
@@ -37,6 +36,7 @@ export const Skill = (props: IProps) => {
         softskillsInterview={softskillsInterview}
         softSkillsList={softSkillsList}
         candidateId={candidateId}
+        softSkillScoreId={softSkillScoreId}
       />
       <SkillComment 
         id={id} 
