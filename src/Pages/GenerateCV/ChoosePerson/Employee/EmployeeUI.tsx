@@ -4,6 +4,7 @@ import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { GenerateCV } from '../../common-components/GenerateCv';
+import { ButtonWithLink } from 'common-components/ButtonWithLink';
 
 import { IEmployee } from 'models/IEmployee';
 import paths from 'config/routes.json';
@@ -231,7 +232,7 @@ export const EmployeeUI = ({
             )}
 
             <div className={classes.interviewButtons}>
-              <Button className={classes.button}>Start tech assessment</Button>
+              <ButtonWithLink id={employeeId} path={paths.generateCVtechnicalAssessment} text='Start tech assessment' />
               <Button className={classes.button}>Start softskills interview</Button>
             </div>
           </div>

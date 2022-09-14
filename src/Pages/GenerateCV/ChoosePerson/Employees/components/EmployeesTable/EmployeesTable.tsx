@@ -5,7 +5,7 @@ import { SorterResult, SortOrder } from 'antd/es/table/interface';
 import { TablePaginationConfig } from 'antd/es/table/Table';
 
 import { useAppDispatch } from 'store';
-import { setLoading, setPageSize, setCurrentPage, getEmployeesList } from 'store/reducers/employees';
+import { setLoading, setPageSize, setCurrentPage, getEmployeesList, loadEmployee } from 'store/reducers/employees';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
 import { useIsMobile } from 'theme/Responsive';
@@ -81,8 +81,11 @@ export const EmployeesTable = ({
   };
 
   const createPath = (record: IEmployee) => {
+    if (record.id) {
+      dispatch(loadEmployee(record.id));
+    }
     navigate(
-      generatePath(paths.employee, {
+      generatePath(paths.generateCVtechnicalAssessmentHistory, {
         id: record.id || '',
       })
     );
