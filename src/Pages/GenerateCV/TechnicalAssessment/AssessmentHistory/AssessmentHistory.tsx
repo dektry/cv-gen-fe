@@ -12,7 +12,7 @@ import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeade
 import { TableComponent as Table } from 'common-components/Table';
 
 import paths from 'config/routes.json';
-import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT, defaultPageSize, defaultCurrentPage } from './utils/constants';
+import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
 
 export const AssessmentHistory = () => {
 
