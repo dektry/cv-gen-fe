@@ -1,5 +1,9 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { useSelector } from 'react-redux';
-import { employeesSelector } from 'store/reducers/employees';
+import { useAppDispatch } from 'store';
+import { employeesSelector, loadEmployee } from 'store/reducers/employees';
 import { Button } from 'antd';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
@@ -12,6 +16,15 @@ interface IProps {
 }
 
 export const EmployeeHeader = ({ backPath }: IProps) => {
+
+  const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(loadEmployee(id));
+    }
+  }, [])
 
   const { currentEmployee: { fullName, location, position, level } } = useSelector(employeesSelector);
 

@@ -26,28 +26,32 @@ interface ITablePaginationObj {
 }
 
 interface Entity {
-  TITLE: string;
-  FULLNAME: string;
-  POSITION: string;
-  LOCATION: string;
-  LEVEL: string;
+  TITLE?: string;
+  FULLNAME?: string;
+  POSITION?: string;
+  LOCATION?: string;
+  LEVEL?: string;
+  TYPE?: string;
+  DATE?: string;
 }
 
 interface TableKeys {
-  id: string;
-  fullName: string;
-  position: string;
-  level: string;
-  location: string;
+  id?: string;
+  fullName?: string;
+  position?: string;
+  level?: string;
+  location?: string;
+  type?: string;
+  date?: string;
 }
 
 export interface ITableParams<T> {
-  handleChange: (pagination: TablePaginationConfig,
+  handleChange?: (pagination: TablePaginationConfig,
     sorter: SorterResult<T> | SorterResult<T>[]) => Promise<void>;
   entity: Entity;
   tableKeys: TableKeys;
   dataSource: T[];
-  expandableParams: IExpandableParams<T> | undefined;
+  expandableParams?: IExpandableParams<T> | undefined;
   handleRowClick: (record: T) => {
     onClick?: (() => void) | undefined;
   };
