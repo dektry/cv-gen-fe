@@ -1,9 +1,12 @@
 import { useEffect, useCallback } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
+import { Spin } from 'antd';
+
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { loadTechAssessments, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { employeesSelector, loadEmployee } from 'store/reducers/employees';
 
 import { ITableParams } from 'models/ICommon';
 import { IAssessmentFromDB } from 'models/ITechAssessment';
@@ -21,10 +24,12 @@ export const AssessmentHistory = () => {
   const { id } = useParams<{ id: string }>();
 
   const { assessments, isLoading, pageSize, currentPage } = useSelector(techAssessmentSelector);
+  const { currentEmployee: { fullName, position, level, location }} = useSelector(employeesSelector);
 
   useEffect(() => {
     if (id) {
-      dispatch(loadTechAssessments(id))
+      dispatch(loadTechAssessments(id));
+      dispatch(loadEmployee(id));
     }
   }, [id]);
 
@@ -62,10 +67,17 @@ const handleRowClick = useCallback(
     loading: isLoading,
   };
 
+  if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
 
   return (
     <>
-      <EmployeeHeader backPath={paths.generateCVemployeesList} />
+      <EmployeeHeader
+        fullName={fullName}
+        location={location}
+        position={position}
+        level={level}
+        backPath={paths.generateCVemployeesList} 
+      />
       <Table params={params} />
     </>
   )

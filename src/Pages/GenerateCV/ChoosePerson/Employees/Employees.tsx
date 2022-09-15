@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { Typography, Spin } from 'antd';
 
 import { EmployeesTable } from './components/EmployeesTable';
-import { GenerateCV } from '../../common-components/GenerateCv';
 import { EmployeeTabs } from 'Pages/GenerateCV/common-components/EmployeeTabs';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
