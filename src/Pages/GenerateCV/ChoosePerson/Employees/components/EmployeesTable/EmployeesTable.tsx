@@ -82,7 +82,7 @@ export const EmployeesTable = ({
 
   const createPath = (record: IEmployee) => {
     navigate(
-      generatePath(paths.generateCVtechnicalAssessmentHistory, {
+      generatePath(paths.employee, {
         id: record.id || ''
       })
     );
