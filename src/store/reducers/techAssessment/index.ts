@@ -7,6 +7,7 @@ import { getAllTechAssessments } from 'actions/techAssessment';
 
 import { IAssessmentFromDB, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
+import { message } from 'antd';
 
 export const loadTechAssessments = createAsyncThunk(loadAllTechAssessmentsAction, (id: string) => getAllTechAssessments(id));
 
@@ -46,9 +47,16 @@ const techAssessment = createSlice({
           }
         })
         state.assessments = processedAssessments;
+        state.isLoading = false;
+      } else {
+        state.assessments = [];
+        state.isLoading = false;
       }
-      state.isLoading = false;
     });
+    builder.addCase(loadTechAssessments.rejected, (state) => {
+      state.isLoading = false;
+      message.error(`Server error. Please contact admin`);
+    })
   }
 });
 

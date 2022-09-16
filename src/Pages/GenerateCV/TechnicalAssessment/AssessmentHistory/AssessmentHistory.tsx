@@ -77,7 +77,7 @@ const handleRowClick = useCallback(
         personalData={personalData}
         backPath={paths.generateCVemployeesList} 
       />
-      <Table params={params} />
+      {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
     </>
   )
 }
