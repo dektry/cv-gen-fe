@@ -83,7 +83,7 @@ export const EmployeesTable = ({
   const createPath = (record: IEmployee) => {
     navigate(
       generatePath(paths.employee, {
-        id: record.id || '',
+        id: record.id || ''
       })
     );
   };

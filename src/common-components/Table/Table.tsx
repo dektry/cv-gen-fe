@@ -24,31 +24,43 @@ export function TableComponent<T extends { id: string | NullableField<string> }>
     loading={loading}
     onChange={handleChange}
   >
-    <Column
+    {entity.DATE && <Column
+      title={entity.DATE}
+      dataIndex={tableKeys.date}
+      key={tableKeys.date}
+      sorter
+    />}
+    {entity.FULLNAME && <Column
       title={entity.FULLNAME}
       dataIndex={tableKeys.fullName}
       key={tableKeys.fullName}
       sorter
-    />
-    <Column
+    />}
+    {entity.POSITION && <Column
       title={entity.POSITION}
       dataIndex={tableKeys.position}
       key={tableKeys.position}
       sorter
-    />
-    <Column
+    />}
+    {entity.LEVEL && <Column
       className={classes.displayNoneMobile}
       title={entity.LEVEL}
       dataIndex={tableKeys.level}
       key={tableKeys.level}
       sorter
-    />
-    <Column
+    />}
+    {entity.LOCATION && <Column
       className={classes.displayNoneMobile}
       title={entity.LOCATION}
       dataIndex={tableKeys.location}
       key={tableKeys.location}
       sorter
-    />
+    />}
+    {entity.TYPE && <Column
+      title={entity.TYPE}
+      dataIndex={tableKeys.type}
+      key={tableKeys.type}
+      sorter
+    />}
   </Table>)
 }
