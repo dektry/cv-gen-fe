@@ -1,7 +1,5 @@
-import { IDBLevels, IDBPosition, IQuestion, ISkill, ISkillGroup } from './IUser';
-import { IInterviewSkill, IInterviewSkillGroup, IInterviewQuestion, IInterviewMatrix, LevelTypesEnum } from './IInterview';
+import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
-import { NullableField } from './TNullableField';
 
 export interface IAssessmentEmployee {
   employee: IEmployee,
@@ -22,4 +20,7 @@ export interface ITechAssessmentState {
   isLoading: boolean;
   pageSize: number;
   currentPage: number;
+  chosenPosition?: string;
+  chosenLevel?: string;
+  skillId?: string;
 }

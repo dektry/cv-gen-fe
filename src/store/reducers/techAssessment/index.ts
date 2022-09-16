@@ -16,6 +16,8 @@ const initialState: ITechAssessmentState = {
   isLoading: false,
   pageSize: defaultPageSize,
   currentPage: defaultCurrentPage,
+  chosenLevel: undefined,
+  chosenPosition: undefined,
 }
 
 const techAssessment = createSlice({
@@ -30,6 +32,15 @@ const techAssessment = createSlice({
     },
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.currentPage = payload;
+    },
+    chooseInterviewPosition: (state, { payload }: PayloadAction<string | undefined>) => {      
+      state.chosenPosition = payload;
+    },
+    chooseInterviewLevel: (state, { payload }: PayloadAction<string | undefined>) => {
+      state.chosenLevel = payload;
+    },
+    setSkillID: (state, { payload }: PayloadAction<string>) => {
+      state.skillId = payload;
     },
   },
   extraReducers: (builder) => {
@@ -64,5 +75,12 @@ export default techAssessment.reducer;
 
 export const techAssessmentSelector = (state: RootState): ITechAssessmentState => state.techAssessment;
 
-export const { setTechAssessments } =
+export const { 
+  setTechAssessments, 
+  setPageSize, 
+  setCurrentPage, 
+  setSkillID, 
+  chooseInterviewLevel, 
+  chooseInterviewPosition
+} =
   techAssessment.actions;

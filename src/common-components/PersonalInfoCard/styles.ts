@@ -13,7 +13,7 @@ export const useStyles = createUseStyles({
     letterSpacing: '0.15px',
     backgroundColor: 'rgba(144, 202, 249, 0.2)',
     padding: '1rem',
-    width: '33%',
+    width: '60%',
     maxHeight: '12rem'
   },
   name: {
@@ -30,7 +30,8 @@ export const useStyles = createUseStyles({
   positionAndLevelContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    width: '50%',
   },
   innerContainer: {
     marginRight: '0.5rem'
