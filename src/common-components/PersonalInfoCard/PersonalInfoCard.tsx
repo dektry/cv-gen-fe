@@ -1,16 +1,13 @@
-import { NullableField } from 'models/TNullableField';
+import { IPersonalData } from 'models/ICommon';
 
 import { useStyles } from './styles';
 
 interface IProps {
-  fullName: string;
-  location: NullableField<string>;
-  position: NullableField<string>;
-  level: NullableField<string>;
+  personalData: IPersonalData;
   children?: React.ReactNode | React.ReactNode[];
 }
 
-export const PersonalInfoCard = ({location, fullName, position, level, children}: IProps) => {
+export const PersonalInfoCard = ({ personalData: { fullName, location, level, position }, children }: IProps) => {
   const classes = useStyles();
 
   return (

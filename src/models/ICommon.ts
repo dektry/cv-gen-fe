@@ -1,4 +1,5 @@
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface';
+import { NullableField } from './TNullableField';
 
 export interface IPagination {
   totalItems: number;
@@ -57,4 +58,11 @@ export interface ITableParams<T> {
   };
   paginationObj: ITablePaginationObj;
   loading: boolean;
+}
+
+export interface IPersonalData {
+  fullName: string;
+  location: NullableField<string>;
+  position: NullableField<string>;
+  level: NullableField<string>;
 }

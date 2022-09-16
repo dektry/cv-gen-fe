@@ -69,13 +69,12 @@ const handleRowClick = useCallback(
 
   if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
 
+  const personalData = { fullName, location, position, level };
+
   return (
     <>
       <EmployeeHeader
-        fullName={fullName}
-        location={location}
-        position={position}
-        level={level}
+        personalData={personalData}
         backPath={paths.generateCVemployeesList} 
       />
       <Table params={params} />

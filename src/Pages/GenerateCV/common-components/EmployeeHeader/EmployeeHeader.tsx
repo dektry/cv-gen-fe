@@ -5,24 +5,20 @@ import { EmployeeTabs } from '../EmployeeTabs';
 import { PersonalInfoCard } from 'common-components/PersonalInfoCard';
 
 import { NullableField } from 'models/TNullableField';
+import { IPersonalData } from 'models/ICommon';
 
 interface IProps {
+  personalData: IPersonalData;
   backPath: string;
-  fullName: string;
-  location: NullableField<string>;
-  position: NullableField<string>;
-  level: NullableField<string>;
 }
 
-export const EmployeeHeader = ({ backPath, fullName, location, position, level }: IProps) => {
+export const EmployeeHeader = ({ backPath, personalData }: IProps) => {
+
   return (
     <>
     <GenerateCvHeader backPath={backPath} />
-    <PersonalInfoCard 
-      fullName={fullName}
-      location={location}
-      position={position}
-      level={level}
+    <PersonalInfoCard
+      personalData={personalData} 
     >
       <Button size='large' type='primary'>Generate CV</Button>
     </PersonalInfoCard>
