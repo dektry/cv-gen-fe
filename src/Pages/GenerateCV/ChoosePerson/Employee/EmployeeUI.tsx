@@ -49,7 +49,6 @@ export const EmployeeUI = ({
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />
       <div>
-        <GenerateCvHeader backPath={paths.generateCVemployeesList} />
         <Button className={classes.editButton} onClick={handleClickEdit}>
           {isEdited ? 'Disable edit' : 'Edit'}
         </Button>

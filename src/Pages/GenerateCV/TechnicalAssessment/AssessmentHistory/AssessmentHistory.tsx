@@ -5,8 +5,8 @@ import { message, Spin } from 'antd';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { loadTechAssessments, techAssessmentSelector, chooseInterviewLevel, chooseInterviewPosition } from 'store/reducers/techAssessment';
-import { employeesSelector, loadEmployee } from 'store/reducers/employees';
+import { loadTechAssessments, techAssessmentSelector, chooseInterviewLevel, chooseInterviewPosition, setIsLoading  } from 'store/reducers/techAssessment';
+import { employeesSelector, loadEmployee, setChosenEmployee } from 'store/reducers/employees';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
@@ -20,6 +20,7 @@ import { InterviewModal } from 'Pages/GenerateCV/common-components/InterviewModa
 
 import paths from 'config/routes.json';
 import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
+import { defaultEmployee } from 'store/constants';
 
 export const AssessmentHistory = () => {
 
@@ -38,10 +39,14 @@ export const AssessmentHistory = () => {
     if (id) {
       dispatch(loadTechAssessments(id));
       dispatch(loadEmployee(id));
-      dispatch(loadLevels());
-      dispatch(loadPositions());
     }
   }, [id]);
+
+  useEffect(() => {
+    return function clear() {
+      dispatch(setChosenEmployee(defaultEmployee));
+    }
+  }, []);
 
 
 const paginationObj = {
@@ -77,13 +82,14 @@ const handleRowClick = useCallback(
     loading: isLoading,
   };
 
-  if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
-
-  
   const handleClick = () => {
+    setIsLoading(true);
     setIsOpen(true);
+    dispatch(loadLevels());
+    dispatch(loadPositions());
+    setIsLoading(false);
   }
-
+  
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
       navigate(generatePath(paths.generateCVtechnicalAssessment, { id }))
@@ -95,17 +101,19 @@ const handleRowClick = useCallback(
   const handleCloseModal = () => {
     setIsOpen(false);
   }
-
+  
   const setInterviewLevel = (level: string) => {
     dispatch(chooseInterviewLevel(level))
   }
-
+  
   const setInterviewPosition = (position: string) => {
     dispatch(chooseInterviewPosition(position))
   }
-
+  
   const personalData = { fullName, location, position, level };
   const state = { positions: allPositions, levels: allLevels };
+
+  if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
   
   return (
     <>
@@ -124,6 +132,7 @@ const handleRowClick = useCallback(
         personalData={personalData}
         setCurrentLevel={setInterviewLevel}
         setCurrentPosition={setInterviewPosition}
+        isLoading={isLoading}
       />
     </>
   )

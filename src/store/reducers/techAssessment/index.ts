@@ -42,6 +42,9 @@ const techAssessment = createSlice({
     setSkillID: (state, { payload }: PayloadAction<string>) => {
       state.skillId = payload;
     },
+    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTechAssessments.pending, (state) => {
@@ -81,6 +84,7 @@ export const {
   setCurrentPage, 
   setSkillID, 
   chooseInterviewLevel, 
-  chooseInterviewPosition
+  chooseInterviewPosition,
+  setIsLoading,
 } =
   techAssessment.actions;

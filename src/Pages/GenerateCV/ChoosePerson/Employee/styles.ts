@@ -65,6 +65,7 @@ export const useStyles = createUseStyles({
   },
   editButton: {
     marginRight: '2rem',
+    marginTop: '1rem',
     width: '6rem',
   },
 });

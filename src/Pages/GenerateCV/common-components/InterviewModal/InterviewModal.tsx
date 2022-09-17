@@ -1,4 +1,4 @@
-import { Modal, Select } from 'antd';
+import { Modal, Select, Spin } from 'antd';
 
 import { IPersonalData } from 'models/ICommon';
 import { IDBLevels, IDBPosition } from 'models/IUser';
@@ -23,13 +23,27 @@ interface IProps {
   personalData: IPersonalData;
   setCurrentPosition: (position: string) => void;
   setCurrentLevel: (level: string) => void;
+  isLoading: boolean;
 }
 
-export const InterviewModal = ({ isOpen, modalTitle, onClose, state, onSubmit, personalData, setCurrentLevel, setCurrentPosition }: IProps) => {
+export const InterviewModal = ({ 
+  isOpen, 
+  modalTitle, 
+  onClose, 
+  state, 
+  onSubmit, 
+  personalData, 
+  setCurrentLevel, 
+  setCurrentPosition, 
+  isLoading 
+}: IProps) => {
 
   const { positions, levels, currentLevel, currentPosition } = state;
 
   const classes = useStyles();
+console.log('LOADING....', isLoading);
+
+  if (isLoading) return <Spin size="large" tip={'Loading positions and levels data...'} />;
 
   return (
     <Modal
