@@ -101,11 +101,11 @@ const handleRowClick = useCallback(
   }
   
   const setInterviewLevel = (level: string) => {
-    dispatch(chooseInterviewLevel(level))
+    dispatch(chooseInterviewLevel(level));
   }
   
   const setInterviewPosition = (position: string) => {
-    dispatch(chooseInterviewPosition(position))
+    dispatch(chooseInterviewPosition(position));
   }
   
   const personalData = { fullName, location, position, level };

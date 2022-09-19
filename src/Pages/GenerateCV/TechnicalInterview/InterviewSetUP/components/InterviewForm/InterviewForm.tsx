@@ -26,9 +26,11 @@ import { IDBLevels, IDBPosition, ILevelsSchema, IMatrix } from 'models/IUser';
 
 import { InterviewMatrix } from '../InterviewMatrix';
 import { InterviewSelect } from '../InterviewSelect';
+import { IEmployee } from 'models/IEmployee';
 
 interface IInterviewFormProps {
-  currentCandidate: ICandidate;
+  currentCandidate?: ICandidate;
+  currentEmployee?: IEmployee;
   allLevels: IDBLevels[];
   allPositions: IDBPosition[];
   levelsSchema: ILevelsSchema[];
@@ -43,6 +45,7 @@ export const InterviewForm = ({
   levelsSchema,
   skillMatrix,
   isLoadingInterviewMatrix,
+  currentEmployee,
 }: IInterviewFormProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -94,7 +97,7 @@ export const InterviewForm = ({
 
   const handleFinishInterview = async () => {
     const interviewData: ICompleteInterview = {
-      candidateId: currentCandidate.id,
+      candidateId: currentCandidate?.id,
       levelId: chosenLevel || '',
       positionId: chosenPosition || '',
       answers,
@@ -106,8 +109,8 @@ export const InterviewForm = ({
     }
 
     navigate(
-      generatePath(paths.generateCVtechnicalInterviewResult.replace(':candidateId', currentCandidate.id), {
-        id: currentCandidate.id,
+      generatePath(paths.generateCVtechnicalInterviewResult.replace(':candidateId', currentCandidate?.id || currentEmployee?.id || ''), {
+        id: currentCandidate?.id,
       })
     );
   };
