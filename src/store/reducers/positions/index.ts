@@ -59,7 +59,7 @@ const initialState: IPositionsState = {
   skillMatrix: [],
   allPositions: [],
   isValidForm: false,
-  isLoading: false,
+  positionsLoading: false,
 };
 
 const positions = createSlice({
@@ -76,19 +76,19 @@ const positions = createSlice({
       state.isValidForm = payload;
     },
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
-      state.isLoading = payload;
+      state.positionsLoading = payload;
     },
   },
   extraReducers: builder => {
     builder.addCase(loadPositions.pending, state => {
-      state.isLoading = true;
+      state.positionsLoading = true;
     });
     builder.addCase(loadPositions.fulfilled, (state, { payload }) => {
       state.allPositions = payload;
-      state.isLoading = false;
+      state.positionsLoading = false;
     });
     builder.addCase(loadPositions.rejected, state => {
-      state.isLoading = false;
+      state.positionsLoading = false;
     });
     builder.addCase(loadSkillMatrix.fulfilled, (state, { payload }) => {
       state.skillMatrix = payload;

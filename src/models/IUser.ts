@@ -126,7 +126,7 @@ export interface IPositionsState {
   isEditPosition: boolean;
   allPositions: IDBPosition[];
   isValidForm: boolean;
-  isLoading: boolean;
+  positionsLoading: boolean;
   skillMatrix: IMatrix;
   skillId?: string;
 }
@@ -142,7 +142,7 @@ export interface ILevelsState {
   allLevels: IDBLevels[];
   levelsSchema: ILevelsSchema[];
   isValidForm: boolean;
-  isLoading: boolean;
+  levelsLoading: boolean;
 }
 
 export interface IUpdateLevel {

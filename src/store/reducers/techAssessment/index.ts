@@ -42,7 +42,7 @@ const techAssessment = createSlice({
     setSkillID: (state, { payload }: PayloadAction<string>) => {
       state.skillId = payload;
     },
-    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
+    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {      
       state.isLoading = payload;
     },
   },

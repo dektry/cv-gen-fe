@@ -5,7 +5,7 @@ import { message, Spin } from 'antd';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { loadTechAssessments, techAssessmentSelector, chooseInterviewLevel, chooseInterviewPosition, setIsLoading  } from 'store/reducers/techAssessment';
+import { loadTechAssessments, techAssessmentSelector, chooseInterviewLevel, chooseInterviewPosition  } from 'store/reducers/techAssessment';
 import { employeesSelector, loadEmployee, setChosenEmployee } from 'store/reducers/employees';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
@@ -32,8 +32,8 @@ export const AssessmentHistory = () => {
 
   const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } = useSelector(techAssessmentSelector);
   const { currentEmployee: { fullName, position, level, location }} = useSelector(employeesSelector);
-  const { allPositions } = useSelector(positionsSelector);
-  const { allLevels } = useSelector(levelsSelector);
+  const { allPositions, positionsLoading } = useSelector(positionsSelector);
+  const { allLevels, levelsLoading } = useSelector(levelsSelector);
 
   useEffect(() => {
     if (id) {
@@ -83,11 +83,9 @@ const handleRowClick = useCallback(
   };
 
   const handleClick = () => {
-    setIsLoading(true);
     setIsOpen(true);
-    dispatch(loadLevels());
     dispatch(loadPositions());
-    setIsLoading(false);
+    dispatch(loadLevels());
   }
   
   const handleSubmit = () => {
@@ -132,7 +130,7 @@ const handleRowClick = useCallback(
         personalData={personalData}
         setCurrentLevel={setInterviewLevel}
         setCurrentPosition={setInterviewPosition}
-        isLoading={isLoading}
+        isLoading={positionsLoading && levelsLoading}
       />
     </>
   )

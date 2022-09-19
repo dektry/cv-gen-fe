@@ -35,15 +35,12 @@ export const InterviewModal = ({
   personalData, 
   setCurrentLevel, 
   setCurrentPosition, 
-  isLoading 
+  isLoading,
 }: IProps) => {
 
   const { positions, levels, currentLevel, currentPosition } = state;
 
   const classes = useStyles();
-console.log('LOADING....', isLoading);
-
-  if (isLoading) return <Spin size="large" tip={'Loading positions and levels data...'} />;
 
   return (
     <Modal
@@ -57,32 +54,35 @@ console.log('LOADING....', isLoading);
     >
       <h4>Choose the level and position for which the interviewee is applying</h4>
       <PersonalInfoCard personalData={personalData} />
-      <div className={classes.selectsWrapper}>
-        <Select
-          onChange={setCurrentPosition}
-          placeholder={'Desired position'}
-          className={classes.selects}
-          value={currentPosition}
-        >
-          {positions.map((position) => (
-            <Select.Option value={position.id} key={position.id}>
-              {position.name}
-            </Select.Option>
-          ))}
-        </Select>
-        <Select
-          onChange={setCurrentLevel}
-          placeholder={'Desired level'}
-          className={classes.selects}
-          value={currentLevel}
-        >
-          {levels.map((level) => (
-            <Select.Option value={level.id} key={level.id}>
-              {level.name}
-            </Select.Option>
-          ))}
-        </Select>
-      </div>
+      {isLoading ? 
+        <Spin size="large" tip={'Loading positions and levels data...'} /> :
+        <div className={classes.selectsWrapper}>
+          <Select
+            onChange={setCurrentPosition}
+            placeholder={'Desired position'}
+            className={classes.selects}
+            value={currentPosition}
+          >
+            {positions.map((position) => (
+              <Select.Option value={position.id} key={position.id}>
+                {position.name}
+              </Select.Option>
+            ))}
+          </Select>
+          <Select
+            onChange={setCurrentLevel}
+            placeholder={'Desired level'}
+            className={classes.selects}
+            value={currentLevel}
+          >
+            {levels.map((level) => (
+              <Select.Option value={level.id} key={level.id}>
+                {level.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+      }
     </Modal>
   );
 }
