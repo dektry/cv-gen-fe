@@ -3,7 +3,6 @@ import { generatePath } from 'react-router-dom';
 
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
-import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
 
