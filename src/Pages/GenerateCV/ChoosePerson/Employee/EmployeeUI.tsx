@@ -3,7 +3,6 @@ import { generatePath } from 'react-router-dom';
 
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
-import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { ButtonWithLink } from 'common-components/ButtonWithLink';
 
@@ -49,7 +48,6 @@ export const EmployeeUI = ({
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />
       <div>
-        <GenerateCvHeader backPath={paths.generateCVemployeesList} />
         <Button className={classes.editButton} onClick={handleClickEdit}>
           {isEdited ? 'Disable edit' : 'Edit'}
         </Button>
