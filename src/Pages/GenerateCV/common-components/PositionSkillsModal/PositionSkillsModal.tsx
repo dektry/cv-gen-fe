@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { cloneDeep } from 'lodash';
 import { Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -8,14 +8,14 @@ import { useSelector } from 'react-redux';
 import { interviewSelector } from 'store/reducers/interview';
 
 import { createSkillMatrix } from 'actions/skills';
-import { ILevelsSchema, IMatrix, IDBLevels } from 'models/IUser';
+import { ILevelsSchema, IMatrix, IDBLevels, ISkill, ISkillGroup } from 'models/IUser';
 import { SkillMatrix } from '../SkillMatrix';
 import { useStyles } from './styles';
 
 export interface StateProps {
   levels: ILevelsSchema[];
   allLevels: IDBLevels[];
-  positionId: string;
+  positionId?: string;
   skillMatrix: IMatrix;
 }
 
@@ -25,6 +25,10 @@ interface IProps<T extends StateProps> {
   onClose: () => void;
   state: T;
   onSubmit?: () => void;
+  setMatrixTree: React.Dispatch<React.SetStateAction<IMatrix>>;
+  matrixTree: IMatrix;
+  handleClickDeleteSkill: (group: ISkillGroup, skill: ISkill) => void;
+  handleClickDeleteSkillGroup: (uuid: string) => void;
 }
 
 export const PositionSkillsModal = <T extends StateProps>({
@@ -33,26 +37,14 @@ export const PositionSkillsModal = <T extends StateProps>({
   onClose,
   onSubmit,
   state: { skillMatrix, levels, allLevels, positionId },
+  setMatrixTree,
+  matrixTree,
+  handleClickDeleteSkill,
+  handleClickDeleteSkillGroup,
 }: IProps<T>) => {
   const classes = useStyles();
 
   const { skillId } = useSelector(interviewSelector);
-
-  const [matrixTree, setMatrixTree] = useState<IMatrix>([
-    {
-      uuid: uuidv4(),
-      position_id: positionId,
-      value: '',
-      skills: [
-        {
-          uuid: uuidv4(),
-          value: '',
-          questions: [{ uuid: uuidv4(), value: '' }],
-          levels,
-        },
-      ],
-    },
-  ]);
 
   useEffect(() => {
     if (skillMatrix) setMatrixTree(skillMatrix);
@@ -61,7 +53,7 @@ export const PositionSkillsModal = <T extends StateProps>({
         {
           uuid: uuidv4(),
           value: '',
-          position_id: positionId,
+          position_id: positionId || '',
           skills: [
             {
               uuid: uuidv4(),
@@ -81,7 +73,7 @@ export const PositionSkillsModal = <T extends StateProps>({
       {
         uuid: uuidv4(),
         value: '',
-        position_id: positionId,
+        position_id: positionId || '',
         skills: [
           {
             uuid: uuidv4(),
@@ -95,7 +87,7 @@ export const PositionSkillsModal = <T extends StateProps>({
   };
 
   const handleSubmit = async () => {
-    await createSkillMatrix({ matrixTree, position_id: positionId });
+    await createSkillMatrix({ matrixTree, position_id: positionId || '' });
     onSubmit?.();
     onClose();
   };
@@ -119,6 +111,8 @@ export const PositionSkillsModal = <T extends StateProps>({
             levels={levels}
             allLevels={allLevels}
             positionId={positionId}
+            handleClickDeleteSkill={handleClickDeleteSkill}
+            handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
           />
         ) : (
           matrixTree.map((skillGroup) => (
@@ -130,6 +124,8 @@ export const PositionSkillsModal = <T extends StateProps>({
               levels={levels}
               allLevels={allLevels}
               positionId={positionId}
+              handleClickDeleteSkill={handleClickDeleteSkill}
+              handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
             />
           ))
         )}

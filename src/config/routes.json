@@ -9,7 +9,7 @@
     "generateCVcandidateList": "/generate-cv/choose-person/candidate-list",
     "generateCVtechnicalInterview": "/generate-cv/candidate/:id/tech-interview",
     "generateCVtechnicalAssessmentHistory": "/generate-cv/employee/:id/tech-interview/history",
-    "generateCVtechnicalAssessment": "/generate-cv/employee/:id/tech-interview",
+    "generateCVtechnicalAssessment": "/generate-cv/employee/:id/tech-interview/:positionId/:levelId",
     "generateCVsoftskillsInterview": "/generate-cv/candidate/:id/soft-interview",
     "generateCVemployeesList": "/generate-cv/choose-person/employee-list",
     "listOfCVs": "/cv-list",

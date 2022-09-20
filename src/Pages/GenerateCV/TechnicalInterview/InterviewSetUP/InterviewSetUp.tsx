@@ -12,7 +12,7 @@ import { loadInterviewResult, interviewSelector } from 'store/reducers/interview
 import { loadLevels, levelsSelector } from 'store/reducers/levels';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { InterviewForm } from './components/InterviewForm';
+import { InterviewForm } from 'Pages/GenerateCV/TechnicalInterview/InterviewSetUP/components/InterviewForm';
 import { CandidatePopOver } from '../../common-components/PopOver';
 
 import { GenerateCV } from '../../common-components/GenerateCv';

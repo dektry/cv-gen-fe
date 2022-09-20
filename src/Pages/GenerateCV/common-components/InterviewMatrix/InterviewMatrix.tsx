@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Select, Button, Spin } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteFilled } from '@ant-design/icons';
 
 import { useAppDispatch } from 'store';
 
@@ -15,30 +15,38 @@ import {
   IInterviewMatrix,
 } from 'models/IInterview';
 import { NullableField } from 'models/TNullableField';
+import { IAssessmentFromDB } from 'models/ITechAssessment';
 
-import { INTERVIEW, levelTypes } from '../InterviewForm/utils/constants';
+import { INTERVIEW, levelTypes } from '../../TechnicalInterview/InterviewSetUP/components/InterviewForm/utils/constants';
 
 import { useStyles } from './styles';
 
+import { DeleteModal } from 'Pages/GenerateCV/common-components/DeleteModal';
+
 interface IProps {
   isShowInterviewQuestions?: boolean | '';
-  answers: IInterviewAnswers;
-  setAnswers: (value: React.SetStateAction<IInterviewAnswers>) => void;
+  answers?: IInterviewAnswers;
+  setAnswers: (value: React.SetStateAction<IInterviewAnswers | undefined>) => void;
   setOpenMatrixModal: React.Dispatch<React.SetStateAction<boolean>>;
   isStarted: boolean;
-  setIsSelectDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSelectDisabled?: React.Dispatch<React.SetStateAction<boolean>>;
   handleFinishInterview: () => Promise<void>;
-  isEditActive: boolean;
+  isEditActive?: boolean;
   handleSkillClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   chosenPosition: string | undefined;
-  interviewResult: NullableField<IInterviewResult>;
+  interviewResult: NullableField<IInterviewResult | IAssessmentFromDB>;
   interviewMatrix: IInterviewMatrix;
   isLoadingInterviewMatrix: boolean;
+  handleClickDeleteSkillGroup: (uuid: string) => void;
+}
+interface IDeleteEventTarget extends EventTarget {
+  id: string
+}
+interface IDeleteElement extends React.MouseEvent<HTMLDivElement> {
+  target: IDeleteEventTarget;
 }
 
 export const InterviewMatrix = (props: IProps) => {
-  const [isTreeChanged, setIsTreeChanged] = useState(false);
-
   const {
     isShowInterviewQuestions,
     answers,
@@ -52,7 +60,11 @@ export const InterviewMatrix = (props: IProps) => {
     interviewResult,
     interviewMatrix,
     isLoadingInterviewMatrix,
+    handleClickDeleteSkillGroup
   } = props;
+
+  const [isTreeChanged, setIsTreeChanged] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const classes = useStyles();
 
@@ -70,18 +82,22 @@ export const InterviewMatrix = (props: IProps) => {
     }
   };
 
+  const handleDeleteSkillGroupClick = (e: IDeleteElement) => {
+    setDeleteModalOpen(true);
+    handleDeleteSkillGroupClick(String(e.target.id))
+    
+  }
+
+
   return (
     <>
       {isShowInterviewQuestions ? (
         <section className={classes.interviewForm}>
-          <div className={classes.answerColumns}>
-            <strong className={classes.greenColor}>Desired:</strong>
-            <strong className={classes.columnActual}>Actual:</strong>
-          </div>
           {interviewMatrix.map(({ id, skills, value }) => (
             <div key={id} className={classes.group}>
               <h2>{value}</h2>
               <div className={classes.skills}>
+                <p className={classes.deleteSection} id={id} onClick={handleDeleteSkillGroupClick}>Delete section</p>
                 {skills.map((skill) => (
                   <div key={skill.id} className={classes.skill}>
                     <div className={classes.skillHeader}>
@@ -96,7 +112,7 @@ export const InterviewMatrix = (props: IProps) => {
                           onChange={(level) => handleSkillChange(level, skill)}
                           placeholder={INTERVIEW.LEVEL_PLACEHOLDER}
                           className={classes.answerSelect}
-                          value={answers[skill.id]}
+                          value={answers && answers[skill.id]}
                         >
                           {Object.keys(levelTypes).map((key) => (
                             <Select.Option value={key} key={key} disabled={!isEditActive}>
@@ -104,12 +120,13 @@ export const InterviewMatrix = (props: IProps) => {
                             </Select.Option>
                           ))}
                         </Select>
+                      <DeleteFilled className={classes.deleteIcon} />
                       </div>
                     </div>
                     <ol>
                       {skill.questions.map((ques) => (
                         <li key={ques.id}>{ques.value}</li>
-                      ))}
+                        ))}
                       <Button
                         id={id}
                         style={{ marginLeft: '95%', marginTop: '3%' }}
@@ -146,6 +163,7 @@ export const InterviewMatrix = (props: IProps) => {
       ) : (
         <Spin size="small" tip={'Loading interview matrix...'} />
       )}
+
     </>
   );
 };

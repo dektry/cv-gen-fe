@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, generatePath } from 'react-router-dom';
 
+import { v4 as uuidv4 } from 'uuid';
+
+import { cloneDeep } from 'lodash';
+
 import { useSelector } from 'react-redux';
 
-import { PositionSkillsModal } from '../PositionSkillsModal';
+import { PositionSkillsModal } from '../../../../common-components/PositionSkillsModal';
 
 import { useAppDispatch } from 'store';
 import {
@@ -16,21 +20,19 @@ import {
 } from 'store/reducers/interview';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
-import { processAnswers } from './utils/helpers/processAnswers';
+import { processInterviewAnswers } from './utils/helpers/processAnswers';
 
 import { IInterviewAnswers, ICompleteInterview } from 'models/IInterview';
 
 import paths from 'config/routes.json';
 import { ICandidate } from 'models/ICandidate';
-import { IDBLevels, IDBPosition, ILevelsSchema, IMatrix } from 'models/IUser';
+import { IDBLevels, IDBPosition, ILevelsSchema, ISkill, IMatrix, ISkillGroup } from 'models/IUser';
 
-import { InterviewMatrix } from '../InterviewMatrix';
+import { InterviewMatrix } from 'Pages/GenerateCV/common-components/InterviewMatrix';
 import { InterviewSelect } from '../InterviewSelect';
-import { IEmployee } from 'models/IEmployee';
 
 interface IInterviewFormProps {
-  currentCandidate?: ICandidate;
-  currentEmployee?: IEmployee;
+  currentCandidate: ICandidate;
   allLevels: IDBLevels[];
   allPositions: IDBPosition[];
   levelsSchema: ILevelsSchema[];
@@ -45,14 +47,13 @@ export const InterviewForm = ({
   levelsSchema,
   skillMatrix,
   isLoadingInterviewMatrix,
-  currentEmployee,
 }: IInterviewFormProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { chosenLevel, chosenPosition, interviewMatrix, interviewResult } = useSelector(interviewSelector);
 
-  const [answers, setAnswers] = useState<IInterviewAnswers>({});
+  const [answers, setAnswers] = useState<IInterviewAnswers | undefined>({});
   const [isStarted, setIsStarted] = useState(false);
 
   const [currentPosition, setCurrentPosition] = useState(interviewResult?.position?.id);
@@ -60,6 +61,22 @@ export const InterviewForm = ({
   const [isOpenMatrixModal, setOpenMatrixModal] = useState(false);
   const [isEditActive, setIsEditActive] = useState(false);
   const [isSelectDisabled, setIsSelectDisabled] = useState(false);
+
+  const [matrixTree, setMatrixTree] = useState<IMatrix>([
+    {
+      uuid: uuidv4(),
+      position_id: '',
+      value: '',
+      skills: [
+        {
+          uuid: uuidv4(),
+          value: '',
+          questions: [{ uuid: uuidv4(), value: '' }],
+          levels: [{ id: uuidv4(), name: '', value: '' }],
+        },
+      ],
+    },
+  ]);
 
   const disableStartInterview = !(currentLevel && currentPosition) || !!interviewMatrix.length;
   const isShowInterviewQuestions = currentLevel && currentPosition && !!interviewMatrix?.length;
@@ -100,7 +117,7 @@ export const InterviewForm = ({
       candidateId: currentCandidate?.id,
       levelId: chosenLevel || '',
       positionId: chosenPosition || '',
-      answers,
+      answers: answers || {},
     };
     if (interviewResult) {
       dispatch(saveChangesToInterview(interviewData));
@@ -109,10 +126,32 @@ export const InterviewForm = ({
     }
 
     navigate(
-      generatePath(paths.generateCVtechnicalInterviewResult.replace(':candidateId', currentCandidate?.id || currentEmployee?.id || ''), {
+      generatePath(paths.generateCVtechnicalInterviewResult.replace(':candidateId', currentCandidate.id), {
         id: currentCandidate?.id,
       })
     );
+  };
+
+  const handleClickDeleteSkill = (group: ISkillGroup, skill: ISkill) => {
+    if (group.skills.length) {
+      const matrixTreeCopy = cloneDeep(skillMatrix);
+      const newMatrix = matrixTreeCopy.map((item) => {
+        if (group?.uuid === item.uuid) {
+          return {
+            ...item,
+            skills: [...item.skills.filter((i) => i.uuid !== skill.uuid)],
+          };
+        }
+        return item;
+      });
+      setMatrixTree(newMatrix);
+    }
+  };
+
+  const handleClickDeleteSkillGroup = (uuid: string) => {
+    if (skillMatrix.length) {
+      setMatrixTree((prev) => [...prev.filter((item) => item.uuid !== uuid)]);
+    }
   };
 
   const handleSkillClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
@@ -135,7 +174,7 @@ export const InterviewForm = ({
       interviewResult?.level?.id === currentLevel && interviewResult?.position?.id === currentPosition;
 
     if (isPositionMatchedWithPreviousResults && interviewResult) {
-      const processedAnswers = processAnswers(interviewResult, interviewMatrix);
+      const processedAnswers = processInterviewAnswers(interviewResult, interviewMatrix);
       setAnswers(processedAnswers);
     }
   }, [interviewResult, interviewMatrix, chosenLevel, chosenPosition]);
@@ -185,6 +224,7 @@ export const InterviewForm = ({
         interviewResult={interviewResult}
         interviewMatrix={interviewMatrix}
         isLoadingInterviewMatrix={isLoadingInterviewMatrix}
+        handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
       />
       <PositionSkillsModal
         modalTitle={allPositions.find(({ id }) => chosenPosition === id)?.name || ''}
@@ -192,6 +232,10 @@ export const InterviewForm = ({
         onClose={handleMatrixModalClose}
         state={positionSkillModalState}
         onSubmit={handleStartInterview}
+        handleClickDeleteSkill={handleClickDeleteSkill}
+        matrixTree={matrixTree}
+        setMatrixTree={setMatrixTree}
+        handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
       />
     </>
   );

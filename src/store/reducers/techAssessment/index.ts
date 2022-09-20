@@ -2,14 +2,26 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../..';
 
-import { appStoreName, loadAllTechAssessmentsAction } from './actions';
-import { getAllTechAssessments } from 'actions/techAssessment';
+import { appStoreName, loadAllTechAssessmentsAction, completeTechAssessmentAction, editTechAssessmentAction, getTechAssessmentAction } from './actions';
+import { getAllTechAssessments, httpCompleteTechAssessment, httpEditTechAssessment, httpGetTechAssessment } from 'actions/techAssessment';
 
-import { IAssessmentFromDB, ITechAssessmentState } from 'models/ITechAssessment';
+import { IAssessmentFromDB, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
 export const loadTechAssessments = createAsyncThunk(loadAllTechAssessmentsAction, (id: string) => getAllTechAssessments(id));
+
+export const finishTechAssessment = createAsyncThunk(completeTechAssessmentAction, (assessment: ICompleteAssessment) => {
+  return httpCompleteTechAssessment(assessment)
+});
+
+export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (assessment: ICompleteAssessment) => {
+  return httpEditTechAssessment(assessment);
+});
+
+export const getTechAssessment = createAsyncThunk(getTechAssessmentAction,(id: string) => {
+  return httpGetTechAssessment(id);
+})
 
 const initialState: ITechAssessmentState = {
   assessments: [],
@@ -18,6 +30,7 @@ const initialState: ITechAssessmentState = {
   currentPage: defaultCurrentPage,
   chosenLevel: undefined,
   chosenPosition: undefined,
+  assessmentResult: null,
 }
 
 const techAssessment = createSlice({
@@ -70,7 +83,17 @@ const techAssessment = createSlice({
     builder.addCase(loadTechAssessments.rejected, (state) => {
       state.isLoading = false;
       message.error(`Server error. Please contact admin`);
-    })
+    });
+    builder.addCase(getTechAssessment.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getTechAssessment.fulfilled, (state, { payload }) => {
+      state.assessmentResult = payload;
+    });
+    builder.addCase(getTechAssessment.rejected, (state) => {
+      state.isLoading = false;
+      message.error(`Server error. Please contact admin`);
+    });
   }
 });
 

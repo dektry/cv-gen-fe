@@ -15,7 +15,7 @@ import { InterviewResultsTable } from '../InterviewResultsTable';
 import { InterviewInfoCard } from '../InterviewInfoCard';
 import { ICompleteInterview } from 'models/IInterview';
 
-import { processAnswers } from '../../../InterviewSetUP/components/InterviewForm/utils/helpers/processAnswers';
+import { processInterviewAnswers } from 'Pages/GenerateCV/TechnicalInterview/InterviewSetUP/components/InterviewForm/utils/helpers/processAnswers';
 
 export const InterviewResult = () => {
   const dispatch = useAppDispatch();
@@ -45,7 +45,7 @@ export const InterviewResult = () => {
 
   const handleSaveChanges = useCallback(() => {
     if (interviewResult) {
-      const processedAnswers = processAnswers(interviewResult, interviewMatrix);
+      const processedAnswers = processInterviewAnswers(interviewResult, interviewMatrix);
       const interviewData: ICompleteInterview = {
         candidateId: currentCandidate.id,
         positionId: chosenPosition || interviewResult.position.id || '',

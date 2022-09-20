@@ -90,7 +90,7 @@ const handleRowClick = useCallback(
   
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
-      navigate(generatePath(paths.generateCVtechnicalAssessment, { id }))
+      navigate(generatePath(paths.generateCVtechnicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel }))
     } else {
       message.warn('You should choose level and position')
     }
