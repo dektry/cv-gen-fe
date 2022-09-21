@@ -13,7 +13,7 @@ import { SoftSkillsInterviewResults } from 'Pages/GenerateCV/SoftskillsInterview
 import { Settings } from 'Pages/Settings';
 import { AssessmentSetUp } from 'Pages/GenerateCV/TechnicalAssessment/AssessmentSetUp';
 import { AssessmentHistory } from 'Pages/GenerateCV/TechnicalAssessment/AssessmentHistory';
-import CvGenerationPage from 'Pages/CvGeneration';
+import CvGenerationPage from 'Pages/CVGeneration';
 
 import routes from 'config/routes.json';
 
