@@ -28,7 +28,6 @@ interface IProps<T extends StateProps> {
   setMatrixTree: React.Dispatch<React.SetStateAction<IMatrix>>;
   matrixTree: IMatrix;
   handleClickDeleteSkill: (group: ISkillGroup, skill: ISkill) => void;
-  handleClickDeleteSkillGroup: (uuid: string) => void;
 }
 
 export const PositionSkillsModal = <T extends StateProps>({
@@ -40,7 +39,6 @@ export const PositionSkillsModal = <T extends StateProps>({
   setMatrixTree,
   matrixTree,
   handleClickDeleteSkill,
-  handleClickDeleteSkillGroup,
 }: IProps<T>) => {
   const classes = useStyles();
 
@@ -66,6 +64,12 @@ export const PositionSkillsModal = <T extends StateProps>({
       ]);
     }
   }, [skillMatrix, positionId, levels]);
+
+  const handleClickDeleteSkillGroup = (uiid: string) => {
+    if (skillMatrix.length) {
+      setMatrixTree((prev) => [...prev.filter((item) => item.uuid !== uiid)]);
+    }
+  };
 
   const handleClickAddSkillGroup = () => {
     setMatrixTree((prev) => [

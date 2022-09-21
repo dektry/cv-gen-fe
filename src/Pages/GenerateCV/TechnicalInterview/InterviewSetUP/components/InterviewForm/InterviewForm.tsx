@@ -148,12 +148,6 @@ export const InterviewForm = ({
     }
   };
 
-  const handleClickDeleteSkillGroup = (uuid: string) => {
-    if (skillMatrix.length) {
-      setMatrixTree((prev) => [...prev.filter((item) => item.uuid !== uuid)]);
-    }
-  };
-
   const handleSkillClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     if (chosenPosition || interviewResult?.position?.id) {
       const button: HTMLButtonElement = e.currentTarget;
@@ -178,6 +172,12 @@ export const InterviewForm = ({
       setAnswers(processedAnswers);
     }
   }, [interviewResult, interviewMatrix, chosenLevel, chosenPosition]);
+
+  useEffect(() => {
+    if (chosenPosition) {
+      dispatch(loadSkillMatrix(chosenPosition));
+    }
+  }, []);
 
   useEffect(() => {
     if (!interviewResult) {
@@ -221,10 +221,13 @@ export const InterviewForm = ({
         isEditActive={isEditActive}
         handleSkillClick={handleSkillClick}
         chosenPosition={chosenPosition}
+        chosenLevel={chosenLevel}
         interviewResult={interviewResult}
         interviewMatrix={interviewMatrix}
         isLoadingInterviewMatrix={isLoadingInterviewMatrix}
-        handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
+        skillMatrix={skillMatrix}
+        setMatrixTree={setMatrixTree}
+        matrixTree={matrixTree}
       />
       <PositionSkillsModal
         modalTitle={allPositions.find(({ id }) => chosenPosition === id)?.name || ''}
@@ -235,7 +238,6 @@ export const InterviewForm = ({
         handleClickDeleteSkill={handleClickDeleteSkill}
         matrixTree={matrixTree}
         setMatrixTree={setMatrixTree}
-        handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
       />
     </>
   );

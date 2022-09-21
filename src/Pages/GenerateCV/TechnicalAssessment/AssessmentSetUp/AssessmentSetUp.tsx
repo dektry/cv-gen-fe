@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { employeesSelector, loadEmployee } from 'store/reducers/employees';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { getTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
 
 import paths from 'config/routes.json';
 
@@ -17,7 +18,7 @@ import { AssessmentPositions } from './components/AssessmentPositions';
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();
   
-  const { id, positionId, levelId } = useParams<{ id: string, positionId: string, levelId: string }>();
+  const { id, positionId, levelId, assessmentId } = useParams<{ id: string, positionId: string, levelId: string, assessmentId: string }>();
   
   useEffect(() => {
     if (id) {
@@ -25,12 +26,17 @@ export const AssessmentSetUp = () => {
       dispatch(loadPositions());
       dispatch(loadLevels());
     }
+
+    if (assessmentId) {
+      dispatch(getTechAssessment(assessmentId));
+    }
   
   }, [id])
   
   const { currentEmployee } = useSelector(employeesSelector);
   const { allPositions, skillMatrix } = useSelector(positionsSelector);
   const { allLevels, levelsSchema } = useSelector(levelsSelector);
+  const { assessmentResult } = useSelector(techAssessmentSelector);
 
   const personalData = { 
     fullName: currentEmployee.fullName, 
@@ -51,8 +57,8 @@ export const AssessmentSetUp = () => {
         backPath={backPath}
       />
       <AssessmentPositions 
-        position={currentPosition}
-        level={currentLevel}
+        position={currentPosition || assessmentResult?.position}
+        level={currentLevel || assessmentResult?.level}
       />
       <AssessmentForm
         currentEmployee={currentEmployee}

@@ -72,5 +72,9 @@ export const useStyles = createUseStyles({
   deleteIcon: {
     marginLeft: '1rem',
     cursor: 'pointer',
+  },
+  rightSkillElementsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   }
 });

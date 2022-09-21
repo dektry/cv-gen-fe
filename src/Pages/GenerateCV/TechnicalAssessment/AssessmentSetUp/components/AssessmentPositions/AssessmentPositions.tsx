@@ -5,7 +5,7 @@ import { useStyles } from './styles';
 export const AssessmentPositions = ({ position, level }: { position: IDBPosition, level: IDBLevels }) => {
 
   const classes = useStyles();
-
+  
   return (
     <div className={classes.container}>
       <div className={classes.positionOrLevel}>

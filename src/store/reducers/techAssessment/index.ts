@@ -19,7 +19,7 @@ export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (as
   return httpEditTechAssessment(assessment);
 });
 
-export const getTechAssessment = createAsyncThunk(getTechAssessmentAction,(id: string) => {
+export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: string) => {
   return httpGetTechAssessment(id);
 })
 
@@ -67,10 +67,12 @@ const techAssessment = createSlice({
       if (payload.length) {
         const processedAssessments = payload.map((el: IAssessmentFromDB) => {
           return {
+            id: el.id,
             date: new Date(el.createdAt).toLocaleDateString(),
             position: el.position?.name,
             level: el.level?.name,
             type: 'Assessment',
+            answers: el.answers,
           }
         })
         state.assessments = processedAssessments;
@@ -88,7 +90,10 @@ const techAssessment = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getTechAssessment.fulfilled, (state, { payload }) => {
-      state.assessmentResult = payload;
+      state.assessmentResult = {
+        ...payload.interview,
+        answers: payload.answers
+      };
     });
     builder.addCase(getTechAssessment.rejected, (state) => {
       state.isLoading = false;

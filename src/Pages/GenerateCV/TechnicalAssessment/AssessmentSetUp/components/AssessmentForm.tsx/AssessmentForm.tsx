@@ -62,6 +62,8 @@ export const AssessmentForm = ({
   const [isStarted, setIsStarted] = useState(false);
 
   const [isOpenMatrixModal, setOpenMatrixModal] = useState(false);
+  const [currentPosition, setCurrentPosition] = useState('');
+  const [currentLevel, setCurrentLevel] = useState('');
 
   const [matrixTree, setMatrixTree] = useState<IMatrix>([
     {
@@ -80,18 +82,34 @@ export const AssessmentForm = ({
   ]);
 
   useEffect(() => {
+    if (positionId && levelId) {
+      setCurrentPosition(positionId);
+      setCurrentLevel(levelId);
+    }
+
+    if (assessmentResult && assessmentResult.position.id && assessmentResult.level.id) {
+      setCurrentPosition(assessmentResult.position.id);
+      setCurrentLevel(assessmentResult.level.id);
+    }
+  }, [positionId, levelId, assessmentResult])
+  
+
+  useEffect(() => {
     handleStartInterview();
+    if (currentPosition) {
+      dispatch(loadSkillMatrix(currentPosition));
+    }
 
     if (assessmentResult) {
       setAnswers(assessmentResult.answers);
     }
-  }, [])
+  }, [currentPosition, currentLevel])
 
   const handleStartInterview = () => {
-    if (levelId && positionId) {
-      dispatch(loadInterviewMatrix({ positionId, levelId }));
-      setIsStarted(true);
+    if (currentPosition && currentLevel) {
+      dispatch(loadInterviewMatrix({ positionId: currentPosition, levelId: currentLevel }));
     }
+    setIsStarted(true);
   };
 
 
@@ -145,13 +163,8 @@ export const AssessmentForm = ({
         }
         return item;
       });
-      setMatrixTree(newMatrix);
-    }
-  };
-
-  const handleClickDeleteSkillGroup = (uuid: string) => {
-    if (skillMatrix.length) {
-      setMatrixTree((prev) => [...prev.filter((item) => item.uuid !== uuid)]);
+      
+      setMatrixTree(newMatrix);      
     }
   };
 
@@ -177,10 +190,14 @@ export const AssessmentForm = ({
         handleFinishInterview={handleFinishInterview}
         handleSkillClick={handleSkillClick}
         chosenPosition={positionId}
+        chosenLevel={levelId}
         interviewResult={assessmentResult}
         interviewMatrix={interviewMatrix}
         isLoadingInterviewMatrix={isLoadingInterviewMatrix}
         isShowInterviewQuestions={true}
+        setMatrixTree={setMatrixTree}
+        skillMatrix={skillMatrix}
+        matrixTree={matrixTree}
       />
       <PositionSkillsModal
         modalTitle={allPositions.find(({ id }) => positionId === id)?.name || ''}
@@ -191,7 +208,6 @@ export const AssessmentForm = ({
         matrixTree={matrixTree}
         setMatrixTree={setMatrixTree}
         handleClickDeleteSkill={handleClickDeleteSkill}
-        handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
       />
     </>
   );

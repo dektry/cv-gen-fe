@@ -18,7 +18,7 @@ export const getAllTechAssessments = async (id: string) => {
 export const httpGetTechAssessment = async (id: string) => {
   try {
     const { data } = await apiClient.get(`${endpoints.employeeInterviews}/${id}`);
-
+    
     return data;
   } catch (error) {
     console.error('[API_CLIENT_GET_TECH_ASSESSMENT_ERROR]', error);

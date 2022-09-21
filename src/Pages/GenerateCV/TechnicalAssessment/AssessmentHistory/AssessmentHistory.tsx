@@ -58,8 +58,9 @@ const paginationObj = {
 
 const createPath = (record: IAssessmentFromDB) => {
   navigate(
-    generatePath(paths.generateCVtechnicalAssessmentHistory, {
-      id: record.id || ''
+    generatePath(paths.generateCVprevTechnicalAssessment, {
+      id: id || '',
+      assessmentId: record.id,
     })
   );
 };
