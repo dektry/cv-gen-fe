@@ -1,21 +1,26 @@
 import React from 'react';
 import { Avatar, Button, Typography } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 
 import { GenerateCvHeader } from '../../../../common-components/GenerateCVHeader';
 import { useStyles } from './styles';
+import { NullableField } from '../../../../models/TNullableField';
 
 const { Title } = Typography;
 
-export const CVGenerationHeader = React.memo(() => {
+interface ICVGenerationHeaderProps {
+  avatarUrl: NullableField<string>;
+}
+
+export const CVGenerationHeader = React.memo((props: ICVGenerationHeaderProps) => {
+  const { avatarUrl } = props;
   const classes = useStyles();
 
   return (
     <div>
-      <GenerateCvHeader backPath={'/'} />
+      <GenerateCvHeader />
       <Title level={2}> Generate CV</Title>
       <div className={classes.avatarAndBtnBox}>
-        <Avatar size={64} icon={<UserOutlined />} />
+        <Avatar size={64} src={avatarUrl} />
         <Button size="large" type="primary">
           Generate CV
         </Button>
