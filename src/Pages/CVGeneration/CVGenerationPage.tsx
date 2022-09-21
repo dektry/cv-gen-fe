@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { CVGenerationHeader } from './components/CVGenerationHeader/CVGenerationHeader';
 import { employeesSelector } from '../../store/reducers/employees';
 import routes from 'config/routes.json';
+import CVGenerationInfo from './components/CVGenerationInfo';
 
 export const CVGenerationPage = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const CVGenerationPage = () => {
   return (
     <div>
       <CVGenerationHeader avatarUrl={avatarUrl}></CVGenerationHeader>
+      <CVGenerationInfo></CVGenerationInfo>
     </div>
   );
 };
