@@ -20,26 +20,14 @@ interface IProps {
 }
 
 export const SkillSelects = (props: IProps) => {
-
-  const { 
-    skill, 
-    skillGroup, 
-    handleChangeSkill, 
-    handleClickDeleteSkill, 
-    idx, 
-    allLevels,
-    handleChangeLevelTypesSelect,
-  } = props;
+  const { skill, skillGroup, handleChangeSkill, handleClickDeleteSkill, idx, allLevels, handleChangeLevelTypesSelect } =
+    props;
 
   const classes = useStyles();
 
   return (
     <div className={classes.levelSelectsWrapper}>
-      <Button
-        type="primary"
-        onClick={() => handleClickDeleteSkill(skillGroup, skill)}
-        icon={<DeleteOutlined />}
-      />
+      <Button type="primary" onClick={() => handleClickDeleteSkill(skillGroup, skill)} icon={<DeleteOutlined />} />
       <Input
         placeholder="Skill"
         onChange={(event: ChangeEvent<HTMLInputElement>) => handleChangeSkill(event, idx)}
@@ -65,6 +53,6 @@ export const SkillSelects = (props: IProps) => {
           </Select>
         ))}
       </div>
-  </div>
+    </div>
   );
-}
+};

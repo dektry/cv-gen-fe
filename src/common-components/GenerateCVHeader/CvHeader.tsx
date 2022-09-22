@@ -18,7 +18,7 @@ export const GenerateCvHeader = ({ backPath, children, disabled }: IProps) => {
 
   const handleClick = () => {
     if (backPath) {
-      navigate(backPath);
+      navigate(backPath || '/');
     } else {
       navigate(-1);
     }

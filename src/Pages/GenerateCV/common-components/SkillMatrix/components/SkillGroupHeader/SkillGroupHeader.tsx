@@ -15,13 +15,7 @@ interface IProps {
 }
 
 export const SkillGroupHeader = (props: IProps) => {
-
-  const { 
-    skillGroup,
-    allLevels,
-    handleClickDeleteSkillGroup,
-    handleChangeSkillGroup,
-  } = props;
+  const { skillGroup, allLevels, handleClickDeleteSkillGroup, handleChangeSkillGroup } = props;
 
   const classes = useStyles();
 
@@ -42,6 +36,6 @@ export const SkillGroupHeader = (props: IProps) => {
           </div>
         ))}
       </div>
-  </div>
-  )
-}
+    </div>
+  );
+};

@@ -4,7 +4,6 @@ import { generatePath } from 'react-router-dom';
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { ButtonWithLink } from 'common-components/ButtonWithLink';
 
 import { IEmployee } from 'models/IEmployee';
 
@@ -26,7 +25,6 @@ interface IEmployeeProps {
 export const EmployeeUI = ({
   isEdited,
   isChanged,
-  employeeId,
   isLoading,
   handleClickEdit,
   handleEmployeeSave,
@@ -39,11 +37,11 @@ export const EmployeeUI = ({
     fullName: currentEmployee.fullName,
     location: currentEmployee.location,
     position: currentEmployee.position,
-    level: currentEmployee.level
-  }
+    level: currentEmployee.level,
+  };
 
   const backPath = generatePath(paths.generateCVemployeesList);
-  
+
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />
@@ -239,11 +237,6 @@ export const EmployeeUI = ({
             ) : (
               <Spin />
             )}
-
-            <div className={classes.interviewButtons}>
-              <ButtonWithLink id={employeeId} path={paths.generateCVtechnicalAssessment} text='Start tech assessment' />
-              <Button className={classes.button}>Start softskills interview</Button>
-            </div>
           </div>
         </Form>
       </div>

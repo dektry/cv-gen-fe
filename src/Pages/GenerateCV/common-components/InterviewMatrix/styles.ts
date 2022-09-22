@@ -31,6 +31,8 @@ export const useStyles = createUseStyles({
   },
   skills: {
     marginLeft: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
   },
   skill: {
     marginTop: '1rem',
@@ -61,5 +63,18 @@ export const useStyles = createUseStyles({
   },
   finishButton: {
     marginLeft: 'auto',
+  },
+  deleteSection: {
+    color: 'red',
+    alignSelf: 'flex-end',
+    cursor: 'pointer',
+  },
+  deleteIcon: {
+    marginLeft: '1rem',
+    cursor: 'pointer',
+  },
+  rightSkillElementsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });

@@ -1,8 +1,10 @@
 import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
+import { IInterviewAnswers } from './IInterview';
+import { NullableField } from './TNullableField';
 
 export interface IAssessmentEmployee {
-  employee: IEmployee,
+  employee: IEmployee;
   level: IDBLevels;
   position: IDBPosition;
 }
@@ -12,7 +14,8 @@ export interface IAssessmentFromDB {
   createdAt: string;
   level: IDBLevels;
   position: IDBPosition;
-  type: 'Assessment'
+  type: 'Assessment';
+  answers?: IInterviewAnswers;
 }
 
 export interface ITechAssessmentState {
@@ -23,4 +26,13 @@ export interface ITechAssessmentState {
   chosenPosition?: string;
   chosenLevel?: string;
   skillId?: string;
+  assessmentResult: NullableField<IAssessmentFromDB>;
+}
+
+export interface ICompleteAssessment {
+  id?: string;
+  employeeId: NullableField<string>;
+  levelId?: string;
+  positionId?: string;
+  answers: IInterviewAnswers;
 }

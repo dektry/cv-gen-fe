@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { cloneDeep } from 'lodash';
 
 import { Select, Button, Spin } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { useAppDispatch } from 'store';
-
-import { loadSkillMatrix } from 'store/reducers/positions';
 
 import {
   IInterviewSkill,
@@ -15,30 +14,48 @@ import {
   IInterviewMatrix,
 } from 'models/IInterview';
 import { NullableField } from 'models/TNullableField';
+import { IAssessmentFromDB } from 'models/ITechAssessment';
+import { IMatrix } from 'models/IUser';
 
-import { INTERVIEW, levelTypes } from '../InterviewForm/utils/constants';
+import { createSkillMatrix } from 'actions/skills';
+
+import {
+  INTERVIEW,
+  levelTypes,
+} from '../../TechnicalInterview/InterviewSetUP/components/InterviewForm/utils/constants';
 
 import { useStyles } from './styles';
 
+import { DeleteModal } from 'Pages/GenerateCV/common-components/DeleteModal';
+import { loadInterviewMatrix } from 'store/reducers/interview';
+
 interface IProps {
   isShowInterviewQuestions?: boolean | '';
-  answers: IInterviewAnswers;
-  setAnswers: (value: React.SetStateAction<IInterviewAnswers>) => void;
+  answers?: IInterviewAnswers;
+  setAnswers: (value: React.SetStateAction<IInterviewAnswers | undefined>) => void;
   setOpenMatrixModal: React.Dispatch<React.SetStateAction<boolean>>;
   isStarted: boolean;
-  setIsSelectDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSelectDisabled?: React.Dispatch<React.SetStateAction<boolean>>;
   handleFinishInterview: () => Promise<void>;
-  isEditActive: boolean;
+  isEditActive?: boolean;
   handleSkillClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
-  chosenPosition: string | undefined;
-  interviewResult: NullableField<IInterviewResult>;
+  chosenPosition?: string;
+  chosenLevel?: string;
+  interviewResult: NullableField<IInterviewResult | IAssessmentFromDB>;
   interviewMatrix: IInterviewMatrix;
   isLoadingInterviewMatrix: boolean;
+  skillMatrix: IMatrix;
+  setMatrixTree: React.Dispatch<React.SetStateAction<IMatrix>>;
+  matrixTree: IMatrix;
+}
+interface IDeleteEventTarget extends EventTarget {
+  id: string;
+}
+interface IDeleteElement extends React.MouseEvent<HTMLDivElement> {
+  target: IDeleteEventTarget;
 }
 
 export const InterviewMatrix = (props: IProps) => {
-  const [isTreeChanged, setIsTreeChanged] = useState(false);
-
   const {
     isShowInterviewQuestions,
     answers,
@@ -49,10 +66,18 @@ export const InterviewMatrix = (props: IProps) => {
     isEditActive,
     handleSkillClick,
     chosenPosition,
+    chosenLevel,
     interviewResult,
     interviewMatrix,
     isLoadingInterviewMatrix,
+    skillMatrix,
+    setMatrixTree,
+    matrixTree,
   } = props;
+
+  const [isTreeChanged, setIsTreeChanged] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [skillGroupId, setSkillGroupId] = useState('');
 
   const classes = useStyles();
 
@@ -64,9 +89,54 @@ export const InterviewMatrix = (props: IProps) => {
   };
 
   const handleMatrixModalOpen = async () => {
-    if (chosenPosition) {
-      await dispatch(loadSkillMatrix(chosenPosition));
+    if (chosenPosition && skillMatrix.length) {
       setOpenMatrixModal(true);
+    }
+  };
+
+  const handleClickDelete = (e: IDeleteElement) => {
+    setSkillGroupId(e.target.id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleClickDeleteSkillGroup = async () => {
+    if (skillMatrix.length) {
+      setMatrixTree((prev) => [...prev.filter((item) => item.uuid !== skillGroupId)]);
+      await createSkillMatrix({ matrixTree, position_id: chosenPosition || '' });
+    }
+    if (chosenPosition && chosenLevel) {
+      dispatch(loadInterviewMatrix({ positionId: chosenPosition, levelId: chosenLevel }));
+    }
+    setDeleteModalOpen(false);
+  };
+
+  const handleClose = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const handleDeleteSkill = async (skill: IInterviewSkill, id: string) => {
+    const group = matrixTree[matrixTree.findIndex((item) => item.uuid === id)];
+
+    const currentSkill = group.skills[group.skills.findIndex((el) => el.uuid === skill.id)];
+
+    if (group.skills.length && currentSkill) {
+      const matrixTreeCopy = cloneDeep(skillMatrix);
+
+      const newMatrix = matrixTreeCopy.map((item) => {
+        if (group?.uuid === item.uuid) {
+          return {
+            ...item,
+            skills: [...item.skills.filter((i) => i.uuid !== currentSkill.uuid)],
+          };
+        }
+        return item;
+      });
+
+      setMatrixTree(newMatrix);
+      await createSkillMatrix({ matrixTree, position_id: chosenPosition || '' });
+      if (chosenPosition && chosenLevel) {
+        dispatch(loadInterviewMatrix({ positionId: chosenPosition, levelId: chosenLevel }));
+      }
     }
   };
 
@@ -74,19 +144,18 @@ export const InterviewMatrix = (props: IProps) => {
     <>
       {isShowInterviewQuestions ? (
         <section className={classes.interviewForm}>
-          <div className={classes.answerColumns}>
-            <strong className={classes.greenColor}>Desired:</strong>
-            <strong className={classes.columnActual}>Actual:</strong>
-          </div>
           {interviewMatrix.map(({ id, skills, value }) => (
             <div key={id} className={classes.group}>
               <h2>{value}</h2>
               <div className={classes.skills}>
+                <div className={classes.deleteSection} id={id} onClick={handleClickDelete}>
+                  Delete section
+                </div>
                 {skills.map((skill) => (
                   <div key={skill.id} className={classes.skill}>
                     <div className={classes.skillHeader}>
                       <h3>{skill.value}</h3>
-                      <div>
+                      <div className={classes.rightSkillElementsContainer}>
                         {skill.levels.map((level) => (
                           <strong key={level.value} className={classes.greenColor}>
                             {levelTypes[level.value]}
@@ -96,7 +165,7 @@ export const InterviewMatrix = (props: IProps) => {
                           onChange={(level) => handleSkillChange(level, skill)}
                           placeholder={INTERVIEW.LEVEL_PLACEHOLDER}
                           className={classes.answerSelect}
-                          value={answers[skill.id]}
+                          value={answers && answers[skill.id]}
                         >
                           {Object.keys(levelTypes).map((key) => (
                             <Select.Option value={key} key={key} disabled={!isEditActive}>
@@ -104,6 +173,15 @@ export const InterviewMatrix = (props: IProps) => {
                             </Select.Option>
                           ))}
                         </Select>
+                        <Button
+                          className={classes.deleteIcon}
+                          id={id}
+                          type="primary"
+                          onClick={() => {
+                            handleDeleteSkill(skill, id);
+                          }}
+                          icon={<DeleteOutlined />}
+                        />
                       </div>
                     </div>
                     <ol>
@@ -146,6 +224,12 @@ export const InterviewMatrix = (props: IProps) => {
       ) : (
         <Spin size="small" tip={'Loading interview matrix...'} />
       )}
+      <DeleteModal
+        onSubmit={handleClickDeleteSkillGroup}
+        onClose={handleClose}
+        isOpen={isDeleteModalOpen}
+        modalTitle={'Delete section'}
+      />
     </>
   );
 };
