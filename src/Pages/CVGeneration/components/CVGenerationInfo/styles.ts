@@ -8,4 +8,7 @@ export const useStyles = createUseStyles({
     gap: '16px',
     margin: '24px 0',
   },
+  textArea: {
+    width: '100%',
+  },
 });
