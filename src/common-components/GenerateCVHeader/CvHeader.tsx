@@ -7,7 +7,7 @@ import { Button } from 'antd';
 import { useStyles } from 'common-components/GenerateCVHeader/styles';
 
 interface IProps {
-  backPath: string;
+  backPath?: string;
   children?: React.ReactNode | React.ReactNode[];
   disabled?: boolean;
 }
@@ -16,18 +16,20 @@ export const GenerateCvHeader = ({ backPath, children, disabled }: IProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const handleClick = () => navigate(backPath);
+  const handleClick = () => navigate(backPath || '/');
 
   return (
     <div className={classes.wrap}>
       <div>
-        <Button
-          type="default"
-          icon={<ArrowLeftOutlined />}
-          className={classes.backBtn}
-          onClick={handleClick}
-          disabled={disabled}
-        />
+        {backPath && (
+          <Button
+            type="default"
+            icon={<ArrowLeftOutlined />}
+            className={classes.backBtn}
+            onClick={handleClick}
+            disabled={disabled}
+          />
+        )}
       </div>
       {children}
     </div>
