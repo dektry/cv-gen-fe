@@ -10,9 +10,10 @@ interface IProps {
   backPath?: string;
   children?: React.ReactNode | React.ReactNode[];
   disabled?: boolean;
+  noBackBtn?: boolean;
 }
 
-export const GenerateCvHeader = ({ backPath, children, disabled }: IProps) => {
+export const GenerateCvHeader = ({ backPath, children, disabled, noBackBtn = false }: IProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -26,15 +27,17 @@ export const GenerateCvHeader = ({ backPath, children, disabled }: IProps) => {
 
   return (
     <div className={classes.wrap}>
-      <div>
-        <Button
-          type="default"
-          icon={<ArrowLeftOutlined />}
-          className={classes.backBtn}
-          onClick={handleClick}
-          disabled={disabled}
-        />
-      </div>
+      {!noBackBtn && (
+        <div>
+          <Button
+            type="default"
+            icon={<ArrowLeftOutlined />}
+            className={classes.backBtn}
+            onClick={handleClick}
+            disabled={disabled}
+          />
+        </div>
+      )}
       {children}
     </div>
   );

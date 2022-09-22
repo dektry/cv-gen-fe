@@ -37,7 +37,7 @@ export const Employees = () => {
   return (
     <>
       <div className={classes.container}>
-        <GenerateCvHeader>
+        <GenerateCvHeader noBackBtn>
           <Typography className={classes.title}>{EMPLOYEES.TITLE}</Typography>
           <SearchWithAutocomplete
             className={classes.search}
