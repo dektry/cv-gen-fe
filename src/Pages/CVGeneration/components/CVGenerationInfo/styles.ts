@@ -11,4 +11,7 @@ export const useStyles = createUseStyles({
   textArea: {
     width: '100%',
   },
+  softSkillsSelect: {
+    width: '100%',
+  },
 });

@@ -1,8 +1,26 @@
 import React from 'react';
-import { Input } from 'antd';
+import { Input, Select, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
 import { useStyles } from './styles';
+
+const { Title } = Typography;
+
+const softSkillsOptions = [
+  'Responsibility',
+  'Teamwork',
+  'Communication',
+  'Sociability',
+  'Leadership',
+  'Punctuality',
+  'Confidence',
+  'Resilience',
+  'Collaboration',
+  'Time management',
+  'Discipline',
+  'Creativity',
+];
+export type SoftSkills = typeof softSkillsOptions[number];
 
 interface CVGenerationInfoProps {
   fullName?: string;
@@ -11,11 +29,12 @@ interface CVGenerationInfoProps {
   experience?: number;
   education?: string | null;
   description?: string;
+  softSkills?: SoftSkills[];
   updateCvInfo: (fields: Partial<CVGenerationInfoProps>) => void;
 }
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { fullName, level, position, experience, education, description, updateCvInfo } = props;
+  const { fullName, level, position, experience, education, description, updateCvInfo, softSkills } = props;
 
   const classes = useStyles();
 
@@ -72,13 +91,29 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
       <div className={classes.row}>
         <Input addonBefore="Languages" name="languages" placeholder={'Languages'} value={'English - B2'} />
       </div>
-      <Input
-        addonBefore="Education"
-        name="education"
-        placeholder={'Education'}
-        onChange={(e) => updateCvInfo({ education: e.target.value })}
-        value={education ? education : ''}
-      />
+      <div className={classes.row}>
+        <Input
+          addonBefore="Education"
+          name="education"
+          placeholder={'Education'}
+          onChange={(e) => updateCvInfo({ education: e.target.value })}
+          value={education ? education : ''}
+        />
+      </div>
+      <div className={classes.row}>
+        <div className={classes.softSkillsSelect}>
+          <Title level={5}>Soft skills</Title>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder="Select soft skills"
+            options={softSkillsOptions?.map((skill) => ({ label: skill, value: skill }))}
+            defaultValue={softSkills}
+            onChange={(value) => updateCvInfo({ softSkills: value })}
+            value={softSkills ? softSkills : []}
+          ></Select>
+        </div>
+      </div>
     </div>
   );
 });

@@ -9,11 +9,13 @@ import CVGenerationInfo from './components/CVGenerationInfo';
 import { IEmployee } from '../../models/IEmployee';
 import { calcExperienceInYears } from './utils/calculateExperienceInYears';
 import { NullableField } from '../../models/TNullableField';
+import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
 
 type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
+  softSkills: SoftSkills[];
 };
 
 export const CVGenerationPage = () => {
@@ -22,7 +24,7 @@ export const CVGenerationPage = () => {
   const { currentEmployee } = useSelector(employeesSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
-  const { avatarUrl, fullName, level, position, experience, education, description } = cvInfo;
+  const { avatarUrl, fullName, level, position, experience, education, description, softSkills } = cvInfo;
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -39,6 +41,7 @@ export const CVGenerationPage = () => {
         position,
         experience: calcExperienceInYears(startingPoint || hiredOn),
         education: formalEducation,
+        softSkills: ['Responsibility', 'Teamwork', 'Communication'],
         // todo: add this field on BE side
         description: '',
       });
@@ -59,8 +62,12 @@ export const CVGenerationPage = () => {
         experience={experience}
         education={education}
         description={description}
+        softSkills={softSkills}
         updateCvInfo={updateCvInfo}
       ></CVGenerationInfo>
+      {/* coming later */}
+      {/*  <ProfessionalSkills></ProfessionalSkills> */}
+      {/*  <Projects></Projects> */}
     </div>
   );
 };
