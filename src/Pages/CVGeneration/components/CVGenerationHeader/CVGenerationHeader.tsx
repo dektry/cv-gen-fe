@@ -9,10 +9,11 @@ const { Title } = Typography;
 
 interface ICVGenerationHeaderProps {
   avatarUrl: NullableField<string>;
+  showCvPreview: () => void;
 }
 
 export const CVGenerationHeader = React.memo((props: ICVGenerationHeaderProps) => {
-  const { avatarUrl } = props;
+  const { avatarUrl, showCvPreview } = props;
   const classes = useStyles();
 
   return (
@@ -21,7 +22,7 @@ export const CVGenerationHeader = React.memo((props: ICVGenerationHeaderProps) =
       <Title level={2}> Generate CV</Title>
       <div className={classes.avatarAndBtnBox}>
         <Avatar size={64} src={avatarUrl} />
-        <Button size="large" type="primary">
+        <Button size="large" type="primary" onClick={showCvPreview}>
           Generate CV
         </Button>
       </div>

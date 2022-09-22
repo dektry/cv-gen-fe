@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { CVGenerationHeader } from './components/CVGenerationHeader/CVGenerationHeader';
@@ -8,9 +8,12 @@ import routes from 'config/routes.json';
 import CVGenerationInfo from './components/CVGenerationInfo';
 import { IEmployee } from '../../models/IEmployee';
 import { calcExperienceInYears } from './utils/calculateExperienceInYears';
+import { NullableField } from '../../models/TNullableField';
 
-type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'formalEducation' | 'avatarUrl'> & {
+type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
+  description: string;
+  education: NullableField<string>;
 };
 
 export const CVGenerationPage = () => {
@@ -19,7 +22,7 @@ export const CVGenerationPage = () => {
   const { currentEmployee } = useSelector(employeesSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
-  const { avatarUrl, fullName, level, position, experience, formalEducation } = cvInfo;
+  const { avatarUrl, fullName, level, position, experience, education, description } = cvInfo;
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -27,7 +30,7 @@ export const CVGenerationPage = () => {
     if (currentEmployee.id == '101010') {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { avatarUrl, fullName, level, position, formalEducation, startingPoint, hiredOn } = currentEmployee;
+      const { avatarUrl, fullName, level, position, startingPoint, hiredOn, formalEducation } = currentEmployee;
 
       setCvInfo({
         avatarUrl,
@@ -35,20 +38,28 @@ export const CVGenerationPage = () => {
         level,
         position,
         experience: calcExperienceInYears(startingPoint || hiredOn),
-        formalEducation,
+        education: formalEducation,
+        // todo: add this field on BE side
+        description: '',
       });
     }
   }, []);
 
+  const updateCvInfo = useCallback((fields: Partial<CvInfo>) => {
+    setCvInfo((prev) => ({ ...prev, ...fields }));
+  }, []);
+
   return (
     <div>
-      <CVGenerationHeader avatarUrl={avatarUrl}></CVGenerationHeader>
+      <CVGenerationHeader avatarUrl={avatarUrl} showCvPreview={() => console.log(cvInfo)}></CVGenerationHeader>
       <CVGenerationInfo
         fullName={fullName}
         level={level}
         position={position}
         experience={experience}
-        education={formalEducation}
+        education={education}
+        description={description}
+        updateCvInfo={updateCvInfo}
       ></CVGenerationInfo>
     </div>
   );
