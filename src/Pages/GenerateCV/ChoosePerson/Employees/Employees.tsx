@@ -5,11 +5,9 @@ import { useSelector } from 'react-redux';
 import { Typography, Spin } from 'antd';
 
 import { EmployeesTable } from './components/EmployeesTable';
-import { EmployeeTabs } from 'Pages/GenerateCV/common-components/EmployeeTabs';
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { SearchWithAutocomplete } from 'common-components/SearchWithAutocomplete';
 
-import paths from 'config/routes.json';
 import { EMPLOYEES } from '../../utils/constants';
 import { defaultCurrentPage, defaultPageSize } from './components/EmployeesTable/utils/constants';
 
@@ -38,9 +36,8 @@ export const Employees = () => {
 
   return (
     <>
-      <EmployeeTabs />
       <div className={classes.container}>
-        <GenerateCvHeader backPath={paths.home}>
+        <GenerateCvHeader>
           <Typography className={classes.title}>{EMPLOYEES.TITLE}</Typography>
           <SearchWithAutocomplete
             className={classes.search}

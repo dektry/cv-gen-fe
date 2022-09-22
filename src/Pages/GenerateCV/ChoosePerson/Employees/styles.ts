@@ -42,12 +42,9 @@ export const useStyles = createUseStyles({
     alignItems: 'center',
   },
   title: {
-    width: '90px',
     height: '30px',
     fontWeight: '600',
-    marginLeft: '5%',
     backgroundColor: 'white',
-    paddingLeft: '8px',
-    paddingTop: '4px',
+    padding: '0.4rem 0.8rem',
   },
 });
