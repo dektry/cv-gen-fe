@@ -58,8 +58,9 @@ const paginationObj = {
 
 const createPath = (record: IAssessmentFromDB) => {
   navigate(
-    generatePath(paths.generateCVtechnicalAssessmentHistory, {
-      id: record.id || ''
+    generatePath(paths.generateCVprevTechnicalAssessment, {
+      id: id || '',
+      assessmentId: record.id,
     })
   );
 };
@@ -90,7 +91,7 @@ const handleRowClick = useCallback(
   
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
-      navigate(generatePath(paths.generateCVtechnicalAssessment, { id }))
+      navigate(generatePath(paths.generateCVtechnicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel }))
     } else {
       message.warn('You should choose level and position')
     }
@@ -101,11 +102,11 @@ const handleRowClick = useCallback(
   }
   
   const setInterviewLevel = (level: string) => {
-    dispatch(chooseInterviewLevel(level))
+    dispatch(chooseInterviewLevel(level));
   }
   
   const setInterviewPosition = (position: string) => {
-    dispatch(chooseInterviewPosition(position))
+    dispatch(chooseInterviewPosition(position));
   }
   
   const personalData = { fullName, location, position, level };

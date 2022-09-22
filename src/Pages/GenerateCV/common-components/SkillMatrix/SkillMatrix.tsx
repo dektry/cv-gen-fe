@@ -11,9 +11,11 @@ import { SkillGroupHeader } from './components/SkillGroupHeader';
 interface ISkillProps extends StateProps {
   skillGroup: ISkillGroup;
   setMatrixTree: React.Dispatch<React.SetStateAction<IMatrix>>;
+  handleClickDeleteSkill: (group: ISkillGroup, skill: ISkill) => void;
+  handleClickDeleteSkillGroup: (uuid: string) => void;
 }
 
-export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, allLevels }: ISkillProps) => {
+export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, allLevels, handleClickDeleteSkill, handleClickDeleteSkillGroup }: ISkillProps) => {
   
   // skill groups handlers
   const handleChangeSkillGroup = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,12 +24,6 @@ export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, al
     const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
     matrixTreeCopy[currentSkillGroupIdx].value = value;
     setMatrixTree(matrixTreeCopy);
-  };
-
-  const handleClickDeleteSkillGroup = (uuid: string) => {
-    if (skillMatrix.length) {
-      setMatrixTree((prev) => [...prev.filter((item) => item.uuid !== uuid)]);
-    }
   };
   
   // skills handlers
@@ -57,22 +53,6 @@ export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, al
     const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
     matrixTreeCopy[currentSkillGroupIdx].skills[idx].value = value;
     setMatrixTree(matrixTreeCopy);
-  };
-
-  const handleClickDeleteSkill = (group: ISkillGroup, skill: ISkill) => {
-    if (group.skills.length) {
-      const matrixTreeCopy = cloneDeep(skillMatrix);
-      const newMatrix = matrixTreeCopy.map((item) => {
-        if (group?.uuid === item.uuid) {
-          return {
-            ...item,
-            skills: [...item.skills.filter((i) => i.uuid !== skill.uuid)],
-          };
-        }
-        return item;
-      });
-      setMatrixTree(newMatrix);
-    }
   };
 
 

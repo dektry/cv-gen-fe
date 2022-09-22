@@ -34,5 +34,6 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVsoftskillsInterviewResult, component: SoftSkillsInterviewResults },
   { path: routes.settings, component: Settings },
   { path: routes.generateCVtechnicalAssessment, component: AssessmentSetUp },
-  { path: routes.generateCVtechnicalAssessmentHistory,  component: AssessmentHistory }
+  { path: routes.generateCVtechnicalAssessmentHistory,  component: AssessmentHistory },
+  { path: routes.generateCVprevTechnicalAssessment, component: AssessmentSetUp }
 ];
