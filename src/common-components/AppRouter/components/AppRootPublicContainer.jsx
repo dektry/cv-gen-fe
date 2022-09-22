@@ -33,7 +33,6 @@ export const AppRootPublicContainer = () => {
                     <DesktopPanel isCollapsed={isCollapsed} setCollapse={setCollapse}/>
                         )}
                         <Content className={classes.content}>
-                            <AppHeader title="Welcome to CV generator!"/>
                             <div className={classes.outlet_container}>
                                 <Outlet/>
                             </div>
