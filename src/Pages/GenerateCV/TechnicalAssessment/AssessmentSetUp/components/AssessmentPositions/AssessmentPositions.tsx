@@ -1,11 +1,11 @@
+import React from 'react';
 import { IDBPosition, IDBLevels } from 'models/IUser';
 
 import { useStyles } from './styles';
 
-export const AssessmentPositions = ({ position, level }: { position: IDBPosition, level: IDBLevels }) => {
-
+const Positions = ({ position, level }: { position: IDBPosition; level: IDBLevels }) => {
   const classes = useStyles();
-  
+
   return (
     <div className={classes.container}>
       <div className={classes.positionOrLevel}>
@@ -18,4 +18,6 @@ export const AssessmentPositions = ({ position, level }: { position: IDBPosition
       </div>
     </div>
   );
-}
+};
+
+export const AssessmentPositions = React.memo(Positions);

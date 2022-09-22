@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, generatePath, useParams } from 'react-router-dom';
+
+import { Spin } from 'antd';
 
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep } from 'lodash';
@@ -9,17 +11,8 @@ import { useSelector } from 'react-redux';
 import { PositionSkillsModal } from '../../../../common-components/PositionSkillsModal';
 
 import { useAppDispatch } from 'store';
-import {
-  interviewSelector,
-  loadInterviewMatrix,
-  setInterviewMatrix,
-  setSkillID,
-} from 'store/reducers/interview';
-import {
-  finishTechAssessment,
-  editTechAssessment,
-  techAssessmentSelector
-} from 'store/reducers/techAssessment';
+import { interviewSelector, setInterviewMatrix, setSkillID } from 'store/reducers/interview';
+import { finishTechAssessment, editTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
 import { IInterviewAnswers } from 'models/IInterview';
@@ -31,7 +24,6 @@ import { IEmployee } from 'models/IEmployee';
 import { ICompleteAssessment } from 'models/ITechAssessment';
 
 import { InterviewMatrix } from 'Pages/GenerateCV/common-components/InterviewMatrix';
-
 
 interface IInterviewFormProps {
   currentEmployee: IEmployee;
@@ -53,7 +45,7 @@ export const AssessmentForm = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { levelId, positionId } = useParams<{ levelId: string, positionId: string}>();
+  const { levelId, positionId } = useParams<{ levelId: string; positionId: string }>();
 
   const { interviewMatrix } = useSelector(interviewSelector);
   const { assessmentResult } = useSelector(techAssessmentSelector);
@@ -64,6 +56,7 @@ export const AssessmentForm = ({
   const [isOpenMatrixModal, setOpenMatrixModal] = useState(false);
   const [currentPosition, setCurrentPosition] = useState('');
   const [currentLevel, setCurrentLevel] = useState('');
+  const [skillMatrixIsLoading, setSkillMatrixIsLoading] = useState(false);
 
   const [matrixTree, setMatrixTree] = useState<IMatrix>([
     {
@@ -91,34 +84,33 @@ export const AssessmentForm = ({
       setCurrentPosition(assessmentResult.position.id);
       setCurrentLevel(assessmentResult.level.id);
     }
-  }, [positionId, levelId, assessmentResult])
-  
+  }, [positionId, levelId, assessmentResult]);
 
   useEffect(() => {
     handleStartInterview();
     if (currentPosition) {
+      setSkillMatrixIsLoading(true);
       dispatch(loadSkillMatrix(currentPosition));
+      setSkillMatrixIsLoading(false);
     }
 
     if (assessmentResult) {
       setAnswers(assessmentResult.answers);
     }
-  }, [currentPosition, currentLevel])
+  }, [currentPosition, currentLevel]);
 
   const handleStartInterview = () => {
-    if (currentPosition && currentLevel) {
-      dispatch(loadInterviewMatrix({ positionId: currentPosition, levelId: currentLevel }));
-    }
     setIsStarted(true);
   };
 
-
-  const positionSkillModalState = {
-    skillMatrix,
-    allLevels,
-    positionId: positionId || assessmentResult?.position?.id,
-    levels: levelsSchema,
-  };
+  const positionSkillModalState = useMemo(() => {
+    return {
+      skillMatrix,
+      allLevels,
+      positionId: positionId || assessmentResult?.position?.id,
+      levels: levelsSchema,
+    };
+  }, [skillMatrix, allLevels, positionId, assessmentResult, levelsSchema]);
 
   // button handlers
 
@@ -146,7 +138,9 @@ export const AssessmentForm = ({
     if (positionId || assessmentResult?.position?.id) {
       const button: HTMLButtonElement = e.currentTarget;
       dispatch(setSkillID(button.id));
+      setSkillMatrixIsLoading(true);
       dispatch(loadSkillMatrix(String(positionId || assessmentResult?.position?.id)));
+      setSkillMatrixIsLoading(false);
       setOpenMatrixModal(true);
     }
   };
@@ -163,8 +157,8 @@ export const AssessmentForm = ({
         }
         return item;
       });
-      
-      setMatrixTree(newMatrix);      
+
+      setMatrixTree(newMatrix);
     }
   };
 
@@ -179,6 +173,13 @@ export const AssessmentForm = ({
       dispatch(setInterviewMatrix([]));
     };
   }, []);
+
+  const modalTitle = useMemo(
+    () => allPositions.find(({ id }) => positionId === id)?.name || '',
+    [allPositions, positionId]
+  );
+
+  if (skillMatrixIsLoading) return <Spin size="large" tip={'Loading skill matrix...'} />;
 
   return (
     <>
@@ -200,7 +201,7 @@ export const AssessmentForm = ({
         matrixTree={matrixTree}
       />
       <PositionSkillsModal
-        modalTitle={allPositions.find(({ id }) => positionId === id)?.name || ''}
+        modalTitle={modalTitle}
         isOpenMatrixModal={isOpenMatrixModal}
         onClose={handleMatrixModalClose}
         state={positionSkillModalState}

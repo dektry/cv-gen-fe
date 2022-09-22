@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, generatePath } from 'react-router-dom';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -193,6 +193,11 @@ export const InterviewForm = ({
     };
   }, []);
 
+  const modalTitle = useMemo(
+    () => allPositions.find(({ id }) => chosenPosition === id)?.name || '',
+    [allPositions, chosenPosition]
+  );
+
   return (
     <>
       <InterviewSelect
@@ -230,7 +235,7 @@ export const InterviewForm = ({
         matrixTree={matrixTree}
       />
       <PositionSkillsModal
-        modalTitle={allPositions.find(({ id }) => chosenPosition === id)?.name || ''}
+        modalTitle={modalTitle}
         isOpenMatrixModal={isOpenMatrixModal}
         onClose={handleMatrixModalClose}
         state={positionSkillModalState}

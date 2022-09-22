@@ -2,18 +2,34 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../..';
 
-import { appStoreName, loadAllTechAssessmentsAction, completeTechAssessmentAction, editTechAssessmentAction, getTechAssessmentAction } from './actions';
-import { getAllTechAssessments, httpCompleteTechAssessment, httpEditTechAssessment, httpGetTechAssessment } from 'actions/techAssessment';
+import {
+  appStoreName,
+  loadAllTechAssessmentsAction,
+  completeTechAssessmentAction,
+  editTechAssessmentAction,
+  getTechAssessmentAction,
+} from './actions';
+import {
+  getAllTechAssessments,
+  httpCompleteTechAssessment,
+  httpEditTechAssessment,
+  httpGetTechAssessment,
+} from 'actions/techAssessment';
 
 import { IAssessmentFromDB, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
-export const loadTechAssessments = createAsyncThunk(loadAllTechAssessmentsAction, (id: string) => getAllTechAssessments(id));
+export const loadTechAssessments = createAsyncThunk(loadAllTechAssessmentsAction, (id: string) =>
+  getAllTechAssessments(id)
+);
 
-export const finishTechAssessment = createAsyncThunk(completeTechAssessmentAction, (assessment: ICompleteAssessment) => {
-  return httpCompleteTechAssessment(assessment)
-});
+export const finishTechAssessment = createAsyncThunk(
+  completeTechAssessmentAction,
+  (assessment: ICompleteAssessment) => {
+    return httpCompleteTechAssessment(assessment);
+  }
+);
 
 export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (assessment: ICompleteAssessment) => {
   return httpEditTechAssessment(assessment);
@@ -21,7 +37,7 @@ export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (as
 
 export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: string) => {
   return httpGetTechAssessment(id);
-})
+});
 
 const initialState: ITechAssessmentState = {
   assessments: [],
@@ -31,7 +47,7 @@ const initialState: ITechAssessmentState = {
   chosenLevel: undefined,
   chosenPosition: undefined,
   assessmentResult: null,
-}
+};
 
 const techAssessment = createSlice({
   name: appStoreName,
@@ -46,7 +62,7 @@ const techAssessment = createSlice({
     setCurrentPage: (state, { payload }: PayloadAction<number>) => {
       state.currentPage = payload;
     },
-    chooseInterviewPosition: (state, { payload }: PayloadAction<string | undefined>) => {      
+    chooseInterviewPosition: (state, { payload }: PayloadAction<string | undefined>) => {
       state.chosenPosition = payload;
     },
     chooseInterviewLevel: (state, { payload }: PayloadAction<string | undefined>) => {
@@ -55,7 +71,7 @@ const techAssessment = createSlice({
     setSkillID: (state, { payload }: PayloadAction<string>) => {
       state.skillId = payload;
     },
-    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {      
+    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
     },
   },
@@ -63,7 +79,7 @@ const techAssessment = createSlice({
     builder.addCase(loadTechAssessments.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(loadTechAssessments.fulfilled, (state, { payload }) => {      
+    builder.addCase(loadTechAssessments.fulfilled, (state, { payload }) => {
       if (payload.length) {
         const processedAssessments = payload.map((el: IAssessmentFromDB) => {
           return {
@@ -73,8 +89,8 @@ const techAssessment = createSlice({
             level: el.level?.name,
             type: 'Assessment',
             answers: el.answers,
-          }
-        })
+          };
+        });
         state.assessments = processedAssessments;
         state.isLoading = false;
       } else {
@@ -92,27 +108,27 @@ const techAssessment = createSlice({
     builder.addCase(getTechAssessment.fulfilled, (state, { payload }) => {
       state.assessmentResult = {
         ...payload.interview,
-        answers: payload.answers
+        answers: payload.answers,
       };
+      state.isLoading = false;
     });
     builder.addCase(getTechAssessment.rejected, (state) => {
       state.isLoading = false;
       message.error(`Server error. Please contact admin`);
     });
-  }
+  },
 });
 
 export default techAssessment.reducer;
 
 export const techAssessmentSelector = (state: RootState): ITechAssessmentState => state.techAssessment;
 
-export const { 
-  setTechAssessments, 
-  setPageSize, 
-  setCurrentPage, 
-  setSkillID, 
-  chooseInterviewLevel, 
+export const {
+  setTechAssessments,
+  setPageSize,
+  setCurrentPage,
+  setSkillID,
+  chooseInterviewLevel,
   chooseInterviewPosition,
   setIsLoading,
-} =
-  techAssessment.actions;
+} = techAssessment.actions;

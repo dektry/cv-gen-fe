@@ -6,8 +6,6 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { useAppDispatch } from 'store';
 
-import { loadSkillMatrix } from 'store/reducers/positions';
-
 import {
   IInterviewSkill,
   IInterviewAnswers,
@@ -21,7 +19,10 @@ import { IMatrix } from 'models/IUser';
 
 import { createSkillMatrix } from 'actions/skills';
 
-import { INTERVIEW, levelTypes } from '../../TechnicalInterview/InterviewSetUP/components/InterviewForm/utils/constants';
+import {
+  INTERVIEW,
+  levelTypes,
+} from '../../TechnicalInterview/InterviewSetUP/components/InterviewForm/utils/constants';
 
 import { useStyles } from './styles';
 
@@ -48,7 +49,7 @@ interface IProps {
   matrixTree: IMatrix;
 }
 interface IDeleteEventTarget extends EventTarget {
-  id: string
+  id: string;
 }
 interface IDeleteElement extends React.MouseEvent<HTMLDivElement> {
   target: IDeleteEventTarget;
@@ -88,8 +89,7 @@ export const InterviewMatrix = (props: IProps) => {
   };
 
   const handleMatrixModalOpen = async () => {
-    if (chosenPosition) {
-      await dispatch(loadSkillMatrix(chosenPosition));
+    if (chosenPosition && skillMatrix.length) {
       setOpenMatrixModal(true);
     }
   };
@@ -97,7 +97,7 @@ export const InterviewMatrix = (props: IProps) => {
   const handleClickDelete = (e: IDeleteElement) => {
     setSkillGroupId(e.target.id);
     setDeleteModalOpen(true);
-  }
+  };
 
   const handleClickDeleteSkillGroup = async () => {
     if (skillMatrix.length) {
@@ -105,23 +105,23 @@ export const InterviewMatrix = (props: IProps) => {
       await createSkillMatrix({ matrixTree, position_id: chosenPosition || '' });
     }
     if (chosenPosition && chosenLevel) {
-      dispatch(loadInterviewMatrix({ positionId: chosenPosition, levelId: chosenLevel }))
+      dispatch(loadInterviewMatrix({ positionId: chosenPosition, levelId: chosenLevel }));
     }
     setDeleteModalOpen(false);
   };
 
   const handleClose = () => {
     setDeleteModalOpen(false);
-  }
+  };
 
   const handleDeleteSkill = async (skill: IInterviewSkill, id: string) => {
-    const group = matrixTree[matrixTree.findIndex((item) => item.uuid === id)];    
-    
-    const currentSkill = group.skills[group.skills.findIndex(el => el.uuid === skill.id)];
-    
+    const group = matrixTree[matrixTree.findIndex((item) => item.uuid === id)];
+
+    const currentSkill = group.skills[group.skills.findIndex((el) => el.uuid === skill.id)];
+
     if (group.skills.length && currentSkill) {
       const matrixTreeCopy = cloneDeep(skillMatrix);
-      
+
       const newMatrix = matrixTreeCopy.map((item) => {
         if (group?.uuid === item.uuid) {
           return {
@@ -131,15 +131,14 @@ export const InterviewMatrix = (props: IProps) => {
         }
         return item;
       });
-      
-      setMatrixTree(newMatrix);      
-      await createSkillMatrix({ matrixTree , position_id: chosenPosition || '' });
+
+      setMatrixTree(newMatrix);
+      await createSkillMatrix({ matrixTree, position_id: chosenPosition || '' });
       if (chosenPosition && chosenLevel) {
-        dispatch(loadInterviewMatrix({ positionId: chosenPosition, levelId: chosenLevel }))
+        dispatch(loadInterviewMatrix({ positionId: chosenPosition, levelId: chosenLevel }));
       }
     }
-  }
-
+  };
 
   return (
     <>
@@ -149,7 +148,9 @@ export const InterviewMatrix = (props: IProps) => {
             <div key={id} className={classes.group}>
               <h2>{value}</h2>
               <div className={classes.skills}>
-                <div className={classes.deleteSection} id={id} onClick={handleClickDelete}>Delete section</div>
+                <div className={classes.deleteSection} id={id} onClick={handleClickDelete}>
+                  Delete section
+                </div>
                 {skills.map((skill) => (
                   <div key={skill.id} className={classes.skill}>
                     <div className={classes.skillHeader}>
@@ -177,7 +178,7 @@ export const InterviewMatrix = (props: IProps) => {
                           id={id}
                           type="primary"
                           onClick={() => {
-                            handleDeleteSkill(skill, id)
+                            handleDeleteSkill(skill, id);
                           }}
                           icon={<DeleteOutlined />}
                         />
@@ -186,7 +187,7 @@ export const InterviewMatrix = (props: IProps) => {
                     <ol>
                       {skill.questions.map((ques) => (
                         <li key={ques.id}>{ques.value}</li>
-                        ))}
+                      ))}
                       <Button
                         id={id}
                         style={{ marginLeft: '95%', marginTop: '3%' }}
@@ -223,7 +224,7 @@ export const InterviewMatrix = (props: IProps) => {
       ) : (
         <Spin size="small" tip={'Loading interview matrix...'} />
       )}
-      <DeleteModal 
+      <DeleteModal
         onSubmit={handleClickDeleteSkillGroup}
         onClose={handleClose}
         isOpen={isDeleteModalOpen}
