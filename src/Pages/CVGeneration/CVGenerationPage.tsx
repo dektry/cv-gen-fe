@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
 
 import { CVGenerationHeader } from './components/CVGenerationHeader/CVGenerationHeader';
 import { employeesSelector } from '../../store/reducers/employees';
@@ -10,6 +11,7 @@ import { IEmployee } from '../../models/IEmployee';
 import { calcExperienceInYears } from './utils/calculateExperienceInYears';
 import { NullableField } from '../../models/TNullableField';
 import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
+import { useStyles } from './styles';
 
 type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
@@ -20,6 +22,7 @@ type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> &
 
 export const CVGenerationPage = () => {
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const { currentEmployee } = useSelector(employeesSelector);
 
@@ -68,6 +71,11 @@ export const CVGenerationPage = () => {
       {/* coming later */}
       {/*  <ProfessionalSkills></ProfessionalSkills> */}
       {/*  <Projects></Projects> */}
+      <div className={classes.genCVbtnBlock}>
+        <Button size="large" type="primary" onClick={() => console.log(cvInfo)}>
+          Generate CV
+        </Button>
+      </div>
     </div>
   );
 };
