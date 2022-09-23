@@ -57,6 +57,7 @@ export const AssessmentForm = ({
   const [currentPosition, setCurrentPosition] = useState('');
   const [currentLevel, setCurrentLevel] = useState('');
   const [skillMatrixIsLoading, setSkillMatrixIsLoading] = useState(false);
+  const [comment, setComment] = useState(assessmentResult?.comment);
 
   const [matrixTree, setMatrixTree] = useState<IMatrix>([
     {
@@ -120,6 +121,7 @@ export const AssessmentForm = ({
       levelId: levelId || '' || assessmentResult?.level?.id,
       positionId: positionId || '' || assessmentResult?.position?.id,
       answers: answers || {},
+      comment: comment || '',
     };
     if (assessmentResult) {
       dispatch(editTechAssessment(interviewData));
@@ -199,6 +201,8 @@ export const AssessmentForm = ({
         setMatrixTree={setMatrixTree}
         skillMatrix={skillMatrix}
         matrixTree={matrixTree}
+        setComment={setComment}
+        comment={comment}
       />
       <PositionSkillsModal
         modalTitle={modalTitle}
