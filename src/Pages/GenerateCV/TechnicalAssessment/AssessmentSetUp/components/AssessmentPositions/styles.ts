@@ -4,7 +4,7 @@ export const useStyles = createUseStyles({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    margin: '1rem 0 1rem 0'
+    margin: '1rem 0 1rem 0',
   },
   positionOrLevel: {
     display: 'flex',
@@ -18,6 +18,6 @@ export const useStyles = createUseStyles({
   name: {
     position: 'relative',
     top: '-0.7rem',
-    marginBottom: '0'
-  }
+    marginBottom: '0',
+  },
 });

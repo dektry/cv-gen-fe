@@ -14,14 +14,8 @@ interface IProps {
 }
 
 export const SkillQuestions = (props: IProps) => {
-  const { 
-    skill,
-    handleClickDeleteQuestion,
-    handleChangeQuestion,
-    idx,
-    skillGroupUiid,
-   } = props;
-  
+  const { skill, handleClickDeleteQuestion, handleChangeQuestion, idx, skillGroupUiid } = props;
+
   return (
     <>
       {skill.questions.map((question, qidx) => (
@@ -32,20 +26,20 @@ export const SkillQuestions = (props: IProps) => {
             display: 'flex',
           }}
           key={question.uuid}
-          >
-            <Button
-              type="primary"
-              onClick={() => handleClickDeleteQuestion(skill, question.uuid)}
-              icon={<DeleteOutlined />}
-            />
-            <Input
-              placeholder="Question"
-              onChange={(event: ChangeEvent<HTMLInputElement>) => handleChangeQuestion(event, idx, qidx)}
-              id={skillGroupUiid}
-              value={question.value}
-            />
-          </div>
-        ))}
+        >
+          <Button
+            type="primary"
+            onClick={() => handleClickDeleteQuestion(skill, question.uuid)}
+            icon={<DeleteOutlined />}
+          />
+          <Input
+            placeholder="Question"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => handleChangeQuestion(event, idx, qidx)}
+            id={skillGroupUiid}
+            value={question.value}
+          />
+        </div>
+      ))}
     </>
   );
-}
+};

@@ -22,8 +22,7 @@ interface IProps {
 }
 
 export const SkillGroup = (props: IProps) => {
-
-  const { 
+  const {
     skillGroup,
     allLevels,
     handleClickDeleteSkill,
@@ -67,5 +66,5 @@ export const SkillGroup = (props: IProps) => {
         icon={<PlusOutlined />}
       />
     </>
-  )
-}
+  );
+};

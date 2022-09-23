@@ -12,5 +12,5 @@ export const useStyles = createUseStyles({
     minWidth: '14%',
     maxWidth: '14%',
     marginRight: '4%',
-  }
+  },
 });

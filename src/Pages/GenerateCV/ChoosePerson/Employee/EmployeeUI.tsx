@@ -37,11 +37,11 @@ export const EmployeeUI = ({
     fullName: currentEmployee.fullName,
     location: currentEmployee.location,
     position: currentEmployee.position,
-    level: currentEmployee.level
-  }
+    level: currentEmployee.level,
+  };
 
   const backPath = generatePath(paths.generateCVemployeesList);
-  
+
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />

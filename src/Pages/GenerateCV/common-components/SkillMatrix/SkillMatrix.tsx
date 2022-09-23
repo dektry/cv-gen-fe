@@ -15,8 +15,15 @@ interface ISkillProps extends StateProps {
   handleClickDeleteSkillGroup: (uuid: string) => void;
 }
 
-export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, allLevels, handleClickDeleteSkill, handleClickDeleteSkillGroup }: ISkillProps) => {
-  
+export const SkillMatrix = ({
+  skillGroup,
+  skillMatrix,
+  setMatrixTree,
+  levels,
+  allLevels,
+  handleClickDeleteSkill,
+  handleClickDeleteSkillGroup,
+}: ISkillProps) => {
   // skill groups handlers
   const handleChangeSkillGroup = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.target;
@@ -25,7 +32,7 @@ export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, al
     matrixTreeCopy[currentSkillGroupIdx].value = value;
     setMatrixTree(matrixTreeCopy);
   };
-  
+
   // skills handlers
   const handleClickAddSkill = (group: ISkillGroup) => {
     const matrixCopy = cloneDeep(skillMatrix);
@@ -54,7 +61,6 @@ export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, al
     matrixTreeCopy[currentSkillGroupIdx].skills[idx].value = value;
     setMatrixTree(matrixTreeCopy);
   };
-
 
   // questions handlers
   const handleClickAddQuestion = (skill: ISkill) => {
@@ -122,7 +128,7 @@ export const SkillMatrix = ({ skillGroup, skillMatrix, setMatrixTree, levels, al
         handleClickDeleteSkillGroup={handleClickDeleteSkillGroup}
         handleChangeSkillGroup={handleChangeSkillGroup}
       />
-      <SkillGroup 
+      <SkillGroup
         skillGroup={skillGroup}
         allLevels={allLevels}
         handleClickDeleteSkill={handleClickDeleteSkill}
