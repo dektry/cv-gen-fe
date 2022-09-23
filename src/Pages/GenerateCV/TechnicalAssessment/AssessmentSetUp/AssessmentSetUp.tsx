@@ -20,15 +20,15 @@ import { AssessmentPositions } from './components/AssessmentPositions';
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();
 
-  const { id, positionId, levelId, assessmentId } = useParams<{
+  const { id, levelId, positionId, assessmentId } = useParams<{
     id: string;
-    positionId: string;
     levelId: string;
+    positionId: string;
     assessmentId: string;
   }>();
 
-  const [level, setPosition] = useState('');
-  const [position, setLevel] = useState('');
+  const [position, setPosition] = useState('');
+  const [level, setLevel] = useState('');
 
   const { currentEmployee } = useSelector(employeesSelector);
   const { allPositions, skillMatrix, positionsLoading } = useSelector(positionsSelector);
@@ -55,8 +55,6 @@ export const AssessmentSetUp = () => {
     }
 
     if (position && level) {
-      console.log(position, level);
-
       dispatch(loadInterviewMatrix({ positionId: position, levelId: level }));
       dispatch(loadSkillMatrix(position));
     }

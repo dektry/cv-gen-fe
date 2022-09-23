@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 
-import { Select, Button, Spin } from 'antd';
+import { Select, Button, Spin, Input } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { useAppDispatch } from 'store';
@@ -47,6 +47,8 @@ interface IProps {
   skillMatrix: IMatrix;
   setMatrixTree: React.Dispatch<React.SetStateAction<IMatrix>>;
   matrixTree: IMatrix;
+  comment?: string;
+  setComment: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 interface IDeleteEventTarget extends EventTarget {
   id: string;
@@ -73,6 +75,8 @@ export const InterviewMatrix = (props: IProps) => {
     skillMatrix,
     setMatrixTree,
     matrixTree,
+    comment,
+    setComment,
   } = props;
 
   const [isTreeChanged, setIsTreeChanged] = useState(false);
@@ -82,6 +86,10 @@ export const InterviewMatrix = (props: IProps) => {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
+
+  const handleChangeComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(event.target.value);
+  };
 
   const handleSkillChange = (level: LevelTypesEnum, skill: IInterviewSkill) => {
     setAnswers({ ...answers, [skill.id]: level });
@@ -203,9 +211,19 @@ export const InterviewMatrix = (props: IProps) => {
           ))}
           <div className={classes.buttons}>
             {isStarted && (
-              <Button type="primary" onClick={handleMatrixModalOpen}>
-                {INTERVIEW.CHANGE_SKILL_MATRIX}
-              </Button>
+              <div className={classes.bottomContainer}>
+                <Input.TextArea
+                  id="comment"
+                  rows={2}
+                  placeholder="Total"
+                  className={classes.textArea}
+                  onChange={handleChangeComment}
+                  value={comment}
+                />
+                <Button className={classes.changeMatrixButton} type="primary" onClick={handleMatrixModalOpen}>
+                  {INTERVIEW.CHANGE_SKILL_MATRIX}
+                </Button>
+              </div>
             )}
             {!!interviewMatrix?.length && (
               <Button
