@@ -13,5 +13,6 @@
     "levels": "/levels",
     "candidates": "/candidates",
     "users": "/users",
-    "auth": "/auth"
+    "auth": "/auth",
+    "employeeInterviews": "/employee-interviews"
   }

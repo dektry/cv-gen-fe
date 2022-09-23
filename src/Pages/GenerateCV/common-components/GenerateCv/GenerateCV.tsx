@@ -59,7 +59,7 @@ export const GenerateCV = ({ ...props }) => {
         type="card"
         onTabClick={handleTabClick}
       >
-        <TabPane tab={GenerateCVsteps.CHOOSE_A_PERSON} key="0" />
+        <TabPane tab={GenerateCVsteps.CHOOSE_A_PERSON} key="0" disabled={true} />
         <TabPane tab={GenerateCVsteps.TECHNICAL_INTERVIEW} key="1" disabled={true} />
         <TabPane tab={GenerateCVsteps.SOFT_SKILLS_INTERVIEW} key="2" disabled={true} />
       </Tabs>

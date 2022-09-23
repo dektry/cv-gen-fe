@@ -7,7 +7,7 @@ export const CANDIDATES = {
 };
 
 export const EMPLOYEES = {
-  TITLE: 'Employees',
+  TITLE: 'Employees list',
   FULLNAME: 'Full Name',
   POSITION: 'Position',
   LEVEL: 'Level',

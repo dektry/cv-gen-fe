@@ -49,7 +49,7 @@ const initialState: ILevelsState = {
   allLevels: [],
   levelsSchema: [],
   isValidForm: false,
-  isLoading: false,
+  levelsLoading: false,
 };
 
 const levels = createSlice({
@@ -66,7 +66,7 @@ const levels = createSlice({
       state.isValidForm = payload;
     },
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
-      state.isLoading = payload;
+      state.levelsLoading = payload;
     },
     setAllLevels: (state, { payload }: PayloadAction<IDBLevels[]>) => {
       state.allLevels = payload;
@@ -74,7 +74,7 @@ const levels = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(loadLevels.pending, state => {
-      state.isLoading = true;
+      state.levelsLoading = true;
     });
     builder.addCase(loadLevels.fulfilled, (state, { payload }) => {
       state.allLevels = sortLevels(payload);
@@ -83,10 +83,10 @@ const levels = createSlice({
         name: level.name,
         value: 'none',
       }));
-      state.isLoading = false;
+      state.levelsLoading = false;
     });
     builder.addCase(loadLevels.rejected, state => {
-      state.isLoading = false;
+      state.levelsLoading = false;
     });
   },
 });

@@ -29,10 +29,6 @@ export const useStyles = createUseStyles({
     marginTop: '1%',
     width: '99%',
   },
-  interviewButtons: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
   candidateInfo: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -65,6 +61,7 @@ export const useStyles = createUseStyles({
   },
   editButton: {
     marginRight: '2rem',
+    marginTop: '1rem',
     width: '6rem',
   },
 });

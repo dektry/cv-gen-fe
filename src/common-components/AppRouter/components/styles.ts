@@ -22,9 +22,7 @@ export const useStyles = createUseStyles({
   layout: {
     minHeight: '100vh',
   },
-  outlet_container: {
-    paddingTop: '50px',
-  },
+  outlet_container: {},
   global: {
     display: 'flex',
     justifyContent: 'center',

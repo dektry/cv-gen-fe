@@ -16,6 +16,7 @@ export enum navigationKeys {
   '/employees' = 'employees',
   '/generate-cv' = 'generate-cv',
   '/cv-list' = 'cv-list',
+  '/settings' = 'settings',
 }
 
 /* eslint-disable no-shadow */
@@ -76,4 +77,6 @@ export const permissions = {
 export const mainPath = /^\/[\dA-z-]*/;
 
 export const LIST_OF_CV = 'List of CVs';
-export const GENERATE_CV = 'Generate CV';
+export const CANDIDATES = 'Candidates';
+export const EMPLOYEES = 'Employees';
+export const SETTINGS = 'Settings';

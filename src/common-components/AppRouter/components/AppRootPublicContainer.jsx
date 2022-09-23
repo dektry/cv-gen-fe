@@ -8,7 +8,6 @@ import { Layout } from 'antd';
 
 import DesktopPanel from './MenuPanel/DesktopPanel'
 import MobilePanel from './MenuPanel/MobilePanel'
-import {Header as AppHeader} from './Header';
 import { ErrorBoundary } from './ErrorBoundary';
 
 import { useIsMobile } from 'theme/Responsive';
@@ -33,7 +32,6 @@ export const AppRootPublicContainer = () => {
                     <DesktopPanel isCollapsed={isCollapsed} setCollapse={setCollapse}/>
                         )}
                         <Content className={classes.content}>
-                            <AppHeader title="Welcome to CV generator!"/>
                             <div className={classes.outlet_container}>
                                 <Outlet/>
                             </div>

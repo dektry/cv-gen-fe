@@ -1,11 +1,12 @@
 import React from 'react';
+import { generatePath } from 'react-router-dom';
 
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
-import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
-import { GenerateCV } from '../../common-components/GenerateCv';
+import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 
 import { IEmployee } from 'models/IEmployee';
+
 import paths from 'config/routes.json';
 
 import { useStyles } from './styles';
@@ -24,7 +25,6 @@ interface IEmployeeProps {
 export const EmployeeUI = ({
   isEdited,
   isChanged,
-  employeeId,
   isLoading,
   handleClickEdit,
   handleEmployeeSave,
@@ -32,12 +32,20 @@ export const EmployeeUI = ({
   currentEmployee,
 }: IEmployeeProps) => {
   const classes = useStyles();
-  console.log(employeeId);
+
+  const personalData = {
+    fullName: currentEmployee.fullName,
+    location: currentEmployee.location,
+    position: currentEmployee.position,
+    level: currentEmployee.level,
+  };
+
+  const backPath = generatePath(paths.generateCVemployeesList);
+
   return (
     <>
-      <GenerateCV />
+      <EmployeeHeader personalData={personalData} backPath={backPath} />
       <div>
-        <GenerateCvHeader backPath={paths.generateCVemployeesList} />
         <Button className={classes.editButton} onClick={handleClickEdit}>
           {isEdited ? 'Disable edit' : 'Edit'}
         </Button>
@@ -229,11 +237,6 @@ export const EmployeeUI = ({
             ) : (
               <Spin />
             )}
-
-            <div className={classes.interviewButtons}>
-              <Button className={classes.button}>Start tech assessment</Button>
-              <Button className={classes.button}>Start softskills interview</Button>
-            </div>
           </div>
         </Form>
       </div>

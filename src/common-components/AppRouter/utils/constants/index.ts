@@ -10,6 +10,10 @@ import { InterviewSetUp } from 'Pages/GenerateCV/TechnicalInterview/InterviewSet
 import { SoftskillsInterview } from 'Pages/GenerateCV/SoftskillsInterview/InterviewSetUp';
 import { InterviewResults } from 'Pages/GenerateCV/TechnicalInterview/InterviewResults';
 import { SoftSkillsInterviewResults } from 'Pages/GenerateCV/SoftskillsInterview/InterviewResults';
+import { Settings } from 'Pages/Settings';
+import { AssessmentSetUp } from 'Pages/GenerateCV/TechnicalAssessment/AssessmentSetUp';
+import { AssessmentHistory } from 'Pages/GenerateCV/TechnicalAssessment/AssessmentHistory';
+import CvGenerationPage from 'Pages/CVGeneration';
 
 import routes from 'config/routes.json';
 
@@ -29,4 +33,9 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVtechnicalInterviewResult, component: InterviewResults },
   { path: routes.generateCVsoftskillsInterview, component: SoftskillsInterview },
   { path: routes.generateCVsoftskillsInterviewResult, component: SoftSkillsInterviewResults },
+  { path: routes.settings, component: Settings },
+  { path: routes.generateCVtechnicalAssessment, component: AssessmentSetUp },
+  { path: routes.generateCVtechnicalAssessmentHistory, component: AssessmentHistory },
+  { path: routes.generateCVprevTechnicalAssessment, component: AssessmentSetUp },
+  { path: routes.generateCV, component: CvGenerationPage },
 ];

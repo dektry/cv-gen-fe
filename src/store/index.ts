@@ -9,6 +9,7 @@ import interview from './reducers/interview';
 import levels from './reducers/levels';
 import positions from './reducers/positions';
 import softskillsInterview from './reducers/softskillsInterview';
+import techAssessment from './reducers/techAssessment';
 
 const rootReducer = combineReducers({
   app,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   levels,
   positions,
   softskillsInterview,
+  techAssessment,
 });
 
 export const store = configureStore({

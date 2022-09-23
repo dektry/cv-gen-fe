@@ -8,6 +8,9 @@
     "generateCVCandidatePage": "/generate-cv/choose-person/candidate/:id",
     "generateCVcandidateList": "/generate-cv/choose-person/candidate-list",
     "generateCVtechnicalInterview": "/generate-cv/candidate/:id/tech-interview",
+    "generateCVtechnicalAssessmentHistory": "/generate-cv/employee/:id/tech-interview/history",
+    "generateCVprevTechnicalAssessment": "/generate-cv/employee/:id/tech-interview/history/:assessmentId",
+    "generateCVtechnicalAssessment": "/generate-cv/employee/:id/tech-interview/:positionId/:levelId",
     "generateCVsoftskillsInterview": "/generate-cv/candidate/:id/soft-interview",
     "generateCVemployeesList": "/generate-cv/choose-person/employee-list",
     "listOfCVs": "/cv-list",
@@ -18,5 +21,6 @@
     "generateCVsoftskillsInterviewResult": 
       "/generate-cv/candidate/:id/soft-interview/result",
     "login": "/login",
-    "users": "/users"
+    "users": "/users",
+    "settings": "/settings"
 }
