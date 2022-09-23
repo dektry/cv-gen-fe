@@ -12,6 +12,7 @@ import { calcExperienceInYears } from './utils/calculateExperienceInYears';
 import { NullableField } from '../../models/TNullableField';
 import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
 import { useStyles } from './styles';
+import { CVPreview } from './components/CVPreview/CVPreview';
 
 type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
@@ -28,6 +29,8 @@ export const CVGenerationPage = () => {
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const { avatarUrl, fullName, level, position, experience, education, description, softSkills } = cvInfo;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -57,7 +60,7 @@ export const CVGenerationPage = () => {
 
   return (
     <div>
-      <CVGenerationHeader avatarUrl={avatarUrl} showCvPreview={() => console.log(cvInfo)}></CVGenerationHeader>
+      <CVGenerationHeader avatarUrl={avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
       <CVGenerationInfo
         fullName={fullName}
         level={level}
@@ -72,10 +75,15 @@ export const CVGenerationPage = () => {
       {/*  <ProfessionalSkills></ProfessionalSkills> */}
       {/*  <Projects></Projects> */}
       <div className={classes.genCVbtnBlock}>
-        <Button size="large" type="primary" onClick={() => console.log(cvInfo)}>
+        <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>
           Generate CV
         </Button>
       </div>
+      <CVPreview
+        isModalOpen={isModalOpen}
+        handleOk={() => setIsModalOpen(false)}
+        handleCancel={() => setIsModalOpen(false)}
+      ></CVPreview>
     </div>
   );
 };
