@@ -4,7 +4,7 @@ import { IInterviewAnswers } from './IInterview';
 import { NullableField } from './TNullableField';
 
 export interface IAssessmentEmployee {
-  employee: IEmployee,
+  employee: IEmployee;
   level: IDBLevels;
   position: IDBPosition;
 }
@@ -14,8 +14,9 @@ export interface IAssessmentFromDB {
   createdAt: string;
   level: IDBLevels;
   position: IDBPosition;
-  type: 'Assessment',
-  answers?: IInterviewAnswers
+  type: 'Assessment';
+  answers?: IInterviewAnswers;
+  comment?: string;
 }
 
 export interface ITechAssessmentState {
@@ -35,4 +36,5 @@ export interface ICompleteAssessment {
   levelId?: string;
   positionId?: string;
   answers: IInterviewAnswers;
+  comment?: string;
 }

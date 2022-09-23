@@ -76,5 +76,18 @@ export const useStyles = createUseStyles({
   rightSkillElementsContainer: {
     display: 'flex',
     flexDirection: 'row',
-  }
+  },
+  textArea: {
+    margin: '0.5rem',
+    marginLeft: '0',
+    width: '30rem',
+    borderRadius: '8px',
+  },
+  bottomContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  changeMatrixButton: {
+    width: '10rem',
+  },
 });
