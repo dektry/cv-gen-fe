@@ -31,7 +31,7 @@ export const AssessmentSetUp = () => {
   const [level, setLevel] = useState('');
 
   const { currentEmployee } = useSelector(employeesSelector);
-  const { allPositions, skillMatrix, positionsLoading } = useSelector(positionsSelector);
+  const { allPositions, positionsLoading } = useSelector(positionsSelector);
   const { allLevels, levelsSchema, levelsLoading } = useSelector(levelsSelector);
   const { assessmentResult, isLoading } = useSelector(techAssessmentSelector);
 
@@ -95,7 +95,6 @@ export const AssessmentSetUp = () => {
         allPositions={allPositions}
         allLevels={allLevels}
         levelsSchema={levelsSchema}
-        skillMatrix={skillMatrix}
         isLoadingInterviewMatrix={false}
       />
     </>
