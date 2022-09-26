@@ -3,16 +3,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 
-import { CVGenerationHeader } from './components/CVGenerationHeader/CVGenerationHeader';
+import { CVGenerationHeader } from './components/CVGenerationHeader';
 import { employeesSelector } from '../../store/reducers/employees';
 import routes from 'config/routes.json';
-import CVGenerationInfo from './components/CVGenerationInfo';
 import { IEmployee } from '../../models/IEmployee';
 import { calcExperienceInYears } from './utils/calculateExperienceInYears';
 import { NullableField } from '../../models/TNullableField';
-import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
+import { CVGenerationInfo, SoftSkills } from './components/CVGenerationInfo';
 import { useStyles } from './styles';
-import { CVPreview } from './components/CVPreview/CVPreview';
+import { CVPreview } from './components/CVPreview';
 
 const mockDescription =
   "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.";

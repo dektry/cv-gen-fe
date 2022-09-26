@@ -1,3 +1,1 @@
-import { CVGenerationHeader } from './CVGenerationHeader';
-
-export default CVGenerationHeader;
+export * from './CVGenerationHeader';

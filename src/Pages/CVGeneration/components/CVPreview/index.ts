@@ -1,3 +1,1 @@
-import { CVPreview } from './CVPreview';
-
-export default CVPreview;
+export * from './CVPreview';

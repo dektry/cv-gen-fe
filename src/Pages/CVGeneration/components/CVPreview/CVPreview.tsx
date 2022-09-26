@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Modal } from 'antd';
 import handlebars from 'handlebars/dist/cjs/handlebars.js';
 
 import { useStyles } from './styles';
 import { cvGenerationSelector } from '../../../../store/reducers/cvGeneration';
-import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../store';
 import { fetchCvGenerationTemplate } from '../../../../store/reducers/cvGeneration/thunks';
 import { CvInfo } from '../../CVGenerationPage';
@@ -69,7 +69,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       cancelText="CLOSE"
       okText="DOWNLOAD"
       width="50vw"
-      style={{ top: '50px' }}
+      style={{ top: '50px', minWidth: '525px' }}
     >
       <div className={classes.container}>
         <h1>CV Preview</h1>
