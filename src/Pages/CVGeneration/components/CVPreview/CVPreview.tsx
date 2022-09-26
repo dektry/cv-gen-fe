@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Modal } from 'antd';
+import handlebars from 'handlebars/dist/cjs/handlebars.js';
 
 import { useStyles } from './styles';
 import { cvGenerationSelector } from '../../../../store/reducers/cvGeneration';
@@ -23,6 +24,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   const dispatch = useAppDispatch();
 
   const { template } = useSelector(cvGenerationSelector);
+  const compiledTemplate = useMemo(() => handlebars.compile(template), [template]);
 
   const cvCanvasEl = useRef<HTMLDivElement | null>(null);
 
@@ -47,7 +49,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
       const scale = cvCanvasDimensions.width / templateWidth;
       const newEl = document.createElement('div');
-      newEl.innerHTML = template;
+      newEl.innerHTML = compiledTemplate(cvInfo);
       newEl.style.scale = `${scale} ${scale}`;
 
       cvCanvasEl.current.appendChild(newEl);

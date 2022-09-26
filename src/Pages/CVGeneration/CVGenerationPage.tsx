@@ -14,6 +14,9 @@ import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
 import { useStyles } from './styles';
 import { CVPreview } from './components/CVPreview/CVPreview';
 
+const mockDescription =
+  "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.";
+
 export type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
@@ -36,15 +39,16 @@ export const CVGenerationPage = () => {
     if (currentEmployee.id == '101010') {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { startingPoint, hiredOn, formalEducation } = currentEmployee;
+      const { startingPoint, hiredOn, formalEducation, position } = currentEmployee;
 
       setCvInfo({
         ...currentEmployee,
+        position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
         education: formalEducation,
         softSkills: ['Responsibility', 'Teamwork', 'Communication'],
         // todo: add this field on BE side
-        description: '',
+        description: mockDescription,
       });
     }
   }, []);

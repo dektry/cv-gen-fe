@@ -77,11 +77,7 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
           maxLength={270}
           showCount
           onChange={(e) => updateCvInfo({ description: e.target.value })}
-          value={
-            description
-              ? description
-              : "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'."
-          }
+          value={description ? description : ''}
         />
       </div>{' '}
       <div className={classes.row}>
