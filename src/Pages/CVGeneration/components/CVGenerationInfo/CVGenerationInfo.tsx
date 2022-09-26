@@ -3,6 +3,7 @@ import { Input, Select, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
 import { useStyles } from './styles';
+import { CvInfo } from '../../CVGenerationPage';
 
 const { Title } = Typography;
 
@@ -23,18 +24,13 @@ const softSkillsOptions = [
 export type SoftSkills = typeof softSkillsOptions[number];
 
 interface CVGenerationInfoProps {
-  fullName?: string;
-  position?: string | null;
-  level?: string | null;
-  experience?: number;
-  education?: string | null;
-  description?: string;
-  softSkills?: SoftSkills[];
-  updateCvInfo: (fields: Partial<CVGenerationInfoProps>) => void;
+  cvInfo: Partial<CvInfo>;
+  updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { fullName, level, position, experience, education, description, updateCvInfo, softSkills } = props;
+  const { updateCvInfo, cvInfo } = props;
+  const { fullName, level, position, experience, education, description, softSkills } = cvInfo;
 
   const classes = useStyles();
 

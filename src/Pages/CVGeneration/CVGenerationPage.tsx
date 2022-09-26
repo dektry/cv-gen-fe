@@ -14,7 +14,7 @@ import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
 import { useStyles } from './styles';
 import { CVPreview } from './components/CVPreview/CVPreview';
 
-type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
+export type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
@@ -28,8 +28,6 @@ export const CVGenerationPage = () => {
   const { currentEmployee } = useSelector(employeesSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
-  const { avatarUrl, fullName, level, position, experience, education, description, softSkills } = cvInfo;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // todo: not the best way to check if employee is loaded
@@ -38,13 +36,10 @@ export const CVGenerationPage = () => {
     if (currentEmployee.id == '101010') {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { avatarUrl, fullName, level, position, startingPoint, hiredOn, formalEducation } = currentEmployee;
+      const { startingPoint, hiredOn, formalEducation } = currentEmployee;
 
       setCvInfo({
-        avatarUrl,
-        fullName,
-        level,
-        position,
+        ...currentEmployee,
         experience: calcExperienceInYears(startingPoint || hiredOn),
         education: formalEducation,
         softSkills: ['Responsibility', 'Teamwork', 'Communication'],
@@ -60,17 +55,8 @@ export const CVGenerationPage = () => {
 
   return (
     <div>
-      <CVGenerationHeader avatarUrl={avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
-      <CVGenerationInfo
-        fullName={fullName}
-        level={level}
-        position={position}
-        experience={experience}
-        education={education}
-        description={description}
-        softSkills={softSkills}
-        updateCvInfo={updateCvInfo}
-      ></CVGenerationInfo>
+      <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
+      <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo}></CVGenerationInfo>
       {/* coming later */}
       {/*  <ProfessionalSkills></ProfessionalSkills> */}
       {/*  <Projects></Projects> */}
@@ -83,6 +69,7 @@ export const CVGenerationPage = () => {
         isModalOpen={isModalOpen}
         handleOk={() => setIsModalOpen(false)}
         handleCancel={() => setIsModalOpen(false)}
+        cvInfo={cvInfo}
       ></CVPreview>
     </div>
   );
