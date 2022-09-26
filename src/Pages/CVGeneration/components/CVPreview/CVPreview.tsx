@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 
 import { useStyles } from './styles';
+import { cvGenerationSelector } from '../../../../store/reducers/cvGeneration';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../../../store';
+import { fetchCvGenerationTemplate } from '../../../../store/reducers/cvGeneration/thunks';
 
 const mockTemplate = `<link
         href="http://fonts.googleapis.com/css?family=Roboto"
@@ -288,6 +292,8 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   const { isModalOpen, handleOk, handleCancel } = props;
 
   const classes = useStyles();
+
+  const { description, isLoading } = useSelector(cvGenerationSelector);
 
   const [cvCanvasDimensions, setCvCanvasDimensions] = useState({ width: 0, height: 0 });
   const [template, setTemplate] = useState<string>('');
