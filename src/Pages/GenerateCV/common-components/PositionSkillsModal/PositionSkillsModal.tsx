@@ -95,7 +95,7 @@ export const PositionSkillsModal = <T extends StateProps>({
     onSubmit?.();
     onClose();
   };
-
+  console.log('MATRIXXXXXXX', matrixTree);
   return (
     <Modal
       title={modalTitle}
