@@ -61,6 +61,7 @@ export const InterviewForm = ({
   const [isOpenMatrixModal, setOpenMatrixModal] = useState(false);
   const [isEditActive, setIsEditActive] = useState(false);
   const [isSelectDisabled, setIsSelectDisabled] = useState(false);
+  const [comment, setComment] = useState(interviewResult?.comment);
 
   const [matrixTree, setMatrixTree] = useState<IMatrix>([
     {
@@ -233,6 +234,8 @@ export const InterviewForm = ({
         skillMatrix={skillMatrix}
         setMatrixTree={setMatrixTree}
         matrixTree={matrixTree}
+        setComment={setComment}
+        comment={comment}
       />
       <PositionSkillsModal
         modalTitle={modalTitle}

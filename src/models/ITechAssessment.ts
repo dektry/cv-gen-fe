@@ -16,6 +16,7 @@ export interface IAssessmentFromDB {
   position: IDBPosition;
   type: 'Assessment';
   answers?: IInterviewAnswers;
+  comment?: string;
 }
 
 export interface ITechAssessmentState {
@@ -35,4 +36,5 @@ export interface ICompleteAssessment {
   levelId?: string;
   positionId?: string;
   answers: IInterviewAnswers;
+  comment?: string;
 }
