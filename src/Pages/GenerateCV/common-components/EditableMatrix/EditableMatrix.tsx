@@ -7,7 +7,14 @@ import { Spin, Button, Select, Input } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 import { IInterviewAnswers } from 'models/IInterview';
-import { IAssessmentFromDB, IAssessmentMatrix, IAssessmentSkill, IAssessmentSkillGroup } from 'models/ITechAssessment';
+import {
+  IAssessmentFromDB,
+  IAssessmentMatrix,
+  IAssessmentSkill,
+  IAssessmentSkillGroup,
+  IExtendElement,
+  InputChangeEvent,
+} from 'models/ITechAssessment';
 import { NullableField } from 'models/TNullableField';
 import { LevelTypesEnum } from 'models/IInterview';
 
@@ -35,14 +42,6 @@ interface IProps {
   handleClickDeleteSkill: (group: IAssessmentSkillGroup, skill: IAssessmentSkill) => void;
   handleClickAddSkillGroup: () => void;
 }
-interface IExtendEventTarget extends EventTarget {
-  id: string;
-}
-interface IExtendElement extends React.MouseEvent<HTMLDivElement> {
-  target: IExtendEventTarget;
-}
-
-type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
 export const EditableMatrix = ({
   answers,

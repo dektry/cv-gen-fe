@@ -54,3 +54,12 @@ export interface IAssessmentSkill {
   questions: IInterviewQuestion[];
   levels: Array<{ value: LevelTypesEnum; id?: string; name?: string }>;
 }
+
+export interface IExtendEventTarget extends EventTarget {
+  id: string;
+}
+export interface IExtendElement extends React.MouseEvent<HTMLDivElement> {
+  target: IExtendEventTarget;
+}
+
+export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
