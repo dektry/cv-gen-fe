@@ -90,4 +90,21 @@ export const useStyles = createUseStyles({
   changeMatrixButton: {
     width: '10rem',
   },
+  questionsContainer: {
+    marginLeft: '100px',
+    marginTop: '10px',
+    display: 'flex',
+  },
+  addQuestionButton: {
+    marginLeft: '80%',
+    marginTop: '3%',
+  },
+  addSkillButton: {
+    marginTop: '3%',
+  },
+  skillInput: {
+    width: '25%',
+    height: 'fit-content',
+    marginTop: '1rem',
+  },
 });

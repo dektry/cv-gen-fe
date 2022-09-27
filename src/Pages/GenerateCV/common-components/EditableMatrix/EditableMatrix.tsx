@@ -42,6 +42,8 @@ interface IExtendElement extends React.MouseEvent<HTMLDivElement> {
   target: IExtendEventTarget;
 }
 
+type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+
 export const EditableMatrix = ({
   answers,
   setAnswers,
@@ -59,7 +61,7 @@ export const EditableMatrix = ({
 
   const classes = useStyles();
 
-  const handleChangeSkillGroup = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSkillGroup = (event: InputChangeEvent) => {
     const { value, id } = event.target;
     const matrixTreeCopy = cloneDeep(interviewMatrix);
     const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
@@ -67,7 +69,7 @@ export const EditableMatrix = ({
     setInterviewMatrix(matrixTreeCopy);
   };
 
-  const handleChangeSkill = (event: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+  const handleChangeSkill = (event: InputChangeEvent, idx: number) => {
     const { value, id } = event.target;
 
     const matrixTreeCopy = cloneDeep(interviewMatrix);
@@ -91,7 +93,7 @@ export const EditableMatrix = ({
 
   const handleClickDeleteSkillGroup = () => {
     if (interviewMatrix.length) {
-      setInterviewMatrix((prev) => [...prev.filter((item) => item.uuid !== skillGroupId)]);
+      setInterviewMatrix((prev) => prev.filter((item) => item.uuid !== skillGroupId));
     }
     setDeleteModalOpen(false);
   };
@@ -112,7 +114,7 @@ export const EditableMatrix = ({
         if (group?.uuid === item.uuid) {
           return {
             ...item,
-            skills: [...item.skills.filter((i) => i.id !== currentSkill.id)],
+            skills: item.skills.filter((i) => i.id !== currentSkill.id),
           };
         }
         return item;
@@ -135,7 +137,7 @@ export const EditableMatrix = ({
     setInterviewMatrix(matrixTreeCopy);
   };
 
-  const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, idx: number, qidx: number) => {
+  const handleChangeQuestion = (event: InputChangeEvent, idx: number, qidx: number) => {
     const { value, id } = event.target;
     const matrixTreeCopy = cloneDeep(interviewMatrix);
     const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
@@ -149,7 +151,7 @@ export const EditableMatrix = ({
       for (const group of matrixTreeCopy) {
         group.skills.map((skill) => {
           if (currentSkill?.id === skill.id) {
-            skill.questions = [...skill.questions.filter((el) => el.id !== uuid)];
+            skill.questions = skill.questions.filter((el) => el.id !== uuid);
           }
           return skill;
         });
@@ -166,10 +168,10 @@ export const EditableMatrix = ({
             <div key={uuid} className={classes.group}>
               <Input
                 placeholder="Skill group"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSkillGroup(event)}
+                onChange={(event: InputChangeEvent) => handleChangeSkillGroup(event)}
                 id={uuid}
                 value={value}
-                style={{ width: '25%', height: 'fit-content', marginTop: '1rem' }}
+                className={classes.skillInput}
               />
               <div className={classes.skills}>
                 <div className={classes.deleteSection} id={uuid} onClick={handleClickDelete}>
@@ -180,10 +182,10 @@ export const EditableMatrix = ({
                     <div className={classes.skillHeader}>
                       <Input
                         placeholder="Skill"
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSkill(event, idx)}
+                        onChange={(event: InputChangeEvent) => handleChangeSkill(event, idx)}
                         id={uuid}
                         value={skill.value}
-                        style={{ width: '21.6%' }}
+                        className={classes.skillInput}
                       />
                       <div className={classes.rightSkillElementsContainer}>
                         {skill.levels.map((level) => (
@@ -216,14 +218,7 @@ export const EditableMatrix = ({
                     </div>
                     <ol>
                       {skill.questions.map((ques, qidx) => (
-                        <div
-                          style={{
-                            marginLeft: '100px',
-                            marginTop: '10px',
-                            display: 'flex',
-                          }}
-                          key={ques.id}
-                        >
+                        <div className={classes.questionsContainer} key={ques.id}>
                           <Button
                             type="primary"
                             onClick={() => handleClickDeleteQuestion(skill, ques.id)}
@@ -231,9 +226,7 @@ export const EditableMatrix = ({
                           />
                           <Input
                             placeholder="Question"
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                              handleChangeQuestion(event, idx, qidx)
-                            }
+                            onChange={(event: InputChangeEvent) => handleChangeQuestion(event, idx, qidx)}
                             id={uuid}
                             value={ques.value}
                           />
@@ -241,7 +234,7 @@ export const EditableMatrix = ({
                       ))}
                       <Button
                         id={skill.id}
-                        style={{ marginLeft: '80%', marginTop: '3%' }}
+                        className={classes.addQuestionButton}
                         type="primary"
                         onClick={() => handleClickAddQuestion(skill, uuid)}
                         icon={<PlusOutlined />}
@@ -255,7 +248,7 @@ export const EditableMatrix = ({
             </div>
           ))}
         <Button
-          style={{ marginTop: '3%' }}
+          className={classes.addSkillButton}
           type="primary"
           onClick={() => handleClickAddSkillGroup()}
           icon={<PlusOutlined />}
