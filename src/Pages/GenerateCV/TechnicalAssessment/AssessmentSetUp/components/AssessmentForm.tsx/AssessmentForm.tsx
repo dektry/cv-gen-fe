@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, generatePath, useParams } from 'react-router-dom';
 
 import { Spin } from 'antd';
@@ -8,40 +8,35 @@ import { cloneDeep } from 'lodash';
 
 import { useSelector } from 'react-redux';
 
-import { PositionSkillsModal } from '../../../../common-components/PositionSkillsModal';
-
 import { useAppDispatch } from 'store';
-import { interviewSelector, setInterviewMatrix, setSkillID } from 'store/reducers/interview';
+import { interviewSelector, setInterviewMatrix } from 'store/reducers/interview';
 import { finishTechAssessment, editTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
-import { IInterviewAnswers } from 'models/IInterview';
+import { IInterviewAnswers, LevelTypesEnum } from 'models/IInterview';
 
 import paths from 'config/routes.json';
 
-import { IDBLevels, IDBPosition, ILevelsSchema, IMatrix, ISkill, ISkillGroup } from 'models/IUser';
+import { IDBLevels, IDBPosition, ILevelsSchema } from 'models/IUser';
 import { IEmployee } from 'models/IEmployee';
-import { ICompleteAssessment } from 'models/ITechAssessment';
+import {
+  ICompleteAssessment,
+  IAssessmentMatrix,
+  IAssessmentSkillGroup,
+  IAssessmentSkill,
+} from 'models/ITechAssessment';
 
-import { InterviewMatrix } from 'Pages/GenerateCV/common-components/InterviewMatrix';
+import { EditableMatrix } from 'Pages/GenerateCV/common-components/EditableMatrix';
 
 interface IInterviewFormProps {
   currentEmployee: IEmployee;
   allLevels: IDBLevels[];
   allPositions: IDBPosition[];
   levelsSchema: ILevelsSchema[];
-  skillMatrix: IMatrix;
   isLoadingInterviewMatrix: boolean;
 }
 
-export const AssessmentForm = ({
-  allLevels,
-  allPositions,
-  levelsSchema,
-  skillMatrix,
-  isLoadingInterviewMatrix,
-  currentEmployee,
-}: IInterviewFormProps) => {
+export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: IInterviewFormProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -51,25 +46,23 @@ export const AssessmentForm = ({
   const { assessmentResult } = useSelector(techAssessmentSelector);
 
   const [answers, setAnswers] = useState<IInterviewAnswers | undefined>({});
-  const [isStarted, setIsStarted] = useState(false);
 
-  const [isOpenMatrixModal, setOpenMatrixModal] = useState(false);
   const [currentPosition, setCurrentPosition] = useState('');
   const [currentLevel, setCurrentLevel] = useState('');
   const [skillMatrixIsLoading, setSkillMatrixIsLoading] = useState(false);
   const [comment, setComment] = useState(assessmentResult?.comment);
 
-  const [matrixTree, setMatrixTree] = useState<IMatrix>([
+  const [matrixTree, setMatrixTree] = useState<IAssessmentMatrix>([
     {
       uuid: uuidv4(),
       position_id: '',
       value: '',
       skills: [
         {
-          uuid: uuidv4(),
+          id: uuidv4(),
           value: '',
-          questions: [{ uuid: uuidv4(), value: '' }],
-          levels: [{ id: uuidv4(), name: '', value: '' }],
+          questions: [{ id: uuidv4(), value: '' }],
+          levels: [{ id: uuidv4(), name: '', value: LevelTypesEnum.None }],
         },
       ],
     },
@@ -88,7 +81,19 @@ export const AssessmentForm = ({
   }, [positionId, levelId, assessmentResult]);
 
   useEffect(() => {
-    handleStartInterview();
+    if (interviewMatrix) {
+      const newMatrix = interviewMatrix.map((group) => {
+        return {
+          uuid: uuidv4(),
+          position_id: currentPosition,
+          ...group,
+        };
+      });
+      setMatrixTree(newMatrix);
+    }
+  }, [interviewMatrix]);
+
+  useEffect(() => {
     if (currentPosition) {
       setSkillMatrixIsLoading(true);
       dispatch(loadSkillMatrix(currentPosition));
@@ -100,23 +105,29 @@ export const AssessmentForm = ({
     }
   }, [currentPosition, currentLevel]);
 
-  const handleStartInterview = () => {
-    setIsStarted(true);
+  const handleClickAddSkillGroup = () => {
+    const matrixCopy = cloneDeep(matrixTree);
+
+    matrixCopy.push({
+      uuid: uuidv4(),
+      value: '',
+      position_id: positionId || '',
+      skills: [
+        {
+          id: uuidv4(),
+          value: '',
+          questions: [{ id: uuidv4(), value: '' }],
+          levels: [{ id: uuidv4(), name: '', value: LevelTypesEnum.None }],
+        },
+      ],
+    });
+
+    setMatrixTree(matrixCopy);
   };
-
-  const positionSkillModalState = useMemo(() => {
-    return {
-      skillMatrix,
-      allLevels,
-      positionId: positionId || assessmentResult?.position?.id,
-      levels: levelsSchema,
-    };
-  }, [skillMatrix, allLevels, positionId, assessmentResult, levelsSchema]);
-
-  // button handlers
 
   const handleFinishInterview = async () => {
     const interviewData: ICompleteAssessment = {
+      id: '' || assessmentResult?.id,
       employeeId: currentEmployee.id,
       levelId: levelId || '' || assessmentResult?.level?.id,
       positionId: positionId || '' || assessmentResult?.position?.id,
@@ -136,25 +147,14 @@ export const AssessmentForm = ({
     );
   };
 
-  const handleSkillClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
-    if (positionId || assessmentResult?.position?.id) {
-      const button: HTMLButtonElement = e.currentTarget;
-      dispatch(setSkillID(button.id));
-      setSkillMatrixIsLoading(true);
-      dispatch(loadSkillMatrix(String(positionId || assessmentResult?.position?.id)));
-      setSkillMatrixIsLoading(false);
-      setOpenMatrixModal(true);
-    }
-  };
-
-  const handleClickDeleteSkill = (group: ISkillGroup, skill: ISkill) => {
+  const handleClickDeleteSkill = (group: IAssessmentSkillGroup, skill: IAssessmentSkill) => {
     if (group.skills.length) {
-      const matrixTreeCopy = cloneDeep(skillMatrix);
+      const matrixTreeCopy = cloneDeep(matrixTree);
       const newMatrix = matrixTreeCopy.map((item) => {
         if (group?.uuid === item.uuid) {
           return {
             ...item,
-            skills: [...item.skills.filter((i) => i.uuid !== skill.uuid)],
+            skills: [...item.skills.filter((i) => i.id !== skill.id)],
           };
         }
         return item;
@@ -164,55 +164,30 @@ export const AssessmentForm = ({
     }
   };
 
-  // modal handlers
-  const handleMatrixModalClose = () => {
-    dispatch(setSkillID(''));
-    setOpenMatrixModal(false);
-  };
-
   useEffect(() => {
     return function clear() {
       dispatch(setInterviewMatrix([]));
     };
   }, []);
 
-  const modalTitle = useMemo(
-    () => allPositions.find(({ id }) => positionId === id)?.name || '',
-    [allPositions, positionId]
-  );
-
   if (skillMatrixIsLoading) return <Spin size="large" tip={'Loading skill matrix...'} />;
 
   return (
     <>
-      <InterviewMatrix
+      <EditableMatrix
         answers={answers}
         setAnswers={setAnswers}
-        setOpenMatrixModal={setOpenMatrixModal}
-        isStarted={isStarted}
         handleFinishInterview={handleFinishInterview}
-        handleSkillClick={handleSkillClick}
+        handleClickDeleteSkill={handleClickDeleteSkill}
+        handleClickAddSkillGroup={handleClickAddSkillGroup}
         chosenPosition={positionId}
         chosenLevel={levelId}
         interviewResult={assessmentResult}
-        interviewMatrix={interviewMatrix}
+        interviewMatrix={matrixTree}
         isLoadingInterviewMatrix={isLoadingInterviewMatrix}
-        isShowInterviewQuestions={true}
-        setMatrixTree={setMatrixTree}
-        skillMatrix={skillMatrix}
-        matrixTree={matrixTree}
+        setInterviewMatrix={setMatrixTree}
         setComment={setComment}
         comment={comment}
-      />
-      <PositionSkillsModal
-        modalTitle={modalTitle}
-        isOpenMatrixModal={isOpenMatrixModal}
-        onClose={handleMatrixModalClose}
-        state={positionSkillModalState}
-        onSubmit={handleStartInterview}
-        matrixTree={matrixTree}
-        setMatrixTree={setMatrixTree}
-        handleClickDeleteSkill={handleClickDeleteSkill}
       />
     </>
   );

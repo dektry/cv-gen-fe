@@ -1,6 +1,6 @@
-import { IDBLevels, IDBPosition } from './IUser';
+import { IDBLevels, IDBPosition, ISkillGroup, ISkill } from './IUser';
 import { IEmployee } from './IEmployee';
-import { IInterviewAnswers } from './IInterview';
+import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum } from './IInterview';
 import { NullableField } from './TNullableField';
 
 export interface IAssessmentEmployee {
@@ -38,3 +38,28 @@ export interface ICompleteAssessment {
   answers: IInterviewAnswers;
   comment?: string;
 }
+
+export interface IAssessmentSkillGroup {
+  uuid: string;
+  position_id: string;
+  value: string;
+  skills: IAssessmentSkill[];
+}
+
+export type IAssessmentMatrix = IAssessmentSkillGroup[];
+
+export interface IAssessmentSkill {
+  id?: string;
+  value: string;
+  questions: IInterviewQuestion[];
+  levels: Array<{ value: LevelTypesEnum; id?: string; name?: string }>;
+}
+
+export interface IExtendEventTarget extends EventTarget {
+  id: string;
+}
+export interface IExtendElement extends React.MouseEvent<HTMLDivElement> {
+  target: IExtendEventTarget;
+}
+
+export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
