@@ -49,7 +49,7 @@ export interface IAssessmentSkillGroup {
 export type IAssessmentMatrix = IAssessmentSkillGroup[];
 
 export interface IAssessmentSkill {
-  uuid?: string;
+  id?: string;
   value: string;
   questions: IInterviewQuestion[];
   levels: Array<{ value: LevelTypesEnum; id?: string; name?: string }>;

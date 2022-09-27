@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
+
+import { v4 as uuidv4 } from 'uuid';
 
 import { Spin, Button, Select, Input } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -22,8 +24,6 @@ interface IProps {
   answers?: IInterviewAnswers;
   setAnswers: (value: React.SetStateAction<IInterviewAnswers | undefined>) => void;
   handleFinishInterview: () => Promise<void>;
-  isEditActive?: boolean;
-  handleSkillClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   chosenPosition?: string;
   chosenLevel?: string;
   interviewResult: NullableField<IAssessmentFromDB>;
@@ -33,43 +33,58 @@ interface IProps {
   comment?: string;
   setComment: React.Dispatch<React.SetStateAction<string | undefined>>;
   handleClickDeleteSkill: (group: IAssessmentSkillGroup, skill: IAssessmentSkill) => void;
+  handleClickAddSkillGroup: () => void;
 }
-interface IDeleteEventTarget extends EventTarget {
+interface IExtendEventTarget extends EventTarget {
   id: string;
 }
-interface IDeleteElement extends React.MouseEvent<HTMLDivElement> {
-  target: IDeleteEventTarget;
+interface IExtendElement extends React.MouseEvent<HTMLDivElement> {
+  target: IExtendEventTarget;
 }
 
 export const EditableMatrix = ({
   answers,
   setAnswers,
   handleFinishInterview,
-  isEditActive,
-  handleSkillClick,
   interviewResult,
   interviewMatrix,
   comment,
   setComment,
   isLoadingInterviewMatrix,
   setInterviewMatrix,
+  handleClickAddSkillGroup,
 }: IProps) => {
-  const [isTreeChanged, setIsTreeChanged] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [skillGroupId, setSkillGroupId] = useState('');
 
   const classes = useStyles();
+
+  const handleChangeSkillGroup = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, id } = event.target;
+    const matrixTreeCopy = cloneDeep(interviewMatrix);
+    const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
+    matrixTreeCopy[currentSkillGroupIdx].value = value;
+    setInterviewMatrix(matrixTreeCopy);
+  };
+
+  const handleChangeSkill = (event: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+    const { value, id } = event.target;
+
+    const matrixTreeCopy = cloneDeep(interviewMatrix);
+    const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
+    matrixTreeCopy[currentSkillGroupIdx].skills[idx].value = value;
+    setInterviewMatrix(matrixTreeCopy);
+  };
 
   const handleChangeComment = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(event.target.value);
   };
 
   const handleSkillChange = (level: LevelTypesEnum, skill: IAssessmentSkill) => {
-    setAnswers({ ...answers, [String(skill?.uuid)]: level });
-    setIsTreeChanged(true);
+    setAnswers({ ...answers, [String(skill?.id)]: level });
   };
 
-  const handleClickDelete = (e: IDeleteElement) => {
+  const handleClickDelete = (e: IExtendElement) => {
     setSkillGroupId(e.target.id);
     setDeleteModalOpen(true);
   };
@@ -88,7 +103,7 @@ export const EditableMatrix = ({
   const handleDeleteSkill = async (skill: IAssessmentSkill, id: string) => {
     const group = interviewMatrix[interviewMatrix.findIndex((item) => item.uuid === id)];
 
-    const currentSkill = group.skills[group.skills.findIndex((el) => el.uuid === skill.uuid)];
+    const currentSkill = group.skills[group.skills.findIndex((el) => el.id === skill.id)];
 
     if (group.skills.length && currentSkill) {
       const matrixTreeCopy = cloneDeep(interviewMatrix);
@@ -97,7 +112,7 @@ export const EditableMatrix = ({
         if (group?.uuid === item.uuid) {
           return {
             ...item,
-            skills: [...item.skills.filter((i) => i.uuid !== currentSkill.uuid)],
+            skills: [...item.skills.filter((i) => i.id !== currentSkill.id)],
           };
         }
         return item;
@@ -107,21 +122,69 @@ export const EditableMatrix = ({
     }
   };
 
+  // questions handlers
+  const handleClickAddQuestion = (skill: IAssessmentSkill, uuid: string) => {
+    const matrixTreeCopy: IAssessmentMatrix = cloneDeep(interviewMatrix);
+    const groupIdx = matrixTreeCopy.findIndex((el) => el.uuid === uuid);
+    const currentGroup = matrixTreeCopy[groupIdx];
+
+    const skillIdx = currentGroup.skills.findIndex((el) => el.id === skill.id);
+
+    currentGroup.skills[skillIdx].questions.push({ id: uuidv4(), value: '' });
+
+    setInterviewMatrix(matrixTreeCopy);
+  };
+
+  const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, idx: number, qidx: number) => {
+    const { value, id } = event.target;
+    const matrixTreeCopy = cloneDeep(interviewMatrix);
+    const currentSkillGroupIdx = matrixTreeCopy.findIndex((item) => id === item.uuid);
+    matrixTreeCopy[currentSkillGroupIdx].skills[idx].questions[qidx].value = value;
+    setInterviewMatrix(matrixTreeCopy);
+  };
+
+  const handleClickDeleteQuestion = (currentSkill: IAssessmentSkill, uuid: string) => {
+    if (currentSkill.questions.length) {
+      const matrixTreeCopy = cloneDeep(interviewMatrix);
+      for (const group of matrixTreeCopy) {
+        group.skills.map((skill) => {
+          if (currentSkill?.id === skill.id) {
+            skill.questions = [...skill.questions.filter((el) => el.id !== uuid)];
+          }
+          return skill;
+        });
+      }
+      setInterviewMatrix(matrixTreeCopy);
+    }
+  };
+
   return (
     <>
       <section className={classes.interviewForm}>
         {interviewMatrix &&
           interviewMatrix.map(({ uuid, skills, value }) => (
             <div key={uuid} className={classes.group}>
-              <h2>{value}</h2>
+              <Input
+                placeholder="Skill group"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSkillGroup(event)}
+                id={uuid}
+                value={value}
+                style={{ width: '25%', height: 'fit-content', marginTop: '1rem' }}
+              />
               <div className={classes.skills}>
                 <div className={classes.deleteSection} id={uuid} onClick={handleClickDelete}>
                   Delete section
                 </div>
-                {skills.map((skill) => (
-                  <div key={skill.uuid} className={classes.skill}>
+                {skills.map((skill, idx) => (
+                  <div key={skill.id} className={classes.skill}>
                     <div className={classes.skillHeader}>
-                      <h3>{skill.value}</h3>
+                      <Input
+                        placeholder="Skill"
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSkill(event, idx)}
+                        id={uuid}
+                        value={skill.value}
+                        style={{ width: '21.6%' }}
+                      />
                       <div className={classes.rightSkillElementsContainer}>
                         {skill.levels.map((level) => (
                           <strong key={level.value} className={classes.greenColor}>
@@ -132,10 +195,10 @@ export const EditableMatrix = ({
                           onChange={(level) => handleSkillChange(level, skill)}
                           placeholder={INTERVIEW.LEVEL_PLACEHOLDER}
                           className={classes.answerSelect}
-                          value={answers && answers[String(skill.uuid)]}
+                          value={answers && answers[String(skill.id)]}
                         >
                           {Object.keys(levelTypes).map((key) => (
-                            <Select.Option value={key} key={key} disabled={!isEditActive}>
+                            <Select.Option value={key} key={key}>
                               {levelTypes[key as LevelTypesEnum]}
                             </Select.Option>
                           ))}
@@ -152,22 +215,53 @@ export const EditableMatrix = ({
                       </div>
                     </div>
                     <ol>
-                      {skill.questions.map((ques) => (
-                        <li key={ques.id}>{ques.value}</li>
+                      {skill.questions.map((ques, qidx) => (
+                        <div
+                          style={{
+                            marginLeft: '100px',
+                            marginTop: '10px',
+                            display: 'flex',
+                          }}
+                          key={ques.id}
+                        >
+                          <Button
+                            type="primary"
+                            onClick={() => handleClickDeleteQuestion(skill, ques.id)}
+                            icon={<DeleteOutlined />}
+                          />
+                          <Input
+                            placeholder="Question"
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                              handleChangeQuestion(event, idx, qidx)
+                            }
+                            id={uuid}
+                            value={ques.value}
+                          />
+                        </div>
                       ))}
                       <Button
-                        id={uuid}
-                        style={{ marginLeft: '95%', marginTop: '3%' }}
+                        id={skill.id}
+                        style={{ marginLeft: '80%', marginTop: '3%' }}
                         type="primary"
-                        onClick={handleSkillClick}
+                        onClick={() => handleClickAddQuestion(skill, uuid)}
                         icon={<PlusOutlined />}
-                      />
+                      >
+                        Add new question
+                      </Button>
                     </ol>
                   </div>
                 ))}
               </div>
             </div>
           ))}
+        <Button
+          style={{ marginTop: '3%' }}
+          type="primary"
+          onClick={() => handleClickAddSkillGroup()}
+          icon={<PlusOutlined />}
+        >
+          Add new section
+        </Button>
         <div className={classes.buttons}>
           <div className={classes.bottomContainer}>
             <Input.TextArea
@@ -180,12 +274,7 @@ export const EditableMatrix = ({
             />
           </div>
           {!!interviewMatrix?.length && (
-            <Button
-              type="primary"
-              onClick={handleFinishInterview}
-              className={classes.finishButton}
-              disabled={!isTreeChanged}
-            >
+            <Button type="primary" onClick={handleFinishInterview} className={classes.finishButton}>
               {interviewResult?.answers?.length ? INTERVIEW.SAVE_CHANGES : INTERVIEW.FINISH}
             </Button>
           )}

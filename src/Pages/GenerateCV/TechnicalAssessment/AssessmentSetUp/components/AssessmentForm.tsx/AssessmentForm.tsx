@@ -9,7 +9,7 @@ import { cloneDeep } from 'lodash';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from 'store';
-import { interviewSelector, setInterviewMatrix, setSkillID } from 'store/reducers/interview';
+import { interviewSelector, setInterviewMatrix } from 'store/reducers/interview';
 import { finishTechAssessment, editTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
@@ -59,7 +59,7 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
       value: '',
       skills: [
         {
-          uuid: uuidv4(),
+          id: uuidv4(),
           value: '',
           questions: [{ id: uuidv4(), value: '' }],
           levels: [{ id: uuidv4(), name: '', value: LevelTypesEnum.None }],
@@ -105,8 +105,29 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
     }
   }, [currentPosition, currentLevel]);
 
+  const handleClickAddSkillGroup = () => {
+    const matrixCopy = cloneDeep(matrixTree);
+
+    matrixCopy.push({
+      uuid: uuidv4(),
+      value: '',
+      position_id: positionId || '',
+      skills: [
+        {
+          id: uuidv4(),
+          value: '',
+          questions: [{ id: uuidv4(), value: '' }],
+          levels: [{ id: uuidv4(), name: '', value: LevelTypesEnum.None }],
+        },
+      ],
+    });
+
+    setMatrixTree(matrixCopy);
+  };
+
   const handleFinishInterview = async () => {
     const interviewData: ICompleteAssessment = {
+      id: '' || assessmentResult?.id,
       employeeId: currentEmployee.id,
       levelId: levelId || '' || assessmentResult?.level?.id,
       positionId: positionId || '' || assessmentResult?.position?.id,
@@ -126,16 +147,6 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
     );
   };
 
-  const handleSkillClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
-    if (positionId || assessmentResult?.position?.id) {
-      const button: HTMLButtonElement = e.currentTarget;
-      dispatch(setSkillID(button.id));
-      setSkillMatrixIsLoading(true);
-      dispatch(loadSkillMatrix(String(positionId || assessmentResult?.position?.id)));
-      setSkillMatrixIsLoading(false);
-    }
-  };
-
   const handleClickDeleteSkill = (group: IAssessmentSkillGroup, skill: IAssessmentSkill) => {
     if (group.skills.length) {
       const matrixTreeCopy = cloneDeep(matrixTree);
@@ -143,7 +154,7 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
         if (group?.uuid === item.uuid) {
           return {
             ...item,
-            skills: [...item.skills.filter((i) => i.uuid !== skill.uuid)],
+            skills: [...item.skills.filter((i) => i.id !== skill.id)],
           };
         }
         return item;
@@ -167,8 +178,8 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
         answers={answers}
         setAnswers={setAnswers}
         handleFinishInterview={handleFinishInterview}
-        handleSkillClick={handleSkillClick}
         handleClickDeleteSkill={handleClickDeleteSkill}
+        handleClickAddSkillGroup={handleClickAddSkillGroup}
         chosenPosition={positionId}
         chosenLevel={levelId}
         interviewResult={assessmentResult}
