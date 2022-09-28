@@ -3,15 +3,31 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 
-import { CVGenerationHeader } from './components/CVGenerationHeader';
-import { employeesSelector } from '../../store/reducers/employees';
+import { employeesSelector } from 'store/reducers/employees';
 import routes from 'config/routes.json';
-import { IEmployee } from '../../models/IEmployee';
-import { calcExperienceInYears } from './utils/calculateExperienceInYears';
-import { NullableField } from '../../models/TNullableField';
-import { CVGenerationInfo, SoftSkills } from './components/CVGenerationInfo';
-import { useStyles } from './styles';
-import { CVPreview } from './components/CVPreview';
+import { IEmployee } from 'models/IEmployee';
+import { NullableField } from 'models/TNullableField';
+import { CVGenerationInfo, SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { useStyles } from 'Pages/CVGeneration/styles';
+import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
+import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
+import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
+
+// I believe this list should be stored in the database
+export const mockSoftSkillsOptions = [
+  'Responsibility',
+  'Teamwork',
+  'Communication',
+  'Sociability',
+  'Leadership',
+  'Punctuality',
+  'Confidence',
+  'Resilience',
+  'Collaboration',
+  'Time management',
+  'Discipline',
+  'Creativity',
+];
 
 const mockDescription =
   "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.";
@@ -59,7 +75,11 @@ export const CVGenerationPage = () => {
   return (
     <div>
       <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
-      <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo}></CVGenerationInfo>
+      <CVGenerationInfo
+        cvInfo={cvInfo}
+        updateCvInfo={updateCvInfo}
+        softSkillsOptions={mockSoftSkillsOptions}
+      ></CVGenerationInfo>
       {/* coming later */}
       {/*  <ProfessionalSkills></ProfessionalSkills> */}
       {/*  <Projects></Projects> */}

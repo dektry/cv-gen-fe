@@ -1,38 +1,30 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Select, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
-import { useStyles } from './styles';
-import { CvInfo } from '../../CVGenerationPage';
+import { CvInfo, mockSoftSkillsOptions } from 'Pages/CVGeneration/CVGenerationPage';
+import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
 
 const { Title } = Typography;
 
-const softSkillsOptions = [
-  'Responsibility',
-  'Teamwork',
-  'Communication',
-  'Sociability',
-  'Leadership',
-  'Punctuality',
-  'Confidence',
-  'Resilience',
-  'Collaboration',
-  'Time management',
-  'Discipline',
-  'Creativity',
-];
-export type SoftSkills = typeof softSkillsOptions[number];
+export type SoftSkills = typeof mockSoftSkillsOptions[number];
 
 interface CVGenerationInfoProps {
   cvInfo: Partial<CvInfo>;
+  softSkillsOptions: SoftSkills[];
   updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { updateCvInfo, cvInfo } = props;
+  const { updateCvInfo, cvInfo, softSkillsOptions } = props;
   const { fullName, level, position, experience, education, description, softSkills } = cvInfo;
 
   const classes = useStyles();
+
+  const selectOptions = useMemo(
+    () => softSkillsOptions?.map((skill) => ({ label: skill, value: skill })),
+    [softSkillsOptions]
+  );
 
   return (
     <div>
@@ -99,7 +91,7 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
             mode="multiple"
             style={{ width: '100%' }}
             placeholder="Select soft skills"
-            options={softSkillsOptions?.map((skill) => ({ label: skill, value: skill }))}
+            options={selectOptions}
             defaultValue={softSkills}
             onChange={(value) => updateCvInfo({ softSkills: value })}
             value={softSkills ? softSkills : []}
