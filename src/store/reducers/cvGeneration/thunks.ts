@@ -1,16 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { message } from 'antd';
 
-import { loadCvTemplate } from './actions';
-import { apiClient } from '../../../services/apiService';
-import endpoints from '../../../config/endpoint.json';
+import { loadCvTemplate } from 'store/reducers/cvGeneration/actionTypes';
+import { getTemplate } from 'actions/cvGeneration';
 
-export const fetchCvGenerationTemplate = createAsyncThunk(loadCvTemplate, async (templateName: string) => {
-  try {
-    const { data } = await apiClient.get(`${endpoints.cvGeneration}/template/${templateName}`);
-    return data;
-  } catch (error) {
-    console.error('[API_CLIENT_CV_GENERATION_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
-  }
-});
+export const fetchCvGenerationTemplate = createAsyncThunk(loadCvTemplate, getTemplate);

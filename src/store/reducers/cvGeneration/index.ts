@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { appStoreName } from './actions';
-import { RootState } from '../../index';
-import { fetchCvGenerationTemplate } from './thunks';
+import { appStoreName } from 'store/reducers/cvGeneration/actionTypes';
+import { RootState } from 'store/index';
+import { fetchCvGenerationTemplate } from 'store/reducers/cvGeneration/thunks';
 
 type InitialStateCvGeneration = {
   template: string;
