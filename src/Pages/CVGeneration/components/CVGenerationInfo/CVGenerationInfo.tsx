@@ -1,42 +1,30 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Input, Select, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
-import { useStyles } from './styles';
+import { CvInfo, mockSoftSkillsOptions } from 'Pages/CVGeneration/CVGenerationPage';
+import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
 
 const { Title } = Typography;
 
-const softSkillsOptions = [
-  'Responsibility',
-  'Teamwork',
-  'Communication',
-  'Sociability',
-  'Leadership',
-  'Punctuality',
-  'Confidence',
-  'Resilience',
-  'Collaboration',
-  'Time management',
-  'Discipline',
-  'Creativity',
-];
-export type SoftSkills = typeof softSkillsOptions[number];
+export type SoftSkills = typeof mockSoftSkillsOptions[number];
 
 interface CVGenerationInfoProps {
-  fullName?: string;
-  position?: string | null;
-  level?: string | null;
-  experience?: number;
-  education?: string | null;
-  description?: string;
-  softSkills?: SoftSkills[];
-  updateCvInfo: (fields: Partial<CVGenerationInfoProps>) => void;
+  cvInfo: Partial<CvInfo>;
+  softSkillsOptions: SoftSkills[];
+  updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { fullName, level, position, experience, education, description, updateCvInfo, softSkills } = props;
+  const { updateCvInfo, cvInfo, softSkillsOptions } = props;
+  const { fullName, level, position, experience, education, description, softSkills } = cvInfo;
 
   const classes = useStyles();
+
+  const selectOptions = useMemo(
+    () => softSkillsOptions?.map((skill) => ({ label: skill, value: skill })),
+    [softSkillsOptions]
+  );
 
   return (
     <div>
@@ -81,11 +69,7 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
           maxLength={270}
           showCount
           onChange={(e) => updateCvInfo({ description: e.target.value })}
-          value={
-            description
-              ? description
-              : "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'."
-          }
+          value={description ? description : ''}
         />
       </div>{' '}
       <div className={classes.row}>
@@ -107,7 +91,7 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
             mode="multiple"
             style={{ width: '100%' }}
             placeholder="Select soft skills"
-            options={softSkillsOptions?.map((skill) => ({ label: skill, value: skill }))}
+            options={selectOptions}
             defaultValue={softSkills}
             onChange={(value) => updateCvInfo({ softSkills: value })}
             value={softSkills ? softSkills : []}

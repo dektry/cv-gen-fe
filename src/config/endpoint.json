@@ -14,5 +14,6 @@
     "candidates": "/candidates",
     "users": "/users",
     "auth": "/auth",
-    "employeeInterviews": "/employee-interviews"
+    "employeeInterviews": "/employee-interviews",
+    "cvGeneration": "/cv-generation"
   }

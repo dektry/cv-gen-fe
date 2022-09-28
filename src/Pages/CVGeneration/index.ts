@@ -1,3 +1,1 @@
-import { CVGenerationPage } from './CVGenerationPage';
-
-export default CVGenerationPage;
+export * from './CVGenerationPage';

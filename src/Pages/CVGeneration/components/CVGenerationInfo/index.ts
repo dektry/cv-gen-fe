@@ -1,3 +1,1 @@
-import { CVGenerationInfo } from './CVGenerationInfo';
-
-export default CVGenerationInfo;
+export * from './CVGenerationInfo';

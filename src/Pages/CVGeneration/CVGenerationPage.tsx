@@ -1,17 +1,38 @@
 import { useSelector } from 'react-redux';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
 
-import { CVGenerationHeader } from './components/CVGenerationHeader/CVGenerationHeader';
-import { employeesSelector } from '../../store/reducers/employees';
+import { employeesSelector } from 'store/reducers/employees';
 import routes from 'config/routes.json';
-import CVGenerationInfo from './components/CVGenerationInfo';
-import { IEmployee } from '../../models/IEmployee';
-import { calcExperienceInYears } from './utils/calculateExperienceInYears';
-import { NullableField } from '../../models/TNullableField';
-import { SoftSkills } from './components/CVGenerationInfo/CVGenerationInfo';
+import { IEmployee } from 'models/IEmployee';
+import { NullableField } from 'models/TNullableField';
+import { CVGenerationInfo, SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { useStyles } from 'Pages/CVGeneration/styles';
+import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
+import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
+import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
 
-type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
+// I believe this list should be stored in the database
+export const mockSoftSkillsOptions = [
+  'Responsibility',
+  'Teamwork',
+  'Communication',
+  'Sociability',
+  'Leadership',
+  'Punctuality',
+  'Confidence',
+  'Resilience',
+  'Collaboration',
+  'Time management',
+  'Discipline',
+  'Creativity',
+];
+
+const mockDescription =
+  "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.";
+
+export type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
@@ -20,11 +41,12 @@ type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> &
 
 export const CVGenerationPage = () => {
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const { currentEmployee } = useSelector(employeesSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
-  const { avatarUrl, fullName, level, position, experience, education, description, softSkills } = cvInfo;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -32,18 +54,16 @@ export const CVGenerationPage = () => {
     if (currentEmployee.id == '101010') {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { avatarUrl, fullName, level, position, startingPoint, hiredOn, formalEducation } = currentEmployee;
+      const { startingPoint, hiredOn, formalEducation, position } = currentEmployee;
 
       setCvInfo({
-        avatarUrl,
-        fullName,
-        level,
-        position,
+        ...currentEmployee,
+        position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
         education: formalEducation,
         softSkills: ['Responsibility', 'Teamwork', 'Communication'],
         // todo: add this field on BE side
-        description: '',
+        description: mockDescription,
       });
     }
   }, []);
@@ -54,20 +74,26 @@ export const CVGenerationPage = () => {
 
   return (
     <div>
-      <CVGenerationHeader avatarUrl={avatarUrl} showCvPreview={() => console.log(cvInfo)}></CVGenerationHeader>
+      <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
       <CVGenerationInfo
-        fullName={fullName}
-        level={level}
-        position={position}
-        experience={experience}
-        education={education}
-        description={description}
-        softSkills={softSkills}
+        cvInfo={cvInfo}
         updateCvInfo={updateCvInfo}
+        softSkillsOptions={mockSoftSkillsOptions}
       ></CVGenerationInfo>
       {/* coming later */}
       {/*  <ProfessionalSkills></ProfessionalSkills> */}
       {/*  <Projects></Projects> */}
+      <div className={classes.genCVbtnBlock}>
+        <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>
+          Generate CV
+        </Button>
+      </div>
+      <CVPreview
+        isModalOpen={isModalOpen}
+        handleOk={() => setIsModalOpen(false)}
+        handleCancel={() => setIsModalOpen(false)}
+        cvInfo={cvInfo}
+      ></CVPreview>
     </div>
   );
 };
