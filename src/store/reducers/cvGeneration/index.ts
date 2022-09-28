@@ -22,7 +22,14 @@ const cvGeneration = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchCvGenerationTemplate.fulfilled, (state, { payload }) => {
-      state.template = payload;
+      state.template = payload || '';
+      state.isLoading = false;
+    });
+    builder.addCase(fetchCvGenerationTemplate.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchCvGenerationTemplate.rejected, (state) => {
+      state.isLoading = false;
     });
   },
 });
