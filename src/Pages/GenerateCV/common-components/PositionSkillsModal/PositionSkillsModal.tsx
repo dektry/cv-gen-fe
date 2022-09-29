@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import { interviewSelector } from 'store/reducers/interview';
 
-import { createSkillMatrix } from 'actions/skills';
+import { createSkillMatrix } from 'services/requests/skills';
 import { ILevelsSchema, IMatrix, IDBLevels, ISkill, ISkillGroup } from 'models/IUser';
 import { SkillMatrix } from '../SkillMatrix';
 import { useStyles } from './styles';

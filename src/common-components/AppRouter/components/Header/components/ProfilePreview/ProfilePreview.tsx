@@ -4,7 +4,7 @@ import { Avatar, Typography, Row, Col, Modal, Button, Menu, Dropdown } from 'ant
 import { Link, useNavigate } from 'react-router-dom';
 import { ImportOutlined, LineChartOutlined } from '@ant-design/icons';
 
-import { getAvatarUrl } from 'actions/user';
+import { getAvatarUrl } from 'services/requests/user';
 import { IDBUser } from 'models/IUser';
 
 import { JobPositionTag } from '../JobPositionTag';

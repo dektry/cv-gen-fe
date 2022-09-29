@@ -3,8 +3,13 @@ import moment from 'moment';
 
 import { RootState } from '../..';
 
-import { appStoreName, loadCandidatesAction, loadOneCandidateAction, updateCandidateAction } from './actions';
-import { getAllCandidates, ILoadCandidateProps, getCandidate, updateCandidate } from 'actions/candidate';
+import {
+  appStoreName,
+  loadCandidatesAction,
+  loadOneCandidateAction,
+  updateCandidateAction,
+} from 'store/reducers/candidates/actionTypes';
+import { getAllCandidates, ILoadCandidateProps, getCandidate, updateCandidate } from 'services/requests/candidate';
 
 import { ICandidate, ICandidateExperience, ICandidatesState, ICandidateTable } from 'models/ICandidate';
 

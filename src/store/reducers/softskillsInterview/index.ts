@@ -6,7 +6,7 @@ import {
   editSoftSkillsInterview,
   uploadNewSkill,
   getSoftSkillScores,
-} from 'actions/skills';
+} from 'services/requests/skills';
 
 import { RootState } from 'store';
 import {
@@ -17,7 +17,7 @@ import {
   editSoftSkillInterviewResultAction,
   addNewSkillAction,
   loadSoftSkillScores,
-} from './actions';
+} from 'store/reducers/softskillsInterview/actionTypes';
 
 import {
   ISoftSkillInterview,

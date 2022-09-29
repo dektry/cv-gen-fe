@@ -2,9 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../..';
 
-import { appStoreName, loadEmployeeAction, loadEmployeesListAction, updateEmployeeAction } from './actions';
+import {
+  appStoreName,
+  loadEmployeeAction,
+  loadEmployeesListAction,
+  updateEmployeeAction,
+} from 'store/reducers/employees/actionTypes';
 
-import { getAllEmployees, ILoadEmployeeProps, getEmployee, updateEmployee } from 'actions/employee';
+import { getAllEmployees, ILoadEmployeeProps, getEmployee, updateEmployee } from 'services/requests/employee';
 
 import { IEmployeesState, IEmployee } from 'models/IEmployee';
 
