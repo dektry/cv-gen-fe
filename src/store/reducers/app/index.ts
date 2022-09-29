@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from 'store';
-import { login, auth } from 'actions/user';
-import { getAllPositionGroups } from 'actions/positions';
+import { login, auth } from 'services/requests/user';
+import { getAllPositionGroups } from 'services/requests/positions';
 
 // TODO this import will be moved to Position store
 import { IAppState, ICredentials } from 'models/ILogin';
 import { IDBPositionGroup } from 'models/IUser';
 
-import { appStoreName, loadPositionGroupsAction, loginAction, authAction } from './actions';
+import { appStoreName, loadPositionGroupsAction, loginAction, authAction } from 'store/reducers/app/actionTypes';
 import { defaultUser } from 'store/constants';
 
 import { saveLocalStorage } from 'services/localStorage';

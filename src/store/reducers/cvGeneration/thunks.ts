@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { generatePdf, getTemplate } from 'actions/cvGeneration';
+import { generatePdf, getTemplate } from 'services/requests/cvGeneration';
 import { generateCv, loadCvTemplate } from './actionTypes';
 
 export const fetchCvGenerationTemplate = createAsyncThunk(loadCvTemplate, getTemplate);

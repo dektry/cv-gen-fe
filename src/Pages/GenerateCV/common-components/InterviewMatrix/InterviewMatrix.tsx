@@ -17,7 +17,7 @@ import { NullableField } from 'models/TNullableField';
 import { IAssessmentFromDB } from 'models/ITechAssessment';
 import { IMatrix } from 'models/IUser';
 
-import { createSkillMatrix } from 'actions/skills';
+import { createSkillMatrix } from 'services/requests/skills';
 
 import {
   INTERVIEW,
