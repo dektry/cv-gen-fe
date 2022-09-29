@@ -5,7 +5,7 @@ import handlebars from 'handlebars/dist/cjs/handlebars.js';
 
 import { cvGenerationSelector } from 'store/reducers/cvGeneration';
 import { useAppDispatch } from 'store';
-import { fetchCvGenerationTemplate, generateCv } from 'store/reducers/cvGeneration/thunks';
+import { fetchCvGenerationTemplate, downloadCv } from 'store/reducers/cvGeneration/thunks';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 
@@ -72,7 +72,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   const handleDownloadCv = () => {
     const template = cvCanvasEl.current?.children[0].innerHTML || '';
 
-    dispatch(generateCv(template));
+    dispatch(downloadCv(template));
   };
 
   return (

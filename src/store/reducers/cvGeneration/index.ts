@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { appStoreName } from 'store/reducers/cvGeneration/actionTypes';
 import { RootState } from 'store/index';
-import { fetchCvGenerationTemplate, generateCv } from 'store/reducers/cvGeneration/thunks';
+import { fetchCvGenerationTemplate, downloadCv } from 'store/reducers/cvGeneration/thunks';
 
 type InitialStateCvGeneration = {
   template: string;
@@ -33,13 +33,13 @@ const cvGeneration = createSlice({
     builder.addCase(fetchCvGenerationTemplate.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(generateCv.fulfilled, (state) => {
+    builder.addCase(downloadCv.fulfilled, (state) => {
       state.isGeneratingPdf = false;
     });
-    builder.addCase(generateCv.pending, (state) => {
+    builder.addCase(downloadCv.pending, (state) => {
       state.isGeneratingPdf = true;
     });
-    builder.addCase(generateCv.rejected, (state) => {
+    builder.addCase(downloadCv.rejected, (state) => {
       state.isGeneratingPdf = false;
     });
   },

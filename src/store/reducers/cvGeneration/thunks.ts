@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { loadCvTemplate } from 'store/reducers/cvGeneration/actionTypes';
 import { generatePdf, getTemplate } from 'actions/cvGeneration';
+import { generateCv, loadCvTemplate } from './actionTypes';
 
 export const fetchCvGenerationTemplate = createAsyncThunk(loadCvTemplate, getTemplate);
 
-export const generateCv = createAsyncThunk('cvGeneration/generateCv', async (template: string) => {
+export const downloadCv = createAsyncThunk(generateCv, async (template: string) => {
   const data = await generatePdf(template);
 
   const blob = new Blob([data], { type: 'application/pdf' });
