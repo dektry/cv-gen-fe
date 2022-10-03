@@ -11,6 +11,7 @@
     "generateCVtechnicalAssessmentHistory": "/generate-cv/employee/:id/tech-interview/history",
     "generateCVsoftSkillAssessmentHistory": "/generate-cv/employee/:id/soft-interview/history",
     "generateCVprevTechnicalAssessment": "/generate-cv/employee/:id/tech-interview/history/:assessmentId",
+    "generateCVprevosftSkillsAssessment": "/generate-cv/employee/:id/soft-interview/history/:assessmentId",
     "generateCVtechnicalAssessment": "/generate-cv/employee/:id/tech-interview/:positionId/:levelId",
     "generateCVsoftskillsInterview": "/generate-cv/candidate/:id/soft-interview",
     "generateCVemployeesList": "/generate-cv/choose-person/employee-list",

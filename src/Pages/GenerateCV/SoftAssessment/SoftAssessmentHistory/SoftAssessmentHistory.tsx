@@ -59,12 +59,12 @@ export const SoftAssessmentHistory = () => {
     pageSize,
     total: assessments.length,
     current: currentPage,
-    showTotal: (total: number) => `Total ${total} technical assessments passed`,
+    showTotal: (total: number) => `Total ${total} soft skills assessments passed`,
   };
 
   const createPath = (record: ISoftAssessment) => {
     navigate(
-      generatePath(paths.generateCVprevTechnicalAssessment, {
+      generatePath(paths.generateCVprevosftSkillsAssessment, {
         id: id || '',
         assessmentId: record.id,
       })
