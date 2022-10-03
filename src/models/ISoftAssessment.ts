@@ -1,3 +1,4 @@
+import { IDBPosition, IDBLevels } from './IUser';
 import { NullableField } from './TNullableField';
 
 export interface ISoftSkill {
@@ -10,12 +11,16 @@ export interface ISoftSkill {
 }
 
 export interface ISoftAssessment {
-  id?: string;
+  id: NullableField<string>;
+  createdAt: string;
+  type: 'Assessment';
   employeeId: string;
-  positionId?: string;
-  levelId?: string;
+  position?: IDBPosition;
+  level?: IDBLevels;
   comment?: string;
   softSkills: Array<ISoftSkill>;
+  chosenPosition?: string;
+  chosenLevel?: string;
 }
 
 export interface ISoftAssessmentState {

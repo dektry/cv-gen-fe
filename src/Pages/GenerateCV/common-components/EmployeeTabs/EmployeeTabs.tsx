@@ -11,9 +11,8 @@ import { useStyles } from './styles';
 const { TabPane } = Tabs;
 
 export const EmployeeTabs = () => {
-
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const { id } = useParams<{ id: string }>();
@@ -39,10 +38,10 @@ export const EmployeeTabs = () => {
     if (!id) {
       setDisabled(true);
     }
-  }, [id])
+  }, [id]);
 
   const handleTabClick = (key: string) => {
-    switch(key) {
+    switch (key) {
       case '0': {
         navigate(generatePath(paths.generateCVemployeesList, { id }));
         break;
@@ -53,7 +52,7 @@ export const EmployeeTabs = () => {
       }
       case '2': {
         // TODO: fix paths for tabs with SI, EI and Summary
-        navigate(generatePath(paths.generateCVemployeesList, { id }));
+        navigate(generatePath(paths.generateCVsoftSkillAssessmentHistory, { id }));
         break;
       }
       case '3': {
@@ -65,23 +64,17 @@ export const EmployeeTabs = () => {
         break;
       }
     }
-  }
+  };
 
   return (
     <div className={classes.tabsContainer}>
-      <Tabs
-        activeKey={currentTab}
-        size='large'
-        type='line'
-        onTabClick={handleTabClick}
-    >
-        <TabPane tab={EmployeeSteps.EMPLOYEES_INFO} key='0' />
-        <TabPane tab={EmployeeSteps.TECHNICAL_INTERVIEW} key='1' disabled={disabled} />
-        <TabPane tab={EmployeeSteps.SOFT_INTERVIEW} key='2' disabled={disabled} />
-        <TabPane tab={EmployeeSteps.ENGLISH_INTERVIEW} key='3' disabled={disabled} />
-        <TabPane tab={EmployeeSteps.SUMMARY} key='4' disabled={disabled} />
+      <Tabs activeKey={currentTab} size="large" type="line" onTabClick={handleTabClick}>
+        <TabPane tab={EmployeeSteps.EMPLOYEES_INFO} key="0" />
+        <TabPane tab={EmployeeSteps.TECHNICAL_INTERVIEW} key="1" disabled={disabled} />
+        <TabPane tab={EmployeeSteps.SOFT_INTERVIEW} key="2" disabled={disabled} />
+        <TabPane tab={EmployeeSteps.ENGLISH_INTERVIEW} key="3" disabled={disabled} />
+        <TabPane tab={EmployeeSteps.SUMMARY} key="4" disabled={disabled} />
       </Tabs>
     </div>
-  )
-
-}
+  );
+};

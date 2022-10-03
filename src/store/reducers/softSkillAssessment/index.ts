@@ -16,6 +16,8 @@ const initialState: ISoftAssessmentState = {
   pageSize: defaultPageSize,
   currentPage: defaultCurrentPage,
   assessmentResult: null,
+  chosenLevel: undefined,
+  chosenPosition: undefined,
 };
 
 const softSkillAssessment = createSlice({
@@ -33,6 +35,15 @@ const softSkillAssessment = createSlice({
       softSkillsList.push(payload);
       state.softSkillsList = softSkillsList;
     },
+    chooseInterviewPosition: (state, { payload }: PayloadAction<string | undefined>) => {
+      state.chosenPosition = payload;
+    },
+    chooseInterviewLevel: (state, { payload }: PayloadAction<string | undefined>) => {
+      state.chosenLevel = payload;
+    },
+    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllSoftSkillAssessments.pending, (state) => {
@@ -42,7 +53,19 @@ const softSkillAssessment = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getAllSoftSkillAssessments.fulfilled, (state, { payload }) => {
-      state.assessments = payload;
+      if (payload.length) {
+        const processedAssessments = payload.map((el: ISoftAssessment) => {
+          return {
+            id: el.id,
+            date: new Date(el.createdAt).toLocaleDateString(),
+            position: el.position?.name,
+            level: el.level?.name,
+            type: 'Assessment',
+          };
+        });
+        state.assessments = processedAssessments;
+      }
+      state.isLoading = false;
     });
     builder.addCase(getOneSoftAssessment.pending, (state) => {
       state.isLoading = true;
@@ -52,6 +75,7 @@ const softSkillAssessment = createSlice({
     });
     builder.addCase(getOneSoftAssessment.fulfilled, (state, { payload }) => {
       state.assessmentResult = payload;
+      state.isLoading = false;
     });
   },
 });
@@ -60,4 +84,11 @@ export default softSkillAssessment.reducer;
 
 export const softSkillInterviewSelector = (state: RootState): ISoftAssessmentState => state.softSkillAssessment;
 
-export const { setSoftAssessmentResult, addNewSkill, setSoftSkillsList } = softSkillAssessment.actions;
+export const {
+  setSoftAssessmentResult,
+  addNewSkill,
+  setSoftSkillsList,
+  chooseInterviewLevel,
+  chooseInterviewPosition,
+  setIsLoading,
+} = softSkillAssessment.actions;
