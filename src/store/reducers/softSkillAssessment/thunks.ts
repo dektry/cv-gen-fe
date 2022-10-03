@@ -6,7 +6,7 @@ import {
   httpGetAllSoftAssessments,
   httpGetSoftAssessment,
 } from 'actions/softAssessment';
-import { ICompleteSoftAssessment } from 'models/ISoftAssessment';
+import { ISoftAssessment } from 'models/ISoftAssessment';
 
 import {
   completeSoftSkillAssessment,
@@ -23,13 +23,10 @@ export const getOneSoftAssessment = createAsyncThunk(loadAOneSoftSkillAssessment
   return httpGetSoftAssessment(assessmentId);
 });
 
-export const completeSoftAssessment = createAsyncThunk(
-  completeSoftSkillAssessment,
-  (assessment: ICompleteSoftAssessment) => {
-    return httpCompleteSoftAssessment(assessment);
-  }
-);
+export const completeSoftAssessment = createAsyncThunk(completeSoftSkillAssessment, (assessment: ISoftAssessment) => {
+  return httpCompleteSoftAssessment(assessment);
+});
 
-export const editSoftAssessment = createAsyncThunk(editSoftSkillAssessment, (assessment: ICompleteSoftAssessment) => {
+export const editSoftAssessment = createAsyncThunk(editSoftSkillAssessment, (assessment: ISoftAssessment) => {
   return httpEditSoftAssessment(assessment);
 });

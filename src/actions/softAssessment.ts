@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
 
-import { ICompleteSoftAssessment } from 'models/ISoftAssessment';
+import { ISoftAssessment } from 'models/ISoftAssessment';
 
 export const httpGetAllSoftAssessments = async (id: string) => {
   try {
@@ -27,7 +27,7 @@ export const httpGetSoftAssessment = async (id: string) => {
   }
 };
 
-export const httpCompleteSoftAssessment = async (assessment: ICompleteSoftAssessment) => {
+export const httpCompleteSoftAssessment = async (assessment: ISoftAssessment) => {
   try {
     const { data } = await apiClient.post(endpoints.employeeSoftAssessments, assessment);
 
@@ -38,7 +38,7 @@ export const httpCompleteSoftAssessment = async (assessment: ICompleteSoftAssess
   }
 };
 
-export const httpEditSoftAssessment = async (assessment: ICompleteSoftAssessment) => {
+export const httpEditSoftAssessment = async (assessment: ISoftAssessment) => {
   try {
     const { data } = await apiClient.put(`${endpoints.employeeInterviews}/${assessment.id}`, assessment);
 
