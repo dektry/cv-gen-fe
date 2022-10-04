@@ -10,6 +10,7 @@ import {
   techAssessmentSelector,
   chooseInterviewLevel,
   chooseInterviewPosition,
+  setTechAssessments,
 } from 'store/reducers/techAssessment';
 import { employeesSelector, loadEmployee, setChosenEmployee } from 'store/reducers/employees';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
@@ -119,6 +120,12 @@ export const AssessmentHistory = () => {
 
   const personalData = { fullName, location, position, level };
   const state = { positions: allPositions, levels: allLevels };
+
+  useEffect(() => {
+    return function clear() {
+      dispatch(setTechAssessments([]));
+    };
+  }, []);
 
   if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
 

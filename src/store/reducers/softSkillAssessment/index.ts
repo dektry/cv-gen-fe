@@ -27,6 +27,9 @@ const softSkillAssessment = createSlice({
     setSoftAssessmentResult: (state, { payload }: PayloadAction<ISoftAssessment>) => {
       state.assessmentResult = payload;
     },
+    setSoftAssessmentList: (state, { payload }: PayloadAction<ISoftAssessment[] | []>) => {
+      state.assessments = payload;
+    },
     setSoftSkillsList: (state, { payload }: PayloadAction<ISoftSkill[]>) => {
       state.softSkillsList = payload;
     },
@@ -91,4 +94,5 @@ export const {
   chooseInterviewLevel,
   chooseInterviewPosition,
   setIsLoading,
+  setSoftAssessmentList,
 } = softSkillAssessment.actions;

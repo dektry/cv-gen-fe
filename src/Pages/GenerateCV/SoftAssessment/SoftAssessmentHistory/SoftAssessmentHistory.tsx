@@ -9,6 +9,7 @@ import {
   softSkillInterviewSelector,
   chooseInterviewLevel,
   chooseInterviewPosition,
+  setSoftAssessmentList,
 } from 'store/reducers/softSkillAssessment';
 import { getAllSoftSkillAssessments } from 'store/reducers/softSkillAssessment/thunks';
 import { employeesSelector, loadEmployee, setChosenEmployee } from 'store/reducers/employees';
@@ -116,6 +117,12 @@ export const SoftAssessmentHistory = () => {
   const setInterviewPosition = (position: string) => {
     dispatch(chooseInterviewPosition(position));
   };
+
+  useEffect(() => {
+    return function clear() {
+      dispatch(setSoftAssessmentList([]));
+    };
+  }, []);
 
   const personalData = { fullName, location, position, level };
   const state = { positions: allPositions, levels: allLevels };

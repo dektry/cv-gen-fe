@@ -53,7 +53,7 @@ const techAssessment = createSlice({
   name: appStoreName,
   initialState,
   reducers: {
-    setTechAssessments: (state, { payload }: PayloadAction<IAssessmentFromDB[]>) => {
+    setTechAssessments: (state, { payload }: PayloadAction<IAssessmentFromDB[] | []>) => {
       state.assessments = payload;
     },
     setPageSize: (state, { payload }: PayloadAction<number>) => {
