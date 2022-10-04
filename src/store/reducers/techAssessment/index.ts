@@ -8,13 +8,13 @@ import {
   completeTechAssessmentAction,
   editTechAssessmentAction,
   getTechAssessmentAction,
-} from './actions';
+} from 'store/reducers/techAssessment/actionTypes';
 import {
   getAllTechAssessments,
   httpCompleteTechAssessment,
   httpEditTechAssessment,
   httpGetTechAssessment,
-} from 'actions/techAssessment';
+} from 'services/requests/techAssessment';
 
 import { IAssessmentFromDB, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';

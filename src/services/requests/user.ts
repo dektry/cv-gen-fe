@@ -4,7 +4,7 @@ import { AppDispatch } from 'store';
 
 import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
-import { CANT_LOGIN, AUTH_OUTDATED } from 'actions/constants';
+import { CANT_LOGIN, AUTH_OUTDATED } from 'services/requests/constants';
 
 import { IDBCareer, IDBRole, IDBUser, IUpdatePosition } from 'models/IUser';
 import { ICredentials } from 'models/ILogin';

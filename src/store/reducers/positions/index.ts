@@ -7,50 +7,34 @@ import {
   loadPositionsAction,
   loadSkillMatrixAction,
   updatePositionAction,
-} from './actions';
-import {
-  IDBPosition,
-  IMatrix,
-  IPositionsState,
-  IUpdatePosition,
-} from 'models/IUser';
+} from 'store/reducers/positions/actionTypes';
+import { IDBPosition, IMatrix, IPositionsState, IUpdatePosition } from 'models/IUser';
 import { defaultPosition, DELETED_POSITION } from 'store/constants';
-import {
-  createPositionRequest,
-  getAllPositions,
-  updatePositionRequest,
-} from 'actions/positions';
-import { getSkillMatrixByPositionId } from 'actions/skills';
+import { createPositionRequest, getAllPositions, updatePositionRequest } from 'services/requests/positions';
+import { getSkillMatrixByPositionId } from 'services/requests/skills';
 
+export const loadPositions = createAsyncThunk(loadPositionsAction, async (): Promise<IDBPosition[]> => {
+  const positions: IDBPosition[] = await getAllPositions();
 
-export const loadPositions = createAsyncThunk(
-  loadPositionsAction,
-  async (): Promise<IDBPosition[]> => {
-    const positions: IDBPosition[] = await getAllPositions();
+  return positions.filter((item) => item.name !== DELETED_POSITION);
+});
 
-    return positions.filter(item => item.name !== DELETED_POSITION);
-  },
-);
-
-export const loadSkillMatrix = createAsyncThunk(
-  loadSkillMatrixAction,
-  (positionId: string): Promise<IMatrix> => {
-    return getSkillMatrixByPositionId(positionId);
-  },
-);
+export const loadSkillMatrix = createAsyncThunk(loadSkillMatrixAction, (positionId: string): Promise<IMatrix> => {
+  return getSkillMatrixByPositionId(positionId);
+});
 
 export const createPosition = createAsyncThunk(
   createPositionAction,
   (newPosition: Omit<IDBPosition, 'id'>): Promise<IDBPosition> => {
     return createPositionRequest(newPosition);
-  },
+  }
 );
 
 export const updatePosition = createAsyncThunk(
   updatePositionAction,
   ({ positionId, position }: IUpdatePosition): Promise<IDBPosition> => {
     return updatePositionRequest(positionId, position);
-  },
+  }
 );
 
 const initialState: IPositionsState = {
@@ -79,15 +63,15 @@ const positions = createSlice({
       state.positionsLoading = payload;
     },
   },
-  extraReducers: builder => {
-    builder.addCase(loadPositions.pending, state => {
+  extraReducers: (builder) => {
+    builder.addCase(loadPositions.pending, (state) => {
       state.positionsLoading = true;
     });
     builder.addCase(loadPositions.fulfilled, (state, { payload }) => {
       state.allPositions = payload;
       state.positionsLoading = false;
     });
-    builder.addCase(loadPositions.rejected, state => {
+    builder.addCase(loadPositions.rejected, (state) => {
       state.positionsLoading = false;
     });
     builder.addCase(loadSkillMatrix.fulfilled, (state, { payload }) => {
@@ -98,12 +82,6 @@ const positions = createSlice({
 
 export default positions.reducer;
 
-export const positionsSelector = (state: RootState): IPositionsState =>
-  state.positions;
+export const positionsSelector = (state: RootState): IPositionsState => state.positions;
 
-export const {
-  setPositionsFormStatus,
-  setIsEditPosition,
-  setIsLoading,
-  choosePosition,
-} = positions.actions;
+export const { setPositionsFormStatus, setIsEditPosition, setIsLoading, choosePosition } = positions.actions;

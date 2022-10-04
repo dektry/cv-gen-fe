@@ -5,7 +5,7 @@ import handlebars from 'handlebars/dist/cjs/handlebars.js';
 
 import { cvGenerationSelector } from 'store/reducers/cvGeneration';
 import { useAppDispatch } from 'store';
-import { fetchCvGenerationTemplate } from 'store/reducers/cvGeneration/thunks';
+import { fetchCvGenerationTemplate, downloadCv } from 'store/reducers/cvGeneration/thunks';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 
@@ -23,7 +23,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
   const dispatch = useAppDispatch();
 
-  const { template, isLoading } = useSelector(cvGenerationSelector);
+  const { template, isLoading, isGeneratingPdf } = useSelector(cvGenerationSelector);
   const compiledTemplate = useMemo(() => handlebars.compile(template), [template]);
 
   const cvCanvasEl = useRef<HTMLDivElement | null>(null);
@@ -63,10 +63,24 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     };
   }, [template, isModalOpen]);
 
+  useEffect(() => {
+    if (!isGeneratingPdf) {
+      handleOk();
+    }
+  }, [isGeneratingPdf]);
+
+  const handleDownloadCv = () => {
+    const template = cvCanvasEl.current?.children[0].innerHTML || '';
+
+    dispatch(downloadCv(template));
+  };
+
   return (
     <Modal
       open={isModalOpen}
-      onOk={handleOk}
+      confirmLoading={isGeneratingPdf}
+      okButtonProps={{ disabled: !template }}
+      onOk={handleDownloadCv}
       onCancel={handleCancel}
       cancelText="CLOSE"
       okText="DOWNLOAD"

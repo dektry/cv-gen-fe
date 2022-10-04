@@ -8,12 +8,12 @@ import {
   loadInterviewResultAction,
   finishInterviewAction,
   editInterviewAction,
-} from './actions';
-import { getCandidate } from 'actions/candidate';
+} from 'store/reducers/interview/actionTypes';
+import { getCandidate } from 'services/requests/candidate';
 
-import { getSkillMatrixByIds } from 'actions/skills';
+import { getSkillMatrixByIds } from 'services/requests/skills';
 
-import { loadInterviewResultRequest, completeInterview, editInterview } from 'actions/interview';
+import { loadInterviewResultRequest, completeInterview, editInterview } from 'services/requests/interview';
 
 import { IInterviewMatrix, IInterviewResult, IInterviewState, ICompleteInterview } from 'models/IInterview';
 

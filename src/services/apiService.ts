@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import endpoints from '../config/endpoint.json';
 
 const client = (token: string | null) => {
@@ -14,7 +14,8 @@ const client = (token: string | null) => {
 
 export const apiClient = {
   get: (url: string) => client(localStorage.getItem('jwt')).get(url),
-  post: (url: string, data: unknown) => client(localStorage.getItem('jwt')).post(url, data),
+  post: (url: string, data: unknown, config?: AxiosRequestConfig) =>
+    client(localStorage.getItem('jwt')).post(url, data, config),
   patch: (url: string, data: unknown) => client(localStorage.getItem('jwt')).patch(url, data),
   put: (url: string, data: unknown) => client(localStorage.getItem('jwt')).put(url, data),
 };
