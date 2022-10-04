@@ -3,19 +3,27 @@ import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
   console.log('getCvPages');
+  const dataForPages = [];
   const result: string[] = [];
 
-  if (cvInfo.profSkills) {
-    const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
-      templates['v2-intro'],
-      'firstName',
-      cvInfo.description + cvInfo.description + cvInfo.description,
-      cvInfo.softSkills,
-      cvInfo.profSkills
-    );
+  if (!cvInfo.profSkills) return result;
 
-    console.log({ profSkillsOnIntroPage, nextPageStart });
-  }
+  const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
+    templates['v2-intro'],
+    'firstName',
+    cvInfo.description + cvInfo.description + cvInfo.description,
+    cvInfo.softSkills,
+    cvInfo.profSkills
+  );
+
+  dataForPages.push({
+    ...cvInfo,
+    profSkills: profSkillsOnIntroPage,
+  });
+
+  dataForPages.forEach((data, index) => {
+    result.push(templates['v2-intro']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
+  });
 
   return result;
 };
