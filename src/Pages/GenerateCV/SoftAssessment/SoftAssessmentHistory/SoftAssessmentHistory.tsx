@@ -6,18 +6,18 @@ import { message, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import {
-  loadTechAssessments,
-  techAssessmentSelector,
+  softSkillInterviewSelector,
   chooseInterviewLevel,
   chooseInterviewPosition,
-  setTechAssessments,
-} from 'store/reducers/techAssessment';
+  setSoftAssessmentList,
+} from 'store/reducers/softSkillAssessment';
+import { getAllSoftSkillAssessments } from 'store/reducers/softSkillAssessment/thunks';
 import { employeesSelector, loadEmployee, setChosenEmployee } from 'store/reducers/employees';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
 import { ITableParams } from 'models/ICommon';
-import { IAssessmentFromDB } from 'models/ITechAssessment';
+import { ISoftAssessment } from 'models/ISoftAssessment';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { TableComponent as Table } from 'common-components/Table';
@@ -28,7 +28,7 @@ import paths from 'config/routes.json';
 import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
 import { defaultEmployee } from 'store/constants';
 
-export const AssessmentHistory = () => {
+export const SoftAssessmentHistory = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -36,7 +36,7 @@ export const AssessmentHistory = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } =
-    useSelector(techAssessmentSelector);
+    useSelector(softSkillInterviewSelector);
   const {
     currentEmployee: { fullName, position, level, location },
   } = useSelector(employeesSelector);
@@ -45,7 +45,7 @@ export const AssessmentHistory = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(loadTechAssessments(id));
+      dispatch(getAllSoftSkillAssessments(id));
       dispatch(loadEmployee(id));
     }
   }, [id]);
@@ -61,13 +61,13 @@ export const AssessmentHistory = () => {
       pageSize,
       total: assessments.length,
       current: currentPage,
-      showTotal: (total: number) => `Total ${total} technical assessments passed`,
+      showTotal: (total: number) => `Total ${total} soft skills assessments passed`,
     };
-  }, [assessments, currentPage]);
+  }, [assessments]);
 
-  const createPath = (record: IAssessmentFromDB) => {
+  const createPath = (record: ISoftAssessment) => {
     navigate(
-      generatePath(paths.generateCVprevTechnicalAssessment, {
+      generatePath(paths.generateCVprevSoftSkillsAssessment, {
         id: id || '',
         assessmentId: record.id,
       })
@@ -75,7 +75,7 @@ export const AssessmentHistory = () => {
   };
 
   const handleRowClick = useCallback(
-    (record: IAssessmentFromDB) => {
+    (record: ISoftAssessment) => {
       return {
         onClick: () => createPath(record),
       };
@@ -83,7 +83,7 @@ export const AssessmentHistory = () => {
     [history]
   );
 
-  const params: ITableParams<IAssessmentFromDB> = useMemo(() => {
+  const params: ITableParams<ISoftAssessment> = useMemo(() => {
     return {
       entity: ASSESSMENT,
       tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
@@ -103,7 +103,7 @@ export const AssessmentHistory = () => {
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
       navigate(
-        generatePath(paths.generateCVtechnicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel })
+        generatePath(paths.generateCVsoftAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel })
       );
     } else {
       message.warn('You should choose level and position');
@@ -122,22 +122,22 @@ export const AssessmentHistory = () => {
     dispatch(chooseInterviewPosition(position));
   };
 
-  const personalData = { fullName, location, position, level };
-  const state = { positions: allPositions, levels: allLevels };
-
   useEffect(() => {
     return function clear() {
-      dispatch(setTechAssessments([]));
+      dispatch(setSoftAssessmentList([]));
     };
   }, []);
 
-  if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
+  const personalData = { fullName, location, position, level };
+  const state = { positions: allPositions, levels: allLevels };
+
+  if (isLoading) return <Spin size="large" tip={'Loading soft skill assessment...'} />;
 
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={paths.generateCVemployeesList} />
-      <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
-      {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
+      <StartInterviewButton text="Start soft skills assessment" handleClick={handleClick} />
+      {assessments.length ? <Table params={params} /> : <div>soft skill assessments not found</div>}
       <InterviewModal
         isOpen={isOpen}
         modalTitle="Level & Position"

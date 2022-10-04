@@ -1,4 +1,4 @@
-import { IDBLevels, IDBPosition, ISkillGroup, ISkill } from './IUser';
+import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
 import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum } from './IInterview';
 import { NullableField } from './TNullableField';
