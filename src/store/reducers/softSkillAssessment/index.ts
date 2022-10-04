@@ -3,7 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../..';
 
 import { appStoreName } from './actionTypes';
-import { getAllSoftSkillAssessments, getOneSoftAssessment } from './thunks';
+import {
+  getAllSoftSkillAssessments,
+  getOneSoftAssessment,
+  loadSoftSkillsList,
+  addNewSkillToDB,
+  softSkillScores,
+} from './thunks';
 
 import { ISoftAssessmentState, ISoftSkill, ISoftAssessment } from 'models/ISoftAssessment';
 
@@ -12,6 +18,7 @@ import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 const initialState: ISoftAssessmentState = {
   assessments: [],
   softSkillsList: [],
+  scores: [],
   isLoading: false,
   pageSize: defaultPageSize,
   currentPage: defaultCurrentPage,
@@ -78,6 +85,35 @@ const softSkillAssessment = createSlice({
     });
     builder.addCase(getOneSoftAssessment.fulfilled, (state, { payload }) => {
       state.assessmentResult = payload;
+      state.isLoading = false;
+    });
+    builder.addCase(loadSoftSkillsList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(loadSoftSkillsList.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(loadSoftSkillsList.fulfilled, (state, { payload }) => {
+      const processedSkills = payload.map((skill: ISoftSkill) => {
+        return {
+          id: skill.id,
+          value: skill.value,
+          comment: skill.comment,
+          questions: skill.questions,
+          score: skill.score,
+        };
+      });
+      state.softSkillsList = processedSkills;
+      state.isLoading = false;
+    });
+    builder.addCase(softSkillScores.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(softSkillScores.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(softSkillScores.fulfilled, (state, { payload }) => {
+      state.scores = payload;
       state.isLoading = false;
     });
   },

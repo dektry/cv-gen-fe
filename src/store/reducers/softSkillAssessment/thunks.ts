@@ -6,13 +6,17 @@ import {
   httpGetAllSoftAssessments,
   httpGetSoftAssessment,
 } from 'services/requests/softAssessment';
-import { ISoftAssessment } from 'models/ISoftAssessment';
+import { getSoftSkillsList, uploadNewSkill, getSoftSkillScores } from 'services/requests/skills';
+import { ISoftAssessment, ISoftSkill } from 'models/ISoftAssessment';
 
 import {
   completeSoftSkillAssessment,
   loadAllSoftSkillAssessments,
   loadAOneSoftSkillAssessment,
   editSoftSkillAssessment,
+  loadSoftSkillsListAction,
+  loadSoftSkillScores,
+  addNewSkillAction,
 } from './actionTypes';
 
 export const getAllSoftSkillAssessments = createAsyncThunk(loadAllSoftSkillAssessments, (employeeId: string) => {
@@ -30,3 +34,9 @@ export const completeSoftAssessment = createAsyncThunk(completeSoftSkillAssessme
 export const editSoftAssessment = createAsyncThunk(editSoftSkillAssessment, (assessment: ISoftAssessment) => {
   return httpEditSoftAssessment(assessment);
 });
+
+export const addNewSkillToDB = createAsyncThunk(addNewSkillAction, (data: Partial<ISoftSkill>) => uploadNewSkill(data));
+
+export const softSkillScores = createAsyncThunk(loadSoftSkillScores, () => getSoftSkillScores());
+
+export const loadSoftSkillsList = createAsyncThunk(loadSoftSkillsListAction, () => getSoftSkillsList());
