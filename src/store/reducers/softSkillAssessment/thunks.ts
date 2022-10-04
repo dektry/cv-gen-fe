@@ -5,7 +5,7 @@ import {
   httpEditSoftAssessment,
   httpGetAllSoftAssessments,
   httpGetSoftAssessment,
-} from 'actions/softAssessment';
+} from 'services/requests/softAssessment';
 import { ISoftAssessment } from 'models/ISoftAssessment';
 
 import {
