@@ -16,7 +16,7 @@ import { mockDescription, mockSoftSkillsOptions } from './mocks';
 
 export type TProfSkill = {
   groupName: string;
-  skills: { name: string; level: number }[];
+  skills: { name: string; level: string }[];
 };
 
 export type TProject = {

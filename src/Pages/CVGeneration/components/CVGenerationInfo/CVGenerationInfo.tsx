@@ -61,6 +61,7 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
           value={level ? level : ''}
         />
       </div>
+      -
       <div className={classes.row}>
         <TextArea
           className={classes.textArea}

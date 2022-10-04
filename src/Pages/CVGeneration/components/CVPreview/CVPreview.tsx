@@ -10,6 +10,7 @@ import { fetchCvGenerationTemplate, downloadCv, fetchGroupOfTemplates } from 'st
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
+import { profSkillsMock } from 'Pages/CVGeneration/mocks';
 
 interface ICVPreviewProps {
   isModalOpen: boolean;
@@ -58,7 +59,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       } else {
         const templateWidth = 595;
 
-        setPages(getCvPages(cvInfo, compiledTemplate));
+        setPages(getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplate));
 
         // const scale = cvCanvasDimensions.width / templateWidth;
         // const newEl = document.createElement('div');
@@ -91,7 +92,6 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     dispatch(downloadCv(template));
   };
 
-  console.log('pages', pages);
   return (
     <Modal
       open={isModalOpen}
