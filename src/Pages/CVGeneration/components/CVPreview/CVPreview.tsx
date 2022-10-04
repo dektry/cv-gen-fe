@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 
 import { cvGenerationSelector } from 'store/reducers/cvGeneration';
 import { useAppDispatch } from 'store';
-import { fetchCvGenerationTemplate, downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
+import { downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
@@ -46,6 +46,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
     const height = window.innerHeight - sumOfModalVerticalPaddingAndMargins;
     const width = height / A4aspectRatio;
+
     setCvCanvasDimensions({ width, height });
   }, []);
 
@@ -57,6 +58,15 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
         dispatch(fetchGroupOfTemplates(['v2-intro', 'v2-prof-skills', 'v2-projects']));
       } else {
         const templateWidth = 595;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        cvInfo.languages = ['English - B2', 'Russian - native'];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        cvInfo.education = [
+          ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
+          ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
+        ];
 
         const newPages = getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplate);
 
@@ -64,10 +74,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
         const scale = cvCanvasDimensions.width / templateWidth;
         const newEl = document.createElement('div');
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        cvInfo.languages = [];
-        console.log(newPages);
+
         newEl.innerHTML = newPages[0];
         newEl.style.scale = `${scale} ${scale}`;
 

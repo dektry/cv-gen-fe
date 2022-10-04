@@ -29,13 +29,15 @@ export type TProject = {
   tools: string[];
 };
 
-export type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
+export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
   softSkills: SoftSkills[];
   profSkills?: TProfSkill[];
   projects?: TProject[];
+  firstName: string;
+  male: boolean;
 };
 
 export const CVGenerationPage = () => {
@@ -57,12 +59,14 @@ export const CVGenerationPage = () => {
 
       setCvInfo({
         ...currentEmployee,
+        firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
         education: formalEducation,
         softSkills: ['Responsibility', 'Teamwork', 'Communication'],
         // todo: add this field on BE side
         description: mockDescription,
+        male: currentEmployee.gender === 'male',
       });
     }
   }, []);

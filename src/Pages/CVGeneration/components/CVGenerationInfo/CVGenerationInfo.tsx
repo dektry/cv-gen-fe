@@ -18,7 +18,7 @@ interface CVGenerationInfoProps {
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
   const { updateCvInfo, cvInfo, softSkillsOptions } = props;
-  const { fullName, level, position, experience, education, description, softSkills } = cvInfo;
+  const { firstName, level, position, experience, education, description, softSkills } = cvInfo;
 
   const classes = useStyles();
 
@@ -33,9 +33,9 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
         <Input
           name="fullName"
           placeholder={'Name'}
-          addonBefore="Full Name"
-          onChange={(e) => updateCvInfo({ fullName: e.target.value })}
-          value={fullName ? fullName : ''}
+          addonBefore="First Name"
+          onChange={(e) => updateCvInfo({ firstName: e.target.value })}
+          value={firstName ? firstName : ''}
         />
         <Input
           name="experience"
@@ -61,7 +61,6 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
           value={level ? level : ''}
         />
       </div>
-      -
       <div className={classes.row}>
         <TextArea
           className={classes.textArea}
