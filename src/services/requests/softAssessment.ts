@@ -23,7 +23,7 @@ export const httpGetSoftAssessment = async (id: string) => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_GET_SOFT_OFTASSESSMENT_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error('Server error. Please contact admin');
   }
 };
 
