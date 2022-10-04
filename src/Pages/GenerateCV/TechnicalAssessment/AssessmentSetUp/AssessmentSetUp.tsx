@@ -15,7 +15,7 @@ import paths from 'config/routes.json';
 
 import { AssessmentForm } from './components/AssessmentForm.tsx';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { AssessmentPositions } from './components/AssessmentPositions';
+import { AssessmentPositions } from '../../common-components/AssessmentPositions';
 
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();

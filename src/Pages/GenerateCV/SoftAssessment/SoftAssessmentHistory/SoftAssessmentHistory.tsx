@@ -6,7 +6,7 @@ import { message, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import {
-  softSkillInterviewSelector,
+  softSkillAssessmentSelector,
   chooseInterviewLevel,
   chooseInterviewPosition,
   setSoftAssessmentList,
@@ -36,7 +36,7 @@ export const SoftAssessmentHistory = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } =
-    useSelector(softSkillInterviewSelector);
+    useSelector(softSkillAssessmentSelector);
   const {
     currentEmployee: { fullName, position, level, location },
   } = useSelector(employeesSelector);

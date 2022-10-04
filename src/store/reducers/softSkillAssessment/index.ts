@@ -99,7 +99,7 @@ const softSkillAssessment = createSlice({
           id: skill.id,
           value: skill.value,
           comment: skill.comment,
-          questions: skill.questions,
+          questions: skill.question,
           score: skill.score,
         };
       });
@@ -121,7 +121,7 @@ const softSkillAssessment = createSlice({
 
 export default softSkillAssessment.reducer;
 
-export const softSkillInterviewSelector = (state: RootState): ISoftAssessmentState => state.softSkillAssessment;
+export const softSkillAssessmentSelector = (state: RootState): ISoftAssessmentState => state.softSkillAssessment;
 
 export const {
   setSoftAssessmentResult,

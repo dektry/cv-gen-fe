@@ -7,7 +7,7 @@ export interface ISoftSkill {
   value: string;
   score: ISoftSkillScore;
   comment: string;
-  questions?: Array<{ id: string; value: string }>;
+  question: string;
   soft_skill_id: { id: string; value: string };
 }
 
