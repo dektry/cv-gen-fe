@@ -64,7 +64,7 @@ export const SoftAssessmentHistory = () => {
 
   const createPath = (record: ISoftAssessment) => {
     navigate(
-      generatePath(paths.generateCVprevosftSkillsAssessment, {
+      generatePath(paths.generateCVprevSoftSkillsAssessment, {
         id: id || '',
         assessmentId: record.id,
       })
@@ -98,7 +98,7 @@ export const SoftAssessmentHistory = () => {
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
       navigate(
-        generatePath(paths.generateCVtechnicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel })
+        generatePath(paths.generateCVsoftAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel })
       );
     } else {
       message.warn('You should choose level and position');
@@ -125,8 +125,8 @@ export const SoftAssessmentHistory = () => {
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={paths.generateCVemployeesList} />
-      <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
-      {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
+      <StartInterviewButton text="Start soft skills assessment" handleClick={handleClick} />
+      {assessments.length ? <Table params={params} /> : <div>soft skill assessments not found</div>}
       <InterviewModal
         isOpen={isOpen}
         modalTitle="Level & Position"
