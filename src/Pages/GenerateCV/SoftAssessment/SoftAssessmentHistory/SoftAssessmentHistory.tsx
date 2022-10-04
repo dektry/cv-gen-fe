@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
 import { message, Spin } from 'antd';
@@ -56,12 +56,14 @@ export const SoftAssessmentHistory = () => {
     };
   }, []);
 
-  const paginationObj = {
-    pageSize,
-    total: assessments.length,
-    current: currentPage,
-    showTotal: (total: number) => `Total ${total} soft skills assessments passed`,
-  };
+  const paginationObj = useMemo(() => {
+    return {
+      pageSize,
+      total: assessments.length,
+      current: currentPage,
+      showTotal: (total: number) => `Total ${total} soft skills assessments passed`,
+    };
+  }, [assessments]);
 
   const createPath = (record: ISoftAssessment) => {
     navigate(
@@ -81,14 +83,16 @@ export const SoftAssessmentHistory = () => {
     [history]
   );
 
-  const params: ITableParams<ISoftAssessment> = {
-    entity: ASSESSMENT,
-    tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
-    dataSource: assessments,
-    handleRowClick,
-    paginationObj,
-    loading: isLoading,
-  };
+  const params: ITableParams<ISoftAssessment> = useMemo(() => {
+    return {
+      entity: ASSESSMENT,
+      tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
+      dataSource: assessments,
+      handleRowClick,
+      paginationObj,
+      loading: isLoading,
+    };
+  }, [assessments]);
 
   const handleClick = () => {
     setIsOpen(true);

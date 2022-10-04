@@ -51,10 +51,10 @@ export const EmployeeTabs = () => {
         break;
       }
       case '2': {
-        // TODO: fix paths for tabs with SI, EI and Summary
         navigate(generatePath(paths.generateCVsoftSkillAssessmentHistory, { id }));
         break;
       }
+      // TODO: fix paths for tabs with EI and Summary
       case '3': {
         navigate(generatePath(paths.generateCVemployeesList, { id }));
         break;

@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
 import { message, Spin } from 'antd';
@@ -56,12 +56,14 @@ export const AssessmentHistory = () => {
     };
   }, []);
 
-  const paginationObj = {
-    pageSize,
-    total: assessments.length,
-    current: currentPage,
-    showTotal: (total: number) => `Total ${total} technical assessments passed`,
-  };
+  const paginationObj = useMemo(() => {
+    return {
+      pageSize,
+      total: assessments.length,
+      current: currentPage,
+      showTotal: (total: number) => `Total ${total} technical assessments passed`,
+    };
+  }, [assessments, currentPage]);
 
   const createPath = (record: IAssessmentFromDB) => {
     navigate(
@@ -81,14 +83,16 @@ export const AssessmentHistory = () => {
     [history]
   );
 
-  const params: ITableParams<IAssessmentFromDB> = {
-    entity: ASSESSMENT,
-    tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
-    dataSource: assessments,
-    handleRowClick,
-    paginationObj,
-    loading: isLoading,
-  };
+  const params: ITableParams<IAssessmentFromDB> = useMemo(() => {
+    return {
+      entity: ASSESSMENT,
+      tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
+      dataSource: assessments,
+      handleRowClick,
+      paginationObj,
+      loading: isLoading,
+    };
+  }, [assessments]);
 
   const handleClick = () => {
     setIsOpen(true);
