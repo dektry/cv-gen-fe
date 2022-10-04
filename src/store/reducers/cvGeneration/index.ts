@@ -4,14 +4,16 @@ import { appStoreName } from 'store/reducers/cvGeneration/actionTypes';
 import { RootState } from 'store/index';
 import { fetchCvGenerationTemplate, downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
 
-type InitialStateCvGeneration = {
-  templates: { [name: string]: string };
+export type TTemplatesDic = { [name: string]: string };
+
+type TInitialStateCvGeneration = {
+  templates: TTemplatesDic;
   description: string;
   isLoading: boolean;
   isGeneratingPdf: boolean;
 };
 
-const initialState: InitialStateCvGeneration = {
+const initialState: TInitialStateCvGeneration = {
   templates: {},
   description: '',
   isLoading: false,

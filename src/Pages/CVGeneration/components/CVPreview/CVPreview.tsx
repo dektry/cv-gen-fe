@@ -9,6 +9,7 @@ import { useAppDispatch } from 'store';
 import { fetchCvGenerationTemplate, downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
+import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
 
 interface ICVPreviewProps {
   isModalOpen: boolean;
@@ -25,11 +26,18 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   const dispatch = useAppDispatch();
 
   const { templates, isLoading, isGeneratingPdf } = useSelector(cvGenerationSelector);
-  const compiledTemplate = useMemo(() => handlebars.compile(templates['v1'] || ''), [templates]);
+  const compiledTemplate = useMemo(() => {
+    const result: { [name: string]: HandlebarsTemplateDelegate } = {};
+    Object.entries(templates).forEach(([key, value]) => {
+      result[key] = handlebars.compile(value);
+    });
+    return result;
+  }, [templates]);
 
   const cvCanvasEl = useRef<HTMLDivElement | null>(null);
 
   const [cvCanvasDimensions, setCvCanvasDimensions] = useState({ width: 0, height: 0 });
+  const [pages, setPages] = useState<string[]>([]);
 
   useEffect(() => {
     const sumOfModalVerticalPaddingAndMargins = 270;
@@ -45,21 +53,23 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       if (!cvCanvasEl.current) cvCanvasEl.current = document.getElementById('cv-canvas') as HTMLDivElement;
 
       if (isEmpty(templates)) {
-        dispatch(fetchCvGenerationTemplate('v2-intro'));
+        dispatch(fetchCvGenerationTemplate('v1'));
         dispatch(fetchGroupOfTemplates(['v2-intro', 'v2-prof-skills', 'v2-projects']));
       } else {
         const templateWidth = 595;
 
-        const scale = cvCanvasDimensions.width / templateWidth;
-        const newEl = document.createElement('div');
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        cvInfo.languages = [];
-        console.log(cvInfo);
-        newEl.innerHTML = compiledTemplate(cvInfo);
-        newEl.style.scale = `${scale} ${scale}`;
+        setPages(getCvPages(cvInfo, compiledTemplate));
 
-        cvCanvasEl.current.appendChild(newEl);
+        // const scale = cvCanvasDimensions.width / templateWidth;
+        // const newEl = document.createElement('div');
+        // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // // @ts-ignore
+        // cvInfo.languages = [];
+        // console.log(compiledTemplates);
+        // newEl.innerHTML = compiledTemplates['v1'](cvInfo);
+        // newEl.style.scale = `${scale} ${scale}`;
+        //
+        // cvCanvasEl.current.appendChild(newEl);
       }
     }
     return () => {
@@ -67,7 +77,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
         cvCanvasEl.current.innerHTML = '';
       }
     };
-  }, [templates, isModalOpen]);
+  }, [isModalOpen]);
 
   useEffect(() => {
     if (!isGeneratingPdf) {
@@ -81,6 +91,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     dispatch(downloadCv(template));
   };
 
+  console.log('pages', pages);
   return (
     <Modal
       open={isModalOpen}

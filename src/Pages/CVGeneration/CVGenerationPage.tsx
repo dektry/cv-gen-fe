@@ -12,31 +12,30 @@ import { useStyles } from 'Pages/CVGeneration/styles';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
+import { mockDescription, mockSoftSkillsOptions } from './mocks';
 
-// I believe this list should be stored in the database
-export const mockSoftSkillsOptions = [
-  'Responsibility',
-  'Teamwork',
-  'Communication',
-  'Sociability',
-  'Leadership',
-  'Punctuality',
-  'Confidence',
-  'Resilience',
-  'Collaboration',
-  'Time management',
-  'Discipline',
-  'Creativity',
-];
+export type TProfSkill = {
+  groupName: string;
+  skills: { name: string; level: number }[];
+};
 
-const mockDescription =
-  "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.";
+export type TProject = {
+  name: string;
+  description: string;
+  duration: string;
+  position: string;
+  teamSize: number;
+  responsibilities: string[];
+  tools: string[];
+};
 
 export type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
   softSkills: SoftSkills[];
+  profSkills?: TProfSkill[];
+  projects?: TProject[];
 };
 
 export const CVGenerationPage = () => {

@@ -2,8 +2,9 @@ import React, { useMemo } from 'react';
 import { Input, Select, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
-import { CvInfo, mockSoftSkillsOptions } from 'Pages/CVGeneration/CVGenerationPage';
+import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
+import { mockSoftSkillsOptions } from 'Pages/CVGeneration/mocks';
 
 const { Title } = Typography;
 
