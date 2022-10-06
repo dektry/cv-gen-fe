@@ -5,8 +5,11 @@ export const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
+    gap: '15px',
     '& h1': {
       textAlign: 'center',
+      marginBottom: 0,
     },
   },
   cvBox: {

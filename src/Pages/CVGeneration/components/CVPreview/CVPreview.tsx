@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Modal, Spin } from 'antd';
+import { Modal, Pagination, Spin } from 'antd';
 import handlebars from 'handlebars/dist/cjs/handlebars.js';
 import { isEmpty } from 'lodash';
 
@@ -39,9 +39,10 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
   const [cvCanvasDimensions, setCvCanvasDimensions] = useState({ width: 0, height: 0 });
   const [pages, setPages] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const sumOfModalVerticalPaddingAndMargins = 270;
+    const sumOfModalVerticalPaddingAndMargins = 300;
     const A4aspectRatio = 1.414;
 
     const height = window.innerHeight - sumOfModalVerticalPaddingAndMargins;
@@ -57,7 +58,6 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       if (isEmpty(compiledTemplate)) {
         dispatch(fetchGroupOfTemplates(['v2-intro', 'v2-prof-skills', 'v2-projects']));
       } else {
-        const templateWidth = 595;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         cvInfo.languages = ['English - B2', 'Russian - native'];
@@ -69,24 +69,29 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
         ];
 
         const newPages = getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplate);
-
         setPages(newPages);
-
-        const scale = cvCanvasDimensions.width / templateWidth;
-        const newEl = document.createElement('div');
-
-        newEl.innerHTML = newPages[1];
-        newEl.style.scale = `${scale} ${scale}`;
-
-        cvCanvasEl.current.appendChild(newEl);
       }
+    }
+  }, [compiledTemplate, isModalOpen]);
+
+  useEffect(() => {
+    if (isModalOpen && pages.length) {
+      const templateWidth = 595;
+
+      const scale = cvCanvasDimensions.width / templateWidth;
+      const newEl = document.createElement('div');
+
+      newEl.innerHTML = pages[currentPage - 1];
+      newEl.style.scale = `${scale} ${scale}`;
+
+      cvCanvasEl.current?.appendChild(newEl);
     }
     return () => {
       if (cvCanvasEl.current) {
         cvCanvasEl.current.innerHTML = '';
       }
     };
-  }, [compiledTemplate, isModalOpen]);
+  }, [pages, isModalOpen, currentPage]);
 
   useEffect(() => {
     if (!isGeneratingPdf) {
@@ -98,6 +103,10 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     const template = cvCanvasEl.current?.children[0].innerHTML || '';
 
     dispatch(downloadCv(template));
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -114,6 +123,15 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     >
       <div className={classes.container}>
         <h1>CV Preview</h1>
+        {pages.length && (
+          <Pagination
+            simple
+            defaultCurrent={currentPage}
+            total={pages.length}
+            pageSize={1}
+            onChange={handlePageChange}
+          />
+        )}
         <div
           id="cv-canvas"
           style={{ width: cvCanvasDimensions.width + 'px', height: cvCanvasDimensions.height + 'px' }}
