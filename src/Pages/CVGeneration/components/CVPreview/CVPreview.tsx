@@ -100,9 +100,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   }, [isGeneratingPdf]);
 
   const handleDownloadCv = () => {
-    const template = cvCanvasEl.current?.children[0].innerHTML || '';
-
-    dispatch(downloadCv(template));
+    dispatch(downloadCv(pages.join('')));
   };
 
   const handlePageChange = (page: number) => {

@@ -1,6 +1,11 @@
 import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
 import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
-import { profSkillGroupHeight, profSkillLineHeight, templatePadding } from '../constants';
+import {
+  invisibleBorderToWrapWithoutSkills,
+  profSkillGroupHeight,
+  profSkillLineHeight,
+  templatePadding,
+} from '../constants';
 
 type TNextPageStart = { group: number; skill: number | null };
 
@@ -97,7 +102,6 @@ const groupProfSkillsForPages = (
   { group, skill }: TNextPageStart,
   profSkills: TProfSkill[]
 ): { profSkills: TProfSkill[] }[] => {
-  console.log(group, skill);
   const body = document.body;
   const div = document.createElement('div');
   div.style.position = 'absolute';
@@ -110,9 +114,9 @@ const groupProfSkillsForPages = (
   const availableSpaceOnSinglePage =
     document.getElementsByClassName('container')[0].clientHeight -
     2 * templatePadding -
+    invisibleBorderToWrapWithoutSkills -
     document.getElementsByClassName('without-prof-skills')[0].clientHeight;
   let availableSpace = availableSpaceOnSinglePage;
-
   div.remove();
 
   const result: { profSkills: TProfSkill[] }[] = [];
@@ -120,25 +124,31 @@ const groupProfSkillsForPages = (
   result.push(currentPage as { profSkills: TProfSkill[] });
 
   for (let i = group; i < profSkills.length; i++) {
-    availableSpace -= profSkillGroupHeight;
+    // if true - group name was already added to intro page
+    if (i === group && skill !== null) {
+      currentPage.profSkills.push({ skills: [] });
+    } else {
+      availableSpace -= profSkillGroupHeight;
 
-    if (availableSpace < profSkillLineHeight) {
-      availableSpace = availableSpaceOnSinglePage;
-      currentPage = { profSkills: [] };
-      result.push(currentPage as { profSkills: TProfSkill[] });
+      if (availableSpace < profSkillLineHeight) {
+        availableSpace = availableSpaceOnSinglePage;
+        currentPage = { profSkills: [] };
+        result.push(currentPage as { profSkills: TProfSkill[] });
+      }
+
+      currentPage.profSkills.push({ ...profSkills[i], skills: [] });
     }
-
-    currentPage.profSkills.push({ ...profSkills[i], skills: [] });
 
     for (let j = 0; j < profSkills[i].skills.length; j++) {
       // if we are on the first page, we need to skip skills, which were already placed on intro page
       if (i == group && skill !== null && j < skill) continue;
 
-      if (availableSpace < profSkillLineHeight * 2 && j % 2 === 0) {
+      if (availableSpace < profSkillLineHeight * 2) {
         availableSpace = availableSpaceOnSinglePage;
         currentPage = { profSkills: [{ skills: [] }] };
         result.push(currentPage as { profSkills: TProfSkill[] });
       }
+
       availableSpace -= profSkillLineHeight;
 
       currentPage.profSkills[currentPage.profSkills.length - 1].skills.push(profSkills[i].skills[j]);
