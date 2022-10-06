@@ -3,13 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../..';
 
 import { appStoreName } from './actionTypes';
-import {
-  getAllSoftSkillAssessments,
-  getOneSoftAssessment,
-  loadSoftSkillsList,
-  addNewSkillToDB,
-  softSkillScores,
-} from './thunks';
+import { getAllSoftSkillAssessments, getOneSoftAssessment, loadSoftSkillsList, softSkillScores } from './thunks';
 
 import { ISoftAssessmentState, ISoftSkill, ISoftAssessment } from 'models/ISoftAssessment';
 
@@ -25,6 +19,7 @@ const initialState: ISoftAssessmentState = {
   assessmentResult: null,
   chosenLevel: undefined,
   chosenPosition: undefined,
+  currentAssessment: null,
 };
 
 const softSkillAssessment = createSlice({
@@ -36,6 +31,9 @@ const softSkillAssessment = createSlice({
     },
     setSoftAssessmentList: (state, { payload }: PayloadAction<ISoftAssessment[] | []>) => {
       state.assessments = payload;
+    },
+    setSoftAssessment: (state, { payload }: PayloadAction<ISoftAssessment>) => {
+      state.currentAssessment = payload;
     },
     setSoftSkillsList: (state, { payload }: PayloadAction<ISoftSkill[]>) => {
       state.softSkillsList = payload;
@@ -131,4 +129,5 @@ export const {
   chooseInterviewPosition,
   setIsLoading,
   setSoftAssessmentList,
+  setSoftAssessment,
 } = softSkillAssessment.actions;
