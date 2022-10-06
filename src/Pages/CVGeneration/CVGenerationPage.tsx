@@ -15,7 +15,7 @@ import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHe
 import { mockDescription, mockSoftSkillsOptions } from './mocks';
 
 export type TProfSkill = {
-  groupName: string;
+  groupName?: string;
   skills: { name: string; level: string }[];
 };
 

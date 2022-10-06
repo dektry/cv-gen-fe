@@ -1,9 +1,11 @@
 import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
 import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { profSkillGroupHeight, profSkillLineHeight, templatePadding } from '../constants';
+
+type TNextPageStart = { group: number; skill: number | null };
 
 export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
-  console.log('getCvPages');
-  const dataForPages = [];
+  let dataForPages: Partial<CvInfo>[] = [];
   const result: string[] = [];
 
   if (!cvInfo.profSkills) return result;
@@ -22,8 +24,16 @@ export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: Handleba
     profSkills: profSkillsOnIntroPage,
   });
 
+  dataForPages = dataForPages.concat(
+    groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
+  );
+
   dataForPages.forEach((data, index) => {
-    result.push(templates['v2-intro']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
+    if (data.firstName) {
+      result.push(templates['v2-intro']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
+    } else if (data.profSkills) {
+      result.push(templates['v2-prof-skills']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
+    }
   });
 
   return result;
@@ -36,10 +46,7 @@ const countProfSkillsOnIntroPage = (
   softSkills: SoftSkills[],
   profSkills: TProfSkill[],
   position: string | null
-): { profSkillsOnIntroPage: TProfSkill[]; nextPageStart: { group: number; skill: number | null } } => {
-  const profSkillGroupHeight = 19 + 12; // 19 - height of prof skill group, 12 - margin bottom
-  const profSkillLineHeight = (23 + 12) / 2; // 23 - height of prof skill line, 12 - margin bottom, /2 - half of line height since there are two skills in one line
-
+): { profSkillsOnIntroPage: TProfSkill[]; nextPageStart: TNextPageStart } => {
   const body = document.body;
   const div = document.createElement('div');
   div.style.position = 'absolute';
@@ -52,6 +59,8 @@ const countProfSkillsOnIntroPage = (
   let availableSpace =
     document.getElementsByClassName('second-column')[0].clientHeight -
     document.getElementsByClassName('without-prof-skills')[0].clientHeight;
+
+  div.remove();
 
   const result: TProfSkill[] = [];
   let group = 0;
@@ -68,7 +77,7 @@ const countProfSkillsOnIntroPage = (
     result.push({ ...profSkills[i], skills: [] });
 
     for (let j = 0; j < profSkills[i].skills.length; j++) {
-      if (availableSpace < profSkillLineHeight * 2) {
+      if (availableSpace < profSkillLineHeight * 2 && j % 2 === 0) {
         break;
       }
       availableSpace -= profSkillLineHeight;
@@ -80,7 +89,61 @@ const countProfSkillsOnIntroPage = (
     }
   }
 
+  return { profSkillsOnIntroPage: result, nextPageStart: { group, skill } };
+};
+
+const groupProfSkillsForPages = (
+  template: HandlebarsTemplateDelegate,
+  { group, skill }: TNextPageStart,
+  profSkills: TProfSkill[]
+): { profSkills: TProfSkill[] }[] => {
+  console.log(group, skill);
+  const body = document.body;
+  const div = document.createElement('div');
+  div.style.position = 'absolute';
+  div.style.visibility = 'hidden';
+  div.innerHTML = template({});
+
+  // create hidden div with template, which will be used to count height of prof skills
+  body.appendChild(div);
+
+  const availableSpaceOnSinglePage =
+    document.getElementsByClassName('container')[0].clientHeight -
+    2 * templatePadding -
+    document.getElementsByClassName('without-prof-skills')[0].clientHeight;
+  let availableSpace = availableSpaceOnSinglePage;
+
   div.remove();
 
-  return { profSkillsOnIntroPage: result, nextPageStart: { group, skill } };
+  const result: { profSkills: TProfSkill[] }[] = [];
+  let currentPage: { profSkills: TProfSkill[] } = { profSkills: [] };
+  result.push(currentPage as { profSkills: TProfSkill[] });
+
+  for (let i = group; i < profSkills.length; i++) {
+    availableSpace -= profSkillGroupHeight;
+
+    if (availableSpace < profSkillLineHeight) {
+      availableSpace = availableSpaceOnSinglePage;
+      currentPage = { profSkills: [] };
+      result.push(currentPage as { profSkills: TProfSkill[] });
+    }
+
+    currentPage.profSkills.push({ ...profSkills[i], skills: [] });
+
+    for (let j = 0; j < profSkills[i].skills.length; j++) {
+      // if we are on the first page, we need to skip skills, which were already placed on intro page
+      if (i == group && skill !== null && j < skill) continue;
+
+      if (availableSpace < profSkillLineHeight * 2 && j % 2 === 0) {
+        availableSpace = availableSpaceOnSinglePage;
+        currentPage = { profSkills: [{ skills: [] }] };
+        result.push(currentPage as { profSkills: TProfSkill[] });
+      }
+      availableSpace -= profSkillLineHeight;
+
+      currentPage.profSkills[currentPage.profSkills.length - 1].skills.push(profSkills[i].skills[j]);
+    }
+  }
+
+  return result;
 };

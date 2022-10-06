@@ -75,7 +75,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
         const scale = cvCanvasDimensions.width / templateWidth;
         const newEl = document.createElement('div');
 
-        newEl.innerHTML = newPages[0];
+        newEl.innerHTML = newPages[1];
         newEl.style.scale = `${scale} ${scale}`;
 
         cvCanvasEl.current.appendChild(newEl);

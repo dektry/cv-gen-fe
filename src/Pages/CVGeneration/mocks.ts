@@ -81,6 +81,194 @@ export const profSkillsMock: TProfSkill[] = [
         level: 'Advanced',
       },
       {
+        name: 'Svelte',
+        level: 'Advanced',
+      },
+      {
+        name: 'NextJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+    ],
+  },
+  {
+    groupName: 'You name it!',
+    skills: [
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+    ],
+  },
+  {
+    groupName: 'Programming languages',
+    skills: [
+      {
+        name: 'JavaScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'TypeScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'JavaScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'TypeScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'JavaScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'TypeScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'JavaScript',
+        level: 'Advanced',
+      },
+      {
+        name: 'TypeScript',
+        level: 'Advanced',
+      },
+    ],
+  },
+  {
+    groupName: 'Frameworks',
+    skills: [
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+    ],
+  },
+  {
+    groupName: 'You name it!',
+    skills: [
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
+        name: 'Angular',
+        level: 'Advanced',
+      },
+      {
+        name: 'NestJS',
+        level: 'Advanced',
+      },
+      {
+        name: 'React Native',
+        level: 'God plz no',
+      },
+      {
+        name: 'React',
+        level: 'Advanced',
+      },
+      {
         name: 'Angular',
         level: 'Advanced',
       },
