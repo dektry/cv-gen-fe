@@ -62,7 +62,6 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
         const newPages = getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplates);
 
         newPages.forEach((p) => {
-          const scale = cvCanvasDimensions.width / templateWidth;
           const newEl = document.createElement('div');
           newEl.innerHTML = p;
           cvCanvasEl.current?.children[0]?.appendChild(newEl);
