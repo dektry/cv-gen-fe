@@ -11,6 +11,7 @@ import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
 import { profSkillsMock } from 'Pages/CVGeneration/mocks';
+import { templateWidth } from 'Pages/CVGeneration/constants';
 
 interface ICVPreviewProps {
   isModalOpen: boolean;
@@ -76,8 +77,6 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
   useEffect(() => {
     if (isModalOpen && pages.length) {
-      const templateWidth = 595;
-
       const scale = cvCanvasDimensions.width / templateWidth;
       const newEl = document.createElement('div');
 

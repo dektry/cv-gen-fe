@@ -1,9 +1,10 @@
-import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { CvInfo, TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
 import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import {
   invisibleBorderToWrapWithoutSkills,
   profSkillGroupHeight,
   profSkillLineHeight,
+  projectBottomMargin,
   templatePadding,
 } from '../constants';
 
@@ -33,11 +34,15 @@ export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: Handleba
     groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
   );
 
+  dataForPages = dataForPages.concat(groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[]));
+
   dataForPages.forEach((data, index) => {
     if (data.firstName) {
       result.push(templates['v2-intro']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
     } else if (data.profSkills) {
       result.push(templates['v2-prof-skills']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
+    } else if (data.projects) {
+      result.push(templates['v2-projects']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
     }
   });
 
@@ -153,6 +158,50 @@ const groupProfSkillsForPages = (
 
       currentPage.profSkills[currentPage.profSkills.length - 1].skills.push(profSkills[i].skills[j]);
     }
+  }
+
+  return result;
+};
+
+const groupProjectsForPages = (
+  template: HandlebarsTemplateDelegate,
+  projects: TProject[]
+): { projects: TProject[] }[] => {
+  const body = document.body;
+  const div = document.createElement('div');
+  div.style.position = 'absolute';
+  div.style.visibility = 'hidden';
+
+  div.innerHTML = template({ projects });
+
+  // create hidden div with template, which will be used to count height of prof skills
+  body.appendChild(div);
+
+  const availableSpaceOnSinglePage =
+    document.getElementsByClassName('container')[0].clientHeight -
+    2 * templatePadding -
+    invisibleBorderToWrapWithoutSkills -
+    document.getElementsByClassName('without-prof-skills')[0].clientHeight;
+  let availableSpace = availableSpaceOnSinglePage;
+
+  const projectsElements = document.getElementsByClassName('project-box');
+  const projectsElementsHeight = Array.from(projectsElements).map((e) => e.clientHeight + projectBottomMargin);
+
+  div.remove();
+
+  const result: { projects: TProject[] }[] = [];
+  let currentPage: { projects: TProject[] } = { projects: [] };
+  result.push(currentPage as { projects: TProject[] });
+
+  for (let i = 0; i < projects.length; i++) {
+    if (availableSpace < projectsElementsHeight[i]) {
+      availableSpace = availableSpaceOnSinglePage;
+      currentPage = { projects: [] };
+      result.push(currentPage as { projects: TProject[] });
+    }
+    availableSpace -= projectsElementsHeight[i];
+
+    currentPage.projects.push(projects[i]);
   }
 
   return result;

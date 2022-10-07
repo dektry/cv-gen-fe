@@ -12,7 +12,7 @@ import { useStyles } from 'Pages/CVGeneration/styles';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
-import { mockDescription, mockSoftSkillsOptions } from './mocks';
+import { mockDescription, mockProjects, mockSoftSkillsOptions } from './mocks';
 
 export type TProfSkill = {
   groupName?: string;
@@ -67,6 +67,7 @@ export const CVGenerationPage = () => {
         // todo: add this field on BE side
         description: mockDescription,
         male: currentEmployee.gender === 'male',
+        projects: mockProjects,
       });
     }
   }, []);

@@ -5,3 +5,7 @@ export const profSkillLineHeight = (22 + 1 + 12) / 2; // 22 - height of prof ski
 export const templatePadding = 24; // 24 - padding of template
 
 export const invisibleBorderToWrapWithoutSkills = 2;
+
+export const templateWidth = 595;
+
+export const projectBottomMargin = 28;

@@ -1,5 +1,5 @@
 // I believe this list should be stored in the database
-import { TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
 
 export const mockSoftSkillsOptions = [
   'Responsibility',
@@ -297,5 +297,50 @@ export const profSkillsMock: TProfSkill[] = [
         level: 'God plz no',
       },
     ],
+  },
+];
+
+export const mockProjects: TProject[] = [
+  {
+    name: 'Project 1',
+    duration: '8 months',
+    position: 'Frontend developer',
+    teamSize: 3,
+    description: mockDescription,
+    responsibilities: [
+      'Implementing visual component using React React hooks and less',
+      'Creating connection to Shopify, google analytics, and Google Ads',
+      'Creating components for visual presentation of information using Highcharts (diagrams, maps)',
+      'Requirements and estimation Bug fixing.',
+    ],
+    tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Shopify', 'Google Analytics', 'Google Ads'],
+  },
+  {
+    name: 'Project 1',
+    duration: '8 months',
+    position: 'Frontend developer',
+    teamSize: 3,
+    description: mockDescription,
+    responsibilities: [
+      'Implementing visual component using React React hooks and less',
+      'Creating connection to Shopify, google analytics, and Google Ads',
+      'Creating components for visual presentation of information using Highcharts (diagrams, maps)',
+      'Requirements and estimation Bug fixing.',
+    ],
+    tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Shopify', 'Google Analytics', 'Google Ads'],
+  },
+  {
+    name: 'Project 1',
+    duration: '8 months',
+    position: 'Frontend developer',
+    teamSize: 3,
+    description: mockDescription,
+    responsibilities: [
+      'Implementing visual component using React React hooks and less',
+      'Creating connection to Shopify, google analytics, and Google Ads',
+      'Creating components for visual presentation of information using Highcharts (diagrams, maps)',
+      'Requirements and estimation Bug fixing.',
+    ],
+    tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Shopify', 'Google Analytics', 'Google Ads'],
   },
 ];
