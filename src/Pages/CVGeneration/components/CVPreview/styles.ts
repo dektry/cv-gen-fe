@@ -21,4 +21,9 @@ export const useStyles = createUseStyles({
     alignItems: 'center',
     overflow: 'hidden',
   },
+  pages: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    transition: '.4s',
+  },
 });

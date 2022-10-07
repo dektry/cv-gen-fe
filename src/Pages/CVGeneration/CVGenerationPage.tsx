@@ -55,19 +55,27 @@ export const CVGenerationPage = () => {
     if (currentEmployee.id == '101010') {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { startingPoint, hiredOn, formalEducation, position } = currentEmployee;
+      const { startingPoint, hiredOn, position } = currentEmployee;
 
       setCvInfo({
         ...currentEmployee,
         firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
-        education: formalEducation,
         softSkills: ['Responsibility', 'Teamwork', 'Communication'],
         // todo: add this field on BE side
         description: mockDescription,
         male: currentEmployee.gender === 'male',
         projects: mockProjects,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        languages: ['English - B2', 'Russian - native'],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        education: [
+          ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
+          ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
+        ],
       });
     }
   }, []);

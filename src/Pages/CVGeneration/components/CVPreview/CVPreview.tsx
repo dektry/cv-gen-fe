@@ -28,7 +28,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   const dispatch = useAppDispatch();
 
   const { templates, isLoading, isGeneratingPdf } = useSelector(cvGenerationSelector);
-  const compiledTemplate = useMemo(() => {
+  const compiledTemplates = useMemo(() => {
     const result: { [name: string]: HandlebarsTemplateDelegate } = {};
     Object.entries(templates).forEach(([key, value]) => {
       result[key] = handlebars.compile(value);
@@ -56,41 +56,34 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     if (isModalOpen) {
       if (!cvCanvasEl.current) cvCanvasEl.current = document.getElementById('cv-canvas') as HTMLDivElement;
 
-      if (isEmpty(compiledTemplate)) {
+      if (isEmpty(compiledTemplates)) {
         dispatch(fetchGroupOfTemplates(['v2-intro', 'v2-prof-skills', 'v2-projects']));
       } else {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        cvInfo.languages = ['English - B2', 'Russian - native'];
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        cvInfo.education = [
-          ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
-          ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
-        ];
+        const newPages = getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplates);
 
-        const newPages = getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplate);
+        newPages.forEach((p) => {
+          const scale = cvCanvasDimensions.width / templateWidth;
+          const newEl = document.createElement('div');
+          newEl.innerHTML = p;
+          cvCanvasEl.current?.children[0]?.appendChild(newEl);
+
+          return newEl;
+        });
+
         setPages(newPages);
       }
     }
-  }, [compiledTemplate, isModalOpen]);
-
-  useEffect(() => {
-    if (isModalOpen && pages.length) {
-      const scale = cvCanvasDimensions.width / templateWidth;
-      const newEl = document.createElement('div');
-
-      newEl.innerHTML = pages[currentPage - 1];
-      newEl.style.scale = `${scale} ${scale}`;
-
-      cvCanvasEl.current?.appendChild(newEl);
-    }
     return () => {
       if (cvCanvasEl.current) {
-        cvCanvasEl.current.innerHTML = '';
+        const pages = cvCanvasEl.current.children[0];
+        if (pages) pages.innerHTML = '';
       }
+      setPages([]);
     };
-  }, [pages, isModalOpen, currentPage]);
+  }, [compiledTemplates, isModalOpen]);
+  useEffect(() => {
+    if (!isModalOpen) setCurrentPage(1);
+  }, [isModalOpen]);
 
   useEffect(() => {
     if (!isGeneratingPdf) {
@@ -105,6 +98,8 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const pagesPosition = (pages.length * templateWidth) / 2 - templateWidth / 2 - (currentPage - 1) * templateWidth;
 
   return (
     <Modal
@@ -121,20 +116,22 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       <div className={classes.container}>
         <h1>CV Preview</h1>
         {pages.length && (
-          <Pagination
-            simple
-            defaultCurrent={currentPage}
-            total={pages.length}
-            pageSize={1}
-            onChange={handlePageChange}
-          />
+          <Pagination simple current={currentPage} total={pages.length} pageSize={1} onChange={handlePageChange} />
         )}
         <div
           id="cv-canvas"
           style={{ width: cvCanvasDimensions.width + 'px', height: cvCanvasDimensions.height + 'px' }}
           className={classes.cvBox}
         >
-          {isLoading && <Spin size="large" tip={'Loading template...'} />}
+          {isLoading ? <Spin size="large" tip={'Loading template...'} /> : null}
+          <div
+            className={classes.pages}
+            style={{
+              transform: `translateX(${pagesPosition}px)`,
+              visibility: pages.length ? 'visible' : 'hidden',
+              scale: `${cvCanvasDimensions.width / templateWidth} ${cvCanvasDimensions.width / templateWidth}`,
+            }}
+          ></div>
         </div>
       </div>
     </Modal>

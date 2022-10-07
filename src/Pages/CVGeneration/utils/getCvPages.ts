@@ -181,7 +181,7 @@ const groupProjectsForPages = (
     document.getElementsByClassName('container')[0].clientHeight -
     2 * templatePadding -
     invisibleBorderToWrapWithoutSkills -
-    document.getElementsByClassName('without-prof-skills')[0].clientHeight;
+    document.getElementsByClassName('without-projects')[0].clientHeight;
   let availableSpace = availableSpaceOnSinglePage;
 
   const projectsElements = document.getElementsByClassName('project-box');

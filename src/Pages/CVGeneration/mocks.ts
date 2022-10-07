@@ -1,6 +1,6 @@
-// I believe this list should be stored in the database
 import { TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
 
+// I believe this list should be stored in the database
 export const mockSoftSkillsOptions = [
   'Responsibility',
   'Teamwork',
@@ -342,5 +342,33 @@ export const mockProjects: TProject[] = [
       'Requirements and estimation Bug fixing.',
     ],
     tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Shopify', 'Google Analytics', 'Google Ads'],
+  },
+  {
+    name: 'Project 1',
+    duration: '8 months',
+    position: 'Frontend developer',
+    teamSize: 3,
+    description:
+      'It is a long-established fact that a reader will be distracted by the readable content of a page when looking at ',
+    responsibilities: [
+      'Implementing visual component using React React hooks and less',
+      'Creating connection to Shopify, google analytics, and Google Ads',
+      'Requirements and estimation Bug fixing.',
+    ],
+    tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Google Ads'],
+  },
+  {
+    name: 'Project 1',
+    duration: '8 months',
+    position: 'Frontend developer',
+    teamSize: 3,
+    description:
+      'It is a long-established fact that a reader will be distracted by the readable content of a page when looking at ',
+    responsibilities: [
+      'Implementing visual component using React React hooks and less',
+      'Creating connection to Shopify, google analytics, and Google Ads',
+      'Requirements and estimation Bug fixing.',
+    ],
+    tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Google Ads'],
   },
 ];
