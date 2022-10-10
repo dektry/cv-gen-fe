@@ -16,6 +16,7 @@ import { AssessmentHistory } from 'Pages/GenerateCV/TechnicalAssessment/Assessme
 import { CVGenerationPage } from 'Pages/CVGeneration';
 import { SoftAssessmentHistory } from 'Pages/GenerateCV/SoftAssessment/SoftAssessmentHistory';
 import { SoftAssessmentSetUp } from 'Pages/GenerateCV/SoftAssessment/SoftAssessmentSetUp';
+import { UIElements } from 'Pages/UIElements';
 
 import routes from 'config/routes.json';
 
@@ -43,4 +44,5 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVsoftSkillAssessmentHistory, component: SoftAssessmentHistory },
   { path: routes.generateCVprevSoftSkillsAssessment, component: SoftAssessmentSetUp },
   { path: routes.generateCVsoftAssessment, component: SoftAssessmentSetUp },
+  { path: routes.uiElements, component: UIElements },
 ];
