@@ -72,9 +72,9 @@ theme = createTheme(theme, {
             },
           },
           '& .MuiFormHelperText-root': {
-            visibility: 'hidden',
+            display: 'none',
             '&.Mui-error': {
-              visibility: 'visible',
+              display: 'block',
             },
           },
         },

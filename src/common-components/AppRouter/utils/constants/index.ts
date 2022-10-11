@@ -44,5 +44,8 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVsoftSkillAssessmentHistory, component: SoftAssessmentHistory },
   { path: routes.generateCVprevSoftSkillsAssessment, component: SoftAssessmentSetUp },
   { path: routes.generateCVsoftAssessment, component: SoftAssessmentSetUp },
-  { path: routes.uiElements, component: UIElements },
 ];
+
+if (process.env.REACT_APP_ENV === 'development') {
+  privateRoutes.push({ path: routes.uiElements, component: UIElements });
+}
