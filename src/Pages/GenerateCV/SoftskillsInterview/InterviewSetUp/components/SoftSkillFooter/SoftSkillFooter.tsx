@@ -19,14 +19,13 @@ interface ISoftSkillFooterProps {
   comment: string | undefined;
 }
 
-export const SoftSkillFotter = ({
+export const SoftSkillFooter = ({
   setOpenSkillModal,
   handleChange,
   comment,
   currentCandidate,
 }: ISoftSkillFooterProps) => {
   const classes = useStyles();
-
 
   return (
     <div className={classes.footer}>
@@ -48,11 +47,7 @@ export const SoftSkillFotter = ({
         onChange={handleChange}
         value={comment}
       />
-      <ButtonWithLink
-        path={paths.generateCVsoftskillsInterviewResult}
-        text={'See results'}
-        id={currentCandidate?.id}
-      />
+      <ButtonWithLink path={paths.generateCVsoftskillsInterviewResult} text={'See results'} id={currentCandidate?.id} />
       <ButtonWithLink
         path={paths.generateCVtechnicalInterview}
         text={'Start tech interview'}

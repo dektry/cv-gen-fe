@@ -4,6 +4,7 @@ import { ISoftSkillScore } from './ISoftSkillsInterview';
 
 export interface IQuestion {
   id: string;
+  soft_skill_id?: string;
   value: string;
 }
 
@@ -24,10 +25,10 @@ export interface ISoftAssessment {
   position?: IDBPosition;
   level?: IDBLevels;
   comment?: string;
-  softSkills: Array<ISoftSkill>;
+  softSkills: ISoftSkill[];
   chosenPosition?: string;
   chosenLevel?: string;
-  successfullySaved: boolean;
+  successfullySaved?: boolean;
 }
 
 export interface ISoftAssessmentState {
@@ -41,5 +42,4 @@ export interface ISoftAssessmentState {
   chosenLevel?: string;
   skillId?: string;
   assessmentResult: NullableField<ISoftAssessment>;
-  currentAssessment: NullableField<ISoftAssessment>;
 }

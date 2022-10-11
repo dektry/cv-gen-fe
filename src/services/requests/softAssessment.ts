@@ -40,7 +40,7 @@ export const httpCompleteSoftAssessment = async (assessment: ISoftAssessment) =>
 
 export const httpEditSoftAssessment = async (assessment: ISoftAssessment) => {
   try {
-    const { data } = await apiClient.put(`${endpoints.employeeInterviews}/${assessment.id}`, assessment);
+    const { data } = await apiClient.put(`${endpoints.employeeSoftAssessments}/${assessment.id}`, assessment);
 
     return data;
   } catch (error) {

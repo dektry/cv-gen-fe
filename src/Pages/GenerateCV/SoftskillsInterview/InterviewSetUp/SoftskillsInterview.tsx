@@ -13,9 +13,9 @@ import {
   softSkillInterviewSelector,
   loadSoftSkillsList,
   loadSoftSkillInterview,
-  softSkillScores, 
+  softSkillScores,
   finishSoftSkillInterview,
-  saveChangesToSoftSkillsInterview
+  saveChangesToSoftSkillsInterview,
 } from 'store/reducers/softskillsInterview';
 import { loadPositions } from 'store/reducers/positions';
 import { loadLevels } from 'store/reducers/levels';
@@ -26,7 +26,7 @@ import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { Skill } from './components/Skill';
 import { SoftSkillModal } from './components/SoftSkillModal';
 import { GenerateCV } from '../../common-components/GenerateCv';
-import { SoftSkillFotter } from './components/SoftSkillFooter';
+import { SoftSkillFooter } from './components/SoftSkillFooter';
 
 import { ISoftSkill } from 'models/ISoftSkillsInterview';
 import paths from 'config/routes.json';
@@ -40,7 +40,7 @@ export const SoftskillsInterview = () => {
     softskillsInterview,
     softSkillsList,
     isLoading: isLoadingSoftInterview,
-    scores
+    scores,
   } = useSelector(softSkillInterviewSelector);
 
   const [isOpenSkillModal, setOpenSkillModal] = useState(false);
@@ -55,9 +55,9 @@ export const SoftskillsInterview = () => {
       const softskillsInterviewCopy = cloneDeep(softskillsInterview);
       softskillsInterviewCopy.comment = value;
       softskillsInterviewCopy.candidateId = id;
-      softskillsInterview?.successfullySaved ?
-        dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
-        dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
+      softskillsInterview?.successfullySaved
+        ? dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy))
+        : dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
       dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
     }, 600)
   ).current;
@@ -105,17 +105,17 @@ export const SoftskillsInterview = () => {
       </GenerateCvHeader>
       {skillsToView &&
         skillsToView.map((el: ISoftSkill) => (
-          <Skill 
-            key={el.id} 
-            skill={el} 
-            softskillsInterview={softskillsInterview} 
-            softSkillsList={softSkillsList} 
+          <Skill
+            key={el.id}
+            skill={el}
+            softskillsInterview={softskillsInterview}
+            softSkillsList={softSkillsList}
             scores={scores}
             candidateId={id}
           />
         ))}
       <SoftSkillModal isOpenSkillModal={isOpenSkillModal} onClose={() => setOpenSkillModal(false)} />
-      <SoftSkillFotter
+      <SoftSkillFooter
         setOpenSkillModal={setOpenSkillModal}
         handleChange={handleChange}
         comment={comment}

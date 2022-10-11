@@ -3,7 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../..';
 
 import { appStoreName } from './actionTypes';
-import { getAllSoftSkillAssessments, getOneSoftAssessment, loadSoftSkillsList, softSkillScores } from './thunks';
+import {
+  completeSoftAssessment,
+  getAllSoftSkillAssessments,
+  getOneSoftAssessment,
+  loadSoftSkillsList,
+  softSkillScores,
+} from './thunks';
 
 import { ISoftAssessmentState, ISoftSkill, ISoftAssessment } from 'models/ISoftAssessment';
 
@@ -19,7 +25,6 @@ const initialState: ISoftAssessmentState = {
   assessmentResult: null,
   chosenLevel: undefined,
   chosenPosition: undefined,
-  currentAssessment: null,
 };
 
 const softSkillAssessment = createSlice({
@@ -31,9 +36,6 @@ const softSkillAssessment = createSlice({
     },
     setSoftAssessmentList: (state, { payload }: PayloadAction<ISoftAssessment[] | []>) => {
       state.assessments = payload;
-    },
-    setSoftAssessment: (state, { payload }: PayloadAction<ISoftAssessment>) => {
-      state.currentAssessment = payload;
     },
     setSoftSkillsList: (state, { payload }: PayloadAction<ISoftSkill[]>) => {
       state.softSkillsList = payload;
@@ -69,6 +71,7 @@ const softSkillAssessment = createSlice({
             position: el.position?.name,
             level: el.level?.name,
             type: 'Assessment',
+            softSkills: el.softSkills,
           };
         });
         state.assessments = processedAssessments;
@@ -97,7 +100,7 @@ const softSkillAssessment = createSlice({
           id: skill.id,
           value: skill.value,
           comment: skill.comment,
-          questions: skill.question,
+          questions: skill.questions,
           score: skill.score,
         };
       });
@@ -114,6 +117,9 @@ const softSkillAssessment = createSlice({
       state.scores = payload;
       state.isLoading = false;
     });
+    builder.addCase(completeSoftAssessment.fulfilled, (state, { payload }) => {
+      state.assessmentResult = payload;
+    });
   },
 });
 
@@ -129,5 +135,4 @@ export const {
   chooseInterviewPosition,
   setIsLoading,
   setSoftAssessmentList,
-  setSoftAssessment,
 } = softSkillAssessment.actions;

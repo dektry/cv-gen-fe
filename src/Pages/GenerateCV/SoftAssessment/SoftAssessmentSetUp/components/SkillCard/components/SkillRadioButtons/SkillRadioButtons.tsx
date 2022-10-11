@@ -7,16 +7,16 @@ import { cloneDeep } from 'lodash';
 
 import { useAppDispatch } from 'store';
 
-import { setSoftAssessment } from 'store/reducers/softSkillAssessment';
 import { editSoftAssessment, completeSoftAssessment } from 'store/reducers/softSkillAssessment/thunks';
 
 import { ISoftSkillScore } from 'models/ISoftSkillsInterview';
 import { ISoftAssessment, ISoftSkill } from 'models/ISoftAssessment';
+import { NullableField } from 'models/TNullableField';
 
 interface IProps {
   id?: string;
   scores?: ISoftSkillScore[];
-  softskillsInterview: ISoftAssessment;
+  softskillsInterview: NullableField<ISoftAssessment>;
   softSkillsList: [] | ISoftSkill[];
   employeeId: string;
   softSkillScoreId?: string;
@@ -33,33 +33,34 @@ export const SkillRadioButtons = (props: IProps) => {
 
   const handleChange = useCallback(
     (e: RadioChangeEvent) => {
-      const softskillsInterviewCopy = cloneDeep(softskillsInterview);
-      softskillsInterviewCopy.employeeId = employeeId;
-      const skillAlreadyChosen = softskillsInterviewCopy?.softSkills?.findIndex((el) => el.id === id) !== -1;
+      if (softskillsInterview) {
+        const softskillsInterviewCopy = cloneDeep(softskillsInterview);
+        softskillsInterviewCopy.employeeId = employeeId;
+        const skillAlreadyChosen = softskillsInterviewCopy?.softSkills?.findIndex((el) => el.id === id) !== -1;
 
-      if (skillAlreadyChosen) {
-        const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
-          if (el.id === e.target.id) {
-            el.score = e.target.value;
-          }
-          return el;
-        });
-        softskillsInterviewCopy.softSkills = processedSkills;
-      } else {
-        const softSkillsListCopy = cloneDeep(softSkillsList);
-        const processedSkills = softSkillsListCopy.map((el) => {
-          if (el.id === e.target.id) {
-            el.score = e.target.value;
-          }
-          return el;
-        });
-        softskillsInterviewCopy.softSkills = processedSkills;
+        if (skillAlreadyChosen) {
+          const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
+            if (el.id === e.target.id) {
+              el.score = e.target.value;
+            }
+            return el;
+          });
+          softskillsInterviewCopy.softSkills = processedSkills;
+        } else {
+          const softSkillsListCopy = cloneDeep(softSkillsList);
+          const processedSkills = softSkillsListCopy.map((el) => {
+            if (el.id === e.target.id) {
+              el.score = e.target.value;
+            }
+            return el;
+          });
+          softskillsInterviewCopy.softSkills = processedSkills;
+        }
+        softskillsInterview?.successfullySaved
+          ? dispatch(editSoftAssessment(softskillsInterviewCopy))
+          : dispatch(completeSoftAssessment(softskillsInterviewCopy));
+        setScore(e.target.value);
       }
-      softskillsInterview?.successfullySaved
-        ? dispatch(editSoftAssessment(softskillsInterviewCopy))
-        : dispatch(completeSoftAssessment(softskillsInterviewCopy));
-      dispatch(setSoftAssessment(softskillsInterviewCopy));
-      setScore(e.target.value);
     },
     [dispatch, softSkillsList, softskillsInterview, score]
   );
