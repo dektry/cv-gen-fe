@@ -3,6 +3,7 @@ import { Button, FormControlLabel, Switch, TextField } from '@mui/material';
 
 import { CustomSelect } from 'common-components/CustomSelect';
 import { useStyles } from './styles';
+import { AddButton } from 'common-components/AddButton';
 
 export const UIElements = () => {
   const classes = useStyles();
@@ -53,6 +54,11 @@ export const UIElements = () => {
         <Button variant="contained" onClick={() => setLevel('')}>
           Reset level
         </Button>
+      </div>
+      <div className={classes.row}>
+        <p>Add button: </p>
+        <AddButton title="Add new section" />
+        <AddButton></AddButton>
       </div>
     </div>
   );
