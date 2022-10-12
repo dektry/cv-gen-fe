@@ -80,6 +80,13 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiSelect: {
+      defaultProps: {
+        variant: 'outlined',
+        fullWidth: true,
+        displayEmpty: true,
+      },
+    },
   },
 });
 
