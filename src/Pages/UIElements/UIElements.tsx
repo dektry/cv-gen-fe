@@ -14,6 +14,7 @@ export const UIElements = () => {
   const [level, setLevel] = useState('');
   const [label, setLabel] = useState('');
   const [sectionName, setSectionName] = useState('');
+  const [hint, setHint] = useState('');
 
   return (
     <div style={{ background: '#fff' }}>
@@ -74,6 +75,17 @@ export const UIElements = () => {
           onChange={(e) => setSectionName(e.target.value)}
           helperText="Field with this name already exists"
           error={error}
+          hint={hint}
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={!!hint}
+              onChange={(e) => setHint(e.target.checked ? 'Some reasonable info' : '')}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          }
+          label="Hint"
         />
       </div>
     </div>

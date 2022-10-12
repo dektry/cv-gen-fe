@@ -1,13 +1,21 @@
 import { createUseStyles } from 'react-jss';
 import { Theme } from '@mui/material/styles/createTheme';
 
-export const useStyles = createUseStyles<string, unknown, Theme>({
+export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
   root: {
+    '&.MuiFormControl-root': {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: '12px',
+      '& legend': {
+        width: 0,
+      },
+    },
     '& .MuiInputBase-root': {
       transition: 'all 0.45s ease',
       minWidth: '410px',
       '& input': {
-        padding: '8px 16px',
+        padding: ({ hint }) => (hint ? '8px 8px 8px 16px' : '8px 16px'),
       },
     },
   },
@@ -29,5 +37,9 @@ export const useStyles = createUseStyles<string, unknown, Theme>({
         borderColor: 'transparent',
       },
     },
+  },
+  label: {
+    position: 'inherit !important',
+    transform: 'none !important',
   },
 });
