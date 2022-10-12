@@ -10,7 +10,6 @@ import { downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/t
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
-import { profSkillsMock } from 'Pages/CVGeneration/mocks';
 import { templateWidth } from 'Pages/CVGeneration/constants';
 
 interface ICVPreviewProps {
@@ -59,7 +58,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       if (isEmpty(compiledTemplates)) {
         dispatch(fetchGroupOfTemplates(['v2-intro', 'v2-prof-skills', 'v2-projects']));
       } else {
-        const newPages = getCvPages({ ...cvInfo, profSkills: profSkillsMock }, compiledTemplates);
+        const newPages = getCvPages({ ...cvInfo }, compiledTemplates);
 
         newPages.forEach((p) => {
           const newEl = document.createElement('div');

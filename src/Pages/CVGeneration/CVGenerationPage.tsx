@@ -8,11 +8,13 @@ import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { NullableField } from 'models/TNullableField';
 import { CVGenerationInfo, SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
-import { useStyles } from 'Pages/CVGeneration/styles';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
-import { mockDescription, mockProjects, mockSoftSkillsOptions } from './mocks';
+import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
+
+import { useStyles } from './styles';
+import { mockDescription, mockProjects, mockSoftSkillsOptions, profSkillsMock } from './mocks';
 
 export type TProfSkill = {
   groupName?: string;
@@ -76,6 +78,7 @@ export const CVGenerationPage = () => {
           ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
           ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
         ],
+        profSkills: profSkillsMock,
       });
     }
   }, []);
@@ -92,8 +95,7 @@ export const CVGenerationPage = () => {
         updateCvInfo={updateCvInfo}
         softSkillsOptions={mockSoftSkillsOptions}
       ></CVGenerationInfo>
-      {/* coming later */}
-      {/*  <ProfessionalSkills></ProfessionalSkills> */}
+      <ProfSkills></ProfSkills>
       {/*  <Projects></Projects> */}
       <div className={classes.genCVbtnBlock}>
         <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>

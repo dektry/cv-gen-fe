@@ -7,6 +7,7 @@ import {
   projectBottomMargin,
   templatePadding,
 } from '../constants';
+import { message } from 'antd';
 
 type TNextPageStart = { group: number; skill: number | null };
 
@@ -16,25 +17,30 @@ export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: Handleba
 
   if (!cvInfo.profSkills) return result;
 
-  const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
-    templates['v2-intro'],
-    'firstName',
-    cvInfo.description,
-    cvInfo.softSkills,
-    cvInfo.profSkills,
-    cvInfo.position
-  );
+  try {
+    const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
+      templates['v2-intro'],
+      'firstName',
+      cvInfo.description,
+      cvInfo.softSkills,
+      cvInfo.profSkills,
+      cvInfo.position
+    );
 
-  dataForPages.push({
-    ...cvInfo,
-    profSkills: profSkillsOnIntroPage,
-  });
+    dataForPages.push({
+      ...cvInfo,
+      profSkills: profSkillsOnIntroPage,
+    });
 
-  dataForPages = dataForPages.concat(
-    groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
-  );
+    dataForPages = dataForPages.concat(
+      groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
+    );
 
-  dataForPages = dataForPages.concat(groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[]));
+    dataForPages = dataForPages.concat(groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[]));
+  } catch (error) {
+    console.error('[CALCULATION_PAGES_AMOUNT_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
 
   dataForPages.forEach((data, index) => {
     if (data.firstName) {
