@@ -4,6 +4,7 @@ import { Button, FormControlLabel, Switch, TextField } from '@mui/material';
 import { CustomSelect } from 'common-components/CustomSelect';
 import { useStyles } from './styles';
 import { AddButton } from 'common-components/AddButton';
+import { DeleteButton } from 'common-components/DeleteButton';
 
 export const UIElements = () => {
   const classes = useStyles();
@@ -58,7 +59,11 @@ export const UIElements = () => {
       <div className={classes.row}>
         <p>Add button: </p>
         <AddButton title="Add new section" />
-        <AddButton></AddButton>
+        <AddButton />
+      </div>
+      <div className={classes.row}>
+        <p>Delete button: </p>
+        <DeleteButton title="Delete section" />
       </div>
     </div>
   );

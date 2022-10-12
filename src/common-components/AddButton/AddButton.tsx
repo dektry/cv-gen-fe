@@ -1,4 +1,4 @@
-import { Button, ButtonProps, IconButton } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 interface IAddButton extends ButtonProps {
