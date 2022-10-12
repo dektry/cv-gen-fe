@@ -5,6 +5,7 @@ import { CustomSelect } from 'common-components/CustomSelect';
 import { useStyles } from './styles';
 import { AddButton } from 'common-components/AddButton';
 import { DeleteButton } from 'common-components/DeleteButton';
+import { SkillGroupField } from 'common-components/SkillGroupField';
 
 export const UIElements = () => {
   const classes = useStyles();
@@ -12,6 +13,7 @@ export const UIElements = () => {
   const [error, setError] = useState(false);
   const [level, setLevel] = useState('');
   const [label, setLabel] = useState('');
+  const [sectionName, setSectionName] = useState('');
 
   return (
     <div style={{ background: '#fff' }}>
@@ -64,6 +66,15 @@ export const UIElements = () => {
       <div className={classes.row}>
         <p>Delete button: </p>
         <DeleteButton title="Delete section" />
+      </div>
+      <div className={classes.row}>
+        <p style={{ minWidth: 'fit-content' }}>Section name: </p>
+        <SkillGroupField
+          value={sectionName}
+          onChange={(e) => setSectionName(e.target.value)}
+          helperText="Field with this name already exists"
+          error={error}
+        />
       </div>
     </div>
   );
