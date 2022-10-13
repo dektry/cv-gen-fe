@@ -90,7 +90,7 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
                 <CustomSelect
                   value={skill.level}
                   options={mockLevels}
-                  sx={{ width: 180 }}
+                  sx={{ width: '220px' }}
                   onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
                 />
                 <Button
