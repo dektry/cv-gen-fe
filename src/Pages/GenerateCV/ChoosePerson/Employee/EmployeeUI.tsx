@@ -4,6 +4,7 @@ import { generatePath } from 'react-router-dom';
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
+import { Projects } from './components/Projects';
 
 import { IEmployee } from 'models/IEmployee';
 
@@ -223,6 +224,7 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
+          <Projects />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button
