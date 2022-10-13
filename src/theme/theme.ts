@@ -53,11 +53,17 @@ theme = createTheme(theme, {
             lineHeight: '20px',
             fontSize: '16px',
             height: '20px',
+            '&.MuiSelect-select': {
+              minHeight: '20px',
+            },
           },
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.primary.light,
           },
           '& .MuiOutlinedInput-root': {
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderWidth: '1px',
+            },
             '&:hover': {
               backgroundColor: theme.palette.action.hover,
               '& .MuiOutlinedInput-notchedOutline': {
@@ -75,6 +81,31 @@ theme = createTheme(theme, {
             display: 'none',
             '&.Mui-error': {
               display: 'block',
+            },
+          },
+          '& .MuiSelect-iconOutlined': {
+            color: theme.palette.primary.main,
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        variant: 'outlined',
+        fullWidth: true,
+        displayEmpty: true,
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '16px',
+          lineHeight: '20px',
+          '&.MuiButton-containedSecondary': {
+            border: `1px solid rgba(0,0,0,0)`,
+            '&:hover': {
+              backgroundColor: theme.palette.secondary.main,
+              border: `1px solid ${theme.palette.primary.main}`,
             },
           },
         },

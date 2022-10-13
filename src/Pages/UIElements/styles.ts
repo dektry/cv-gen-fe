@@ -8,5 +8,8 @@ export const useStyles = createUseStyles({
     padding: '10px',
     boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)',
     marginBottom: '15px',
+    '&>p': {
+      margin: 0,
+    },
   },
 });

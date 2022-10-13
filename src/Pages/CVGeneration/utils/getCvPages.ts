@@ -1,3 +1,6 @@
+import { cloneDeep } from 'lodash';
+import { message } from 'antd';
+
 import { CvInfo, TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
 import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import {
@@ -7,34 +10,51 @@ import {
   projectBottomMargin,
   templatePadding,
 } from '../constants';
+import { mockLevels } from 'Pages/CVGeneration/mocks';
 
 type TNextPageStart = { group: number; skill: number | null };
 
-export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
+export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
   let dataForPages: Partial<CvInfo>[] = [];
   const result: string[] = [];
 
-  if (!cvInfo.profSkills) return result;
+  if (!cvInfoData.profSkills) return result;
 
-  const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
-    templates['v2-intro'],
-    'firstName',
-    cvInfo.description,
-    cvInfo.softSkills,
-    cvInfo.profSkills,
-    cvInfo.position
-  );
+  const cvInfo = { ...cvInfoData };
 
-  dataForPages.push({
-    ...cvInfo,
-    profSkills: profSkillsOnIntroPage,
+  // send level label for cv generation
+  cvInfo.profSkills = cloneDeep(cvInfo.profSkills).map((group) => {
+    group.skills = group.skills.map((skill) => {
+      skill.level = mockLevels.find((l) => l.value === skill.level)?.label || '';
+      return skill;
+    });
+    return group;
   });
 
-  dataForPages = dataForPages.concat(
-    groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
-  );
+  try {
+    const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
+      templates['v2-intro'],
+      'firstName',
+      cvInfo.description,
+      cvInfo.softSkills,
+      cvInfo.profSkills,
+      cvInfo.position
+    );
 
-  dataForPages = dataForPages.concat(groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[]));
+    dataForPages.push({
+      ...cvInfo,
+      profSkills: profSkillsOnIntroPage,
+    });
+
+    dataForPages = dataForPages.concat(
+      groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
+    );
+
+    dataForPages = dataForPages.concat(groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[]));
+  } catch (error) {
+    console.error('[CALCULATION_PAGES_AMOUNT_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
 
   dataForPages.forEach((data, index) => {
     if (data.firstName) {
