@@ -1,3 +1,6 @@
+import { cloneDeep } from 'lodash';
+import { message } from 'antd';
+
 import { CvInfo, TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
 import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import {
@@ -7,15 +10,26 @@ import {
   projectBottomMargin,
   templatePadding,
 } from '../constants';
-import { message } from 'antd';
+import { mockLevels } from 'Pages/CVGeneration/mocks';
 
 type TNextPageStart = { group: number; skill: number | null };
 
-export const getCvPages = (cvInfo: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
+export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
   let dataForPages: Partial<CvInfo>[] = [];
   const result: string[] = [];
 
-  if (!cvInfo.profSkills) return result;
+  if (!cvInfoData.profSkills) return result;
+
+  const cvInfo = { ...cvInfoData };
+
+  // send level label for cv generation
+  cvInfo.profSkills = cloneDeep(cvInfo.profSkills).map((group) => {
+    group.skills = group.skills.map((skill) => {
+      skill.level = mockLevels.find((l) => l.value === skill.level)?.label || '';
+      return skill;
+    });
+    return group;
+  });
 
   try {
     const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(

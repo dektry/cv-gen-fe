@@ -20,7 +20,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     },
     '& .MuiAccordionDetails-root': {
       display: 'grid',
-      gridTemplateColumns: 'auto auto',
+      gridTemplateColumns: '50% 50%',
       gridTemplateRows: 'auto auto',
       gap: '16px',
       padding: '0 16px',

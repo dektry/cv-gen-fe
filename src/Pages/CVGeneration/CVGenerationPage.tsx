@@ -36,7 +36,7 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   description: string;
   education: NullableField<string>;
   softSkills: SoftSkills[];
-  profSkills?: TProfSkill[];
+  profSkills: TProfSkill[];
   projects?: TProject[];
   firstName: string;
   male: boolean;
@@ -91,7 +91,7 @@ export const CVGenerationPage = () => {
     <div>
       <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
       <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
-      <ProfSkills cvInfo={cvInfo} updateCvInfo={updateCvInfo} />
+      <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       {/*  <Projects></Projects> */}
       <div className={classes.genCVbtnBlock}>
         <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>

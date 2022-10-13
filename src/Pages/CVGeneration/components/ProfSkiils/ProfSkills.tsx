@@ -1,40 +1,74 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, TextField } from '@mui/material';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-
-import { SkillGroupField } from 'common-components/SkillGroupField';
-import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
-import { AddButton } from 'common-components/AddButton';
-import theme from 'theme/theme';
-import { useStyles } from './styles';
-import { DeleteButton } from 'common-components/DeleteButton';
-import { CustomSelect } from 'common-components/CustomSelect';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
+import { SkillGroupField } from 'common-components/SkillGroupField';
+import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { AddButton } from 'common-components/AddButton';
+import theme from 'theme/theme';
+import { DeleteButton } from 'common-components/DeleteButton';
+import { CustomSelect } from 'common-components/CustomSelect';
+import { mockLevels } from 'Pages/CVGeneration/mocks';
+import { useStyles } from './styles';
+
 interface IProfSkills {
-  cvInfo: Partial<CvInfo>;
+  profSkills: TProfSkill[];
   updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
 export const ProfSkills = React.memo((props: IProfSkills) => {
-  const { cvInfo, updateCvInfo } = props;
+  const { profSkills, updateCvInfo } = props;
 
   const classes = useStyles({ theme });
 
-  const [value, setValue] = useState('');
+  const handleSkillGroupChange = (index: number, value: string) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills[index].groupName = value;
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
+  const handleSkillChange = (groupIndex: number, skillIndex: number, value: string) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills[groupIndex].skills[skillIndex].name = value;
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
+  const handleSkillLevelChange = (groupIndex: number, skillIndex: number, value: string) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills[groupIndex].skills[skillIndex].level = value;
+    updateCvInfo({ profSkills: newProfSkills });
+  };
 
   return (
     <>
-      {cvInfo?.profSkills?.map((skillGroup, index) => (
-        <Accordion className={classes.accordion} disableGutters TransitionProps={{ unmountOnExit: true }}>
+      {profSkills?.map((skillGroup, groupIndex) => (
+        <Accordion
+          key={'group' + groupIndex}
+          className={classes.accordion}
+          disableGutters
+          TransitionProps={{ unmountOnExit: true }}
+        >
           <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
-            <SkillGroupField value={skillGroup.groupName} onChange={(e) => setValue(e.target.value)} />
+            <SkillGroupField
+              value={skillGroup.groupName}
+              onChange={(e) => handleSkillGroupChange(groupIndex, e.target.value)}
+            />
           </AccordionSummary>
           <AccordionDetails>
-            {skillGroup.skills.map((skill, index) => (
-              <Box key={skill.name + index} className={classes.skill}>
-                <TextField label="Skill" value={skill.name} />
-                <CustomSelect value={skill.level} options={mockLevels} />
+            {skillGroup.skills.map((skill, skillIndex) => (
+              <Box key={'skill' + groupIndex + skillIndex} className={classes.skill}>
+                <TextField
+                  label="Skill"
+                  value={skill.name}
+                  onChange={(e) => handleSkillChange(groupIndex, skillIndex, e.target.value)}
+                />
+                <CustomSelect
+                  value={skill.level}
+                  options={mockLevels}
+                  sx={{ width: 180 }}
+                  onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
+                />
                 <Button className={classes.deleteSkillBtn} variant="contained" endIcon={<AddRoundedIcon />} />
               </Box>
             ))}
@@ -48,10 +82,3 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
     </>
   );
 });
-
-const mockLevels = [
-  { value: '0', label: 'Beginner' },
-  { value: '1', label: 'Advanced' },
-  { value: '2', label: 'Expert' },
-  { value: '3', label: 'Master' },
-];

@@ -106,10 +106,6 @@ export const profSkillsMock: TProfSkill[] = [
     groupName: 'You name it!',
     skills: [
       {
-        name: 'React',
-        level: 'Advanced',
-      },
-      {
         name: 'Angular',
         level: 'Advanced',
       },
@@ -300,7 +296,7 @@ export const profSkillsMock: TProfSkill[] = [
   },
 ].map((group, index) => {
   group.skills = group.skills.map((skill) => {
-    skill.level = getRandomInt(0, 3).toString();
+    skill.level = getRandomInt(0, 4).toString();
     return skill;
   });
   return group;
@@ -384,3 +380,10 @@ export function getRandomInt(min: number, max: number) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
+
+export const mockLevels = [
+  { value: '0', label: 'Beginner' },
+  { value: '1', label: 'Advanced' },
+  { value: '2', label: 'Expert' },
+  { value: '3', label: 'Master' },
+];
