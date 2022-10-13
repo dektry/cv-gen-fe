@@ -40,8 +40,32 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
     updateCvInfo({ profSkills: newProfSkills });
   };
 
+  const handleAddSkill = (groupIndex: number) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills[groupIndex].skills.push({ name: '', level: '' });
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
+  const handleDeleteSkill = (groupIndex: number, skillIndex: number) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills[groupIndex].skills.splice(skillIndex, 1);
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
+  const handleAddSkillGroup = () => {
+    const newProfSkills = [...profSkills];
+    newProfSkills.push({ groupName: '', skills: [] });
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
+  const handleDeleteSkillGroup = (groupIndex: number) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills.splice(groupIndex, 1);
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
   return (
-    <>
+    <Box>
       {profSkills?.map((skillGroup, groupIndex) => (
         <Accordion
           key={'group' + groupIndex}
@@ -69,16 +93,22 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
                   sx={{ width: 180 }}
                   onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
                 />
-                <Button className={classes.deleteSkillBtn} variant="contained" endIcon={<AddRoundedIcon />} />
+                <Button
+                  className={classes.deleteSkillBtn}
+                  variant="contained"
+                  endIcon={<AddRoundedIcon />}
+                  onClick={() => handleDeleteSkill(groupIndex, skillIndex)}
+                />
               </Box>
             ))}
           </AccordionDetails>
           <AccordionActions sx={{ justifyContent: 'space-between' }}>
-            <AddButton title="Add field" />
-            <DeleteButton title="Delete section" />
+            <AddButton title="Add field" onClick={() => handleAddSkill(groupIndex)} />
+            <DeleteButton title="Delete section" onClick={() => handleDeleteSkillGroup(groupIndex)} />
           </AccordionActions>
         </Accordion>
       ))}
-    </>
+      <AddButton title="Add new section" sx={{ marginTop: '24px' }} onClick={handleAddSkillGroup} />
+    </Box>
   );
 });

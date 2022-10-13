@@ -4,6 +4,9 @@ import { Theme } from '@mui/material/styles/createTheme';
 export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
   accordion: {
     marginBottom: '16px',
+    '&:nth-last-child(2)': {
+      marginBottom: 0,
+    },
     '&.MuiPaper-root': {
       backgroundColor: ({ theme }) => theme.palette.action.hover,
       borderRadius: '8px',
