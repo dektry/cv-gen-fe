@@ -16,5 +16,6 @@
     "auth": "/auth",
     "employeeInterviews": "/employee-interviews",
     "employeeSoftAssessments": "/softassessments",
-    "cvGeneration": "/cv-generation"
+    "cvGeneration": "/cv-generation",
+    "projects": "/projects"
   }
