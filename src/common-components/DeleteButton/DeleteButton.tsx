@@ -14,6 +14,13 @@ export const DeleteButton = (props: IDeleteButton) => {
           textTransform: 'none',
           color: 'error.main',
           height: '40px',
+          padding: '8px 16px',
+          border: '1px solid',
+          borderColor: 'rgba(0, 0, 0, 0)',
+          '&:hover': {
+            borderColor: 'error.main',
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+          },
         },
       ]}
     >

@@ -19,9 +19,10 @@ export const SkillGroupField = (props: ISkillGroupField) => {
   });
   return (
     <TextField
+      onClick={(e) => e.stopPropagation()}
       className={clsx([classes.root, !!value && !error && classes.shrunk])}
       fullWidth={false}
-      inputProps={{ size: (value as string)?.length, autocomplete: 'off' }}
+      inputProps={{ size: (value as string)?.length + 1, autocomplete: 'off' }}
       InputProps={{ endAdornment: hint && <InfoOutlinedIcon /> }}
       label={'Section name:'}
       InputLabelProps={{ className: classes.label }}

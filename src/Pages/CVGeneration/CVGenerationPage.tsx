@@ -90,12 +90,8 @@ export const CVGenerationPage = () => {
   return (
     <div>
       <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
-      <CVGenerationInfo
-        cvInfo={cvInfo}
-        updateCvInfo={updateCvInfo}
-        softSkillsOptions={mockSoftSkillsOptions}
-      ></CVGenerationInfo>
-      <ProfSkills></ProfSkills>
+      <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
+      <ProfSkills cvInfo={cvInfo} updateCvInfo={updateCvInfo} />
       {/*  <Projects></Projects> */}
       <div className={classes.genCVbtnBlock}>
         <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>
