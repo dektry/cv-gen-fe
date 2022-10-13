@@ -53,6 +53,9 @@ theme = createTheme(theme, {
             lineHeight: '20px',
             fontSize: '16px',
             height: '20px',
+            '&.MuiSelect-select': {
+              minHeight: '20px',
+            },
           },
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.primary.light,

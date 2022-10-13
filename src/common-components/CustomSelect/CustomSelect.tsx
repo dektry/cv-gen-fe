@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { MenuItem, TextField } from '@mui/material';
 import { TextFieldProps } from '@mui/material/TextField/TextField';
 
 type TCustomSelect = {
@@ -6,10 +6,10 @@ type TCustomSelect = {
 } & TextFieldProps;
 
 export const CustomSelect = (props: TCustomSelect) => {
-  const { options } = props;
+  const { options, ...rest } = props;
 
   return (
-    <TextField {...props} select>
+    <TextField {...rest} select>
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}
