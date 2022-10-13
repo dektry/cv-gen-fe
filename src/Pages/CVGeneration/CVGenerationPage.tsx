@@ -8,35 +8,38 @@ import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { NullableField } from 'models/TNullableField';
 import { CVGenerationInfo, SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
-import { useStyles } from 'Pages/CVGeneration/styles';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
+import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
 
-// I believe this list should be stored in the database
-export const mockSoftSkillsOptions = [
-  'Responsibility',
-  'Teamwork',
-  'Communication',
-  'Sociability',
-  'Leadership',
-  'Punctuality',
-  'Confidence',
-  'Resilience',
-  'Collaboration',
-  'Time management',
-  'Discipline',
-  'Creativity',
-];
+import { useStyles } from './styles';
+import { mockDescription, mockProjects, mockSoftSkillsOptions, profSkillsMock } from './mocks';
 
-const mockDescription =
-  "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.";
+export type TProfSkill = {
+  groupName?: string;
+  skills: { name: string; level: string }[];
+};
 
-export type CvInfo = Pick<IEmployee, 'fullName' | 'level' | 'position' | 'avatarUrl'> & {
+export type TProject = {
+  name: string;
+  description: string;
+  duration: string;
+  position: string;
+  teamSize: number;
+  responsibilities: string[];
+  tools: string[];
+};
+
+export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
   softSkills: SoftSkills[];
+  profSkills: TProfSkill[];
+  projects?: TProject[];
+  firstName: string;
+  male: boolean;
 };
 
 export const CVGenerationPage = () => {
@@ -54,16 +57,28 @@ export const CVGenerationPage = () => {
     if (currentEmployee.id == '101010') {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { startingPoint, hiredOn, formalEducation, position } = currentEmployee;
+      const { startingPoint, hiredOn, position } = currentEmployee;
 
       setCvInfo({
         ...currentEmployee,
+        firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
-        education: formalEducation,
         softSkills: ['Responsibility', 'Teamwork', 'Communication'],
         // todo: add this field on BE side
         description: mockDescription,
+        male: currentEmployee.gender === 'male',
+        projects: mockProjects,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        languages: ['English - B2', 'Russian - native'],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        education: [
+          ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
+          ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
+        ],
+        profSkills: profSkillsMock,
       });
     }
   }, []);
@@ -75,13 +90,8 @@ export const CVGenerationPage = () => {
   return (
     <div>
       <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
-      <CVGenerationInfo
-        cvInfo={cvInfo}
-        updateCvInfo={updateCvInfo}
-        softSkillsOptions={mockSoftSkillsOptions}
-      ></CVGenerationInfo>
-      {/* coming later */}
-      {/*  <ProfessionalSkills></ProfessionalSkills> */}
+      <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
+      <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       {/*  <Projects></Projects> */}
       <div className={classes.genCVbtnBlock}>
         <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>

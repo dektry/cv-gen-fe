@@ -21,6 +21,7 @@ export const useStyles = createUseStyles({
   },
   layout: {
     minHeight: '100vh',
+    background: '#fff',
   },
   outlet_container: {},
   global: {

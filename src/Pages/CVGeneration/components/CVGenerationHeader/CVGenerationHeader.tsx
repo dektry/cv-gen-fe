@@ -1,9 +1,9 @@
 import React from 'react';
 import { Avatar, Button, Typography } from 'antd';
 
-import { GenerateCvHeader } from '../../../../common-components/GenerateCVHeader';
+import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { useStyles } from './styles';
-import { NullableField } from '../../../../models/TNullableField';
+import { NullableField } from 'models/TNullableField';
 
 const { Title } = Typography;
 

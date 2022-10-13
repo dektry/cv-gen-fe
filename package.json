@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.8",
     "@reduxjs/toolkit": "^1.8.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -16,6 +20,7 @@
     "@types/uuid": "^8.3.4",
     "antd": "^4.22.5",
     "axios": "0.21.1",
+    "clsx": "^1.2.1",
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "handlebars": "^4.7.7",
@@ -31,9 +36,7 @@
     "react-scripts": "5.0.1",
     "typescript": "^4.7.4",
     "uuid": "^8.3.2",
-    "web-vitals": "^2.1.4",
-    "cors": "^2.8.5",
-    "express": "^4.18.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",

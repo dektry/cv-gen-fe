@@ -16,6 +16,7 @@ import { AssessmentHistory } from 'Pages/GenerateCV/TechnicalAssessment/Assessme
 import { CVGenerationPage } from 'Pages/CVGeneration';
 import { SoftAssessmentHistory } from 'Pages/GenerateCV/SoftAssessment/SoftAssessmentHistory';
 import { SoftAssessmentSetUp } from 'Pages/GenerateCV/SoftAssessment/SoftAssessmentSetUp';
+import { UIElements } from 'Pages/UIElements';
 
 import routes from 'config/routes.json';
 
@@ -44,3 +45,7 @@ export const privateRoutes: IRoute[] = [
   { path: routes.generateCVprevSoftSkillsAssessment, component: SoftAssessmentSetUp },
   { path: routes.generateCVsoftAssessment, component: SoftAssessmentSetUp },
 ];
+
+if (process.env.REACT_APP_ENV === 'development') {
+  privateRoutes.push({ path: routes.uiElements, component: UIElements });
+}

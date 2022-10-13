@@ -5,8 +5,11 @@ export const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
+    gap: '15px',
     '& h1': {
       textAlign: 'center',
+      marginBottom: 0,
     },
   },
   cvBox: {
@@ -17,5 +20,10 @@ export const useStyles = createUseStyles({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
+  },
+  pages: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    transition: '.4s',
   },
 });

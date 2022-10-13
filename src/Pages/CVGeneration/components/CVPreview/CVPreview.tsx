@@ -1,13 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Modal, Spin } from 'antd';
+import { Modal, Pagination, Spin } from 'antd';
 import handlebars from 'handlebars/dist/cjs/handlebars.js';
+import { isEmpty } from 'lodash';
 
 import { cvGenerationSelector } from 'store/reducers/cvGeneration';
 import { useAppDispatch } from 'store';
-import { fetchCvGenerationTemplate, downloadCv } from 'store/reducers/cvGeneration/thunks';
+import { downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
+import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
+import { templateWidth } from 'Pages/CVGeneration/constants';
 
 interface ICVPreviewProps {
   isModalOpen: boolean;
@@ -23,19 +26,28 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
 
   const dispatch = useAppDispatch();
 
-  const { template, isLoading, isGeneratingPdf } = useSelector(cvGenerationSelector);
-  const compiledTemplate = useMemo(() => handlebars.compile(template), [template]);
+  const { templates, isLoading, isGeneratingPdf } = useSelector(cvGenerationSelector);
+  const compiledTemplates = useMemo(() => {
+    const result: { [name: string]: HandlebarsTemplateDelegate } = {};
+    Object.entries(templates).forEach(([key, value]) => {
+      result[key] = handlebars.compile(value);
+    });
+    return result;
+  }, [templates]);
 
   const cvCanvasEl = useRef<HTMLDivElement | null>(null);
 
   const [cvCanvasDimensions, setCvCanvasDimensions] = useState({ width: 0, height: 0 });
+  const [pages, setPages] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const sumOfModalVerticalPaddingAndMargins = 270;
+    const sumOfModalVerticalPaddingAndMargins = 300;
     const A4aspectRatio = 1.414;
 
     const height = window.innerHeight - sumOfModalVerticalPaddingAndMargins;
     const width = height / A4aspectRatio;
+
     setCvCanvasDimensions({ width, height });
   }, []);
 
@@ -43,25 +55,33 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     if (isModalOpen) {
       if (!cvCanvasEl.current) cvCanvasEl.current = document.getElementById('cv-canvas') as HTMLDivElement;
 
-      if (!template) {
-        dispatch(fetchCvGenerationTemplate('v1'));
+      if (isEmpty(compiledTemplates)) {
+        dispatch(fetchGroupOfTemplates(['v2-intro', 'v2-prof-skills', 'v2-projects']));
       } else {
-        const templateWidth = 595;
+        const newPages = getCvPages({ ...cvInfo }, compiledTemplates);
 
-        const scale = cvCanvasDimensions.width / templateWidth;
-        const newEl = document.createElement('div');
-        newEl.innerHTML = compiledTemplate(cvInfo);
-        newEl.style.scale = `${scale} ${scale}`;
+        newPages.forEach((p) => {
+          const newEl = document.createElement('div');
+          newEl.innerHTML = p;
+          cvCanvasEl.current?.children[0]?.appendChild(newEl);
 
-        cvCanvasEl.current.appendChild(newEl);
+          return newEl;
+        });
+
+        setPages(newPages);
       }
     }
     return () => {
       if (cvCanvasEl.current) {
-        cvCanvasEl.current.innerHTML = '';
+        const pages = cvCanvasEl.current.children[0];
+        if (pages) pages.innerHTML = '';
       }
+      setPages([]);
     };
-  }, [template, isModalOpen]);
+  }, [compiledTemplates, isModalOpen]);
+  useEffect(() => {
+    if (!isModalOpen) setCurrentPage(1);
+  }, [isModalOpen]);
 
   useEffect(() => {
     if (!isGeneratingPdf) {
@@ -70,16 +90,20 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
   }, [isGeneratingPdf]);
 
   const handleDownloadCv = () => {
-    const template = cvCanvasEl.current?.children[0].innerHTML || '';
-
-    dispatch(downloadCv(template));
+    dispatch(downloadCv(pages.join('')));
   };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const pagesPosition = (pages.length * templateWidth) / 2 - templateWidth / 2 - (currentPage - 1) * templateWidth;
 
   return (
     <Modal
       open={isModalOpen}
       confirmLoading={isGeneratingPdf}
-      okButtonProps={{ disabled: !template }}
+      okButtonProps={{ disabled: isEmpty(templates) }}
       onOk={handleDownloadCv}
       onCancel={handleCancel}
       cancelText="CLOSE"
@@ -89,12 +113,23 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
     >
       <div className={classes.container}>
         <h1>CV Preview</h1>
+        {pages.length && (
+          <Pagination simple current={currentPage} total={pages.length} pageSize={1} onChange={handlePageChange} />
+        )}
         <div
           id="cv-canvas"
           style={{ width: cvCanvasDimensions.width + 'px', height: cvCanvasDimensions.height + 'px' }}
           className={classes.cvBox}
         >
-          {isLoading && <Spin size="large" tip={'Loading template...'} />}
+          {isLoading ? <Spin size="large" tip={'Loading template...'} /> : null}
+          <div
+            className={classes.pages}
+            style={{
+              transform: `translateX(${pagesPosition}px)`,
+              visibility: pages.length ? 'visible' : 'hidden',
+              scale: `${cvCanvasDimensions.width / templateWidth} ${cvCanvasDimensions.width / templateWidth}`,
+            }}
+          ></div>
         </div>
       </div>
     </Modal>
