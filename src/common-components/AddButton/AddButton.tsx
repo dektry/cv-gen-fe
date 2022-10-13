@@ -43,8 +43,6 @@ export const AddButton = (props: IAddButton) => {
     }
   }
 
-  console.log(sxProp);
-
   return (
     <Button {...rest} sx={sxProp} variant="contained" endIcon={<AddRoundedIcon />} color="secondary">
       {title}
