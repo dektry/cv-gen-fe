@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Accordion,
-  AccordionActions,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, TextField } from '@mui/material';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 import { SkillGroupField } from 'common-components/SkillGroupField';
@@ -33,36 +24,34 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
   const [value, setValue] = useState('');
 
   return (
-    <Accordion className={classes.accordion} disableGutters>
-      <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
-        <SkillGroupField value={value} onChange={(e) => setValue(e.target.value)} />
-      </AccordionSummary>
-      <AccordionDetails>
-        {skills.map((skill, index) => (
-          <Box key={skill.name + index} className={classes.skill}>
-            <TextField label="Skill" value={skill.name} />
-            <CustomSelect value={skill.level} options={levels} />
-            <Button className={classes.deleteSkillBtn} variant="contained" endIcon={<AddRoundedIcon />} />
-          </Box>
-        ))}
-      </AccordionDetails>
-      <AccordionActions sx={{ justifyContent: 'space-between' }}>
-        <AddButton title="Add field" />
-        <DeleteButton title="Delete section" />
-      </AccordionActions>
-    </Accordion>
+    <>
+      {cvInfo?.profSkills?.map((skillGroup, index) => (
+        <Accordion className={classes.accordion} disableGutters TransitionProps={{ unmountOnExit: true }}>
+          <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
+            <SkillGroupField value={skillGroup.groupName} onChange={(e) => setValue(e.target.value)} />
+          </AccordionSummary>
+          <AccordionDetails>
+            {skillGroup.skills.map((skill, index) => (
+              <Box key={skill.name + index} className={classes.skill}>
+                <TextField label="Skill" value={skill.name} />
+                <CustomSelect value={skill.level} options={mockLevels} />
+                <Button className={classes.deleteSkillBtn} variant="contained" endIcon={<AddRoundedIcon />} />
+              </Box>
+            ))}
+          </AccordionDetails>
+          <AccordionActions sx={{ justifyContent: 'space-between' }}>
+            <AddButton title="Add field" />
+            <DeleteButton title="Delete section" />
+          </AccordionActions>
+        </Accordion>
+      ))}
+    </>
   );
 });
 
-const skills = [
-  { name: 'HTML', level: '0' },
-  { name: 'CSS', level: '2' },
-  { name: 'JavaScript', level: '1' },
-  { name: 'React', level: '0' },
-];
-
-const levels = [
+const mockLevels = [
   { value: '0', label: 'Beginner' },
   { value: '1', label: 'Advanced' },
   { value: '2', label: 'Expert' },
+  { value: '3', label: 'Master' },
 ];

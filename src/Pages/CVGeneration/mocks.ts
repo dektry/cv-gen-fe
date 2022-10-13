@@ -298,7 +298,13 @@ export const profSkillsMock: TProfSkill[] = [
       },
     ],
   },
-];
+].map((group, index) => {
+  group.skills = group.skills.map((skill) => {
+    skill.level = getRandomInt(0, 3).toString();
+    return skill;
+  });
+  return group;
+});
 
 export const mockProjects: TProject[] = [
   {
@@ -372,3 +378,9 @@ export const mockProjects: TProject[] = [
     tools: ['React', 'Redux', 'TypeScript', 'Less', 'Highcharts', 'Google Ads'],
   },
 ];
+
+export function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
