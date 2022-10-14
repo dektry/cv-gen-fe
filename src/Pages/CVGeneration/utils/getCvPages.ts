@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import { message } from 'antd';
 
 import { CvInfo, TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
@@ -10,7 +9,6 @@ import {
   projectBottomMargin,
   templatePadding,
 } from '../constants';
-import { mockLevels } from 'Pages/CVGeneration/mocks';
 
 type TNextPageStart = { group: number; skill: number | null };
 
@@ -22,14 +20,15 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
 
   const cvInfo = { ...cvInfoData };
 
+  // due current implementation is not used, but it is needed for future
   // send level label for cv generation
-  cvInfo.profSkills = cloneDeep(cvInfo.profSkills).map((group) => {
-    group.skills = group.skills.map((skill) => {
-      skill.level = mockLevels.find((l) => l.value === skill.level)?.label || '';
-      return skill;
-    });
-    return group;
-  });
+  // cvInfo.profSkills = cloneDeep(cvInfo.profSkills).map((group) => {
+  //   group.skills = group.skills.map((skill) => {
+  //     skill.level = mockLevels.find((l) => l.value === skill.level)?.label || '';
+  //     return skill;
+  //   });
+  //   return group;
+  // });
 
   try {
     const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(

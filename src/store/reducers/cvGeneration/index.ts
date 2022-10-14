@@ -2,13 +2,24 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { appStoreName } from 'store/reducers/cvGeneration/actionTypes';
 import { RootState } from 'store/index';
-import { fetchCvGenerationTemplate, downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
+import {
+  fetchCvGenerationTemplate,
+  downloadCv,
+  fetchGroupOfTemplates,
+  fetchProfSkills,
+} from 'store/reducers/cvGeneration/thunks';
+import { TProfSkill } from 'Pages/CVGeneration';
+import { cloneDeep } from 'lodash';
 
 export type TTemplatesDic = { [name: string]: string };
 
 type TInitialStateCvGeneration = {
   templates: TTemplatesDic;
   description: string;
+  profSkills: {
+    data: TProfSkill[];
+    isLoading: boolean;
+  };
   isLoading: boolean;
   isGeneratingPdf: boolean;
 };
@@ -16,6 +27,10 @@ type TInitialStateCvGeneration = {
 const initialState: TInitialStateCvGeneration = {
   templates: {},
   description: '',
+  profSkills: {
+    data: [],
+    isLoading: false,
+  },
   isLoading: false,
   isGeneratingPdf: false,
 };
@@ -23,7 +38,12 @@ const initialState: TInitialStateCvGeneration = {
 const cvGeneration = createSlice({
   name: appStoreName,
   initialState,
-  reducers: {},
+  reducers: {
+    resetCvGeneration: (state) => ({
+      ...initialState,
+      templates: state.templates,
+    }),
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCvGenerationTemplate.fulfilled, (state, { payload }) => {
       state.templates = { ...state.templates, ...payload };
@@ -55,9 +75,22 @@ const cvGeneration = createSlice({
     builder.addCase(fetchGroupOfTemplates.rejected, (state) => {
       state.isLoading = false;
     });
+    builder.addCase(fetchProfSkills.fulfilled, (state, { payload }) => {
+      state.profSkills = { data: payload, isLoading: false };
+    });
+    builder.addCase(fetchProfSkills.pending, (state) => {
+      state.profSkills = { data: [], isLoading: true };
+    });
+    builder.addCase(fetchProfSkills.rejected, (state) => {
+      state.profSkills = { data: [], isLoading: false };
+    });
   },
 });
 
+export const { resetCvGeneration } = cvGeneration.actions;
+
 export const cvGenerationSelector = (state: RootState) => state.cvGeneration;
+// have to use cloneDeep to avoid unnecessary object "freezing"
+export const profSkillsSelector = (state: RootState) => cloneDeep(state.cvGeneration.profSkills);
 
 export default cvGeneration.reducer;
