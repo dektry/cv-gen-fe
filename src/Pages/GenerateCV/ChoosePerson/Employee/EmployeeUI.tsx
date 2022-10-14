@@ -4,7 +4,7 @@ import { generatePath } from 'react-router-dom';
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { Projects } from 'Pages/Projects';
+import { Projects } from 'common-components/Projects';
 
 import { IEmployee } from 'models/IEmployee';
 

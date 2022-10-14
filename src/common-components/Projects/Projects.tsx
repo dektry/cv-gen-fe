@@ -31,21 +31,6 @@ export const Projects = () => {
     };
   }, []);
 
-  const processedProjects = projects?.map((project) => {
-    const processedTools = project.technologies.map((el) => el.name);
-
-    return {
-      id: project.id,
-      name: project.name,
-      description: project.description,
-      duration: project.duration,
-      position: project.role,
-      teamSize: project.teamSize,
-      responsibilities: project.responsibilities,
-      tools: processedTools,
-    };
-  });
-
   return (
     <>
       <div className={classes.upperContainer}>
@@ -54,7 +39,7 @@ export const Projects = () => {
           <AddButton />
         </div>
       </div>
-      {processedProjects?.map((project) => (
+      {projects?.map((project) => (
         <ProjectCard project={project} />
       ))}
     </>

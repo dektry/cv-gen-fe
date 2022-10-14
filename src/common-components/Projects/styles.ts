@@ -7,7 +7,7 @@ export const useStyles = createUseStyles({
     alignContent: 'center',
   },
   projectsHeader: {
-    fontFamily: 'Effra',
+    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: '24px',

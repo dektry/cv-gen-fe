@@ -6,8 +6,6 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { cloneDeep } from 'lodash';
 
-import { message } from 'antd';
-
 import { IProject } from 'models/IProject';
 
 import { useAppDispatch } from 'store';
@@ -17,16 +15,16 @@ import { deleteProject } from 'store/reducers/projects/thunks';
 
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
-import { DeleteModal } from 'Pages/GenerateCV/common-components/DeleteModal';
+import { DeleteModal } from 'common-components/DeleteModal';
 
 import theme from 'theme/theme';
 import { useStyles } from './styles';
 
-type Project = Omit<IProject, 'technologies' | 'employeeId' | 'role'> & { tools: string[]; position: string };
+type TProjectCard = Omit<IProject, 'technologies' | 'employeeId' | 'role'> & { tools: string[]; position: string };
 
-type Props = { project: Project };
+type TProps = { project: TProjectCard };
 
-export const ProjectCard = React.memo(({ project }: Props) => {
+export const ProjectCard = React.memo(({ project }: TProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const classes = useStyles({ theme });
@@ -35,26 +33,18 @@ export const ProjectCard = React.memo(({ project }: Props) => {
   const { projects } = useSelector(projectsSelector);
 
   const handleClickDelete = () => {
-    if (project.id) {
-      dispatch(setProjectId(project.id));
-      setIsModalOpen(true);
-    } else {
-      message.error("This project doesn't have ID and couldn't be deleted");
-    }
+    dispatch(setProjectId(project.id));
+    setIsModalOpen(true);
   };
 
   const handleClickDeleteProject = () => {
-    if (project.id) {
-      dispatch(deleteProject(project.id));
-      const projectsListCopy = cloneDeep(projects);
+    dispatch(deleteProject(project.id));
+    const projectsListCopy = cloneDeep(projects);
 
-      const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
+    const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
 
-      dispatch(setProjectsList(newProjectsList));
-      setIsModalOpen(false);
-    } else {
-      message.error("This project doesn't have ID and couldn't be deleted");
-    }
+    dispatch(setProjectsList(newProjectsList));
+    setIsModalOpen(false);
   };
 
   const handleClose = () => {
@@ -64,7 +54,7 @@ export const ProjectCard = React.memo(({ project }: Props) => {
   return (
     <>
       <Accordion
-        key={'group' + project.id}
+        key={project.id}
         className={classes.accordion}
         disableGutters
         TransitionProps={{ unmountOnExit: true }}
@@ -101,7 +91,7 @@ export const ProjectCard = React.memo(({ project }: Props) => {
                 <p className={classes.label}>Responsibilities</p>
                 <ul className={classes.list}>
                   {project.responsibilities?.map((el) => (
-                    <li>{el}</li>
+                    <li key={el}>{el}</li>
                   ))}
                 </ul>
               </div>
@@ -110,7 +100,7 @@ export const ProjectCard = React.memo(({ project }: Props) => {
               <p className={classes.label}>Tools & technologies</p>
               <Stack direction={'row'} spacing={0} sx={{ flexWrap: 'wrap', gap: 1 }}>
                 {project.tools?.map((tool) => (
-                  <Chip className={classes.chip} label={tool} />
+                  <Chip key={tool} className={classes.chip} label={tool} />
                 ))}
               </Stack>
             </div>

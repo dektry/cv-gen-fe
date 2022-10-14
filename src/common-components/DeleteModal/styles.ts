@@ -2,11 +2,6 @@ import { createUseStyles } from 'react-jss';
 import { Theme } from '@mui/material/styles/createTheme';
 
 export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
-  modal: {
-    '& .MuiBackdrop-root': {
-      zIndex: -100,
-    },
-  },
   box: {
     '&.MuiBox-root': {
       display: 'flex',
@@ -24,7 +19,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     },
   },
   title: {
-    fontFamily: 'Effra',
+    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '20px',
@@ -32,7 +27,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     textAlign: 'center',
   },
   text: {
-    fontFamily: 'Effra',
+    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '16px',

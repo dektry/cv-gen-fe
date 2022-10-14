@@ -18,7 +18,8 @@ export const EditButton = (props: IEditButton) => {
       border: '1px solid black',
       paddingLeft: '16px',
       '&.MuiButton-containedSecondary': {
-        border: '1px solid #333333',
+        border: '1px solid',
+        borderColor: 'primary.main',
         boxShadow: 'none',
         '&:hover': {
           backgroundColor: 'action.hover',

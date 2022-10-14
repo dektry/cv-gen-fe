@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../..';
+import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
 import { getProjectsList } from './thunks';
 
-import { IProject, IProjectsState } from 'models/IProject';
+import { IProject, IProjectFromDB, IProjectsState } from 'models/IProject';
 
 const initialState: IProjectsState = {
   projects: [],
@@ -32,19 +32,21 @@ const projects = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getProjectsList.fulfilled, (state, { payload }) => {
-      const processedProjects: IProject[] = payload.map((el: IProject) => {
-        const teamSize = el.team_size ? parseInt(el.team_size) : 0;
+      const processedProjects: IProject[] = payload.map((project: IProjectFromDB) => {
+        const teamSize = project.team_size ? parseInt(project.team_size) : 0;
+        const tools = project.technologies.map((el) => el.name);
 
         return {
-          id: el.id,
-          employeeId: el.employee?.id,
-          name: el.name,
-          duration: el.duration,
-          role: el.role,
+          id: project.id,
+          employeeId: project.employee?.id,
+          name: project.name,
+          duration: project.duration,
+          position: project.role,
           teamSize,
-          description: el.description,
-          responsibilities: el.responsibilities,
-          technologies: el.technologies,
+          description: project.description,
+          responsibilities: project.responsibilities,
+          technologies: project.technologies,
+          tools,
         };
       });
 

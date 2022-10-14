@@ -24,7 +24,7 @@ export const DeleteModal = ({
   const classes = useStyles({ theme });
 
   return (
-    <Modal className={classes.modal} open={isOpen} onClose={onClose}>
+    <Modal open={isOpen} onClose={onClose}>
       <Box className={classes.box}>
         <CloseIcon className={classes.closeIcon} onClick={onClose} />
         <h2 className={classes.title}>{modalTitle}</h2>

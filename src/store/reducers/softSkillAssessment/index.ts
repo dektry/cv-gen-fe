@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../..';
+import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
 import { getAllSoftSkillAssessments, getOneSoftAssessment } from './thunks';

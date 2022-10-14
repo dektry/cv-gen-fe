@@ -2,10 +2,22 @@ import { NullableField } from './TNullableField';
 import { IEmployee } from './IEmployee';
 
 export interface IProject {
-  id?: string;
-  employee?: IEmployee;
+  id: string;
   team_size?: string;
   employeeId: string;
+  name: string;
+  duration: string;
+  position: string;
+  teamSize: number;
+  description: string;
+  responsibilities: string[];
+  tools: string[];
+}
+
+export interface IProjectFromDB {
+  id: string;
+  employee?: IEmployee;
+  team_size?: string;
   name: string;
   duration: string;
   role: string;
