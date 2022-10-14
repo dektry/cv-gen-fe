@@ -63,20 +63,26 @@ export const Employee = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleClickDelete = useCallback((project: IProject) => {
-    dispatch(setProjectId(project.id));
-    setIsModalOpen(true);
-  }, []);
+  const handleClickDelete = useCallback(
+    (project: IProject) => {
+      dispatch(setProjectId(project.id));
+      setIsModalOpen(true);
+    },
+    [projects]
+  );
 
-  const handleClickDeleteProject = useCallback((project: IProject) => {
-    dispatch(deleteProject(project.id));
-    const projectsListCopy = cloneDeep(projects);
+  const handleClickDeleteProject = useCallback(
+    (project: IProject) => {
+      dispatch(deleteProject(project.id));
+      const projectsListCopy = cloneDeep(projects);
 
-    const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
+      const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
 
-    dispatch(setProjectsList(newProjectsList));
-    setIsModalOpen(false);
-  }, []);
+      dispatch(setProjectsList(newProjectsList));
+      setIsModalOpen(false);
+    },
+    [projects]
+  );
 
   const handleClose = () => {
     setIsModalOpen(false);
