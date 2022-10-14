@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, TextField } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
@@ -30,7 +30,7 @@ export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
 
   const classes = useStyles({ theme });
 
-  const [groupState, setGroupState] = React.useState(skillGroup);
+  const [groupState, setGroupState] = useState(skillGroup);
 
   useEffect(() => {
     setGroupState(skillGroup);
