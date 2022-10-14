@@ -13,6 +13,7 @@ let theme = createTheme({
     },
     text: {
       primary: '#333333',
+      secondary: '#AAB2C3',
     },
     error: {
       main: '#d32f2f',

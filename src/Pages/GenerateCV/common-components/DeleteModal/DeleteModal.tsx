@@ -5,11 +5,18 @@ import { useStyles } from './styles';
 interface IProps {
   isOpen: boolean;
   modalTitle: string;
+  modalText?: string;
   onClose: () => void;
   onSubmit?: () => void;
 }
 
-export const DeleteModal = ({ isOpen, modalTitle, onClose, onSubmit }: IProps) => {
+export const DeleteModal = ({
+  isOpen,
+  modalTitle,
+  modalText = 'Are you sure you want to delete this section? All data will be lost',
+  onClose,
+  onSubmit,
+}: IProps) => {
   const classes = useStyles();
 
   return (
@@ -24,7 +31,7 @@ export const DeleteModal = ({ isOpen, modalTitle, onClose, onSubmit }: IProps) =
       cancelText={'No'}
       destroyOnClose
     >
-      <div className={classes.warning}>Are you sure you want to delete this section? All data will be lost</div>
+      <div className={classes.warning}>{modalText}</div>
     </Modal>
   );
 };

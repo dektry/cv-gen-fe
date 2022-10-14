@@ -33,12 +33,14 @@ const projects = createSlice({
     });
     builder.addCase(getProjectsList.fulfilled, (state, { payload }) => {
       const processedProjects: IProject[] = payload.map((el: IProject) => {
+        const teamSize = el.team_size ? parseInt(el.team_size) : 0;
+
         return {
           employeeId: el.employee?.id,
           name: el.name,
           duration: el.duration,
           role: el.role,
-          teamSize: el.team_size,
+          teamSize,
           description: el.description,
           responsibilities: el.responsibilities,
           technologies: el.technologies,

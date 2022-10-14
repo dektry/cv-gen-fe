@@ -15,12 +15,13 @@ export const EditButton = (props: IEditButton) => {
       textTransform: 'none',
       height: '40px',
       padding: '8px',
+      border: '1px solid black',
       paddingLeft: '16px',
-      '&  .MuiButtonBase-root-MuiButton-root': {
-        // '&  .MuiButtonBase-root-MuiButton-root'
-        border: '1px solid pink',
-        '& ::hover': {
-          backgroundColor: '#F4F7FC',
+      '&.MuiButton-containedSecondary': {
+        border: '1px solid #333333',
+        boxShadow: 'none',
+        '&:hover': {
+          backgroundColor: 'action.hover',
         },
       },
       '& 	.MuiButton-endIcon': {

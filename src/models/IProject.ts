@@ -9,7 +9,7 @@ export interface IProject {
   name: string;
   duration: string;
   role: string;
-  teamSize: string;
+  teamSize: number;
   description: string;
   responsibilities: string[];
   technologies: { id?: string; name: string }[];

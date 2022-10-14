@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, TextField } from '@mui/material';
-
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 
@@ -10,8 +8,7 @@ import { getProjectsList } from 'store/reducers/projects/thunks';
 import { setProjectsList, projectsSelector } from 'store/reducers/projects';
 
 import { AddButton } from 'common-components/AddButton';
-import { DeleteButton } from 'common-components/DeleteButton';
-import { EditButton } from 'common-components/EditButton';
+import { ProjectCard } from './components/ProjectCard';
 
 import { useStyles } from './styles';
 
@@ -34,6 +31,20 @@ export const Projects = () => {
     };
   }, []);
 
+  const processedProjects = projects?.map((project) => {
+    const processedTools = project.technologies.map((el) => el.name);
+
+    return {
+      name: project.name,
+      description: project.description,
+      duration: project.duration,
+      position: project.role,
+      teamSize: project.teamSize,
+      responsibilities: project.responsibilities,
+      tools: processedTools,
+    };
+  });
+
   return (
     <>
       <div className={classes.upperContainer}>
@@ -41,8 +52,10 @@ export const Projects = () => {
         <div className={classes.button}>
           <AddButton />
         </div>
-        <EditButton title="Edit project" />
       </div>
+      {processedProjects?.map((project) => (
+        <ProjectCard project={project} />
+      ))}
     </>
   );
 };
