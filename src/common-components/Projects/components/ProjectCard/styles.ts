@@ -37,7 +37,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     },
   },
   projectSummary: {
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '16px',
@@ -47,7 +46,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     backgroundColor: ({ theme }) => theme.palette.background.default,
   },
   label: {
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '10px',
@@ -58,9 +56,11 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '12px',
+    padding: '16px',
     border: '1px solid',
     borderColor: ({ theme }) => theme.palette.action.hover,
+    borderLeft: 'none',
+    borderRight: 'none',
   },
   middleContainer: {
     display: 'flex',
@@ -78,7 +78,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     borderColor: ({ theme }) => theme.palette.action.hover,
   },
   boldData: {
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '12px',
@@ -88,23 +87,22 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     width: '33%',
     borderRight: '1px solid',
     borderColor: ({ theme }) => theme.palette.action.hover,
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
     lineHeight: '18px',
+    padding: '16px',
   },
   responsibilities: {
     width: '66%',
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
     lineHeight: '18px',
+    padding: '16px',
   },
   list: {
     paddingLeft: '16px',
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
@@ -113,7 +111,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   chip: {
     '&.MuiChip-root': {
       backgroundColor: ({ theme }) => theme.palette.action.hover,
-      fontFamily: 'Roboto',
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '12px',

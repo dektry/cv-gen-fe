@@ -4,9 +4,10 @@ import { generatePath } from 'react-router-dom';
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { Projects } from 'Pages/Projects';
+import { Projects } from 'common-components/Projects';
 
 import { IEmployee } from 'models/IEmployee';
+import { IProject } from 'models/IProject';
 
 import paths from 'config/routes.json';
 
@@ -21,6 +22,11 @@ interface IEmployeeProps {
   handleClickEdit: () => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
+  projects: IProject[];
+  handleClickDelete: (project: IProject) => void;
+  handleClickDeleteProject: (project: IProject) => void;
+  handleClose: () => void;
+  isModalOpen: boolean;
 }
 
 export const EmployeeUI = ({
@@ -31,6 +37,11 @@ export const EmployeeUI = ({
   handleEmployeeSave,
   handleChange,
   currentEmployee,
+  projects,
+  handleClickDelete,
+  handleClickDeleteProject,
+  handleClose,
+  isModalOpen,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -224,7 +235,13 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
-          <Projects />
+          <Projects
+            projects={projects}
+            handleClickDelete={handleClickDelete}
+            handleClickDeleteProject={handleClickDeleteProject}
+            handleClose={handleClose}
+            isModalOpen={isModalOpen}
+          />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button
