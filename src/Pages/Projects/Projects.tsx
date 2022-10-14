@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { Typography } from '@mui/material';
+
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 
@@ -34,7 +36,9 @@ export const Projects = () => {
   return (
     <>
       <div className={classes.upperContainer}>
-        <h2 className={classes.projectsHeader}>PROJECTS</h2>
+        <Typography variant="h2" sx={{ marginBottom: '24px' }}>
+          PROJECTS
+        </Typography>
         <div className={classes.button}>
           <AddButton />
         </div>
