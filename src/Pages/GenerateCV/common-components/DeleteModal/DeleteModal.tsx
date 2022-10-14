@@ -1,6 +1,10 @@
-import { Modal } from 'antd';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 interface IProps {
   isOpen: boolean;
@@ -17,21 +21,23 @@ export const DeleteModal = ({
   onClose,
   onSubmit,
 }: IProps) => {
-  const classes = useStyles();
+  const classes = useStyles({ theme });
 
   return (
-    <Modal
-      className={classes.modal}
-      centered
-      title={modalTitle}
-      visible={isOpen}
-      onOk={onSubmit}
-      onCancel={onClose}
-      okText={'Yes'}
-      cancelText={'No'}
-      destroyOnClose
-    >
-      <div className={classes.warning}>{modalText}</div>
+    <Modal className={classes.modal} open={isOpen} onClose={onClose}>
+      <Box className={classes.box}>
+        <CloseIcon className={classes.closeIcon} onClick={onClose} />
+        <h2 className={classes.title}>{modalTitle}</h2>
+        <p className={classes.text}>{modalText}</p>
+        <div className={classes.buttonContainer}>
+          <Button className={classes.noButton} onClick={onClose}>
+            No
+          </Button>
+          <Button className={classes.yesButton} onClick={onSubmit}>
+            Yes
+          </Button>
+        </div>
+      </Box>
     </Modal>
   );
 };

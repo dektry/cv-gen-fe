@@ -37,7 +37,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     },
   },
   projectSummary: {
-    fonFamily: 'Effra',
+    fontFamily: 'Effra',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '16px',
@@ -47,7 +47,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     backgroundColor: ({ theme }) => theme.palette.background.default,
   },
   label: {
-    fonFamily: 'Effra',
+    fontFamily: 'Effra',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '10px',
@@ -78,9 +78,9 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     borderColor: ({ theme }) => theme.palette.action.hover,
   },
   boldData: {
-    fonFamily: 'Effra',
+    fontFamily: 'Effra',
     fontStyle: 'normal',
-    fontWeight: 550,
+    fontWeight: 600,
     fontSize: '12px',
     lineHeight: '18px',
   },
@@ -91,7 +91,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   responsibilities: {
     width: '66%',
-    fonFamily: 'Effra',
+    fontFamily: 'Effra',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
@@ -99,7 +99,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   list: {
     paddingLeft: '16px',
-    fonFamily: 'Effra',
+    fontFamily: 'Effra',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
@@ -108,7 +108,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   chip: {
     '&.MuiChip-root': {
       backgroundColor: ({ theme }) => theme.palette.action.hover,
-      fonFamily: 'Effra',
+      fontFamily: 'Effra',
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '12px',

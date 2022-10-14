@@ -36,6 +36,7 @@ const projects = createSlice({
         const teamSize = el.team_size ? parseInt(el.team_size) : 0;
 
         return {
+          id: el.id,
           employeeId: el.employee?.id,
           name: el.name,
           duration: el.duration,

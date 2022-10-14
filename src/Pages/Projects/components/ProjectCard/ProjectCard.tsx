@@ -4,11 +4,16 @@ import { Accordion, AccordionActions, AccordionDetails, AccordionSummary } from 
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import { cloneDeep } from 'lodash';
+
+import { message } from 'antd';
 
 import { IProject } from 'models/IProject';
 
 import { useAppDispatch } from 'store';
-import { setProjectId } from 'store/reducers/projects';
+import { useSelector } from 'react-redux';
+import { setProjectId, setProjectsList, projectsSelector } from 'store/reducers/projects';
+import { deleteProject } from 'store/reducers/projects/thunks';
 
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
@@ -27,16 +32,29 @@ export const ProjectCard = React.memo(({ project }: Props) => {
   const classes = useStyles({ theme });
   const dispatch = useAppDispatch();
 
+  const { projects } = useSelector(projectsSelector);
+
   const handleClickDelete = () => {
     if (project.id) {
       dispatch(setProjectId(project.id));
+      setIsModalOpen(true);
+    } else {
+      message.error("This project doesn't have ID and couldn't be deleted");
     }
-    setIsModalOpen(true);
   };
 
   const handleClickDeleteProject = () => {
-    //TODO: write delete logic
-    setIsModalOpen(false);
+    if (project.id) {
+      dispatch(deleteProject(project.id));
+      const projectsListCopy = cloneDeep(projects);
+
+      const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
+
+      dispatch(setProjectsList(newProjectsList));
+      setIsModalOpen(false);
+    } else {
+      message.error("This project doesn't have ID and couldn't be deleted");
+    }
   };
 
   const handleClose = () => {

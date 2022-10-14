@@ -35,6 +35,7 @@ export const Projects = () => {
     const processedTools = project.technologies.map((el) => el.name);
 
     return {
+      id: project.id,
       name: project.name,
       description: project.description,
       duration: project.duration,

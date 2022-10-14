@@ -1,3 +1,4 @@
 export const appStoreName = 'projects';
 
-export const loadAllEmployeeProjects = `${appStoreName}/loadAllEmployeeProjects`;
+export const loadAllEmployeeProjectsAction = `${appStoreName}/loadAllEmployeeProjects`;
+export const deleteProjectAction = `${appStoreName}/deleteProject`;

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button, FormControlLabel, Switch, TextField } from '@mui/material';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import { CustomSelect } from 'common-components/CustomSelect';
 import { useStyles } from './styles';
