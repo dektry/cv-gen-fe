@@ -31,7 +31,6 @@ export const AddButton = (props: IAddButton) => {
       padding: '0',
       minWidth: '24px',
       height: 'auto',
-
       '& 	.MuiButton-endIcon': {
         margin: 0,
       },

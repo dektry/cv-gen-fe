@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { generatePdf, getTemplate } from 'services/requests/cvGeneration';
-import { generateCv, loadCvTemplate, loadGroupOfTemplates } from './actionTypes';
+import { generateCv, getProfSkills, loadCvTemplate, loadGroupOfTemplates } from './actionTypes';
+import { TProfSkill } from 'Pages/CVGeneration';
 
 export const fetchCvGenerationTemplate = createAsyncThunk(loadCvTemplate, async (templateName: string) => {
   const template = await getTemplate(templateName);
@@ -29,4 +30,10 @@ export const downloadCv = createAsyncThunk(generateCv, async (template: string) 
   link.href = url;
   link.click();
   link.remove();
+});
+
+export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: string) => {
+  const profSkills: TProfSkill[] = [];
+  // const profSkills = await getProfSkills();
+  return profSkills;
 });

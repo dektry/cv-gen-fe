@@ -2,13 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { appStoreName } from 'store/reducers/cvGeneration/actionTypes';
 import { RootState } from 'store/index';
-import { fetchCvGenerationTemplate, downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
+import {
+  fetchCvGenerationTemplate,
+  downloadCv,
+  fetchGroupOfTemplates,
+  fetchProfSkills,
+} from 'store/reducers/cvGeneration/thunks';
+import { TProfSkill } from 'Pages/CVGeneration';
 
 export type TTemplatesDic = { [name: string]: string };
 
 type TInitialStateCvGeneration = {
   templates: TTemplatesDic;
   description: string;
+  profSkills: TProfSkill[];
   isLoading: boolean;
   isGeneratingPdf: boolean;
 };
@@ -16,6 +23,7 @@ type TInitialStateCvGeneration = {
 const initialState: TInitialStateCvGeneration = {
   templates: {},
   description: '',
+  profSkills: [],
   isLoading: false,
   isGeneratingPdf: false,
 };
@@ -23,7 +31,12 @@ const initialState: TInitialStateCvGeneration = {
 const cvGeneration = createSlice({
   name: appStoreName,
   initialState,
-  reducers: {},
+  reducers: {
+    resetCvGeneration: (state) => ({
+      ...initialState,
+      templates: state.templates,
+    }),
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCvGenerationTemplate.fulfilled, (state, { payload }) => {
       state.templates = { ...state.templates, ...payload };
@@ -55,8 +68,20 @@ const cvGeneration = createSlice({
     builder.addCase(fetchGroupOfTemplates.rejected, (state) => {
       state.isLoading = false;
     });
+    builder.addCase(fetchProfSkills.fulfilled, (state, { payload }) => {
+      state.profSkills = payload;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchProfSkills.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchProfSkills.rejected, (state) => {
+      state.isLoading = false;
+    });
   },
 });
+
+export const { resetCvGeneration } = cvGeneration.actions;
 
 export const cvGenerationSelector = (state: RootState) => state.cvGeneration;
 

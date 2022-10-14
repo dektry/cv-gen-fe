@@ -15,6 +15,9 @@ import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
 
 import { useStyles } from './styles';
 import { mockDescription, mockProjects, mockSoftSkillsOptions, profSkillsMock } from './mocks';
+import { useAppDispatch } from 'store';
+import { resetCvGeneration } from 'store/reducers/cvGeneration';
+import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 
 export type TProfSkill = {
   groupName?: string;
@@ -44,6 +47,7 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
 
 export const CVGenerationPage = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const classes = useStyles();
 
   const { currentEmployee } = useSelector(employeesSelector);
@@ -81,6 +85,13 @@ export const CVGenerationPage = () => {
         profSkills: profSkillsMock,
       });
     }
+  }, []);
+
+  useEffect(() => {
+    if (currentEmployee.id) dispatch(fetchProfSkills(currentEmployee.id));
+    return () => {
+      dispatch(resetCvGeneration());
+    };
   }, []);
 
   const updateCvInfo = useCallback((fields: Partial<CvInfo>) => {
