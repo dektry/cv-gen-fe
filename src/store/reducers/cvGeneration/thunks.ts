@@ -52,24 +52,22 @@ export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: st
     ]);
     const answers = lastAssessment?.answers || [];
 
-    if (answers.length) {
-      skillMatrix.forEach((group: Record<string, unknown>) => {
-        const profSkillGroup: TProfSkill = { groupName: '', skills: [] };
+    skillMatrix.forEach((group: Record<string, unknown>) => {
+      const profSkillGroup: TProfSkill = { groupName: '', skills: [] };
 
-        profSkillGroup.groupName = group.value as string;
-        profSkillGroup.skills = (group.skills as Record<string, unknown>[]).map((skill) => {
-          const profSkill = { name: '', level: '' };
+      profSkillGroup.groupName = group.value as string;
+      profSkillGroup.skills = (group.skills as Record<string, unknown>[]).map((skill) => {
+        const profSkill = { name: '', level: '' };
 
-          profSkill.name = skill.value as string;
-          profSkill.level = answers.find((answer: Record<string, unknown>) => answer.skill === skill.value)
-            ?.actual as string;
+        profSkill.name = skill.value as string;
+        profSkill.level =
+          (answers.find((answer: Record<string, unknown>) => answer.skill === skill.value)?.actual as string) || 'None';
 
-          return profSkill;
-        });
-
-        profSkills.push(profSkillGroup);
+        return profSkill;
       });
-    }
+
+      profSkills.push(profSkillGroup);
+    });
   }
 
   return profSkills;
