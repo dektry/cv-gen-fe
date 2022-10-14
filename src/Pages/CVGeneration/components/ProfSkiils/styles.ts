@@ -1,6 +1,8 @@
 import { createUseStyles } from 'react-jss';
 import { Theme } from '@mui/material/styles/createTheme';
 
+const skillsGap = 16;
+
 export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
   accordion: {
     marginBottom: '16px',
@@ -23,9 +25,9 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     },
     '& .MuiAccordionDetails-root': {
       display: 'grid',
-      gridTemplateColumns: '50% 50%',
+      gridTemplateColumns: `calc(50% - ${skillsGap / 2}px) calc(50% - ${skillsGap / 2}px)`,
       gridTemplateRows: 'auto auto',
-      gap: '16px',
+      gap: skillsGap + 'px',
       padding: '0 16px',
     },
     '& .MuiAccordionActions-root': {

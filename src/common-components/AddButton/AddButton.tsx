@@ -16,6 +16,10 @@ export const AddButton = (props: IAddButton) => {
       height: '40px',
       padding: '8px',
       paddingLeft: '16px',
+      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+      '&:hover': {
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+      },
       '& 	.MuiButton-endIcon': {
         marginRight: 0,
         '& svg': {
@@ -27,7 +31,6 @@ export const AddButton = (props: IAddButton) => {
       padding: '0',
       minWidth: '24px',
       height: 'auto',
-
       '& 	.MuiButton-endIcon': {
         margin: 0,
       },
