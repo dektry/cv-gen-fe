@@ -26,6 +26,13 @@ let theme = createTheme({
       hover: '#f4f7fc',
     },
   },
+  typography: {
+    h2: {
+      fontSize: '20px',
+      fontWeight: 500,
+      lineHeight: '24px',
+    },
+  },
 });
 
 // A custom theme for this app

@@ -15,7 +15,10 @@ export type TTemplatesDic = { [name: string]: string };
 type TInitialStateCvGeneration = {
   templates: TTemplatesDic;
   description: string;
-  profSkills: TProfSkill[];
+  profSkills: {
+    data: TProfSkill[];
+    isLoading: boolean;
+  };
   isLoading: boolean;
   isGeneratingPdf: boolean;
 };
@@ -23,7 +26,10 @@ type TInitialStateCvGeneration = {
 const initialState: TInitialStateCvGeneration = {
   templates: {},
   description: '',
-  profSkills: [],
+  profSkills: {
+    data: [],
+    isLoading: false,
+  },
   isLoading: false,
   isGeneratingPdf: false,
 };
@@ -69,14 +75,13 @@ const cvGeneration = createSlice({
       state.isLoading = false;
     });
     builder.addCase(fetchProfSkills.fulfilled, (state, { payload }) => {
-      state.profSkills = payload;
-      state.isLoading = false;
+      state.profSkills = { data: payload, isLoading: false };
     });
     builder.addCase(fetchProfSkills.pending, (state) => {
-      state.isLoading = true;
+      state.profSkills = { data: [], isLoading: true };
     });
     builder.addCase(fetchProfSkills.rejected, (state) => {
-      state.isLoading = false;
+      state.profSkills = { data: [], isLoading: false };
     });
   },
 });
@@ -84,5 +89,6 @@ const cvGeneration = createSlice({
 export const { resetCvGeneration } = cvGeneration.actions;
 
 export const cvGenerationSelector = (state: RootState) => state.cvGeneration;
+export const profSkillsSelector = (state: RootState) => state.cvGeneration.profSkills;
 
 export default cvGeneration.reducer;

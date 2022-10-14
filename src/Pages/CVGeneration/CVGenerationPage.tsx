@@ -14,9 +14,9 @@ import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHe
 import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
 
 import { useStyles } from './styles';
-import { mockDescription, mockProjects, mockSoftSkillsOptions, profSkillsMock } from './mocks';
+import { mockDescription, mockProjects, mockSoftSkillsOptions } from './mocks';
 import { useAppDispatch } from 'store';
-import { resetCvGeneration } from 'store/reducers/cvGeneration';
+import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 
 export type TProfSkill = {
@@ -51,6 +51,7 @@ export const CVGenerationPage = () => {
   const classes = useStyles();
 
   const { currentEmployee } = useSelector(employeesSelector);
+  const { data: profSkills } = useSelector(profSkillsSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,10 +83,10 @@ export const CVGenerationPage = () => {
           ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
           ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
         ],
-        profSkills: profSkillsMock,
+        profSkills,
       });
     }
-  }, []);
+  }, [profSkills]);
 
   useEffect(() => {
     if (currentEmployee.id) dispatch(fetchProfSkills(currentEmployee.id));

@@ -1,5 +1,16 @@
 import React from 'react';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, TextField } from '@mui/material';
+import { useSelector } from 'react-redux';
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  LinearProgress,
+  TextField,
+  Typography,
+} from '@mui/material';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -11,6 +22,8 @@ import { DeleteButton } from 'common-components/DeleteButton';
 import { CustomSelect } from 'common-components/CustomSelect';
 import { mockLevels } from 'Pages/CVGeneration/mocks';
 import { useStyles } from './styles';
+import { profSkillsSelector } from 'store/reducers/cvGeneration';
+import { useDeferredLoading } from 'hooks/useDeferredLoading';
 
 interface IProfSkills {
   profSkills: TProfSkill[];
@@ -21,6 +34,10 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
   const { profSkills, updateCvInfo } = props;
 
   const classes = useStyles({ theme });
+
+  const { isLoading } = useSelector(profSkillsSelector);
+
+  const deferredLoading = useDeferredLoading(isLoading);
 
   const handleSkillGroupChange = (index: number, value: string) => {
     const newProfSkills = [...profSkills];
@@ -66,49 +83,63 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
 
   return (
     <Box>
-      {profSkills?.map((skillGroup, groupIndex) => (
-        <Accordion
-          key={'group' + groupIndex}
-          className={classes.accordion}
-          disableGutters
-          TransitionProps={{ unmountOnExit: true }}
-        >
-          <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
-            <SkillGroupField
-              value={skillGroup.groupName}
-              onChange={(e) => handleSkillGroupChange(groupIndex, e.target.value)}
-            />
-          </AccordionSummary>
-          <AccordionDetails>
-            {skillGroup.skills.map((skill, skillIndex) => (
-              <Box key={'skill' + groupIndex + skillIndex} className={classes.skill}>
-                <TextField
-                  label="Skill"
-                  value={skill.name}
-                  onChange={(e) => handleSkillChange(groupIndex, skillIndex, e.target.value)}
+      <Typography variant="h2" sx={{ marginBottom: '24px' }}>
+        PROFESSIONAL SKILLS
+      </Typography>
+      {deferredLoading ? (
+        <LinearProgress></LinearProgress>
+      ) : (
+        <>
+          {profSkills?.map((skillGroup, groupIndex) => (
+            <Accordion
+              key={'group' + groupIndex}
+              className={classes.accordion}
+              disableGutters
+              TransitionProps={{ unmountOnExit: true }}
+            >
+              <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
+                <SkillGroupField
+                  value={skillGroup.groupName}
+                  onChange={(e) => handleSkillGroupChange(groupIndex, e.target.value)}
                 />
-                <CustomSelect
-                  value={skill.level}
-                  options={mockLevels}
-                  sx={{ width: '220px' }}
-                  onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
-                />
-                <Button
-                  className={classes.deleteSkillBtn}
-                  variant="contained"
-                  endIcon={<AddRoundedIcon />}
-                  onClick={() => handleDeleteSkill(groupIndex, skillIndex)}
-                />
-              </Box>
-            ))}
-          </AccordionDetails>
-          <AccordionActions sx={{ justifyContent: 'space-between' }}>
-            <AddButton title="Add field" onClick={() => handleAddSkill(groupIndex)} />
-            <DeleteButton title="Delete section" onClick={() => handleDeleteSkillGroup(groupIndex)} />
-          </AccordionActions>
-        </Accordion>
-      ))}
-      <AddButton title="Add new section" sx={{ marginTop: '24px' }} onClick={handleAddSkillGroup} />
+              </AccordionSummary>
+              <AccordionDetails>
+                {skillGroup.skills.map((skill, skillIndex) => (
+                  <Box key={'skill' + groupIndex + skillIndex} className={classes.skill}>
+                    <TextField
+                      label="Skill"
+                      value={skill.name}
+                      onChange={(e) => handleSkillChange(groupIndex, skillIndex, e.target.value)}
+                    />
+                    <CustomSelect
+                      value={skill.level}
+                      options={mockLevels}
+                      sx={{ width: '220px' }}
+                      onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
+                    />
+                    <Button
+                      className={classes.deleteSkillBtn}
+                      variant="contained"
+                      endIcon={<AddRoundedIcon />}
+                      onClick={() => handleDeleteSkill(groupIndex, skillIndex)}
+                    />
+                  </Box>
+                ))}
+              </AccordionDetails>
+              <AccordionActions sx={{ justifyContent: 'space-between' }}>
+                <AddButton title="Add field" onClick={() => handleAddSkill(groupIndex)} />
+                <DeleteButton title="Delete section" onClick={() => handleDeleteSkillGroup(groupIndex)} />
+              </AccordionActions>
+            </Accordion>
+          ))}
+        </>
+      )}
+      <AddButton
+        title="Add new section"
+        sx={{ marginTop: '24px' }}
+        onClick={handleAddSkillGroup}
+        disabled={deferredLoading}
+      />
     </Box>
   );
 });
