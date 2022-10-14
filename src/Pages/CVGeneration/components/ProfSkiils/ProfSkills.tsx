@@ -20,10 +20,15 @@ import { AddButton } from 'common-components/AddButton';
 import theme from 'theme/theme';
 import { DeleteButton } from 'common-components/DeleteButton';
 import { CustomSelect } from 'common-components/CustomSelect';
-import { mockLevels } from 'Pages/CVGeneration/mocks';
 import { useStyles } from './styles';
 import { profSkillsSelector } from 'store/reducers/cvGeneration';
 import { useDeferredLoading } from 'hooks/useDeferredLoading';
+import { LevelTypesEnum } from 'models/IInterview';
+
+const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
+  label: level,
+  value: level,
+}));
 
 interface IProfSkills {
   profSkills: TProfSkill[];
@@ -113,7 +118,7 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
                     />
                     <CustomSelect
                       value={skill.level}
-                      options={mockLevels}
+                      options={levelsOptions}
                       sx={{ width: '220px' }}
                       onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
                     />

@@ -9,6 +9,7 @@ import {
   fetchProfSkills,
 } from 'store/reducers/cvGeneration/thunks';
 import { TProfSkill } from 'Pages/CVGeneration';
+import { cloneDeep } from 'lodash';
 
 export type TTemplatesDic = { [name: string]: string };
 
@@ -89,6 +90,7 @@ const cvGeneration = createSlice({
 export const { resetCvGeneration } = cvGeneration.actions;
 
 export const cvGenerationSelector = (state: RootState) => state.cvGeneration;
-export const profSkillsSelector = (state: RootState) => state.cvGeneration.profSkills;
+// have to use cloneDeep to avoid unnecessary object "freezing"
+export const profSkillsSelector = (state: RootState) => cloneDeep(state.cvGeneration.profSkills);
 
 export default cvGeneration.reducer;
