@@ -6,42 +6,41 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     '&.MuiBox-root': {
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '15rem',
-      maxWidth: '30rem',
+      width: '448px',
+      height: '272px',
       position: 'absolute',
       top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: 400,
       backgroundColor: ({ theme }) => theme.palette.background.default,
       borderRadius: '8px',
-      padding: '56px 24px 40px 24px',
     },
   },
   title: {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '20px',
-    lineHeight: '24px',
-    textAlign: 'center',
+    '&.MuiTypography-root': {
+      textAlign: 'center',
+      margin: '56px 0 4px 0',
+    },
   },
   text: {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: '20px',
-    textAlign: 'center',
+    '&.MuiTypography-root': {
+      textAlign: 'center',
+      margin: '4px 24px 24px 24px',
+      color: '#5c5d66',
+    },
   },
   buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    height: '24px',
+    margin: '24px 24px 40px 24px',
   },
   noButton: {
     '&.MuiButton-root': {
-      fontFamily: 'Roboto',
+      width: '94px',
+      height: '56px',
+      marginRight: '8px',
       fontStyle: 'normal',
       fontWeight: 500,
       fontSize: '16px',
@@ -52,6 +51,9 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   yesButton: {
     '&.MuiButton-root': {
+      width: '94px',
+      height: '56px',
+      marginLeft: '8px',
       backgroundColor: ({ theme }) => theme.palette.error.main,
       borderRadius: '100px',
       color: ({ theme }) => theme.palette.background.default,
@@ -64,14 +66,14 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   closeIcon: {
     '&.MuiSvgIcon-root': {
       position: 'absolute',
-      left: '90%',
-      right: '10%',
-      top: '10%',
-      bottom: '80%',
+      left: '406.67px',
+      right: '30.67px',
+      top: '30.67px',
+      bottom: '230.67px',
+      color: ({ theme }) => theme.palette.primary.dark,
 
       '&:hover': {
         cursor: 'pointer',
-        rotate: '5deg',
       },
     },
   },

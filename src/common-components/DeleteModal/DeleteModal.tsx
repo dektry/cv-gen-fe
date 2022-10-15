@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
+import { Typography } from '@mui/material';
 
 interface IProps {
   isOpen: boolean;
@@ -27,8 +28,12 @@ export const DeleteModal = ({
     <Modal open={isOpen} onClose={onClose}>
       <Box className={classes.box}>
         <CloseIcon className={classes.closeIcon} onClick={onClose} />
-        <h2 className={classes.title}>{modalTitle}</h2>
-        <p className={classes.text}>{modalText}</p>
+        <Typography variant="h2" className={classes.title}>
+          {modalTitle}
+        </Typography>
+        <Typography variant="h3" className={classes.text}>
+          {modalText}
+        </Typography>
         <div className={classes.buttonContainer}>
           <Button className={classes.noButton} onClick={onClose}>
             No

@@ -120,7 +120,7 @@ export const ProjectCard = React.memo(
           onSubmit={() => handleClickDeleteProjectConfirm(project)}
           onClose={handleCloseDeleteProjectModal}
           isOpen={isDeleteProjectModalOpen}
-          modalTitle={'Delete project'}
+          modalTitle={'DELETE PROJECT'}
           modalText={'Are you sure you want to delete this project? All data will be lost'}
         />
       </>
