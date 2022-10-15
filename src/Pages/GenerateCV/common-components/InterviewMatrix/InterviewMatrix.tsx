@@ -26,7 +26,7 @@ import {
 
 import { useStyles } from './styles';
 
-import { DeleteModal } from 'Pages/GenerateCV/common-components/DeleteModal';
+import { DeleteModal } from 'common-components/DeleteModal';
 import { loadInterviewMatrix } from 'store/reducers/interview';
 
 interface IProps {

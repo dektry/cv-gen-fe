@@ -294,7 +294,7 @@ export const profSkillsMock: TProfSkill[] = [
       },
     ],
   },
-].map((group, index) => {
+].map((group) => {
   group.skills = group.skills.map((skill) => {
     skill.level = getRandomInt(0, 4).toString();
     return skill;

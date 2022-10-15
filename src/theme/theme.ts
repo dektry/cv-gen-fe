@@ -13,6 +13,7 @@ let theme = createTheme({
     },
     text: {
       primary: '#333333',
+      secondary: '#AAB2C3',
     },
     error: {
       main: '#d32f2f',
@@ -31,6 +32,25 @@ let theme = createTheme({
       fontSize: '20px',
       fontWeight: 500,
       lineHeight: '24px',
+    },
+    h3: {
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+    },
+    h5: {
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '12px',
+      lineHeight: '18px',
+    },
+    h6: {
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '10px',
+      lineHeight: '14px',
+      color: '#AAB2C3',
     },
   },
 });

@@ -18,4 +18,5 @@ export const apiClient = {
     client(localStorage.getItem('jwt')).post(url, data, config),
   patch: (url: string, data: unknown) => client(localStorage.getItem('jwt')).patch(url, data),
   put: (url: string, data: unknown) => client(localStorage.getItem('jwt')).put(url, data),
+  delete: (url: string) => client(localStorage.getItem('jwt')).delete(url),
 };
