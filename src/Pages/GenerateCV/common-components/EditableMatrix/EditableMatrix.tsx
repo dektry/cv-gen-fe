@@ -18,7 +18,7 @@ import {
 import { NullableField } from 'models/TNullableField';
 import { LevelTypesEnum } from 'models/IInterview';
 
-import { DeleteModal } from '../../../../common-components/DeleteModal';
+import { DeleteModal } from 'common-components/DeleteModal';
 
 import {
   INTERVIEW,

@@ -24,6 +24,7 @@ export const Employee = () => {
 
   const [isChanged, setIsChanged] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -61,17 +62,15 @@ export const Employee = () => {
     }
   }, []);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleClickDelete = useCallback(
+  const handleClickDeleteProjectButton = useCallback(
     (project: IProject) => {
       dispatch(setProjectId(project.id));
-      setIsModalOpen(true);
+      setIsDeleteProjectModalOpen(true);
     },
     [projects]
   );
 
-  const handleClickDeleteProject = useCallback(
+  const handleClickDeleteProjectConfirm = useCallback(
     (project: IProject) => {
       dispatch(deleteProject(project.id));
       const projectsListCopy = cloneDeep(projects);
@@ -79,13 +78,13 @@ export const Employee = () => {
       const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
 
       dispatch(setProjectsList(newProjectsList));
-      setIsModalOpen(false);
+      setIsDeleteProjectModalOpen(false);
     },
     [projects]
   );
 
-  const handleClose = () => {
-    setIsModalOpen(false);
+  const handleCloseDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(false);
   };
 
   useEffect(() => {
@@ -107,10 +106,10 @@ export const Employee = () => {
       currentEmployee={currentEmployee}
       employeeId={id}
       projects={projects}
-      handleClickDelete={handleClickDelete}
-      handleClickDeleteProject={handleClickDeleteProject}
-      handleClose={handleClose}
-      isModalOpen={isModalOpen}
+      handleClickDeleteProjectButton={handleClickDeleteProjectButton}
+      handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
+      handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
+      isDeleteProjectModalOpen={isDeleteProjectModalOpen}
     />
   );
 };

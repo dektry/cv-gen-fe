@@ -23,10 +23,10 @@ interface IEmployeeProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
   projects: IProject[];
-  handleClickDelete: (project: IProject) => void;
-  handleClickDeleteProject: (project: IProject) => void;
-  handleClose: () => void;
-  isModalOpen: boolean;
+  handleClickDeleteProjectButton: (project: IProject) => void;
+  handleClickDeleteProjectConfirm: (project: IProject) => void;
+  handleCloseDeleteProjectModal: () => void;
+  isDeleteProjectModalOpen: boolean;
 }
 
 export const EmployeeUI = ({
@@ -38,10 +38,10 @@ export const EmployeeUI = ({
   handleChange,
   currentEmployee,
   projects,
-  handleClickDelete,
-  handleClickDeleteProject,
-  handleClose,
-  isModalOpen,
+  handleClickDeleteProjectButton,
+  handleClickDeleteProjectConfirm,
+  handleCloseDeleteProjectModal,
+  isDeleteProjectModalOpen,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -237,10 +237,10 @@ export const EmployeeUI = ({
           </Form.Item>
           <Projects
             projects={projects}
-            handleClickDelete={handleClickDelete}
-            handleClickDeleteProject={handleClickDeleteProject}
-            handleClose={handleClose}
-            isModalOpen={isModalOpen}
+            handleClickDeleteProjectButton={handleClickDeleteProjectButton}
+            handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
+            handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
+            isDeleteProjectModalOpen={isDeleteProjectModalOpen}
           />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (

@@ -9,18 +9,18 @@ import { useStyles } from './styles';
 
 interface IProps {
   projects: IProject[];
-  handleClickDelete: (project: IProject) => void;
-  handleClickDeleteProject: (project: IProject) => void;
-  handleClose: () => void;
-  isModalOpen: boolean;
+  handleClickDeleteProjectButton: (project: IProject) => void;
+  handleClickDeleteProjectConfirm: (project: IProject) => void;
+  handleCloseDeleteProjectModal: () => void;
+  isDeleteProjectModalOpen: boolean;
 }
 
 export const Projects = ({
   projects,
-  handleClickDelete,
-  handleClickDeleteProject,
-  handleClose,
-  isModalOpen,
+  handleClickDeleteProjectButton,
+  handleClickDeleteProjectConfirm,
+  handleCloseDeleteProjectModal,
+  isDeleteProjectModalOpen,
 }: IProps) => {
   const classes = useStyles();
 
@@ -34,13 +34,14 @@ export const Projects = ({
           <AddButton />
         </div>
       </div>
-      {projects?.map((project) => (
+      {projects?.map((project, idx) => (
         <ProjectCard
+          id={idx}
           project={project}
-          handleClickDelete={handleClickDelete}
-          handleClickDeleteProject={handleClickDeleteProject}
-          handleClose={handleClose}
-          isModalOpen={isModalOpen}
+          handleClickDeleteProjectButton={handleClickDeleteProjectButton}
+          handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
+          handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
+          isDeleteProjectModalOpen={isDeleteProjectModalOpen}
         />
       ))}
     </>

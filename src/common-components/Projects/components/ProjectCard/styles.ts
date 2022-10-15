@@ -20,8 +20,8 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     '& .MuiAccordionSummary-root.Mui-focusVisible': {
       backgroundColor: ({ theme }) => theme.palette.action.hover,
     },
-    '& .MuiAccordionSummary-content': {
-      margin: '24px 0 16px',
+    '& .MuiAccordionSummary-root': {
+      padding: '12px',
     },
     '& .MuiAccordionDetails-root': {
       display: 'grid',
@@ -29,7 +29,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       padding: '0',
     },
     '& .MuiAccordionActions-root': {
-      padding: '16px 16px 24px',
+      padding: '21px 12px',
       border: '1px solid',
       borderTop: 'none',
       borderColor: ({ theme }) => theme.palette.action.hover,
@@ -46,17 +46,15 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     backgroundColor: ({ theme }) => theme.palette.background.default,
   },
   label: {
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '10px',
-    lineHeight: '14px',
-    color: ({ theme }) => theme.palette.text.secondary,
+    '&.MuiTypography-root': {
+      paddingBottom: '4px',
+    },
   },
   upperContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '16px',
+    padding: '14px 16px',
     border: '1px solid',
     borderColor: ({ theme }) => theme.palette.action.hover,
     borderLeft: 'none',
@@ -66,40 +64,41 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '0 12px',
     border: '1px solid',
     borderColor: ({ theme }) => theme.palette.action.hover,
     borderTop: 'none',
     borderBottom: 'none',
   },
   lowerContainer: {
-    padding: '12px',
+    padding: '14px 16px',
     border: '1px solid',
     borderColor: ({ theme }) => theme.palette.action.hover,
   },
+  infoBlock: {
+    width: '25%',
+  },
   boldData: {
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '12px',
-    lineHeight: '18px',
+    '&.MuiTypography-root': {
+      fontWeight: 600,
+    },
   },
   description: {
-    width: '33%',
+    width: '33.2%',
     borderRight: '1px solid',
     borderColor: ({ theme }) => theme.palette.action.hover,
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
     lineHeight: '18px',
-    padding: '16px',
+    padding: '14px 16px',
   },
   responsibilities: {
-    width: '66%',
+    width: '66.8%',
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: '12px',
     lineHeight: '18px',
-    padding: '16px',
+    padding: '14px 16px',
   },
   list: {
     paddingLeft: '16px',
@@ -115,6 +114,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       fontWeight: 400,
       fontSize: '12px',
       lineHeight: '18px',
+      paddingLeft: '0',
     },
   },
 });
