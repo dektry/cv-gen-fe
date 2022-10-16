@@ -8,7 +8,7 @@ export interface IProject {
   name: string;
   duration: string;
   position: string;
-  teamSize: number;
+  teamSize: number | string;
   description: string;
   responsibilities: string[];
   tools: string[];

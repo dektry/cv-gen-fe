@@ -4,6 +4,7 @@ import { IProject } from 'models/IProject';
 
 import { AddButton } from 'common-components/AddButton';
 import { ProjectCard } from './components/ProjectCard';
+import { ProjectForm } from './components/ProjectForm';
 
 import { useStyles } from './styles';
 
@@ -35,14 +36,17 @@ export const Projects = ({
         </div>
       </div>
       {projects?.map((project, idx) => (
-        <ProjectCard
-          id={idx}
-          project={project}
-          handleClickDeleteProjectButton={handleClickDeleteProjectButton}
-          handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
-          handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
-          isDeleteProjectModalOpen={isDeleteProjectModalOpen}
-        />
+        <>
+          <ProjectCard
+            id={idx}
+            project={project}
+            handleClickDeleteProjectButton={handleClickDeleteProjectButton}
+            handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
+            handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
+            isDeleteProjectModalOpen={isDeleteProjectModalOpen}
+          />
+          <ProjectForm project={project} />
+        </>
       ))}
     </>
   );
