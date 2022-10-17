@@ -1,11 +1,16 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { Cancel } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 interface IProps {
   tag: string;
   handleClickTag: (tag: string) => void;
 }
 export const Tag = ({ tag, handleClickTag }: IProps) => {
+  const classes = useStyles({ theme });
+
   return (
     <Box
       sx={{
@@ -24,11 +29,10 @@ export const Tag = ({ tag, handleClickTag }: IProps) => {
         margin: '4px',
         fontSize: '12px',
       }}
-      onClick={() => handleClickTag(tag)}
     >
-      <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
+      <Stack direction="row" sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 1 }}>
         <Typography>{tag}</Typography>
-        <Cancel />
+        <CloseIcon fontSize="small" className={classes.closeIcon} onClick={() => handleClickTag(tag)} />
       </Stack>
     </Box>
   );

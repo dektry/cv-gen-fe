@@ -11,6 +11,7 @@ import { IProject } from 'models/IProject';
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
 import { DeleteModal } from 'common-components/DeleteModal';
+import { CreateEditModal } from '../CreateEditModal';
 
 import theme from 'theme/theme';
 import { useStyles } from './styles';
@@ -22,6 +23,12 @@ type TProps = {
   handleClickDeleteProjectConfirm: (project: IProject) => void;
   handleCloseDeleteProjectModal: () => void;
   isDeleteProjectModalOpen: boolean;
+  handleOpenEditModal: (project: IProject) => void;
+  handleCloseEditModal: () => void;
+  editModalOpen: boolean;
+  handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
+  error: boolean;
+  setError: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const ProjectCard = React.memo(
@@ -32,6 +39,12 @@ export const ProjectCard = React.memo(
     handleClickDeleteProjectConfirm,
     handleCloseDeleteProjectModal,
     isDeleteProjectModalOpen,
+    handleOpenEditModal,
+    handleCloseEditModal,
+    editModalOpen,
+    handleSaveOrEditProject,
+    error,
+    setError,
   }: TProps) => {
     const classes = useStyles({ theme });
 
@@ -112,7 +125,7 @@ export const ProjectCard = React.memo(
           </AccordionDetails>
           <AccordionActions sx={{ justifyContent: 'flex-end' }}>
             <DeleteButton title="Delete project" onClick={() => handleClickDeleteProjectButton(project)} />
-            <EditButton title="Edit project" />
+            <EditButton title="Edit project" onClick={() => handleOpenEditModal(project)} />
           </AccordionActions>
         </Accordion>
 
@@ -122,6 +135,15 @@ export const ProjectCard = React.memo(
           isOpen={isDeleteProjectModalOpen}
           modalTitle={'DELETE PROJECT'}
           modalText={'Are you sure you want to delete this project? All data will be lost'}
+        />
+        <CreateEditModal
+          edit={true}
+          isOpen={editModalOpen}
+          modalTitle="EDIT PROJECT"
+          onClose={handleCloseEditModal}
+          onSubmit={handleSaveOrEditProject}
+          error={error}
+          setError={setError}
         />
       </>
     );

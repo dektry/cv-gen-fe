@@ -4,6 +4,10 @@ import { Theme } from '@mui/material/styles/createTheme';
 const inputsGap = 16;
 
 export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
+  box: {
+    marginTop: '8px',
+    padding: '24px',
+  },
   upperContainer: {
     display: 'grid',
     gridTemplateColumns: `calc(50% - ${inputsGap / 2}px) calc(50% - ${inputsGap / 2}px)`,

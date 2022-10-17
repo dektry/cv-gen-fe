@@ -26,6 +26,13 @@ interface IEmployeeProps {
   handleClickDeleteProjectButton: (project: IProject) => void;
   handleClickDeleteProjectConfirm: (project: IProject) => void;
   handleCloseDeleteProjectModal: () => void;
+  handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
+  handleOpenCreateModal: () => void;
+  handleCloseCreateModal: () => void;
+  createModalOpen: boolean;
+  handleOpenEditModal: (project: IProject) => void;
+  handleCloseEditModal: () => void;
+  editModalOpen: boolean;
   isDeleteProjectModalOpen: boolean;
 }
 
@@ -41,6 +48,13 @@ export const EmployeeUI = ({
   handleClickDeleteProjectButton,
   handleClickDeleteProjectConfirm,
   handleCloseDeleteProjectModal,
+  handleSaveOrEditProject,
+  handleCloseCreateModal,
+  handleOpenCreateModal,
+  createModalOpen,
+  handleOpenEditModal,
+  handleCloseEditModal,
+  editModalOpen,
   isDeleteProjectModalOpen,
 }: IEmployeeProps) => {
   const classes = useStyles();
@@ -241,6 +255,13 @@ export const EmployeeUI = ({
             handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
             handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
             isDeleteProjectModalOpen={isDeleteProjectModalOpen}
+            handleSaveOrEditProject={handleSaveOrEditProject}
+            handleCloseCreateModal={handleCloseCreateModal}
+            handleOpenCreateModal={handleOpenCreateModal}
+            createModalOpen={createModalOpen}
+            handleOpenEditModal={handleOpenEditModal}
+            handleCloseEditModal={handleCloseEditModal}
+            editModalOpen={editModalOpen}
           />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
