@@ -17,10 +17,11 @@ import { useStyles } from './styles';
 
 interface IProps {
   employeeId: string;
-  handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
+  handleSaveProject: (project: IProject) => void;
+  handleEditProject: (project: IProject) => void;
 }
 
-export const Projects = ({ employeeId, handleSaveOrEditProject }: IProps) => {
+export const Projects = ({ employeeId, handleSaveProject, handleEditProject }: IProps) => {
   const classes = useStyles();
   const [error, setError] = useState(false);
 
@@ -90,7 +91,7 @@ export const Projects = ({ employeeId, handleSaveOrEditProject }: IProps) => {
           handleCloseEditModal={handleCloseEditModal}
           handleOpenEditModal={handleOpenEditModal}
           editModalOpen={editModalOpen}
-          handleSaveOrEditProject={handleSaveOrEditProject}
+          handleEditProject={handleEditProject}
           error={error}
           setError={setError}
           setProjectInfo={setProjectInfo}
@@ -100,7 +101,7 @@ export const Projects = ({ employeeId, handleSaveOrEditProject }: IProps) => {
         isOpen={createModalOpen}
         modalTitle="ADD NEW PROJECT"
         onClose={handleCloseCreateModal}
-        onSubmit={handleSaveOrEditProject}
+        onSubmit={handleSaveProject}
         error={error}
         setError={setError}
         setProjectInfo={setProjectInfo}

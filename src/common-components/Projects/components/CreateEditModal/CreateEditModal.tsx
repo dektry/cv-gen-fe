@@ -22,9 +22,8 @@ interface IProps {
   isOpen: boolean;
   modalTitle: string;
   onClose: () => void;
-  onSubmit?: (project: IProject, edit: boolean) => void;
+  onSubmit?: (project: IProject) => void;
   error: boolean;
-  edit?: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
   projectInfo: Partial<IProject> | null;
@@ -37,7 +36,6 @@ export const CreateEditModal = ({
   onSubmit,
   error,
   setError,
-  edit = false,
   setProjectInfo,
   projectInfo,
 }: IProps) => {
@@ -58,7 +56,7 @@ export const CreateEditModal = ({
   const handleSubmit = () => {
     if (projectInfo && projectInfo && onSubmit) {
       const projectToSave = formatProject(projectInfo, currentEmployee);
-      onSubmit(projectToSave, edit);
+      onSubmit(projectToSave);
       setOpenChildModal(false);
       onClose();
     }

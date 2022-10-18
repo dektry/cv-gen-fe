@@ -23,8 +23,8 @@ export const httpGetTechnologiesList = async ({ limit = 10, page = 1, query }: I
 
   try {
     const { data } = await apiClient.get(`${endpoints.technologies}?${params}`);
-    const [projects, count]: [IProject[], number] = data;
-    return { projects, count };
+    const [technologies, count]: [IProject[], number] = data;
+    return { technologies, count };
   } catch (error) {
     console.error('[API_CLIENT_GET_TECHNOLOGIES_LIST_ERROR]', error);
     message.error(`Server error. Please contact admin`);

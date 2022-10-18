@@ -22,7 +22,8 @@ interface IEmployeeProps {
   handleClickEdit: () => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
-  handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
+  handleSaveProject: (project: IProject) => void;
+  handleEditProject: (project: IProject) => void;
 }
 
 export const EmployeeUI = ({
@@ -34,7 +35,8 @@ export const EmployeeUI = ({
   handleChange,
   currentEmployee,
   employeeId,
-  handleSaveOrEditProject,
+  handleSaveProject,
+  handleEditProject,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -228,7 +230,11 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
-          <Projects employeeId={employeeId || ''} handleSaveOrEditProject={handleSaveOrEditProject} />
+          <Projects
+            employeeId={employeeId || ''}
+            handleSaveProject={handleSaveProject}
+            handleEditProject={handleEditProject}
+          />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button

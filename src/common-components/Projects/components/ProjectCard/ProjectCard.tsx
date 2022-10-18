@@ -27,7 +27,7 @@ type TProps = {
   handleOpenEditModal: (project: IProject) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
-  handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
+  handleEditProject: (project: IProject) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
@@ -44,7 +44,7 @@ export const ProjectCard = React.memo(
     handleOpenEditModal,
     handleCloseEditModal,
     editModalOpen,
-    handleSaveOrEditProject,
+    handleEditProject,
     error,
     setError,
     setProjectInfo,
@@ -141,12 +141,11 @@ export const ProjectCard = React.memo(
           modalText={'Are you sure you want to delete this project? All data will be lost'}
         />
         <CreateEditModal
-          edit={true}
           projectInfo={projectInfo}
           isOpen={editModalOpen}
           modalTitle="EDIT PROJECT"
           onClose={handleCloseEditModal}
-          onSubmit={handleSaveOrEditProject}
+          onSubmit={handleEditProject}
           error={error}
           setError={setError}
           setProjectInfo={setProjectInfo}

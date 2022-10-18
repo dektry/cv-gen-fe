@@ -61,14 +61,23 @@ export const Employee = () => {
     }
   }, []);
 
-  const handleSaveOrEditProject = useCallback(
-    (project: IProject, edit: boolean) => {
+  const handleSaveProject = useCallback(
+    (project: IProject) => {
       if (id) {
         const projectToSave = projectFormatter(project, id);
 
-        edit
-          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(id)))
-          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
+        dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
+      }
+    },
+    [projects]
+  );
+
+  const handleEditProject = useCallback(
+    (project: IProject) => {
+      if (id) {
+        const projectToSave = projectFormatter(project, id);
+
+        dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
       }
     },
     [projects]
@@ -92,7 +101,8 @@ export const Employee = () => {
       isLoading={isLoading}
       currentEmployee={currentEmployee}
       employeeId={id}
-      handleSaveOrEditProject={handleSaveOrEditProject}
+      handleSaveProject={handleSaveProject}
+      handleEditProject={handleEditProject}
     />
   );
 };

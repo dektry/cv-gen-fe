@@ -108,14 +108,23 @@ export const CVGenerationPage = () => {
     setCvInfo((prev) => ({ ...prev, ...fields }));
   }, []);
 
-  const handleSaveOrEditProject = useCallback(
-    (project: IProject, edit: boolean) => {
+  const handleSaveProject = useCallback(
+    (project: IProject) => {
       if (currentEmployee.id) {
         const projectToSave = projectFormatter(project, currentEmployee.id);
 
-        edit
-          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))))
-          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
+        dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
+      }
+    },
+    [projects]
+  );
+
+  const handleEditProject = useCallback(
+    (project: IProject) => {
+      if (currentEmployee.id) {
+        const projectToSave = projectFormatter(project, currentEmployee.id);
+
+        dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
       }
     },
     [projects]
@@ -126,7 +135,11 @@ export const CVGenerationPage = () => {
       <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
       <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects employeeId={currentEmployee.id || ''} handleSaveOrEditProject={handleSaveOrEditProject} />
+      <Projects
+        employeeId={currentEmployee.id || ''}
+        handleEditProject={handleEditProject}
+        handleSaveProject={handleSaveProject}
+      />
       <div className={classes.genCVbtnBlock}>
         <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>
           Generate CV

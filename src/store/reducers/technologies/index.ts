@@ -32,11 +32,11 @@ const technologies = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getTechnologiesList.fulfilled, (state, { payload }) => {
-      if (payload && payload.projects) {
-        const { projects } = payload;
-        state.technologiesList = projects;
+      if (payload && payload.technologies) {
+        const { technologies } = payload;
+        state.technologiesList = technologies;
 
-        const technologiesNames = projects.map((el) => el.name);
+        const technologiesNames = technologies.map((el) => el.name);
         state.technologiesNames = technologiesNames;
       }
     });
