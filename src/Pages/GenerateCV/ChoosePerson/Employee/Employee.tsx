@@ -71,7 +71,7 @@ export const Employee = () => {
           : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
       }
     },
-    [projects, dispatch]
+    [projects]
   );
 
   useEffect(() => {

@@ -79,7 +79,7 @@ export const CVGenerationPage = () => {
         // todo: add this field on BE side
         description: mockDescription,
         male: currentEmployee.gender === 'male',
-        projects: projects,
+        projects,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         languages: ['English - B2', 'Russian - native'],
@@ -92,7 +92,7 @@ export const CVGenerationPage = () => {
         profSkills,
       });
     }
-  }, [profSkills, projects]);
+  }, [profSkills]);
 
   useEffect(() => {
     if (currentEmployee.id) {
@@ -114,11 +114,11 @@ export const CVGenerationPage = () => {
         const projectToSave = projectFormatter(project, currentEmployee.id);
 
         edit
-          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(currentEmployee.id)))
-          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(currentEmployee.id)));
+          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))))
+          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
       }
     },
-    [projects, dispatch]
+    [projects]
   );
 
   return (
