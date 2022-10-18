@@ -7,17 +7,22 @@ import { employeesSelector } from 'store/reducers/employees';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { NullableField } from 'models/TNullableField';
+import { IProject } from 'models/IProject';
 import { CVGenerationInfo, SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
 import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
+import { Projects } from 'common-components/Projects';
 
 import { useStyles } from './styles';
-import { mockDescription, mockProjects, mockSoftSkillsOptions } from './mocks';
+import { mockDescription, mockSoftSkillsOptions } from './mocks';
 import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
+import { projectsSelector } from 'store/reducers/projects';
+import { getProjectsList, createProject, editProject } from 'store/reducers/projects/thunks';
+import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 
 export type TProfSkill = {
   groupName?: string;
@@ -51,6 +56,7 @@ export const CVGenerationPage = () => {
   const classes = useStyles();
 
   const { currentEmployee } = useSelector(employeesSelector);
+  const { projects } = useSelector(projectsSelector);
   const { data: profSkills } = useSelector(profSkillsSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
@@ -73,7 +79,7 @@ export const CVGenerationPage = () => {
         // todo: add this field on BE side
         description: mockDescription,
         male: currentEmployee.gender === 'male',
-        projects: mockProjects,
+        projects: projects,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         languages: ['English - B2', 'Russian - native'],
@@ -86,10 +92,13 @@ export const CVGenerationPage = () => {
         profSkills,
       });
     }
-  }, [profSkills]);
+  }, [profSkills, projects]);
 
   useEffect(() => {
-    if (currentEmployee.id) dispatch(fetchProfSkills(currentEmployee.id));
+    if (currentEmployee.id) {
+      dispatch(fetchProfSkills(currentEmployee.id));
+      dispatch(getProjectsList(currentEmployee.id));
+    }
     return () => {
       dispatch(resetCvGeneration());
     };
@@ -99,12 +108,28 @@ export const CVGenerationPage = () => {
     setCvInfo((prev) => ({ ...prev, ...fields }));
   }, []);
 
+  const handleSaveOrEditProject = useCallback(
+    (project: IProject, edit: boolean) => {
+      if (currentEmployee.id) {
+        const projectToSave = projectFormatter(project, currentEmployee.id);
+
+        edit ? dispatch(editProject(projectToSave)) : dispatch(createProject(projectToSave));
+        setTimeout(() => {
+          if (currentEmployee.id) {
+            dispatch(getProjectsList(currentEmployee.id));
+          }
+        }, 50);
+      }
+    },
+    [projects, dispatch]
+  );
+
   return (
     <div>
       <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
       <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      {/*  <Projects></Projects> */}
+      <Projects employeeId={currentEmployee.id || ''} handleSaveOrEditProject={handleSaveOrEditProject} />
       <div className={classes.genCVbtnBlock}>
         <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>
           Generate CV

@@ -68,7 +68,7 @@ export const Projects = ({ employeeId, handleSaveOrEditProject }: IProps) => {
   };
 
   return (
-    <>
+    <div className={classes.container}>
       <div className={classes.upperContainer}>
         <Typography variant="h2" sx={{ marginBottom: '24px' }}>
           PROJECTS
@@ -106,6 +106,6 @@ export const Projects = ({ employeeId, handleSaveOrEditProject }: IProps) => {
         setProjectInfo={setProjectInfo}
         projectInfo={projectInfo}
       />
-    </>
+    </div>
   );
 };
