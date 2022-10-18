@@ -114,8 +114,8 @@ export const CVGenerationPage = () => {
         const projectToSave = projectFormatter(project, currentEmployee.id);
 
         edit
-          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(id)))
-          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
+          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(currentEmployee.id)))
+          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(currentEmployee.id)));
       }
     },
     [projects, dispatch]
