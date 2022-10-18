@@ -66,10 +66,9 @@ export const Employee = () => {
       if (id) {
         const projectToSave = projectFormatter(project, id);
 
-        edit ? dispatch(editProject(projectToSave)) : dispatch(createProject(projectToSave));
-        setTimeout(() => {
-          dispatch(getProjectsList(id));
-        }, 50);
+        edit
+          ? dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(id)))
+          : dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
       }
     },
     [projects, dispatch]
