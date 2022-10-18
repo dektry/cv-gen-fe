@@ -22,18 +22,7 @@ interface IEmployeeProps {
   handleClickEdit: () => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
-  projects: IProject[];
-  handleClickDeleteProjectButton: (project: IProject) => void;
-  handleClickDeleteProjectConfirm: (project: IProject) => void;
-  handleCloseDeleteProjectModal: () => void;
   handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
-  handleOpenCreateModal: () => void;
-  handleCloseCreateModal: () => void;
-  createModalOpen: boolean;
-  handleOpenEditModal: (project: IProject) => void;
-  handleCloseEditModal: () => void;
-  editModalOpen: boolean;
-  isDeleteProjectModalOpen: boolean;
 }
 
 export const EmployeeUI = ({
@@ -44,18 +33,8 @@ export const EmployeeUI = ({
   handleEmployeeSave,
   handleChange,
   currentEmployee,
-  projects,
-  handleClickDeleteProjectButton,
-  handleClickDeleteProjectConfirm,
-  handleCloseDeleteProjectModal,
+  employeeId,
   handleSaveOrEditProject,
-  handleCloseCreateModal,
-  handleOpenCreateModal,
-  createModalOpen,
-  handleOpenEditModal,
-  handleCloseEditModal,
-  editModalOpen,
-  isDeleteProjectModalOpen,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -249,20 +228,7 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
-          <Projects
-            projects={projects}
-            handleClickDeleteProjectButton={handleClickDeleteProjectButton}
-            handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
-            handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
-            isDeleteProjectModalOpen={isDeleteProjectModalOpen}
-            handleSaveOrEditProject={handleSaveOrEditProject}
-            handleCloseCreateModal={handleCloseCreateModal}
-            handleOpenCreateModal={handleOpenCreateModal}
-            createModalOpen={createModalOpen}
-            handleOpenEditModal={handleOpenEditModal}
-            handleCloseEditModal={handleCloseEditModal}
-            editModalOpen={editModalOpen}
-          />
+          <Projects employeeId={employeeId || ''} handleSaveOrEditProject={handleSaveOrEditProject} />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button

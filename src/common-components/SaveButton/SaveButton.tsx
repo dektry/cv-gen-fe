@@ -2,28 +2,30 @@ import { Button, ButtonProps } from '@mui/material';
 import { SxProps } from '@mui/system';
 import { SystemStyleObject } from '@mui/system/styleFunctionSx/styleFunctionSx';
 
+import theme from 'theme/theme';
+
 interface ISaveButton extends ButtonProps {
   title?: string;
   error: boolean;
-  width: string;
   handleClickOkButton?: () => void;
 }
 
 export const SaveButton = (props: ISaveButton) => {
-  const { title, error, width, handleClickOkButton, ...rest } = props;
+  const { title, error, handleClickOkButton, ...rest } = props;
 
   let sxProp: SxProps = [
     {
-      background: '#333333',
+      background: () => theme.palette.primary.main,
       height: '56px',
-      width: width,
+      minWidth: '94px',
+      maxWwidth: '185px',
       marginLeft: '8px',
       borderRadius: '100px',
-      color: '#ffffff',
+      color: () => theme.palette.background.default,
 
       '&:hover': {
         cursor: 'pointer',
-        background: '#333333',
+        background: () => theme.palette.primary.main,
         boxShadow:
           '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12)',
       },

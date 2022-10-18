@@ -8,14 +8,14 @@ export interface IProject {
   name: string;
   duration: string;
   position: string;
-  teamSize: number | string;
+  teamSize: number;
   description: string;
   responsibilities: string[];
   tools: string[];
 }
 
 export interface IProjectFromDB {
-  id?: string;
+  id: string;
   employee?: IEmployee;
   employeeId?: string;
   team_size: string;

@@ -19,6 +19,7 @@ import { useStyles } from './styles';
 type TProps = {
   id: number;
   project: IProject;
+  projectInfo: Partial<IProject> | null;
   handleClickDeleteProjectButton: (project: IProject) => void;
   handleClickDeleteProjectConfirm: (project: IProject) => void;
   handleCloseDeleteProjectModal: () => void;
@@ -29,6 +30,7 @@ type TProps = {
   handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
+  setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
 };
 
 export const ProjectCard = React.memo(
@@ -45,6 +47,8 @@ export const ProjectCard = React.memo(
     handleSaveOrEditProject,
     error,
     setError,
+    setProjectInfo,
+    projectInfo,
   }: TProps) => {
     const classes = useStyles({ theme });
 
@@ -138,12 +142,14 @@ export const ProjectCard = React.memo(
         />
         <CreateEditModal
           edit={true}
+          projectInfo={projectInfo}
           isOpen={editModalOpen}
           modalTitle="EDIT PROJECT"
           onClose={handleCloseEditModal}
           onSubmit={handleSaveOrEditProject}
           error={error}
           setError={setError}
+          setProjectInfo={setProjectInfo}
         />
       </>
     );

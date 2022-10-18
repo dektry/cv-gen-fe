@@ -8,37 +8,42 @@ import { useSelector } from 'react-redux';
 import { technologiesSelector } from 'store/reducers/technologies';
 import { getTechnologiesList } from 'store/reducers/technologies/thunks';
 
-import { IProject } from 'models/IProject';
-
 import { Tag } from './components/Tag';
+import { maxTagsNumber } from './utils/constants';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 interface IProps {
   skills?: string[];
-  error: boolean;
-  setError: React.Dispatch<React.SetStateAction<boolean>>;
-  updateProjectInfo: (fields: Partial<IProject>) => void;
+  updateTags: (tags: string[]) => void;
 }
 
-export const TagsInput = ({ skills, error, setError, updateProjectInfo }: IProps) => {
+export const TagsInput = ({ skills, updateTags }: IProps) => {
   const [tags, setTags] = useState(skills || []);
   const [inputValue, setInputValue] = useState('');
+  const [isChanged, setIsChanged] = useState(false);
+  const [error, setError] = useState(false);
+
+  const classes = useStyles({ theme });
 
   const dispatch = useAppDispatch();
 
   const { technologiesNames } = useSelector(technologiesSelector);
 
   useEffect(() => {
-    if (tags.length >= 15 || !tags.length) {
+    if ((tags.length >= maxTagsNumber || !tags.length) && isChanged) {
       setError(true);
     } else {
       setError(false);
     }
-    updateProjectInfo({ tools: tags });
+    updateTags(tags);
   }, [tags]);
 
   const handleInputChange = (value: string[]) => {
     const isExisting = tags.some((el) => el?.toLowerCase() === value[value.length - 1]?.toLowerCase());
-    if (!isExisting && tags?.length < 15 && value[value.length - 1]) {
+    if (!isExisting && tags?.length < maxTagsNumber && value[value.length - 1]) {
+      setIsChanged(true);
       setTags((prev) => [...prev, value[value.length - 1]]);
     }
   };
@@ -52,7 +57,7 @@ export const TagsInput = ({ skills, error, setError, updateProjectInfo }: IProps
     setTags(newTags);
   };
 
-  const helperText = tags.length ? 'Maximum 15 skills' : 'Required field';
+  const helperText = tags.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
   return (
     <Autocomplete
       multiple
@@ -71,6 +76,7 @@ export const TagsInput = ({ skills, error, setError, updateProjectInfo }: IProps
       renderInput={(params) => (
         <TextField
           {...params}
+          className={classes.tagInput}
           label="Search technologies"
           placeholder="Search technologies"
           multiline={true}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Typography } from '@mui/material';
 
 import { useSelector } from 'react-redux';
-import { projectsSelector } from 'store/reducers/projects';
+import { employeesSelector } from 'store/reducers/employees';
 
 import { IProject } from 'models/IProject';
 
@@ -16,6 +16,7 @@ import theme from 'theme/theme';
 
 import { ProjectForm } from '../ProjectForm';
 import { SaveButton } from '../../../SaveButton';
+import { formatProject } from './utils/helpers/formatProject';
 
 interface IProps {
   isOpen: boolean;
@@ -25,14 +26,26 @@ interface IProps {
   error: boolean;
   edit?: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
+  setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
+  projectInfo: Partial<IProject> | null;
 }
 
-export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, error, setError, edit = false }: IProps) => {
+export const CreateEditModal = ({
+  isOpen,
+  modalTitle,
+  onClose,
+  onSubmit,
+  error,
+  setError,
+  edit = false,
+  setProjectInfo,
+  projectInfo,
+}: IProps) => {
   const classes = useStyles({ theme });
 
   const [openChildModal, setOpenChildModal] = useState(false);
 
-  const { currentProject } = useSelector(projectsSelector);
+  const { currentEmployee } = useSelector(employeesSelector);
 
   const handleClickSaveButton = () => {
     setOpenChildModal(true);
@@ -43,13 +56,19 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, error, 
   };
 
   const handleSubmit = () => {
-    if (currentProject && onSubmit) {
-      console.log(currentProject);
-
-      onSubmit(currentProject, edit);
+    if (projectInfo && projectInfo && onSubmit) {
+      const projectToSave = formatProject(projectInfo, currentEmployee);
+      onSubmit(projectToSave, edit);
+      setOpenChildModal(false);
+      onClose();
     }
-    setOpenChildModal(false);
   };
+
+  useEffect(() => {
+    return () => {
+      setProjectInfo(null);
+    };
+  }, []);
 
   return (
     <>
@@ -59,17 +78,12 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, error, 
           <Typography variant="h2" className={classes.title}>
             {modalTitle}
           </Typography>
-          <ProjectForm project={currentProject} setError={setError} />
+          <ProjectForm project={projectInfo} setCommonError={setError} setProjectInfo={setProjectInfo} />
           <div className={classes.buttonContainer}>
             <Button className={classes.cancelButton} onClick={onClose}>
               Cancel
             </Button>
-            <SaveButton
-              width="185px"
-              title={'Save Changes'}
-              handleClickOkButton={handleClickSaveButton}
-              error={error}
-            />
+            <SaveButton title={'Save Changes'} handleClickOkButton={handleClickSaveButton} error={error} />
           </div>
         </Box>
       </Modal>
@@ -83,10 +97,10 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, error, 
             Do you want to save changes before moving on to another action?
           </Typography>
           <div className={classes.buttonContainer}>
-            <Button className={classes.cancelButton} onClick={onClose}>
+            <Button className={classes.cancelButton} onClick={handleChildModalClose}>
               No
             </Button>
-            <SaveButton width="94px" title={'Yes'} handleClickOkButton={handleSubmit} error={false} />
+            <SaveButton title={'Yes'} handleClickOkButton={handleSubmit} error={false} />
           </div>
         </Box>
       </Modal>

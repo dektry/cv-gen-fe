@@ -36,14 +36,14 @@ export const SkillComment = (props: IProps) => {
     debounce((e: React.ChangeEvent<HTMLInputElement>) => {
       const softskillsInterviewCopy = cloneDeep(softskillsInterview);
       softskillsInterviewCopy.candidateId = candidateId;
-      
-      const skillAlreadyChosen = softskillsInterviewCopy?.softSkills?.findIndex(el => el.id === id) !== -1;
-      
-      if(skillAlreadyChosen) {
+
+      const skillAlreadyChosen = softskillsInterviewCopy?.softSkills?.findIndex((el) => el.id === id) !== -1;
+
+      if (skillAlreadyChosen) {
         const processedSkills = softskillsInterviewCopy?.softSkills?.map((el) => {
-        if (el.id === e.target.id) {
-          el.comment = e.target.value;
-        }
+          if (el.id === e.target.id) {
+            el.comment = e.target.value;
+          }
           return el;
         });
         softskillsInterviewCopy.softSkills = processedSkills;
@@ -53,15 +53,14 @@ export const SkillComment = (props: IProps) => {
           if (el.id === e.target.id) {
             el.comment = e.target.value;
           }
-            return el;
-          });
+          return el;
+        });
         softskillsInterviewCopy.softSkills = processedSkills;
       }
-      console.log(softskillsInterview?.successfullySaved);
-      
-      softskillsInterview?.successfullySaved ?
-        dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy)) :
-        dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
+
+      softskillsInterview?.successfullySaved
+        ? dispatch(saveChangesToSoftSkillsInterview(softskillsInterviewCopy))
+        : dispatch(finishSoftSkillInterview(softskillsInterviewCopy));
       dispatch(setSoftSkillsInterview(softskillsInterviewCopy));
     }, 600)
   ).current;
@@ -81,6 +80,12 @@ export const SkillComment = (props: IProps) => {
   );
 
   return (
-    <Input id={id} className={classes.skillComment} value={currentComment} placeholder="Comment" onChange={handleChange} />
+    <Input
+      id={id}
+      className={classes.skillComment}
+      value={currentComment}
+      placeholder="Comment"
+      onChange={handleChange}
+    />
   );
 };

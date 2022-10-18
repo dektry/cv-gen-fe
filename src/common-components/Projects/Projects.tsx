@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Typography } from '@mui/material';
+
+import { useAppDispatch } from 'store';
+import { useSelector } from 'react-redux';
+import { projectsSelector } from 'store/reducers/projects';
+import { deleteProject, getProjectsList } from 'store/reducers/projects/thunks';
 
 import { IProject } from 'models/IProject';
 
@@ -11,36 +16,56 @@ import { CreateEditModal } from './components/CreateEditModal';
 import { useStyles } from './styles';
 
 interface IProps {
-  projects: IProject[];
-  handleClickDeleteProjectButton: (project: IProject) => void;
-  handleClickDeleteProjectConfirm: (project: IProject) => void;
-  handleCloseDeleteProjectModal: () => void;
+  employeeId: string;
   handleSaveOrEditProject: (project: IProject, edit: boolean) => void;
-  handleOpenCreateModal: () => void;
-  handleCloseCreateModal: () => void;
-  createModalOpen: boolean;
-  handleOpenEditModal: (project: IProject) => void;
-  handleCloseEditModal: () => void;
-  editModalOpen: boolean;
-  isDeleteProjectModalOpen: boolean;
 }
 
-export const Projects = ({
-  projects,
-  handleClickDeleteProjectButton,
-  handleClickDeleteProjectConfirm,
-  handleCloseDeleteProjectModal,
-  handleSaveOrEditProject,
-  handleOpenCreateModal,
-  handleCloseCreateModal,
-  createModalOpen,
-  handleCloseEditModal,
-  handleOpenEditModal,
-  editModalOpen,
-  isDeleteProjectModalOpen,
-}: IProps) => {
+export const Projects = ({ employeeId, handleSaveOrEditProject }: IProps) => {
   const classes = useStyles();
   const [error, setError] = useState(false);
+
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [projectInfo, setProjectInfo] = useState<Partial<IProject> | null>(null);
+
+  const { projects } = useSelector(projectsSelector);
+
+  const dispatch = useAppDispatch();
+
+  const handleClickDeleteProjectButton = () => {
+    setIsDeleteProjectModalOpen(true);
+  };
+
+  const handleClickDeleteProjectConfirm = useCallback(
+    (project: IProject) => {
+      dispatch(deleteProject(project.id));
+      dispatch(getProjectsList(employeeId));
+      setIsDeleteProjectModalOpen(false);
+    },
+    [projects]
+  );
+
+  const handleCloseDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(false);
+  };
+
+  const handleOpenCreateModal = () => {
+    setCreateModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setCreateModalOpen(false);
+  };
+
+  const handleOpenEditModal = (project: IProject) => {
+    setProjectInfo(project);
+    setEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
 
   return (
     <>
@@ -57,6 +82,7 @@ export const Projects = ({
           key={project.id}
           id={idx}
           project={project}
+          projectInfo={projectInfo}
           handleClickDeleteProjectButton={handleClickDeleteProjectButton}
           handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
           handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
@@ -67,6 +93,7 @@ export const Projects = ({
           handleSaveOrEditProject={handleSaveOrEditProject}
           error={error}
           setError={setError}
+          setProjectInfo={setProjectInfo}
         />
       ))}
       <CreateEditModal
@@ -76,6 +103,8 @@ export const Projects = ({
         onSubmit={handleSaveOrEditProject}
         error={error}
         setError={setError}
+        setProjectInfo={setProjectInfo}
+        projectInfo={projectInfo}
       />
     </>
   );
