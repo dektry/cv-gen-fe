@@ -41,8 +41,10 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
   }, [tags]);
 
   const handleInputChange = (value: string[]) => {
-    const isExisting = tags.some((el) => el?.toLowerCase() === value[value.length - 1]?.toLowerCase());
-    if (!isExisting && tags?.length < maxTagsNumber && value[value.length - 1]) {
+    const lastElementInInput = value[value.length - 1];
+    const tagsLengthIsNotExceeded = tags?.length < maxTagsNumber;
+    const isExisting = tags.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
+    if (!isExisting && tagsLengthIsNotExceeded && lastElementInInput) {
       setIsChanged(true);
       setTags((prev) => [...prev, value[value.length - 1]]);
     }
