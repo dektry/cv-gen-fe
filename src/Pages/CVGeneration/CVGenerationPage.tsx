@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
+import { throttle } from 'lodash';
 
 import { employeesSelector } from 'store/reducers/employees';
 import routes from 'config/routes.json';
@@ -56,8 +57,9 @@ export const CVGenerationPage = () => {
   const classes = useStyles();
 
   const { currentEmployee } = useSelector(employeesSelector);
+
   const { projects } = useSelector(projectsSelector);
-  const { data: profSkills } = useSelector(profSkillsSelector);
+  const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,9 +106,12 @@ export const CVGenerationPage = () => {
     };
   }, []);
 
-  const updateCvInfo = useCallback((fields: Partial<CvInfo>) => {
-    setCvInfo((prev) => ({ ...prev, ...fields }));
-  }, []);
+  const updateCvInfo = useCallback(
+    throttle((fields: Partial<CvInfo>) => {
+      setCvInfo((prev) => ({ ...prev, ...fields }));
+    }, 700),
+    []
+  );
 
   const handleSaveProject = useCallback(
     (project: IProject) => {
@@ -132,7 +137,11 @@ export const CVGenerationPage = () => {
 
   return (
     <div>
-      <CVGenerationHeader avatarUrl={cvInfo.avatarUrl} showCvPreview={() => setIsModalOpen(true)}></CVGenerationHeader>
+      <CVGenerationHeader
+        avatarUrl={cvInfo.avatarUrl}
+        showCvPreview={() => setIsModalOpen(true)}
+        disableCvGenBtn={isLoading}
+      ></CVGenerationHeader>
       <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects
@@ -141,7 +150,7 @@ export const CVGenerationPage = () => {
         handleSaveProject={handleSaveProject}
       />
       <div className={classes.genCVbtnBlock}>
-        <Button size="large" type="primary" onClick={() => setIsModalOpen(true)}>
+        <Button disabled={isLoading} size="large" type="primary" onClick={() => setIsModalOpen(true)}>
           Generate CV
         </Button>
       </div>

@@ -13,7 +13,7 @@ import { interviewSelector, setInterviewMatrix } from 'store/reducers/interview'
 import { finishTechAssessment, editTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
 import { loadSkillMatrix } from 'store/reducers/positions';
 
-import { IInterviewAnswers, LevelTypesEnum } from 'models/IInterview';
+import { IInterviewAnswers, IInterviewResultAnswers, LevelTypesEnum } from 'models/IInterview';
 
 import paths from 'config/routes.json';
 
@@ -101,7 +101,11 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
     }
 
     if (assessmentResult) {
-      setAnswers(assessmentResult.answers);
+      const processedAnswers: IInterviewAnswers = {};
+      assessmentResult.answers?.map((el: IInterviewResultAnswers) => {
+        processedAnswers[el.id] = el.actual;
+      });
+      setAnswers(processedAnswers);
     }
   }, [currentPosition, currentLevel]);
 
