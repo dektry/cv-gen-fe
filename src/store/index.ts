@@ -13,6 +13,7 @@ import techAssessment from './reducers/techAssessment';
 import cvGeneration from './reducers/cvGeneration';
 import softSkillAssessment from './reducers/softSkillAssessment';
 import projects from './reducers/projects';
+import technologies from './reducers/technologies';
 
 const rootReducer = combineReducers({
   app,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   cvGeneration,
   softSkillAssessment,
   projects,
+  technologies,
 });
 
 export const store = configureStore({

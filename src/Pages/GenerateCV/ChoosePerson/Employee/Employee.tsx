@@ -2,15 +2,15 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { cloneDeep } from 'lodash';
-
 import { Spin } from 'antd';
 
 import { useAppDispatch } from 'store';
 import { employeesSelector, loadEmployee, setEmployee, saveChangesToEmployee } from 'store/reducers/employees';
 import { getProjectsList } from 'store/reducers/projects/thunks';
-import { setProjectsList, setProjectId, projectsSelector } from 'store/reducers/projects';
-import { deleteProject } from 'store/reducers/projects/thunks';
+import { setProjectsList, projectsSelector } from 'store/reducers/projects';
+import { createProject, editProject } from 'store/reducers/projects/thunks';
+
+import { projectFormatter } from './utils/helpers/projectFormatter';
 
 import { IProject } from 'models/IProject';
 
@@ -24,7 +24,6 @@ export const Employee = () => {
 
   const [isChanged, setIsChanged] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
-  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -62,30 +61,27 @@ export const Employee = () => {
     }
   }, []);
 
-  const handleClickDeleteProjectButton = useCallback(
+  const handleSaveProject = useCallback(
     (project: IProject) => {
-      dispatch(setProjectId(project.id));
-      setIsDeleteProjectModalOpen(true);
+      if (id) {
+        const projectToSave = projectFormatter(project, id);
+
+        dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
+      }
     },
     [projects]
   );
 
-  const handleClickDeleteProjectConfirm = useCallback(
+  const handleEditProject = useCallback(
     (project: IProject) => {
-      dispatch(deleteProject(project.id));
-      const projectsListCopy = cloneDeep(projects);
+      if (id) {
+        const projectToSave = projectFormatter(project, id);
 
-      const newProjectsList = projectsListCopy.filter((el) => el.id !== project.id);
-
-      dispatch(setProjectsList(newProjectsList));
-      setIsDeleteProjectModalOpen(false);
+        dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
+      }
     },
     [projects]
   );
-
-  const handleCloseDeleteProjectModal = () => {
-    setIsDeleteProjectModalOpen(false);
-  };
 
   useEffect(() => {
     return () => {
@@ -105,11 +101,8 @@ export const Employee = () => {
       isLoading={isLoading}
       currentEmployee={currentEmployee}
       employeeId={id}
-      projects={projects}
-      handleClickDeleteProjectButton={handleClickDeleteProjectButton}
-      handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
-      handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
-      isDeleteProjectModalOpen={isDeleteProjectModalOpen}
+      handleSaveProject={handleSaveProject}
+      handleEditProject={handleEditProject}
     />
   );
 };

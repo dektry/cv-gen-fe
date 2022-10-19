@@ -11,6 +11,7 @@ import { IProject } from 'models/IProject';
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
 import { DeleteModal } from 'common-components/DeleteModal';
+import { CreateEditModal } from '../CreateEditModal';
 
 import theme from 'theme/theme';
 import { useStyles } from './styles';
@@ -18,10 +19,18 @@ import { useStyles } from './styles';
 type TProps = {
   id: number;
   project: IProject;
+  projectInfo: Partial<IProject> | null;
   handleClickDeleteProjectButton: (project: IProject) => void;
   handleClickDeleteProjectConfirm: (project: IProject) => void;
   handleCloseDeleteProjectModal: () => void;
   isDeleteProjectModalOpen: boolean;
+  handleOpenEditModal: (project: IProject) => void;
+  handleCloseEditModal: () => void;
+  editModalOpen: boolean;
+  handleEditProject: (project: IProject) => void;
+  error: boolean;
+  setError: React.Dispatch<React.SetStateAction<boolean>>;
+  setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
 };
 
 export const ProjectCard = React.memo(
@@ -32,6 +41,14 @@ export const ProjectCard = React.memo(
     handleClickDeleteProjectConfirm,
     handleCloseDeleteProjectModal,
     isDeleteProjectModalOpen,
+    handleOpenEditModal,
+    handleCloseEditModal,
+    editModalOpen,
+    handleEditProject,
+    error,
+    setError,
+    setProjectInfo,
+    projectInfo,
   }: TProps) => {
     const classes = useStyles({ theme });
 
@@ -112,7 +129,7 @@ export const ProjectCard = React.memo(
           </AccordionDetails>
           <AccordionActions sx={{ justifyContent: 'flex-end' }}>
             <DeleteButton title="Delete project" onClick={() => handleClickDeleteProjectButton(project)} />
-            <EditButton title="Edit project" />
+            <EditButton title="Edit project" onClick={() => handleOpenEditModal(project)} />
           </AccordionActions>
         </Accordion>
 
@@ -122,6 +139,16 @@ export const ProjectCard = React.memo(
           isOpen={isDeleteProjectModalOpen}
           modalTitle={'DELETE PROJECT'}
           modalText={'Are you sure you want to delete this project? All data will be lost'}
+        />
+        <CreateEditModal
+          projectInfo={projectInfo}
+          isOpen={editModalOpen}
+          modalTitle="EDIT PROJECT"
+          onClose={handleCloseEditModal}
+          onSubmit={handleEditProject}
+          error={error}
+          setError={setError}
+          setProjectInfo={setProjectInfo}
         />
       </>
     );

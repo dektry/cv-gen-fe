@@ -3,14 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
-import { getProjectsList } from './thunks';
+import { getProjectsList, createProject, editProject } from './thunks';
 
 import { IProject, IProjectFromDB, IProjectsState } from 'models/IProject';
+
+import { formatProjectFromDb } from 'store/helpers/formatProjectFromDb';
 
 const initialState: IProjectsState = {
   projects: [],
   isLoading: false,
   currentProjectId: null,
+  currentProject: null,
 };
 
 const projects = createSlice({
@@ -23,6 +26,9 @@ const projects = createSlice({
     setProjectId: (state, { payload }: PayloadAction<string>) => {
       state.currentProjectId = payload;
     },
+    setCurrentProject: (state, { payload }: PayloadAction<IProject | null>) => {
+      state.currentProject = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getProjectsList.pending, (state) => {
@@ -33,24 +39,22 @@ const projects = createSlice({
     });
     builder.addCase(getProjectsList.fulfilled, (state, { payload }) => {
       const processedProjects: IProject[] = payload.map((project: IProjectFromDB) => {
-        const teamSize = project.team_size ? parseInt(project.team_size) : 0;
-        const tools = project.technologies.map((el) => el.name);
-
-        return {
-          id: project.id,
-          employeeId: project.employee?.id,
-          name: project.name,
-          duration: project.duration,
-          position: project.role,
-          teamSize,
-          description: project.description,
-          responsibilities: project.responsibilities,
-          technologies: project.technologies,
-          tools,
-        };
+        return formatProjectFromDb(project);
       });
-
       state.projects = processedProjects;
+      state.isLoading = false;
+    });
+    builder.addCase(createProject.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(createProject.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(editProject.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(editProject.pending, (state) => {
+      state.isLoading = true;
     });
   },
 });
@@ -59,4 +63,4 @@ export default projects.reducer;
 
 export const projectsSelector = (state: RootState): IProjectsState => state.projects;
 
-export const { setProjectsList, setProjectId } = projects.actions;
+export const { setProjectsList, setProjectId, setCurrentProject } = projects.actions;

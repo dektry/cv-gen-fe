@@ -17,11 +17,11 @@ export interface IProject {
 export interface IProjectFromDB {
   id: string;
   employee?: IEmployee;
-  team_size?: string;
+  employeeId?: string;
+  team_size: string;
   name: string;
   duration: string;
   role: string;
-  teamSize: number;
   description: string;
   responsibilities: string[];
   technologies: { id?: string; name: string }[];
@@ -30,5 +30,6 @@ export interface IProjectFromDB {
 export interface IProjectsState {
   projects: IProject[] | [];
   currentProjectId: NullableField<string>;
+  currentProject: NullableField<IProject>;
   isLoading: boolean;
 }
