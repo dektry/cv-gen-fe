@@ -5,6 +5,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
 import { mockSoftSkillsOptions } from 'Pages/CVGeneration/mocks';
+import { TagsInput } from 'common-components/TagInput';
 
 const { Title } = Typography;
 
@@ -97,6 +98,7 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
             onChange={(value) => updateCvInfo({ softSkills: value })}
             value={softSkills ? softSkills : []}
           ></Select>
+          <TagsInput updateCvInfo={updateCvInfo} />
         </div>
       </div>
     </div>

@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { technologiesSelector } from 'store/reducers/technologies';
 import { getTechnologiesList } from 'store/reducers/technologies/thunks';
 
+import { CvInfo } from 'Pages/CVGeneration';
+
 import { Tag } from './components/Tag';
 import { maxTagsNumber } from './utils/constants';
 
@@ -16,10 +18,27 @@ import theme from 'theme/theme';
 
 interface IProps {
   skills?: string[];
-  updateTags: (tags: string[]) => void;
+  updateTags?: (tags: string[]) => void;
+  updateCvInfo?: (fields: Partial<CvInfo>) => void;
+  label?: string;
+  placeholder?: string;
+  multiline?: boolean;
+  errorText?: string;
+  value: string[];
+  onSearch: (value: string) => void;
 }
 
-export const TagsInput = ({ skills, updateTags }: IProps) => {
+export const TagsInput = ({
+  skills,
+  updateTags,
+  updateCvInfo,
+  label,
+  placeholder,
+  multiline,
+  errorText,
+  value,
+  onSearch,
+}: IProps) => {
   const [tags, setTags] = useState(skills || []);
   const [inputValue, setInputValue] = useState('');
   const [isChanged, setIsChanged] = useState(false);
@@ -27,17 +46,20 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
 
   const classes = useStyles({ theme });
 
-  const dispatch = useAppDispatch();
-
-  const { technologiesNames } = useSelector(technologiesSelector);
-
   useEffect(() => {
     if ((tags.length >= maxTagsNumber || !tags.length) && isChanged) {
       setError(true);
     } else {
       setError(false);
     }
-    updateTags(tags);
+
+    if (updateTags) {
+      updateTags(tags);
+    }
+
+    if (updateCvInfo) {
+      updateCvInfo({ softSkills: tags });
+    }
   }, [tags]);
 
   const handleInputChange = (value: string[]) => {
@@ -51,7 +73,7 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
   };
   const handleTagsChange = (value: string) => {
     setInputValue(value);
-    dispatch(getTechnologiesList(value));
+    onSearch(value);
   };
 
   const handleClickTag = (tag: string) => {
@@ -59,12 +81,13 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
     setTags(newTags);
   };
 
-  const helperText = tags.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
+  const helperText = errorText ? errorText : tags.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
+
   return (
     <Autocomplete
       multiple
       id="tags-outlined"
-      options={technologiesNames}
+      options={value}
       value={tags}
       inputValue={inputValue}
       disableClearable
@@ -73,15 +96,15 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
       renderTags={(tags) => {
         return tags.map((tag) => <Tag key={tag} tag={tag} handleClickTag={handleClickTag} />);
       }}
-      onChange={(event, value) => handleInputChange(value)}
-      onInputChange={(event, value) => handleTagsChange(value)}
+      onChange={(_, value) => handleInputChange(value)}
+      onInputChange={(_, value) => handleTagsChange(value)}
       renderInput={(params) => (
         <TextField
           {...params}
           className={classes.tagInput}
-          label="Search technologies"
-          placeholder="Search technologies"
-          multiline={true}
+          label={label}
+          placeholder={placeholder}
+          multiline={multiline}
           value={tags}
           error={error}
           helperText={helperText}
