@@ -1,6 +1,6 @@
 import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
-import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum } from './IInterview';
+import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum, IInterviewResultAnswers } from './IInterview';
 import { NullableField } from './TNullableField';
 
 export interface IAssessmentEmployee {
@@ -15,7 +15,7 @@ export interface IAssessmentFromDB {
   level: IDBLevels;
   position: IDBPosition;
   type: 'Assessment';
-  answers?: IInterviewAnswers;
+  answers?: IInterviewResultAnswers[];
   comment?: string;
 }
 
