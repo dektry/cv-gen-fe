@@ -39,7 +39,7 @@ export const httpCompleteTechAssessment = async (assessment: ICompleteAssessment
 
 export const httpEditTechAssessment = async (assessment: ICompleteAssessment) => {
   try {
-    const { data } = await apiClient.put(`${endpoints.employeeInterviews}/${assessment.id}`, assessment);
+    const { data } = await apiClient.put(`${endpoints.employeeInterviews}`, assessment);
 
     return data;
   } catch (error) {
