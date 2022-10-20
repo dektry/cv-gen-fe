@@ -57,7 +57,7 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   male: boolean;
 };
 
-export const CVGenerationPage = () => {
+export const CVGenerationPage = React.memo(() => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const classes = useStyles();
@@ -70,6 +70,7 @@ export const CVGenerationPage = () => {
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [softSkills, setSoftSkills] = useState(skillsOfEmployee);
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -84,7 +85,7 @@ export const CVGenerationPage = () => {
         firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
-        softSkills: skillsOfEmployee,
+        softSkills: softSkills,
         // todo: add this field on BE side
         description: mockDescription,
         male: currentEmployee.gender === 'male',
@@ -101,7 +102,7 @@ export const CVGenerationPage = () => {
         profSkills,
       });
     }
-  }, [profSkills, skills, skillsOfEmployee]);
+  }, [profSkills]);
 
   useEffect(() => {
     if (currentEmployee.id) {
@@ -156,7 +157,7 @@ export const CVGenerationPage = () => {
   };
 
   const updateCvSoftSkills = useCallback((tags: string[]) => {
-    setCvInfo((prev) => ({ ...prev, ...{ softSkills: tags } }));
+    setSoftSkills(tags);
   }, []);
 
   return (
@@ -170,7 +171,7 @@ export const CVGenerationPage = () => {
         cvInfo={cvInfo}
         updateCvInfo={updateCvInfo}
         softSkillsOptions={skills}
-        employeeSoftSkills={skillsOfEmployee}
+        softSkillsOfEmployee={skillsOfEmployee}
         softSkillsSearch={tagsSearch}
         updateCvSoftSkills={updateCvSoftSkills}
       />
@@ -190,8 +191,7 @@ export const CVGenerationPage = () => {
         handleOk={() => setIsModalOpen(false)}
         handleCancel={() => setIsModalOpen(false)}
         cvInfo={cvInfo}
-        key={JSON.stringify(cvInfo)}
       ></CVPreview>
     </div>
   );
-};
+});

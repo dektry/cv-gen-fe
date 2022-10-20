@@ -13,13 +13,13 @@ interface CVGenerationInfoProps {
   softSkillsOptions: string[];
   updateCvInfo: (fields: Partial<CvInfo>) => void;
   softSkillsSearch: (value: string) => void;
-  employeeSoftSkills: string[] | [];
   updateCvSoftSkills: (tags: string[]) => void;
+  softSkillsOfEmployee: string[];
 }
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { updateCvInfo, cvInfo, softSkillsOptions, softSkillsSearch, employeeSoftSkills, updateCvSoftSkills } = props;
-  const { firstName, level, position, experience, education, description, softSkills } = cvInfo;
+  const { updateCvInfo, cvInfo, softSkillsOptions, softSkillsSearch, updateCvSoftSkills, softSkillsOfEmployee } = props;
+  const { firstName, level, position, experience, education, description } = cvInfo;
 
   const classes = useStyles();
 
@@ -87,9 +87,9 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
           <TagsInput
             updateTags={updateCvSoftSkills}
             value={softSkillsOptions}
-            skills={softSkills}
+            skills={softSkillsOfEmployee}
             onSearch={softSkillsSearch}
-            key={JSON.stringify(softSkills)}
+            key={JSON.stringify(softSkillsOfEmployee)}
           />
         </div>
       </div>

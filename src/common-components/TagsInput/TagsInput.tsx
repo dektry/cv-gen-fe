@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { CvInfo } from 'Pages/CVGeneration';
-
 import { Tag } from './components/Tag';
 import { maxTagsNumber } from './utils/constants';
 
@@ -13,8 +11,7 @@ import theme from 'theme/theme';
 
 interface IProps {
   skills?: string[];
-  updateTags?: (tags: string[]) => void;
-  updateCvInfo?: (fields: Partial<CvInfo>) => void;
+  updateTags: (tags: string[]) => void;
   label?: string;
   placeholder?: string;
   multiline?: boolean;
@@ -47,10 +44,6 @@ export const TagsInput = ({
     } else {
       setError(false);
     }
-
-    if (updateTags) {
-      updateTags(tags);
-    }
   }, [tags]);
 
   const handleInputChange = (value: string[]) => {
@@ -59,7 +52,11 @@ export const TagsInput = ({
     const isExisting = tags?.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
     if (!isExisting && tagsLengthIsNotExceeded && lastElementInInput) {
       setIsChanged(true);
-      setTags((prev) => [...prev, value[value.length - 1]]);
+      const tagsCopy = [...tags];
+      tagsCopy.push(lastElementInInput);
+
+      setTags(tagsCopy);
+      updateTags(tagsCopy);
     }
   };
   const handleTagsChange = (value: string) => {
@@ -70,6 +67,7 @@ export const TagsInput = ({
   const handleClickTag = (tag: string) => {
     const newTags = tags?.filter((el) => el !== tag);
     setTags(newTags);
+    updateTags(newTags);
   };
 
   const helperText = errorText ? errorText : tags?.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
