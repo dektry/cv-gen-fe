@@ -190,6 +190,7 @@ export const CVGenerationPage = () => {
         handleOk={() => setIsModalOpen(false)}
         handleCancel={() => setIsModalOpen(false)}
         cvInfo={cvInfo}
+        key={JSON.stringify(cvInfo)}
       ></CVPreview>
     </div>
   );

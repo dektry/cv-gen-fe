@@ -19,7 +19,7 @@ interface CVGenerationInfoProps {
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
   const { updateCvInfo, cvInfo, softSkillsOptions, softSkillsSearch, employeeSoftSkills, updateCvSoftSkills } = props;
-  const { firstName, level, position, experience, education, description } = cvInfo;
+  const { firstName, level, position, experience, education, description, softSkills } = cvInfo;
 
   const classes = useStyles();
 
@@ -87,9 +87,9 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
           <TagsInput
             updateTags={updateCvSoftSkills}
             value={softSkillsOptions}
-            skills={employeeSoftSkills}
+            skills={softSkills}
             onSearch={softSkillsSearch}
-            key={JSON.stringify(employeeSoftSkills)}
+            key={JSON.stringify(softSkills)}
           />
         </div>
       </div>

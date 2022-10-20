@@ -19,7 +19,7 @@ interface ICVPreviewProps {
   cvInfo: CvInfo;
 }
 
-export const CVPreview = React.memo((props: ICVPreviewProps) => {
+export const CVPreview = (props: ICVPreviewProps) => {
   const { isModalOpen, handleOk, handleCancel, cvInfo } = props;
 
   const classes = useStyles();
@@ -134,4 +134,4 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       </div>
     </Modal>
   );
-});
+};
