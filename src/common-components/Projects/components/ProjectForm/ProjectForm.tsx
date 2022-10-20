@@ -8,7 +8,7 @@ import { getTechnologiesList } from 'store/reducers/technologies/thunks';
 
 import { IProject } from 'models/IProject';
 
-import { TagsInput } from 'common-components/TagInput';
+import { TagsInput } from 'common-components/TagsInput';
 import { ProjectFieldInput } from './components/ProjectFieldInput';
 
 import theme from 'theme/theme';
@@ -142,7 +142,7 @@ export const ProjectForm = ({ project, setCommonError, setProjectInfo }: IProps)
           multiline={true}
         />
         <TagsInput
-          skills={project?.tools}
+          skills={project?.tools || []}
           updateTags={updateProjectTags}
           label="Search technologies"
           placeholder="Search technologies"

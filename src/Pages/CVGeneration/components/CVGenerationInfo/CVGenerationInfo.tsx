@@ -1,32 +1,27 @@
-import React, { useMemo } from 'react';
-import { Input, Select, Typography } from 'antd';
+import React from 'react';
+import { Input, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
-import { mockSoftSkillsOptions } from 'Pages/CVGeneration/mocks';
-import { TagsInput } from 'common-components/TagInput';
+import { TagsInput } from 'common-components/TagsInput';
 
 const { Title } = Typography;
 
-export type SoftSkills = typeof mockSoftSkillsOptions[number];
-
 interface CVGenerationInfoProps {
   cvInfo: Partial<CvInfo>;
-  softSkillsOptions: SoftSkills[];
+  softSkillsOptions: string[];
   updateCvInfo: (fields: Partial<CvInfo>) => void;
+  softSkillsSearch: (value: string) => void;
+  employeeSoftSkills: string[] | [];
+  updateCvSoftSkills: (tags: string[]) => void;
 }
 
 export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { updateCvInfo, cvInfo, softSkillsOptions } = props;
-  const { firstName, level, position, experience, education, description, softSkills } = cvInfo;
+  const { updateCvInfo, cvInfo, softSkillsOptions, softSkillsSearch, employeeSoftSkills, updateCvSoftSkills } = props;
+  const { firstName, level, position, experience, education, description } = cvInfo;
 
   const classes = useStyles();
-
-  const selectOptions = useMemo(
-    () => softSkillsOptions?.map((skill) => ({ label: skill, value: skill })),
-    [softSkillsOptions]
-  );
 
   return (
     <div>
@@ -89,16 +84,13 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
       <div className={classes.row}>
         <div className={classes.softSkillsSelect}>
           <Title level={5}>Soft skills</Title>
-          <Select
-            mode="multiple"
-            style={{ width: '100%' }}
-            placeholder="Select soft skills"
-            options={selectOptions}
-            defaultValue={softSkills}
-            onChange={(value) => updateCvInfo({ softSkills: value })}
-            value={softSkills ? softSkills : []}
-          ></Select>
-          <TagsInput updateCvInfo={updateCvInfo} />
+          <TagsInput
+            updateTags={updateCvSoftSkills}
+            value={softSkillsOptions}
+            skills={employeeSoftSkills}
+            onSearch={softSkillsSearch}
+            key={JSON.stringify(employeeSoftSkills)}
+          />
         </div>
       </div>
     </div>

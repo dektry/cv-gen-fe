@@ -9,7 +9,7 @@ import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { NullableField } from 'models/TNullableField';
 import { IProject } from 'models/IProject';
-import { CVGenerationInfo, SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
@@ -17,13 +17,19 @@ import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
 import { Projects } from 'common-components/Projects';
 
 import { useStyles } from './styles';
-import { mockDescription, mockSoftSkillsOptions } from './mocks';
+import { mockDescription } from './mocks';
 import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
 import { getProjectsList, createProject, editProject } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
+import { softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
+import {
+  getSoftSkillsToCvList,
+  getSoftSkillsToCvOfEmployee,
+  createSoftSkillsToCv,
+} from 'store/reducers/softSkillsToCV/thunks';
 
 export type TProfSkill = {
   groupName?: string;
@@ -44,7 +50,7 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: NullableField<string>;
-  softSkills: SoftSkills[];
+  softSkills: string[];
   profSkills: TProfSkill[];
   projects?: TProject[];
   firstName: string;
@@ -60,6 +66,7 @@ export const CVGenerationPage = () => {
 
   const { projects } = useSelector(projectsSelector);
   const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
+  const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,7 +84,7 @@ export const CVGenerationPage = () => {
         firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
-        softSkills: ['Responsibility', 'Teamwork', 'Communication'],
+        softSkills: skillsOfEmployee,
         // todo: add this field on BE side
         description: mockDescription,
         male: currentEmployee.gender === 'male',
@@ -94,12 +101,14 @@ export const CVGenerationPage = () => {
         profSkills,
       });
     }
-  }, [profSkills]);
+  }, [profSkills, skills, skillsOfEmployee]);
 
   useEffect(() => {
     if (currentEmployee.id) {
       dispatch(fetchProfSkills(currentEmployee.id));
       dispatch(getProjectsList(currentEmployee.id));
+      dispatch(getSoftSkillsToCvList({ query: '' }));
+      dispatch(getSoftSkillsToCvOfEmployee(currentEmployee.id));
     }
     return () => {
       dispatch(resetCvGeneration());
@@ -135,14 +144,36 @@ export const CVGenerationPage = () => {
     [projects]
   );
 
+  const tagsSearch = (value: string) => {
+    dispatch(getSoftSkillsToCvList({ query: value }));
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    if (currentEmployee.id && cvInfo.softSkills) {
+      dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: currentEmployee.id }));
+    }
+  };
+
+  const updateCvSoftSkills = useCallback((tags: string[]) => {
+    setCvInfo((prev) => ({ ...prev, ...{ softSkills: tags } }));
+  }, []);
+
   return (
     <div>
       <CVGenerationHeader
         avatarUrl={cvInfo.avatarUrl}
-        showCvPreview={() => setIsModalOpen(true)}
+        showCvPreview={handleModalOpen}
         disableCvGenBtn={isLoading}
       ></CVGenerationHeader>
-      <CVGenerationInfo cvInfo={cvInfo} updateCvInfo={updateCvInfo} softSkillsOptions={mockSoftSkillsOptions} />
+      <CVGenerationInfo
+        cvInfo={cvInfo}
+        updateCvInfo={updateCvInfo}
+        softSkillsOptions={skills}
+        employeeSoftSkills={skillsOfEmployee}
+        softSkillsSearch={tagsSearch}
+        updateCvSoftSkills={updateCvSoftSkills}
+      />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects
         employeeId={currentEmployee.id || ''}
@@ -150,7 +181,7 @@ export const CVGenerationPage = () => {
         handleSaveProject={handleSaveProject}
       />
       <div className={classes.genCVbtnBlock}>
-        <Button disabled={isLoading} size="large" type="primary" onClick={() => setIsModalOpen(true)}>
+        <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV
         </Button>
       </div>

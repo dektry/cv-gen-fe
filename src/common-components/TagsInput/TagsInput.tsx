@@ -3,11 +3,6 @@ import { useState, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { useAppDispatch } from 'store';
-import { useSelector } from 'react-redux';
-import { technologiesSelector } from 'store/reducers/technologies';
-import { getTechnologiesList } from 'store/reducers/technologies/thunks';
-
 import { CvInfo } from 'Pages/CVGeneration';
 
 import { Tag } from './components/Tag';
@@ -26,12 +21,12 @@ interface IProps {
   errorText?: string;
   value: string[];
   onSearch: (value: string) => void;
+  key?: string;
 }
 
 export const TagsInput = ({
   skills,
   updateTags,
-  updateCvInfo,
   label,
   placeholder,
   multiline,
@@ -47,7 +42,7 @@ export const TagsInput = ({
   const classes = useStyles({ theme });
 
   useEffect(() => {
-    if ((tags.length >= maxTagsNumber || !tags.length) && isChanged) {
+    if ((tags?.length >= maxTagsNumber || !tags?.length) && isChanged) {
       setError(true);
     } else {
       setError(false);
@@ -56,16 +51,12 @@ export const TagsInput = ({
     if (updateTags) {
       updateTags(tags);
     }
-
-    if (updateCvInfo) {
-      updateCvInfo({ softSkills: tags });
-    }
   }, [tags]);
 
   const handleInputChange = (value: string[]) => {
     const lastElementInInput = value[value.length - 1];
     const tagsLengthIsNotExceeded = tags?.length < maxTagsNumber;
-    const isExisting = tags.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
+    const isExisting = tags?.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
     if (!isExisting && tagsLengthIsNotExceeded && lastElementInInput) {
       setIsChanged(true);
       setTags((prev) => [...prev, value[value.length - 1]]);
@@ -77,11 +68,11 @@ export const TagsInput = ({
   };
 
   const handleClickTag = (tag: string) => {
-    const newTags = tags.filter((el) => el !== tag);
+    const newTags = tags?.filter((el) => el !== tag);
     setTags(newTags);
   };
 
-  const helperText = errorText ? errorText : tags.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
+  const helperText = errorText ? errorText : tags?.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
 
   return (
     <Autocomplete
