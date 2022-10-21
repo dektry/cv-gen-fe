@@ -1,7 +1,6 @@
 import { message } from 'antd';
 
 import { CvInfo, TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
-import { SoftSkills } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import {
   invisibleBorderToWrapWithoutSkills,
   profSkillGroupHeight,
@@ -72,7 +71,7 @@ const countProfSkillsOnIntroPage = (
   template: HandlebarsTemplateDelegate,
   firstName: string,
   description: string,
-  softSkills: SoftSkills[],
+  softSkills: string[],
   profSkills: TProfSkill[],
   position: string | null
 ): { profSkillsOnIntroPage: TProfSkill[]; nextPageStart: TNextPageStart } => {

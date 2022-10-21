@@ -5,7 +5,7 @@ import { IEmployee } from 'models/IEmployee';
 export const defaultGroup = {
   name: '',
   color: '',
-  id: ''
+  id: '',
 };
 
 export const defaultPosition: IDBPosition = {
@@ -31,7 +31,6 @@ export const defaultLevel: IDBLevels = {
   group: defaultGroup,
 };
 
-
 export const defaultUser: IDBUser = {
   id: '',
   password: '',
@@ -50,7 +49,7 @@ export const defaultUser: IDBUser = {
   level: defaultLevel,
   isActive: true,
   balance: 160,
-  permissions: []
+  permissions: [],
 };
 
 export const defaultCandidate: ICandidate = {
@@ -121,6 +120,7 @@ export const defaultEmployee: IEmployee = {
   formalEducation: null,
   startingPoint: null,
   interests: null,
+  description: null,
 };
 
 export const defaultPageSize = 10;

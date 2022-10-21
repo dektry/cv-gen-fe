@@ -18,5 +18,6 @@
     "employeeSoftAssessments": "/softassessments",
     "cvGeneration": "/cv-generation",
     "projects": "/projects",
-    "technologies": "/technologies"
+    "technologies": "/technologies",
+    "softSkillToCv": "/softSkillToCv"
   }

@@ -7,7 +7,7 @@ import { getProjectsList, createProject, editProject } from './thunks';
 
 import { IProject, IProjectFromDB, IProjectsState } from 'models/IProject';
 
-import { formatProjectFromDb } from 'store/helpers/formatProjectFromDb';
+import { formatProjectFromDb } from '../../helpers/formatProjectFromDb';
 
 const initialState: IProjectsState = {
   projects: [],

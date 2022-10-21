@@ -3,11 +3,6 @@ import { useState, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { useAppDispatch } from 'store';
-import { useSelector } from 'react-redux';
-import { technologiesSelector } from 'store/reducers/technologies';
-import { getTechnologiesList } from 'store/reducers/technologies/thunks';
-
 import { Tag } from './components/Tag';
 import { maxTagsNumber } from './utils/constants';
 
@@ -17,9 +12,25 @@ import theme from 'theme/theme';
 interface IProps {
   skills?: string[];
   updateTags: (tags: string[]) => void;
+  label?: string;
+  placeholder?: string;
+  multiline?: boolean;
+  errorText?: string;
+  value: string[];
+  onSearch: (value: string) => void;
+  key?: string;
 }
 
-export const TagsInput = ({ skills, updateTags }: IProps) => {
+export const TagsInput = ({
+  skills,
+  updateTags,
+  label,
+  placeholder,
+  multiline,
+  errorText,
+  value,
+  onSearch,
+}: IProps) => {
   const [tags, setTags] = useState(skills || []);
   const [inputValue, setInputValue] = useState('');
   const [isChanged, setIsChanged] = useState(false);
@@ -27,44 +38,45 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
 
   const classes = useStyles({ theme });
 
-  const dispatch = useAppDispatch();
-
-  const { technologiesNames } = useSelector(technologiesSelector);
-
   useEffect(() => {
-    if ((tags.length >= maxTagsNumber || !tags.length) && isChanged) {
+    if ((tags?.length >= maxTagsNumber || !tags?.length) && isChanged) {
       setError(true);
     } else {
       setError(false);
     }
-    updateTags(tags);
   }, [tags]);
 
   const handleInputChange = (value: string[]) => {
     const lastElementInInput = value[value.length - 1];
     const tagsLengthIsNotExceeded = tags?.length < maxTagsNumber;
-    const isExisting = tags.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
+    const isExisting = tags?.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
     if (!isExisting && tagsLengthIsNotExceeded && lastElementInInput) {
       setIsChanged(true);
-      setTags((prev) => [...prev, value[value.length - 1]]);
+      const tagsCopy = [...tags];
+      tagsCopy.push(lastElementInInput);
+
+      setTags(tagsCopy);
+      updateTags(tagsCopy);
     }
   };
   const handleTagsChange = (value: string) => {
     setInputValue(value);
-    dispatch(getTechnologiesList(value));
+    onSearch(value);
   };
 
   const handleClickTag = (tag: string) => {
-    const newTags = tags.filter((el) => el !== tag);
+    const newTags = tags?.filter((el) => el !== tag);
     setTags(newTags);
+    updateTags(newTags);
   };
 
-  const helperText = tags.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
+  const helperText = errorText ? errorText : tags?.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
+
   return (
     <Autocomplete
       multiple
       id="tags-outlined"
-      options={technologiesNames}
+      options={value}
       value={tags}
       inputValue={inputValue}
       disableClearable
@@ -73,15 +85,15 @@ export const TagsInput = ({ skills, updateTags }: IProps) => {
       renderTags={(tags) => {
         return tags.map((tag) => <Tag key={tag} tag={tag} handleClickTag={handleClickTag} />);
       }}
-      onChange={(event, value) => handleInputChange(value)}
-      onInputChange={(event, value) => handleTagsChange(value)}
+      onChange={(_, value) => handleInputChange(value)}
+      onInputChange={(_, value) => handleTagsChange(value)}
       renderInput={(params) => (
         <TextField
           {...params}
           className={classes.tagInput}
-          label="Search technologies"
-          placeholder="Search technologies"
-          multiline={true}
+          label={label}
+          placeholder={placeholder}
+          multiline={multiline}
           value={tags}
           error={error}
           helperText={helperText}
