@@ -51,7 +51,6 @@ const softSkillsToCv = createSlice({
     builder.addCase(getSoftSkillsToCvOfEmployee.fulfilled, (state, { payload }) => {
       if (payload) {
         const processedSoftSkillsToCvOfEmployee: string[] = payload.map((el: ISoftSkillToCv) => el.name);
-        console.log(payload);
 
         state.skillsOfEmployee = processedSoftSkillsToCvOfEmployee;
       }

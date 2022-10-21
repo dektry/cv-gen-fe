@@ -7,5 +7,6 @@ export function formatEmployeeBeforeUpdate(employee: IEmployee, cvInfo: CvInfo) 
     fullName: `${employee.fullName.split(' ')[0]} ${cvInfo.firstName}`,
     position: `${cvInfo.position} –– ${employee.position?.split(' –– ')[0] || ''}`,
     description: cvInfo.description,
+    softSkillsToCv: cvInfo.softSkills,
   };
 }
