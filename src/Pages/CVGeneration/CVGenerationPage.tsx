@@ -29,6 +29,7 @@ import {
   getSoftSkillsToCvOfEmployee,
   createSoftSkillsToCv,
 } from 'store/reducers/softSkillsToCV/thunks';
+import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
 
 export type TProfSkill = {
   groupName?: string;
@@ -152,15 +153,10 @@ export const CVGenerationPage = React.memo(() => {
   const handleModalOpen = () => {
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
+      const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
+
       dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: currentEmployee.id }));
-      dispatch(
-        saveChangesToEmployee({
-          ...currentEmployee,
-          fullName: `${currentEmployee.fullName.split(' ')[0]} ${cvInfo.firstName}`,
-          position: `${cvInfo.position} –– ${currentEmployee.position?.split(' –– ')[0] || ''}`,
-          description: cvInfo.description,
-        })
-      );
+      dispatch(saveChangesToEmployee(formattedEmployee));
     }
   };
 
