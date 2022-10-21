@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { TextField } from '@mui/material';
 
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
@@ -14,12 +15,23 @@ interface CVGenerationInfoProps {
   updateCvInfo: (fields: Partial<CvInfo>) => void;
   softSkillsSearch: (value: string) => void;
   updateCvSoftSkills: (tags: string[]) => void;
+  updateCvDescription: (value: string) => void;
   softSkillsOfEmployee: string[];
+  employeeDescription: string;
 }
 
-export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
-  const { updateCvInfo, cvInfo, softSkillsOptions, softSkillsSearch, updateCvSoftSkills, softSkillsOfEmployee } = props;
-  const { firstName, level, position, experience, education, description } = cvInfo;
+export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
+  const {
+    updateCvInfo,
+    cvInfo,
+    softSkillsOptions,
+    softSkillsSearch,
+    updateCvSoftSkills,
+    softSkillsOfEmployee,
+    updateCvDescription,
+    employeeDescription,
+  } = props;
+  const { firstName, level, position, experience, education } = cvInfo;
 
   const classes = useStyles();
 
@@ -58,15 +70,13 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
         />
       </div>
       <div className={classes.row}>
-        <TextArea
-          className={classes.textArea}
+        <TextField
           name="description"
-          autoSize={{ minRows: 3 }}
+          multiline={true}
+          label={'Description'}
           placeholder={'Description'}
-          maxLength={270}
-          showCount
-          onChange={(e) => updateCvInfo({ description: e.target.value })}
-          value={description ? description : ''}
+          onChange={(e) => updateCvDescription(e.target.value)}
+          value={employeeDescription ? employeeDescription : ''}
         />
       </div>{' '}
       <div className={classes.row}>
@@ -95,4 +105,4 @@ export const CVGenerationInfo = React.memo((props: CVGenerationInfoProps) => {
       </div>
     </div>
   );
-});
+};

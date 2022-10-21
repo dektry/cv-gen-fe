@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { throttle } from 'lodash';
 
-import { employeesSelector } from 'store/reducers/employees';
+import { employeesSelector, saveChangesToEmployee } from 'store/reducers/employees';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { NullableField } from 'models/TNullableField';
@@ -71,6 +71,7 @@ export const CVGenerationPage = React.memo(() => {
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [softSkills, setSoftSkills] = useState(skillsOfEmployee);
+  const [employeeDescription, setEmployeeDescription] = useState(currentEmployee?.description || '');
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -87,7 +88,7 @@ export const CVGenerationPage = React.memo(() => {
         experience: calcExperienceInYears(startingPoint || hiredOn),
         softSkills: softSkills,
         // todo: add this field on BE side
-        description: mockDescription,
+        description: employeeDescription,
         male: currentEmployee.gender === 'male',
         projects,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -102,7 +103,7 @@ export const CVGenerationPage = React.memo(() => {
         profSkills,
       });
     }
-  }, [profSkills]);
+  }, [profSkills, skillsOfEmployee]);
 
   useEffect(() => {
     if (currentEmployee.id) {
@@ -153,11 +154,23 @@ export const CVGenerationPage = React.memo(() => {
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
       dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: currentEmployee.id }));
+      dispatch(
+        saveChangesToEmployee({
+          ...currentEmployee,
+          fullName: `${currentEmployee.fullName.split(' ')[0]} ${cvInfo.firstName}`,
+          position: `${cvInfo.position} –– ${currentEmployee.position?.split(' –– ')[0] || ''}`,
+          description: cvInfo.description,
+        })
+      );
     }
   };
 
   const updateCvSoftSkills = useCallback((tags: string[]) => {
     setSoftSkills(tags);
+  }, []);
+
+  const updateCvDescription = useCallback((value: string) => {
+    setEmployeeDescription(value);
   }, []);
 
   return (
@@ -174,6 +187,8 @@ export const CVGenerationPage = React.memo(() => {
         softSkillsOfEmployee={skillsOfEmployee}
         softSkillsSearch={tagsSearch}
         updateCvSoftSkills={updateCvSoftSkills}
+        updateCvDescription={updateCvDescription}
+        employeeDescription={employeeDescription}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects

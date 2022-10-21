@@ -32,6 +32,8 @@ export interface IEmployee {
   formalEducation: NullableField<string>;
   startingPoint: NullableField<string>;
   interests: NullableField<string>;
+  description: NullableField<string>;
+  softSkillsToCv?: string[];
 }
 
 export interface IEmployeesState extends ITableExtension {
