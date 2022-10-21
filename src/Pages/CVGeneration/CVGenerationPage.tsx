@@ -17,7 +17,6 @@ import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
 import { Projects } from 'common-components/Projects';
 
 import { useStyles } from './styles';
-import { mockDescription } from './mocks';
 import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';

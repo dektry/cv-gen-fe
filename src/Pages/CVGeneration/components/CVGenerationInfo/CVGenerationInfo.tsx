@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input, Typography } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
 import { TextField } from '@mui/material';
 
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
