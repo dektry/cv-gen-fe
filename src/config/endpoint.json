@@ -19,5 +19,6 @@
     "cvGeneration": "/cv-generation",
     "projects": "/projects",
     "technologies": "/technologies",
-    "softSkillToCv": "/softSkillToCv"
+    "softSkillToCv": "/softSkillToCv",
+    "education": "/education"
   }
