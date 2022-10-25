@@ -6,6 +6,11 @@ import { TProfSkill } from 'Pages/CVGeneration';
 import { getAllTechAssessments, httpGetTechAssessment } from 'services/requests/techAssessment';
 import { getSkillMatrixByIds } from 'services/requests/skills';
 
+interface IDownloadProps {
+  template: string;
+  fileName: string;
+}
+
 export const fetchCvGenerationTemplate = createAsyncThunk(loadCvTemplate, async (templateName: string) => {
   const template = await getTemplate(templateName);
   return { [templateName]: template || '' };
@@ -22,13 +27,13 @@ export const fetchGroupOfTemplates = createAsyncThunk(loadGroupOfTemplates, asyn
   return result;
 });
 
-export const downloadCv = createAsyncThunk(generateCv, async (template: string) => {
+export const downloadCv = createAsyncThunk(generateCv, async ({ template, fileName }: IDownloadProps) => {
   const data = await generatePdf(template);
 
   const blob = new Blob([data], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.download = `cv.pdf`;
+  link.download = `${fileName}.pdf`;
   link.href = url;
   link.click();
   link.remove();
