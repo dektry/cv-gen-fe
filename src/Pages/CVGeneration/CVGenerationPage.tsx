@@ -31,6 +31,7 @@ import {
 import { getEducation, deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
 import { educationSelector } from 'store/reducers/education';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
+import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
 import { IEducation } from 'models/IEducation';
 
 export type TProfSkill = {
@@ -79,7 +80,7 @@ export const CVGenerationPage = React.memo(() => {
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
   useEffect(() => {
-    if (currentEmployee.id == '101010') {
+    if (!currentEmployee.id) {
       navigate(routes.generateCVemployeesList);
     } else {
       const { startingPoint, hiredOn, position } = currentEmployee;
@@ -106,7 +107,7 @@ export const CVGenerationPage = React.memo(() => {
   }, [profSkills, skillsOfEmployee, education]);
 
   useEffect(() => {
-    if (currentEmployee.id && currentEmployee.id !== '101010') {
+    if (currentEmployee.id) {
       dispatch(fetchProfSkills(currentEmployee.id));
       dispatch(getProjectsList(currentEmployee.id));
       dispatch(getSoftSkillsToCvList({ query: '' }));
@@ -152,12 +153,7 @@ export const CVGenerationPage = React.memo(() => {
   };
 
   const handleModalOpen = () => {
-    const updateCvEducationInfo = cvInfo.education.map((el) => ({
-      university: el.university,
-      specialization: el.specialization,
-      startYear: el.startYear,
-      endYear: el.endYear,
-    }));
+    const updateCvEducationInfo = formatEducationBeforeCvGen(cvInfo.education);
     updateCvInfo({ education: updateCvEducationInfo });
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
@@ -176,9 +172,9 @@ export const CVGenerationPage = React.memo(() => {
     setEmployeeDescription(value);
   }, []);
 
-  const handleConfirmDeleteEducation = (id: string) => {
-    if (currentEmployee?.id) {
-      dispatch(deleteEducation(id)).then(() => dispatch(getEducation(String(currentEmployee.id))));
+  const handleConfirmDeleteEducation = (currentEducation: IEducation) => {
+    if (currentEmployee?.id && currentEducation.id) {
+      dispatch(deleteEducation(currentEducation.id)).then(() => dispatch(getEducation(String(currentEmployee.id))));
       updateCvInfo({ education });
     }
   };

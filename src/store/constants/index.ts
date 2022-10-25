@@ -95,7 +95,7 @@ export const defaultCandidate: ICandidate = {
 };
 
 export const defaultEmployee: IEmployee = {
-  id: '101010',
+  id: null,
   pfId: 101010,
   pfUpdatedAt: '1970-12-31T14:47:14.306Z',
   fullName: 'Say MyName',

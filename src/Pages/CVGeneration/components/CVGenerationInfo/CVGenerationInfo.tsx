@@ -19,7 +19,7 @@ interface CVGenerationInfoProps {
   updateCvDescription: (value: string) => void;
   softSkillsOfEmployee: string[];
   employeeDescription: string;
-  handleConfirmDeleteEducation: (id: string) => void;
+  handleConfirmDeleteEducation: (education: IEducation) => void;
   handleConfirmAddEducation: (education: IEducation) => void;
   handleConfirmEditEducation: (education: IEducation) => void;
 }

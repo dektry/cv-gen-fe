@@ -16,7 +16,7 @@ import { useStyles } from './styles';
 
 interface IProps {
   education?: IEducation[];
-  handleConfirmDelete: (id: string) => void;
+  handleConfirmDelete: (education: IEducation) => void;
   handleConfirmAddEducation: (education: IEducation) => void;
   handleConfirmEditEducation: (education: IEducation) => void;
 }
@@ -32,21 +32,21 @@ export const Education = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [educationId, setEducationId] = useState('');
   const [currentEducation, setCurrentEducation] = useState<IEducation>({} as IEducation);
 
-  const handleDeleteModalOpen = (id: string) => {
-    setEducationId(id);
+  const handleDeleteModalOpen = (el: IEducation) => {
+    setCurrentEducation(el);
     setIsDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
-    setEducationId('');
+    setCurrentEducation({} as IEducation);
   };
 
   const onDeleteSubmit = () => {
-    handleConfirmDelete(educationId);
+    handleConfirmDelete(currentEducation);
+    setCurrentEducation({} as IEducation);
     setIsDeleteModalOpen(false);
   };
 
@@ -93,11 +93,7 @@ export const Education = ({
             />
             <Button className={classes.button} endIcon={<EditIcon />} onClick={() => handleEditModalOpen(el)} />
             {idx > 0 && (
-              <Button
-                className={classes.button}
-                endIcon={<DeleteIcon />}
-                onClick={() => handleDeleteModalOpen(String(el.id))}
-              />
+              <Button className={classes.button} endIcon={<DeleteIcon />} onClick={() => handleDeleteModalOpen(el)} />
             )}
           </div>
         );
