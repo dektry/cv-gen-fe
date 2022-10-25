@@ -5,6 +5,8 @@ import { TextField } from '@mui/material';
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
 import { TagsInput } from 'common-components/TagsInput';
+import { Education } from 'common-components/Education';
+import { IEducation } from 'models/IEducation';
 
 const { Title } = Typography;
 
@@ -17,6 +19,9 @@ interface CVGenerationInfoProps {
   updateCvDescription: (value: string) => void;
   softSkillsOfEmployee: string[];
   employeeDescription: string;
+  handleConfirmDeleteEducation: (education: IEducation) => void;
+  handleConfirmAddEducation: (education: IEducation) => void;
+  handleConfirmEditEducation: (education: IEducation) => void;
 }
 
 export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
@@ -29,6 +34,9 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     softSkillsOfEmployee,
     updateCvDescription,
     employeeDescription,
+    handleConfirmDeleteEducation,
+    handleConfirmAddEducation,
+    handleConfirmEditEducation,
   } = props;
   const { firstName, level, position, experience, education } = cvInfo;
 
@@ -82,12 +90,11 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
         <Input addonBefore="Languages" name="languages" placeholder={'Languages'} value={'English - B2'} />
       </div>
       <div className={classes.row}>
-        <Input
-          addonBefore="Education"
-          name="education"
-          placeholder={'Education'}
-          onChange={(e) => updateCvInfo({ education: e.target.value })}
-          value={education ? education : ''}
+        <Education
+          education={education}
+          handleConfirmDelete={handleConfirmDeleteEducation}
+          handleConfirmAddEducation={handleConfirmAddEducation}
+          handleConfirmEditEducation={handleConfirmEditEducation}
         />
       </div>
       <div className={classes.row}>

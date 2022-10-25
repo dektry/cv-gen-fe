@@ -7,7 +7,6 @@ import { throttle } from 'lodash';
 import { employeesSelector, saveChangesToEmployee } from 'store/reducers/employees';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
-import { NullableField } from 'models/TNullableField';
 import { IProject } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
@@ -29,7 +28,11 @@ import {
   getSoftSkillsToCvOfEmployee,
   createSoftSkillsToCv,
 } from 'store/reducers/softSkillsToCV/thunks';
+import { getEducation, deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
+import { educationSelector } from 'store/reducers/education';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
+import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
+import { IEducation } from 'models/IEducation';
 
 export type TProfSkill = {
   groupName?: string;
@@ -49,7 +52,7 @@ export type TProject = {
 export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
-  education: NullableField<string>;
+  education: IEducation[];
   softSkills: string[];
   profSkills: TProfSkill[];
   projects?: TProject[];
@@ -67,6 +70,7 @@ export const CVGenerationPage = React.memo(() => {
   const { projects } = useSelector(projectsSelector);
   const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
   const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
+  const { education } = useSelector(educationSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,7 +80,7 @@ export const CVGenerationPage = React.memo(() => {
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
   useEffect(() => {
-    if (currentEmployee.id == '101010') {
+    if (!currentEmployee.id) {
       navigate(routes.generateCVemployeesList);
     } else {
       const { startingPoint, hiredOn, position } = currentEmployee;
@@ -96,14 +100,11 @@ export const CVGenerationPage = React.memo(() => {
         languages: ['English - B2', 'Russian - native'],
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        education: [
-          ['Belarusian State University of Informatics and Radioelectronics', 'Software Engineering', '2015-2019'],
-          ['Belarusian National Technical University', 'Civil Engineering', '2010-2015'],
-        ],
+        education,
         profSkills,
       });
     }
-  }, [profSkills, skillsOfEmployee]);
+  }, [profSkills, skillsOfEmployee, education]);
 
   useEffect(() => {
     if (currentEmployee.id) {
@@ -111,6 +112,7 @@ export const CVGenerationPage = React.memo(() => {
       dispatch(getProjectsList(currentEmployee.id));
       dispatch(getSoftSkillsToCvList({ query: '' }));
       dispatch(getSoftSkillsToCvOfEmployee(currentEmployee.id));
+      dispatch(getEducation(currentEmployee.id));
     }
     return () => {
       dispatch(resetCvGeneration());
@@ -151,6 +153,8 @@ export const CVGenerationPage = React.memo(() => {
   };
 
   const handleModalOpen = () => {
+    const updateCvEducationInfo = formatEducationBeforeCvGen(cvInfo.education);
+    updateCvInfo({ education: updateCvEducationInfo });
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
       const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
@@ -168,6 +172,35 @@ export const CVGenerationPage = React.memo(() => {
     setEmployeeDescription(value);
   }, []);
 
+  const handleConfirmDeleteEducation = (currentEducation: IEducation) => {
+    if (currentEmployee?.id && currentEducation.id) {
+      dispatch(deleteEducation(currentEducation.id)).then(() => dispatch(getEducation(String(currentEmployee.id))));
+      updateCvInfo({ education });
+    }
+  };
+
+  const handleConfirmAddEducation = (currEducation: IEducation) => {
+    if (currentEmployee?.id) {
+      const educationToSave: IEducation = {
+        ...currEducation,
+        employeeId: currentEmployee?.id,
+      };
+      dispatch(createEducation(educationToSave)).then(() => dispatch(getEducation(String(currentEmployee?.id))));
+      updateCvInfo({ education });
+    }
+  };
+
+  const handleConfirmEditEducation = (currEducation: IEducation) => {
+    if (currentEmployee?.id) {
+      const educationToSave: IEducation = {
+        ...currEducation,
+        employeeId: currentEmployee?.id,
+      };
+      dispatch(editEducation(educationToSave)).then(() => dispatch(getEducation(String(currentEmployee?.id))));
+      updateCvInfo({ education });
+    }
+  };
+
   return (
     <div>
       <CVGenerationHeader
@@ -184,6 +217,9 @@ export const CVGenerationPage = React.memo(() => {
         updateCvSoftSkills={updateCvSoftSkills}
         updateCvDescription={updateCvDescription}
         employeeDescription={employeeDescription}
+        handleConfirmDeleteEducation={handleConfirmDeleteEducation}
+        handleConfirmAddEducation={handleConfirmAddEducation}
+        handleConfirmEditEducation={handleConfirmEditEducation}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects
