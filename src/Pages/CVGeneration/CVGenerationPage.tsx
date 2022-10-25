@@ -30,9 +30,12 @@ import {
 } from 'store/reducers/softSkillsToCV/thunks';
 import { getEducation, deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
 import { educationSelector } from 'store/reducers/education';
+import { getLanguages, createLanguage, editLanguage, deleteLanguage } from 'store/reducers/languages/thunks';
+import { languagesSelector } from 'store/reducers/languages';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
 import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
 import { IEducation } from 'models/IEducation';
+import { ILanguage } from 'models/ILanguage';
 
 export type TProfSkill = {
   groupName?: string;
@@ -53,6 +56,7 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: IEducation[];
+  languages: ILanguage[];
   softSkills: string[];
   profSkills: TProfSkill[];
   projects?: TProject[];
@@ -71,6 +75,7 @@ export const CVGenerationPage = React.memo(() => {
   const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
   const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
   const { education } = useSelector(educationSelector);
+  const { languages } = useSelector(languagesSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,7 +102,7 @@ export const CVGenerationPage = React.memo(() => {
         projects,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        languages: ['English - B2', 'Russian - native'],
+        languages,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         education,
@@ -113,6 +118,7 @@ export const CVGenerationPage = React.memo(() => {
       dispatch(getSoftSkillsToCvList({ query: '' }));
       dispatch(getSoftSkillsToCvOfEmployee(currentEmployee.id));
       dispatch(getEducation(currentEmployee.id));
+      dispatch(getLanguages(currentEmployee.id));
     }
     return () => {
       dispatch(resetCvGeneration());
@@ -152,9 +158,9 @@ export const CVGenerationPage = React.memo(() => {
     dispatch(getSoftSkillsToCvList({ query: value }));
   };
 
-  const handleModalOpen = () => {
+  const handleModalOpen = async () => {
     const updateCvEducationInfo = formatEducationBeforeCvGen(cvInfo.education);
-    updateCvInfo({ education: updateCvEducationInfo });
+    await updateCvInfo({ education: updateCvEducationInfo });
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
       const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
@@ -201,6 +207,35 @@ export const CVGenerationPage = React.memo(() => {
     }
   };
 
+  const handleConfirmDeleteLanguage = (currentLanguage: ILanguage) => {
+    if (currentEmployee?.id && currentLanguage.id) {
+      dispatch(deleteLanguage(currentLanguage.id)).then(() => dispatch(getLanguages(String(currentEmployee.id))));
+      updateCvInfo({ languages });
+    }
+  };
+
+  const handleConfirmAddLanguage = (currentLanguage: ILanguage) => {
+    if (currentEmployee?.id) {
+      const languageToSave: ILanguage = {
+        ...currentLanguage,
+        employeeId: currentEmployee?.id,
+      };
+      dispatch(createLanguage(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
+      updateCvInfo({ languages });
+    }
+  };
+
+  const handleConfirmEditLanguage = (currentLanguage: ILanguage) => {
+    if (currentEmployee?.id) {
+      const languageToSave: ILanguage = {
+        ...currentLanguage,
+        employeeId: currentEmployee?.id,
+      };
+      dispatch(editLanguage(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
+      updateCvInfo({ languages });
+    }
+  };
+
   return (
     <div>
       <CVGenerationHeader
@@ -220,6 +255,9 @@ export const CVGenerationPage = React.memo(() => {
         handleConfirmDeleteEducation={handleConfirmDeleteEducation}
         handleConfirmAddEducation={handleConfirmAddEducation}
         handleConfirmEditEducation={handleConfirmEditEducation}
+        handleConfirmDeleteLanguage={handleConfirmDeleteLanguage}
+        handleConfirmAddLanguage={handleConfirmAddLanguage}
+        handleConfirmEditLanguage={handleConfirmEditLanguage}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects

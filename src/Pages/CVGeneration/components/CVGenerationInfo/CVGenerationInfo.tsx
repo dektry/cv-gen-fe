@@ -6,7 +6,9 @@ import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
 import { TagsInput } from 'common-components/TagsInput';
 import { Education } from 'common-components/Education';
+import { Languages } from 'common-components/Languages';
 import { IEducation } from 'models/IEducation';
+import { ILanguage } from 'models/ILanguage';
 
 const { Title } = Typography;
 
@@ -22,6 +24,9 @@ interface CVGenerationInfoProps {
   handleConfirmDeleteEducation: (education: IEducation) => void;
   handleConfirmAddEducation: (education: IEducation) => void;
   handleConfirmEditEducation: (education: IEducation) => void;
+  handleConfirmDeleteLanguage: (language: ILanguage) => void;
+  handleConfirmAddLanguage: (language: ILanguage) => void;
+  handleConfirmEditLanguage: (language: ILanguage) => void;
 }
 
 export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
@@ -37,8 +42,11 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     handleConfirmDeleteEducation,
     handleConfirmAddEducation,
     handleConfirmEditEducation,
+    handleConfirmDeleteLanguage,
+    handleConfirmAddLanguage,
+    handleConfirmEditLanguage,
   } = props;
-  const { firstName, level, position, experience, education } = cvInfo;
+  const { firstName, level, position, experience, education, languages } = cvInfo;
 
   const classes = useStyles();
 
@@ -87,7 +95,12 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
         />
       </div>{' '}
       <div className={classes.row}>
-        <Input addonBefore="Languages" name="languages" placeholder={'Languages'} value={'English - B2'} />
+        <Languages
+          handleConfirmDelete={handleConfirmDeleteLanguage}
+          handleConfirmAdd={handleConfirmAddLanguage}
+          handleConfirmEdit={handleConfirmEditLanguage}
+          languages={languages}
+        />
       </div>
       <div className={classes.row}>
         <Education
