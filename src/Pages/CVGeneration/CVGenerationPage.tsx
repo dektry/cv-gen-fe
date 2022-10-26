@@ -158,7 +158,6 @@ export const CVGenerationPage = React.memo(() => {
   };
 
   const handleModalOpen = () => {
-    console.log(skillsOfEmployee);
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
       const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
