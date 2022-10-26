@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { EducationForm } from '../EducationForm';
-import { IEducation } from 'models/IEducation';
+import { LanguageForm } from '../LanguageForm';
+import { ILanguage } from 'models/ILanguage';
 
 interface IProps {
   isOpen: boolean;
@@ -15,8 +15,8 @@ interface IProps {
   submitText: string;
   onClose: () => void;
   onSubmit?: () => void;
-  education: IEducation;
-  setCurrentEducation: React.Dispatch<React.SetStateAction<IEducation>>;
+  language: ILanguage;
+  setCurrentLanguage: React.Dispatch<React.SetStateAction<ILanguage>>;
 }
 
 export const CreateOrEditModal = ({
@@ -25,18 +25,16 @@ export const CreateOrEditModal = ({
   submitText,
   onClose,
   onSubmit,
-  education,
-  setCurrentEducation,
+  language,
+  setCurrentLanguage,
 }: IProps) => {
   const classes = useStyles({ theme });
 
-  const disabled = !education.university || !education.specialization || !education.startYear || !education.endYear;
+  const disabled = !language.value || !language.level;
 
-  const onChange = (fields: Partial<IEducation>) => {
-    setCurrentEducation((prev) => ({ ...prev, ...fields }));
+  const onChange = (fields: Partial<ILanguage>) => {
+    setCurrentLanguage((prev) => ({ ...prev, ...fields }));
   };
-
-  console.log(education);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -45,7 +43,7 @@ export const CreateOrEditModal = ({
         <Typography variant="h2" className={classes.title}>
           {modalTitle}
         </Typography>
-        <EducationForm education={education} onChange={onChange} />
+        <LanguageForm language={language} onChange={onChange} />
         <div className={classes.buttonContainer}>
           <Button className={classes.cancelButton} onClick={onClose}>
             Cancel

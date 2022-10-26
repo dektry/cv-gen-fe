@@ -1,4 +1,5 @@
 import React from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 import { generatePath } from 'react-router-dom';
 
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
@@ -7,7 +8,7 @@ import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeade
 import { Projects } from 'common-components/Projects';
 
 import { IEmployee } from 'models/IEmployee';
-import { IProject } from 'models/IProject';
+import { IProject, IProjectFromDB } from 'models/IProject';
 
 import paths from 'config/routes.json';
 
@@ -22,8 +23,7 @@ interface IEmployeeProps {
   handleClickEdit: () => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
-  handleSaveProject: (project: IProject) => void;
-  handleEditProject: (project: IProject) => void;
+  handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
 }
 
 export const EmployeeUI = ({
@@ -35,8 +35,7 @@ export const EmployeeUI = ({
   handleChange,
   currentEmployee,
   employeeId,
-  handleSaveProject,
-  handleEditProject,
+  handleUpdateProject,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -230,11 +229,7 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
-          <Projects
-            employeeId={employeeId || ''}
-            handleSaveProject={handleSaveProject}
-            handleEditProject={handleEditProject}
-          />
+          <Projects employeeId={employeeId || ''} handleUpdateProject={handleUpdateProject} />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button

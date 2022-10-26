@@ -20,5 +20,6 @@
     "projects": "/projects",
     "technologies": "/technologies",
     "softSkillToCv": "/softSkillToCv",
-    "education": "/education"
+    "education": "/education",
+    "language": "/language"
   }

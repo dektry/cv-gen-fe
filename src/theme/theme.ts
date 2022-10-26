@@ -9,6 +9,7 @@ let theme = createTheme({
     },
     secondary: {
       main: '#ffffff',
+      dark: '#5c5d66',
     },
     text: {
       primary: '#333333',

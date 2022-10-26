@@ -1,13 +1,14 @@
 import { useState, useCallback } from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 
 import { Typography } from '@mui/material';
 
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import { projectsSelector } from 'store/reducers/projects';
-import { deleteProject, getProjectsList } from 'store/reducers/projects/thunks';
+import { deleteProject, getProjectsList, createProject } from 'store/reducers/projects/thunks';
 
-import { IProject } from 'models/IProject';
+import { IProject, IProjectFromDB } from 'models/IProject';
 
 import { AddButton } from 'common-components/AddButton';
 import { ProjectCard } from './components/ProjectCard';
@@ -17,11 +18,10 @@ import { useStyles } from './styles';
 
 interface IProps {
   employeeId: string;
-  handleSaveProject: (project: IProject) => void;
-  handleEditProject: (project: IProject) => void;
+  handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
 }
 
-export const Projects = ({ employeeId, handleSaveProject, handleEditProject }: IProps) => {
+export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
   const classes = useStyles();
   const [error, setError] = useState(false);
 
@@ -68,6 +68,10 @@ export const Projects = ({ employeeId, handleSaveProject, handleEditProject }: I
     setEditModalOpen(false);
   };
 
+  const handleAddProject = (project: IProject) => {
+    handleUpdateProject(createProject, project);
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.upperContainer}>
@@ -91,7 +95,7 @@ export const Projects = ({ employeeId, handleSaveProject, handleEditProject }: I
           handleCloseEditModal={handleCloseEditModal}
           handleOpenEditModal={handleOpenEditModal}
           editModalOpen={editModalOpen}
-          handleEditProject={handleEditProject}
+          handleUpdateProject={handleUpdateProject}
           error={error}
           setError={setError}
           setProjectInfo={setProjectInfo}
@@ -101,7 +105,7 @@ export const Projects = ({ employeeId, handleSaveProject, handleEditProject }: I
         isOpen={createModalOpen}
         modalTitle="ADD NEW PROJECT"
         onClose={handleCloseCreateModal}
-        onSubmit={handleSaveProject}
+        onSubmit={handleAddProject}
         error={error}
         setError={setError}
         setProjectInfo={setProjectInfo}

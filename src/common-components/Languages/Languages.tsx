@@ -6,9 +6,9 @@ import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
+import { createLanguage, editLanguage, deleteLanguage } from 'store/reducers/languages/thunks';
 
-import { IEducation } from 'models/IEducation';
+import { ILanguage } from 'models/ILanguage';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
@@ -18,34 +18,34 @@ import theme from 'theme/theme';
 import { useStyles } from './styles';
 
 interface IProps {
-  education?: IEducation[];
-  handleUpdateEducation: (
-    dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
-    currEducation: IEducation
+  languages?: ILanguage[];
+  handleUpdateLanguage: (
+    dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>,
+    currentLanguage: ILanguage
   ) => void;
 }
 
-export const Education = ({ education, handleUpdateEducation }: IProps) => {
+export const Languages = ({ languages, handleUpdateLanguage }: IProps) => {
   const classes = useStyles({ theme });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [currentEducation, setCurrentEducation] = useState<IEducation>({} as IEducation);
+  const [currentLanguage, setCurrentLanguage] = useState<ILanguage>({} as ILanguage);
 
-  const handleDeleteModalOpen = (el: IEducation) => {
-    setCurrentEducation(el);
+  const handleDeleteModalOpen = (el: ILanguage) => {
+    setCurrentLanguage(el);
     setIsDeleteModalOpen(true);
   };
 
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentLanguage({} as ILanguage);
   };
 
   const onDeleteSubmit = () => {
-    handleUpdateEducation(deleteEducation, currentEducation);
-    setCurrentEducation({} as IEducation);
+    handleUpdateLanguage(deleteLanguage, currentLanguage);
+    setCurrentLanguage({} as ILanguage);
     setIsDeleteModalOpen(false);
   };
 
@@ -55,41 +55,37 @@ export const Education = ({ education, handleUpdateEducation }: IProps) => {
 
   const handleCloseAddModal = () => {
     setIsAddModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentLanguage({} as ILanguage);
   };
 
   const onAddSubmit = () => {
-    handleUpdateEducation(createEducation, currentEducation);
+    handleUpdateLanguage(createLanguage, currentLanguage);
     setIsAddModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentLanguage({} as ILanguage);
   };
 
-  const handleEditModalOpen = (education: IEducation) => {
-    setCurrentEducation(education);
+  const handleEditModalOpen = (language: ILanguage) => {
+    setCurrentLanguage(language);
     setIsEditModalOpen(true);
   };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentLanguage({} as ILanguage);
   };
 
   const onEditSubmit = () => {
-    handleUpdateEducation(editEducation, currentEducation);
+    handleUpdateLanguage(editLanguage, currentLanguage);
     setIsEditModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentLanguage({} as ILanguage);
   };
 
   return (
     <div className={classes.container}>
-      {education?.map((el, idx) => {
+      {languages?.map((el, idx) => {
         return (
           <div className={classes.infoContainer} key={el.id}>
-            <TextField
-              value={`${el.university} - ${el.specialization} - ${el.startYear}-${el.endYear}`}
-              label={'Education'}
-              name="education"
-            />
+            <TextField value={`${el.value} - ${el.level}`} label={'Languages'} name="languages" />
             <Button className={classes.button} endIcon={<EditIcon />} onClick={() => handleEditModalOpen(el)} />
             {idx > 0 && (
               <Button className={classes.button} endIcon={<DeleteIcon />} onClick={() => handleDeleteModalOpen(el)} />
@@ -97,34 +93,34 @@ export const Education = ({ education, handleUpdateEducation }: IProps) => {
           </div>
         );
       })}
-      <AddButton className={classes.addButton} title={'Add education'} onClick={handleAddModalOpen} />
+      <AddButton className={classes.addButton} title={'Add language'} onClick={handleAddModalOpen} />
 
       <CreateOrEditModal
-        modalTitle={'ADD EDUCATION'}
+        modalTitle={'ADD LANGUAGE'}
         isOpen={isAddModalOpen}
-        submitText={'ADD EDUCATION'}
+        submitText={'ADD LANGUAGE'}
         onClose={handleCloseAddModal}
         onSubmit={onAddSubmit}
-        education={currentEducation}
-        setCurrentEducation={setCurrentEducation}
+        language={currentLanguage}
+        setCurrentLanguage={setCurrentLanguage}
       />
 
       <CreateOrEditModal
-        modalTitle={'EDIT EDUCATION'}
+        modalTitle={'EDIT LANGUAGE'}
         isOpen={isEditModalOpen}
         submitText={'SAVE CHANGES'}
         onClose={handleCloseEditModal}
         onSubmit={onEditSubmit}
-        education={currentEducation}
-        setCurrentEducation={setCurrentEducation}
+        language={currentLanguage}
+        setCurrentLanguage={setCurrentLanguage}
       />
 
       <DeleteModal
         onSubmit={onDeleteSubmit}
         onClose={handleDeleteModalClose}
         isOpen={isDeleteModalOpen}
-        modalTitle={'DELETE EDUCATION'}
-        modalText={'Are you sure you want to delete this education? All data will be lost'}
+        modalTitle={'DELETE LANGUAGE'}
+        modalText={'Are you sure you want to delete this language? All data will be lost'}
       />
     </div>
   );
