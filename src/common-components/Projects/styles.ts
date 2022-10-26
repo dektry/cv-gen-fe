@@ -2,7 +2,7 @@ import { createUseStyles } from 'react-jss';
 
 export const useStyles = createUseStyles({
   container: {
-    marginTop: '24px',
+    margin: '24px 0',
   },
   upperContainer: {
     display: 'flex',

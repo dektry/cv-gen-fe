@@ -36,6 +36,8 @@ export const CreateOrEditModal = ({
     setCurrentEducation((prev) => ({ ...prev, ...fields }));
   };
 
+  console.log(education);
+
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box className={classes.box}>

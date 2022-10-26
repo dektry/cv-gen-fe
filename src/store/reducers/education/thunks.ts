@@ -27,6 +27,6 @@ export const editEducation = createAsyncThunk(editEducationAction, (education: I
   return httpPutEducation(education);
 });
 
-export const deleteEducation = createAsyncThunk(deleteEducationAction, (educationId: string) => {
-  return httpDeleteEducation(educationId);
+export const deleteEducation = createAsyncThunk(deleteEducationAction, (education: IEducation) => {
+  return httpDeleteEducation(String(education.id));
 });

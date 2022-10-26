@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+
+import { deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
 
 import { IEducation } from 'models/IEducation';
 
@@ -16,17 +19,13 @@ import { useStyles } from './styles';
 
 interface IProps {
   education?: IEducation[];
-  handleConfirmDelete: (education: IEducation) => void;
-  handleConfirmAddEducation: (education: IEducation) => void;
-  handleConfirmEditEducation: (education: IEducation) => void;
+  handleUpdateEducation: (
+    dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
+    currEducation: IEducation
+  ) => void;
 }
 
-export const Education = ({
-  education,
-  handleConfirmDelete,
-  handleConfirmAddEducation,
-  handleConfirmEditEducation,
-}: IProps) => {
+export const Education = ({ education, handleUpdateEducation }: IProps) => {
   const classes = useStyles({ theme });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -45,7 +44,7 @@ export const Education = ({
   };
 
   const onDeleteSubmit = () => {
-    handleConfirmDelete(currentEducation);
+    handleUpdateEducation(deleteEducation, currentEducation);
     setCurrentEducation({} as IEducation);
     setIsDeleteModalOpen(false);
   };
@@ -60,7 +59,7 @@ export const Education = ({
   };
 
   const onAddSubmit = () => {
-    handleConfirmAddEducation(currentEducation);
+    handleUpdateEducation(createEducation, currentEducation);
     setIsAddModalOpen(false);
     setCurrentEducation({} as IEducation);
   };
@@ -76,7 +75,7 @@ export const Education = ({
   };
 
   const onEditSubmit = () => {
-    handleConfirmEditEducation(currentEducation);
+    handleUpdateEducation(editEducation, currentEducation);
     setIsEditModalOpen(false);
     setCurrentEducation({} as IEducation);
   };
@@ -113,7 +112,7 @@ export const Education = ({
       <CreateOrEditModal
         modalTitle={'EDIT EDUCATION'}
         isOpen={isEditModalOpen}
-        submitText={'ADD EDUCATION'}
+        submitText={'SAVE CHANGES'}
         onClose={handleCloseEditModal}
         onSubmit={onEditSubmit}
         education={currentEducation}

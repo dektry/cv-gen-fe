@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+
+import { createLanguage, editLanguage, deleteLanguage } from 'store/reducers/languages/thunks';
 
 import { ILanguage } from 'models/ILanguage';
 
@@ -16,12 +19,13 @@ import { useStyles } from './styles';
 
 interface IProps {
   languages?: ILanguage[];
-  handleConfirmDelete: (language: ILanguage) => void;
-  handleConfirmAdd: (language: ILanguage) => void;
-  handleConfirmEdit: (language: ILanguage) => void;
+  handleUpdateLanguage: (
+    dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>,
+    currentLanguage: ILanguage
+  ) => void;
 }
 
-export const Languages = ({ languages, handleConfirmDelete, handleConfirmAdd, handleConfirmEdit }: IProps) => {
+export const Languages = ({ languages, handleUpdateLanguage }: IProps) => {
   const classes = useStyles({ theme });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -40,7 +44,7 @@ export const Languages = ({ languages, handleConfirmDelete, handleConfirmAdd, ha
   };
 
   const onDeleteSubmit = () => {
-    handleConfirmDelete(currentLanguage);
+    handleUpdateLanguage(deleteLanguage, currentLanguage);
     setCurrentLanguage({} as ILanguage);
     setIsDeleteModalOpen(false);
   };
@@ -55,13 +59,13 @@ export const Languages = ({ languages, handleConfirmDelete, handleConfirmAdd, ha
   };
 
   const onAddSubmit = () => {
-    handleConfirmAdd(currentLanguage);
+    handleUpdateLanguage(createLanguage, currentLanguage);
     setIsAddModalOpen(false);
     setCurrentLanguage({} as ILanguage);
   };
 
-  const handleEditModalOpen = (education: ILanguage) => {
-    setCurrentLanguage(education);
+  const handleEditModalOpen = (language: ILanguage) => {
+    setCurrentLanguage(language);
     setIsEditModalOpen(true);
   };
 
@@ -71,7 +75,7 @@ export const Languages = ({ languages, handleConfirmDelete, handleConfirmAdd, ha
   };
 
   const onEditSubmit = () => {
-    handleConfirmEdit(currentLanguage);
+    handleUpdateLanguage(editLanguage, currentLanguage);
     setIsEditModalOpen(false);
     setCurrentLanguage({} as ILanguage);
   };
@@ -104,7 +108,7 @@ export const Languages = ({ languages, handleConfirmDelete, handleConfirmAdd, ha
       <CreateOrEditModal
         modalTitle={'EDIT LANGUAGE'}
         isOpen={isEditModalOpen}
-        submitText={'ADD LANGUAGE'}
+        submitText={'SAVE CHANGES'}
         onClose={handleCloseEditModal}
         onSubmit={onEditSubmit}
         language={currentLanguage}

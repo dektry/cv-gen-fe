@@ -17,6 +17,6 @@ export const editLanguage = createAsyncThunk(editLanguageAction, (language: ILan
   return httpPutLanguage(language);
 });
 
-export const deleteLanguage = createAsyncThunk(deleteLanguageAction, (languageId: string) => {
-  return httpDeleteLanguage(languageId);
+export const deleteLanguage = createAsyncThunk(deleteLanguageAction, (language: ILanguage) => {
+  return httpDeleteLanguage(String(language.id));
 });

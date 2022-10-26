@@ -1,4 +1,4 @@
-import React from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 import { Input, Typography } from 'antd';
 import { TextField } from '@mui/material';
 
@@ -21,13 +21,16 @@ interface CVGenerationInfoProps {
   updateCvDescription: (value: string) => void;
   softSkillsOfEmployee: string[];
   employeeDescription: string;
-  handleConfirmDeleteEducation: (education: IEducation) => void;
-  handleConfirmAddEducation: (education: IEducation) => void;
-  handleConfirmEditEducation: (education: IEducation) => void;
-  handleConfirmDeleteLanguage: (language: ILanguage) => void;
-  handleConfirmAddLanguage: (language: ILanguage) => void;
-  handleConfirmEditLanguage: (language: ILanguage) => void;
+  handleUpdateEducation: (
+    dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
+    currEducation: IEducation
+  ) => void;
+  handleUpdateLanguage: (
+    dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>,
+    currentLanguage: ILanguage
+  ) => void;
   languages: ILanguage[] | [];
+  education: IEducation[] | [];
 }
 
 export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
@@ -40,15 +43,12 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     softSkillsOfEmployee,
     updateCvDescription,
     employeeDescription,
-    handleConfirmDeleteEducation,
-    handleConfirmAddEducation,
-    handleConfirmEditEducation,
-    handleConfirmDeleteLanguage,
-    handleConfirmAddLanguage,
-    handleConfirmEditLanguage,
+    handleUpdateEducation,
+    handleUpdateLanguage,
     languages,
+    education,
   } = props;
-  const { firstName, level, position, experience, education } = cvInfo;
+  const { firstName, level, position, experience } = cvInfo;
 
   const classes = useStyles();
 
@@ -97,20 +97,10 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
         />
       </div>{' '}
       <div className={classes.row}>
-        <Languages
-          handleConfirmDelete={handleConfirmDeleteLanguage}
-          handleConfirmAdd={handleConfirmAddLanguage}
-          handleConfirmEdit={handleConfirmEditLanguage}
-          languages={languages}
-        />
+        <Languages handleUpdateLanguage={handleUpdateLanguage} languages={languages} />
       </div>
       <div className={classes.row}>
-        <Education
-          education={education}
-          handleConfirmDelete={handleConfirmDeleteEducation}
-          handleConfirmAddEducation={handleConfirmAddEducation}
-          handleConfirmEditEducation={handleConfirmEditEducation}
-        />
+        <Education education={education} handleUpdateEducation={handleUpdateEducation} />
       </div>
       <div className={classes.row}>
         <div className={classes.softSkillsSelect}>

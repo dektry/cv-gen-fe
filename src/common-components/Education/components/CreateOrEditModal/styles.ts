@@ -26,7 +26,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     '&.MuiTypography-root': {
       textAlign: 'center',
       margin: '4px 24px 24px 24px',
-      color: '#5c5d66',
+      color: ({ theme }) => theme.palette.secondary.dark,
     },
   },
   buttonContainer: {

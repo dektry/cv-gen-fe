@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { AsyncThunk } from '@reduxjs/toolkit';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
@@ -7,7 +8,7 @@ import { throttle } from 'lodash';
 import { employeesSelector, saveChangesToEmployee } from 'store/reducers/employees';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
-import { IProject } from 'models/IProject';
+import { IProject, IProjectFromDB } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
@@ -20,7 +21,7 @@ import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
-import { getProjectsList, createProject, editProject } from 'store/reducers/projects/thunks';
+import { getProjectsList } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
@@ -28,9 +29,9 @@ import {
   getSoftSkillsToCvOfEmployee,
   createSoftSkillsToCv,
 } from 'store/reducers/softSkillsToCV/thunks';
-import { getEducation, deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
+import { getEducation } from 'store/reducers/education/thunks';
 import { educationSelector } from 'store/reducers/education';
-import { getLanguages, createLanguage, editLanguage, deleteLanguage } from 'store/reducers/languages/thunks';
+import { getLanguages } from 'store/reducers/languages/thunks';
 import { languagesSelector } from 'store/reducers/languages';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
 import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
@@ -131,28 +132,6 @@ export const CVGenerationPage = React.memo(() => {
     []
   );
 
-  const handleSaveProject = useCallback(
-    (project: IProject) => {
-      if (currentEmployee.id) {
-        const projectToSave = projectFormatter(project, currentEmployee.id);
-
-        dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
-      }
-    },
-    [projects]
-  );
-
-  const handleEditProject = useCallback(
-    (project: IProject) => {
-      if (currentEmployee.id) {
-        const projectToSave = projectFormatter(project, currentEmployee.id);
-
-        dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
-      }
-    },
-    [projects]
-  );
-
   const tagsSearch = (value: string) => {
     dispatch(getSoftSkillsToCvList({ query: value }));
   };
@@ -175,66 +154,45 @@ export const CVGenerationPage = React.memo(() => {
     setEmployeeDescription(value);
   }, []);
 
-  const handleConfirmDeleteEducation = (currentEducation: IEducation) => {
-    if (currentEmployee?.id && currentEducation.id) {
-      dispatch(deleteEducation(currentEducation.id)).then(() => dispatch(getEducation(String(currentEmployee.id))));
-      updateCvInfo({ education });
-    }
-  };
+  const handleUpdateProject = useCallback(
+    (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
+      if (currentEmployee.id) {
+        const projectToSave = projectFormatter(project, currentEmployee.id);
 
-  const handleConfirmAddEducation = (currEducation: IEducation) => {
-    if (currentEmployee?.id) {
-      const educationToSave: IEducation = {
-        ...currEducation,
-        employeeId: currentEmployee?.id,
-      };
-      dispatch(createEducation(educationToSave)).then(() => dispatch(getEducation(String(currentEmployee?.id))));
-      updateCvInfo({ education });
-    }
-  };
+        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
+      }
+    },
+    [projects]
+  );
 
-  const handleConfirmEditEducation = (currEducation: IEducation) => {
-    if (currentEmployee?.id) {
-      const educationToSave: IEducation = {
-        ...currEducation,
-        employeeId: currentEmployee?.id,
-      };
-      dispatch(editEducation(educationToSave)).then(() => dispatch(getEducation(String(currentEmployee?.id))));
-      updateCvInfo({ education });
-    }
-  };
+  const handleUpdateEducation = useCallback(
+    (dispatcher: AsyncThunk<void, IEducation, Record<string, never>>, currEducation: IEducation) => {
+      if (currentEmployee?.id) {
+        const educationToSave: IEducation = {
+          ...currEducation,
+          employeeId: currentEmployee?.id,
+        };
+        dispatch(dispatcher(educationToSave)).then(() => dispatch(getEducation(String(currentEmployee?.id))));
+        updateCvInfo({ education });
+      }
+    },
+    [education]
+  );
 
-  const handleConfirmDeleteLanguage = (currentLanguage: ILanguage) => {
-    if (currentEmployee?.id && currentLanguage.id) {
-      dispatch(deleteLanguage(currentLanguage.id)).then(() => dispatch(getLanguages(String(currentEmployee.id))));
-      const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
-      updateCvInfo({ languages: updatedLanguages });
-    }
-  };
-
-  const handleConfirmAddLanguage = (currentLanguage: ILanguage) => {
-    if (currentEmployee?.id) {
-      const languageToSave: ILanguage = {
-        ...currentLanguage,
-        employeeId: currentEmployee?.id,
-      };
-      dispatch(createLanguage(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
-      const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
-      updateCvInfo({ languages: updatedLanguages });
-    }
-  };
-
-  const handleConfirmEditLanguage = (currentLanguage: ILanguage) => {
-    if (currentEmployee?.id) {
-      const languageToSave: ILanguage = {
-        ...currentLanguage,
-        employeeId: currentEmployee?.id,
-      };
-      dispatch(editLanguage(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
-      const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
-      updateCvInfo({ languages: updatedLanguages });
-    }
-  };
+  const handleUpdateLanguage = useCallback(
+    (dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>, currentLanguage: ILanguage) => {
+      if (currentEmployee?.id) {
+        const languageToSave: ILanguage = {
+          ...currentLanguage,
+          employeeId: currentEmployee?.id,
+        };
+        dispatch(dispatcher(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
+        const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
+        updateCvInfo({ languages: updatedLanguages });
+      }
+    },
+    [languages]
+  );
 
   return (
     <div>
@@ -252,20 +210,13 @@ export const CVGenerationPage = React.memo(() => {
         updateCvSoftSkills={updateCvSoftSkills}
         updateCvDescription={updateCvDescription}
         employeeDescription={employeeDescription}
-        handleConfirmDeleteEducation={handleConfirmDeleteEducation}
-        handleConfirmAddEducation={handleConfirmAddEducation}
-        handleConfirmEditEducation={handleConfirmEditEducation}
-        handleConfirmDeleteLanguage={handleConfirmDeleteLanguage}
-        handleConfirmAddLanguage={handleConfirmAddLanguage}
-        handleConfirmEditLanguage={handleConfirmEditLanguage}
+        handleUpdateEducation={handleUpdateEducation}
+        handleUpdateLanguage={handleUpdateLanguage}
         languages={languages}
+        education={education}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects
-        employeeId={currentEmployee.id || ''}
-        handleEditProject={handleEditProject}
-        handleSaveProject={handleSaveProject}
-      />
+      <Projects employeeId={currentEmployee.id || ''} handleUpdateProject={handleUpdateProject} />
       <div className={classes.genCVbtnBlock}>
         <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV

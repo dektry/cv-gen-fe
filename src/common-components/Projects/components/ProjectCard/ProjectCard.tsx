@@ -1,4 +1,5 @@
 import React from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -6,7 +7,9 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 
-import { IProject } from 'models/IProject';
+import { editProject } from 'store/reducers/projects/thunks';
+
+import { IProject, IProjectFromDB } from 'models/IProject';
 
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
@@ -27,7 +30,7 @@ type TProps = {
   handleOpenEditModal: (project: IProject) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
-  handleEditProject: (project: IProject) => void;
+  handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
@@ -44,13 +47,17 @@ export const ProjectCard = React.memo(
     handleOpenEditModal,
     handleCloseEditModal,
     editModalOpen,
-    handleEditProject,
+    handleUpdateProject,
     error,
     setError,
     setProjectInfo,
     projectInfo,
   }: TProps) => {
     const classes = useStyles({ theme });
+
+    const handleEditProject = (currentProject: IProject) => {
+      handleUpdateProject(editProject, currentProject);
+    };
 
     return (
       <>

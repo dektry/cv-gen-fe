@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { AsyncThunk } from '@reduxjs/toolkit';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -8,11 +9,10 @@ import { useAppDispatch } from 'store';
 import { employeesSelector, loadEmployee, setEmployee, saveChangesToEmployee } from 'store/reducers/employees';
 import { getProjectsList } from 'store/reducers/projects/thunks';
 import { setProjectsList, projectsSelector } from 'store/reducers/projects';
-import { createProject, editProject } from 'store/reducers/projects/thunks';
 
 import { projectFormatter } from './utils/helpers/projectFormatter';
 
-import { IProject } from 'models/IProject';
+import { IProject, IProjectFromDB } from 'models/IProject';
 
 import { EmployeeUI } from './EmployeeUI';
 
@@ -61,23 +61,12 @@ export const Employee = () => {
     }
   }, []);
 
-  const handleSaveProject = useCallback(
-    (project: IProject) => {
-      if (id) {
-        const projectToSave = projectFormatter(project, id);
+  const handleUpdateProject = useCallback(
+    (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
+      if (currentEmployee.id) {
+        const projectToSave = projectFormatter(project, currentEmployee.id);
 
-        dispatch(createProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
-      }
-    },
-    [projects]
-  );
-
-  const handleEditProject = useCallback(
-    (project: IProject) => {
-      if (id) {
-        const projectToSave = projectFormatter(project, id);
-
-        dispatch(editProject(projectToSave)).then(() => dispatch(getProjectsList(id)));
+        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
       }
     },
     [projects]
@@ -101,8 +90,7 @@ export const Employee = () => {
       isLoading={isLoading}
       currentEmployee={currentEmployee}
       employeeId={id}
-      handleSaveProject={handleSaveProject}
-      handleEditProject={handleEditProject}
+      handleUpdateProject={handleUpdateProject}
     />
   );
 };
