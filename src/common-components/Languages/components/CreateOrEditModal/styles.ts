@@ -7,7 +7,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       display: 'flex',
       flexDirection: 'column',
       width: '600px',
-      height: '456px',
+      height: '336px',
       position: 'absolute',
       top: '50%',
       left: '50%',

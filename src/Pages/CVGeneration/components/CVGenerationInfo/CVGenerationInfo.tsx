@@ -27,6 +27,7 @@ interface CVGenerationInfoProps {
   handleConfirmDeleteLanguage: (language: ILanguage) => void;
   handleConfirmAddLanguage: (language: ILanguage) => void;
   handleConfirmEditLanguage: (language: ILanguage) => void;
+  languages: ILanguage[] | [];
 }
 
 export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
@@ -45,8 +46,9 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     handleConfirmDeleteLanguage,
     handleConfirmAddLanguage,
     handleConfirmEditLanguage,
+    languages,
   } = props;
-  const { firstName, level, position, experience, education, languages } = cvInfo;
+  const { firstName, level, position, experience, education } = cvInfo;
 
   const classes = useStyles();
 

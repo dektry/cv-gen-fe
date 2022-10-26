@@ -5,6 +5,6 @@ export const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    margin: '24px',
+    margin: '24px 24px 0 24px',
   },
 });

@@ -1,9 +1,13 @@
 import { useMemo } from 'react';
+
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+
 import { CustomSelect } from 'common-components/CustomSelect';
 import { ILanguage } from 'models/ILanguage';
 
 import { languageLevels, languages } from '../../utils/constants';
-import { formattedLanguages, formattedLanguageLevels } from './utils/helpers';
+import { formattedLanguageLevels } from './utils/helpers';
 
 import { useStyles } from './styles';
 
@@ -14,19 +18,27 @@ interface IProps {
 
 export const LanguageForm = ({ language, onChange }: IProps) => {
   const classes = useStyles();
-
-  const languagesOptions = useMemo(() => formattedLanguages(languages), []);
   const levelsOptions = useMemo(() => formattedLanguageLevels(languageLevels), []);
 
   return (
     <div className={classes.container}>
-      <CustomSelect
-        options={languagesOptions}
-        label={'Language'}
-        name="value"
-        value={language?.value || ''}
-        required
-        onChange={(e) => onChange({ value: e.target.value })}
+      <Autocomplete
+        options={languages}
+        inputValue={language?.value || ''}
+        disableClearable
+        freeSolo
+        autoSelect
+        onChange={(_, value) => onChange({ value })}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={'Language'}
+            name="value"
+            value={language?.value || ''}
+            required
+            onChange={(e) => onChange({ value: e.target.value })}
+          />
+        )}
       />
       <CustomSelect
         options={levelsOptions}

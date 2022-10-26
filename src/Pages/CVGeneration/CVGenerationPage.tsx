@@ -22,7 +22,7 @@ import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
 import { getProjectsList, createProject, editProject } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
-import { softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
+import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
   getSoftSkillsToCvList,
   getSoftSkillsToCvOfEmployee,
@@ -56,7 +56,7 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   experience: number;
   description: string;
   education: IEducation[];
-  languages: ILanguage[];
+  languages: string[];
   softSkills: string[];
   profSkills: TProfSkill[];
   projects?: TProject[];
@@ -79,7 +79,6 @@ export const CVGenerationPage = React.memo(() => {
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [softSkills, setSoftSkills] = useState(skillsOfEmployee);
   const [employeeDescription, setEmployeeDescription] = useState(currentEmployee?.description || '');
 
   // todo: not the best way to check if employee is loaded
@@ -95,17 +94,17 @@ export const CVGenerationPage = React.memo(() => {
         firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
         experience: calcExperienceInYears(startingPoint || hiredOn),
-        softSkills: softSkills,
+        softSkills: skillsOfEmployee,
         // todo: add this field on BE side
         description: employeeDescription,
         male: currentEmployee.gender === 'male',
         projects,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        languages,
+        languages: languages.map((el) => `${el.value} - ${el.level}`),
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        education,
+        education: formatEducationBeforeCvGen(education),
         profSkills,
       });
     }
@@ -158,9 +157,8 @@ export const CVGenerationPage = React.memo(() => {
     dispatch(getSoftSkillsToCvList({ query: value }));
   };
 
-  const handleModalOpen = async () => {
-    const updateCvEducationInfo = formatEducationBeforeCvGen(cvInfo.education);
-    await updateCvInfo({ education: updateCvEducationInfo });
+  const handleModalOpen = () => {
+    console.log(skillsOfEmployee);
     setIsModalOpen(true);
     if (currentEmployee.id && cvInfo.softSkills) {
       const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
@@ -171,7 +169,7 @@ export const CVGenerationPage = React.memo(() => {
   };
 
   const updateCvSoftSkills = useCallback((tags: string[]) => {
-    setSoftSkills(tags);
+    dispatch(setSoftSkillsToCvOfEmployee(tags));
   }, []);
 
   const updateCvDescription = useCallback((value: string) => {
@@ -210,7 +208,8 @@ export const CVGenerationPage = React.memo(() => {
   const handleConfirmDeleteLanguage = (currentLanguage: ILanguage) => {
     if (currentEmployee?.id && currentLanguage.id) {
       dispatch(deleteLanguage(currentLanguage.id)).then(() => dispatch(getLanguages(String(currentEmployee.id))));
-      updateCvInfo({ languages });
+      const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
+      updateCvInfo({ languages: updatedLanguages });
     }
   };
 
@@ -221,7 +220,8 @@ export const CVGenerationPage = React.memo(() => {
         employeeId: currentEmployee?.id,
       };
       dispatch(createLanguage(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
-      updateCvInfo({ languages });
+      const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
+      updateCvInfo({ languages: updatedLanguages });
     }
   };
 
@@ -232,7 +232,8 @@ export const CVGenerationPage = React.memo(() => {
         employeeId: currentEmployee?.id,
       };
       dispatch(editLanguage(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
-      updateCvInfo({ languages });
+      const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
+      updateCvInfo({ languages: updatedLanguages });
     }
   };
 
@@ -258,6 +259,7 @@ export const CVGenerationPage = React.memo(() => {
         handleConfirmDeleteLanguage={handleConfirmDeleteLanguage}
         handleConfirmAddLanguage={handleConfirmAddLanguage}
         handleConfirmEditLanguage={handleConfirmEditLanguage}
+        languages={languages}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects
