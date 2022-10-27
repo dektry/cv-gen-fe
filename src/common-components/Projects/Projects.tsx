@@ -53,10 +53,10 @@ export const Projects = ({
       if (employeeId) {
         dispatch(deleteProject(project.id));
         dispatch(getProjectsList(employeeId));
-        setIsDeleteProjectModalOpen(false);
       } else if (handleDeleteFromState) {
         handleDeleteFromState(project);
       }
+      setIsDeleteProjectModalOpen(false);
     },
     [projects]
   );

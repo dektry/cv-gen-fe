@@ -19,13 +19,22 @@ import { useStyles } from './styles';
 
 interface IProps {
   education?: IEducation[];
-  handleUpdateEducation: (
+  handleUpdateEducation?: (
     dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
     currEducation: IEducation
   ) => void;
+  handleAddToState?: (project: IEducation) => void;
+  handleDeleteFromState?: (project: IEducation) => void;
+  handleEditInState?: (project: IEducation) => void;
 }
 
-export const Education = ({ education, handleUpdateEducation }: IProps) => {
+export const Education = ({
+  education,
+  handleUpdateEducation,
+  handleAddToState,
+  handleDeleteFromState,
+  handleEditInState,
+}: IProps) => {
   const classes = useStyles({ theme });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -44,7 +53,11 @@ export const Education = ({ education, handleUpdateEducation }: IProps) => {
   };
 
   const onDeleteSubmit = () => {
-    handleUpdateEducation(deleteEducation, currentEducation);
+    if (handleUpdateEducation) {
+      handleUpdateEducation(deleteEducation, currentEducation);
+    } else if (handleDeleteFromState) {
+      handleDeleteFromState(currentEducation);
+    }
     setCurrentEducation({} as IEducation);
     setIsDeleteModalOpen(false);
   };
@@ -59,7 +72,11 @@ export const Education = ({ education, handleUpdateEducation }: IProps) => {
   };
 
   const onAddSubmit = () => {
-    handleUpdateEducation(createEducation, currentEducation);
+    if (handleUpdateEducation) {
+      handleUpdateEducation(createEducation, currentEducation);
+    } else if (handleAddToState) {
+      handleAddToState(currentEducation);
+    }
     setIsAddModalOpen(false);
     setCurrentEducation({} as IEducation);
   };
@@ -75,7 +92,11 @@ export const Education = ({ education, handleUpdateEducation }: IProps) => {
   };
 
   const onEditSubmit = () => {
-    handleUpdateEducation(editEducation, currentEducation);
+    if (handleUpdateEducation) {
+      handleUpdateEducation(editEducation, currentEducation);
+    } else if (handleEditInState) {
+      handleEditInState(currentEducation);
+    }
     setIsEditModalOpen(false);
     setCurrentEducation({} as IEducation);
   };

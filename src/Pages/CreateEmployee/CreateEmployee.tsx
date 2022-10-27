@@ -1,17 +1,16 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { createEmployee } from 'store/reducers/employees/thunks';
 
-import { TextField } from '@mui/material';
-import { CustomSelect } from 'common-components/CustomSelect';
 import { Typography } from '@mui/material';
 
 import routes from 'config/routes.json';
-import { timezones } from './components/constants';
 
 import theme from 'theme/theme';
 import { useStyles } from './styles';
@@ -22,17 +21,24 @@ import { ILanguage } from 'models/ILanguage';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { Projects } from 'common-components/Projects';
+import { Education } from 'common-components/Education';
+import { Languages } from 'common-components/Languages';
+import { SaveButton } from 'common-components/SaveButton';
+import { PersonalInformation } from './components/PersonalInformation';
+import { Contacts } from './components/Contacts';
+import { WorkExperience } from './components/WorkExperience';
+import { SocialNetworks } from './components/SocialNetworks';
 
 export const CreateEmployee = () => {
   const classes = useStyles({ theme });
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [employee, setEmployee] = useState<ICreateEmployee>({} as ICreateEmployee);
   const [educations, setEducations] = useState<IEducation[]>([] as IEducation[]);
   const [languages, setLanguages] = useState<ILanguage[]>([] as ILanguage[]);
   const [projects, setProjects] = useState<IProject[]>([] as IProject[]);
-
-  console.log(projects);
+  const [error, setError] = useState(true);
 
   const { allPositions } = useSelector(positionsSelector);
   const { allLevels } = useSelector(levelsSelector);
@@ -41,6 +47,36 @@ export const CreateEmployee = () => {
     dispatch(loadPositions());
     dispatch(loadLevels());
   }, []);
+
+  useEffect(() => {
+    setEmployee((prev) => ({ ...prev, ...{ projects } }));
+  }, [projects]);
+
+  useEffect(() => {
+    setEmployee((prev) => ({ ...prev, ...{ languages } }));
+  }, [languages]);
+
+  useEffect(() => {
+    setEmployee((prev) => ({ ...prev, ...{ educations } }));
+  }, [educations]);
+
+  useEffect(() => {
+    if (
+      (employee.fullName && employee.gender,
+      employee.location,
+      employee.email,
+      employee.hiredOn,
+      employee.position,
+      employee.level)
+    ) {
+      setError(false);
+    }
+  }, [employee]);
+
+  const handleSaveEmployee = () => {
+    dispatch(createEmployee(employee));
+    navigate(routes.generateCVemployeesList);
+  };
 
   const handleChangeInput = useCallback((fields: Partial<ICreateEmployee>) => {
     setEmployee((prev) => ({ ...prev, ...fields }));
@@ -54,11 +90,11 @@ export const CreateEmployee = () => {
     setProjects((prev) => [...prev, projectToAdd]);
   };
 
-  const handleDeleteProject = (project: IProject) => {
+  const handleDeleteProject = useCallback((project: IProject) => {
     setProjects((prev) => prev.filter((el) => el.id !== project.id));
-  };
+  }, []);
 
-  const handleEditProject = (project: IProject) => {
+  const handleEditProject = useCallback((project: IProject) => {
     const mappedProjects = projects.map((el) => {
       if (el.id !== project.id) {
         return el;
@@ -66,156 +102,108 @@ export const CreateEmployee = () => {
         return project;
       }
     });
-
     setProjects(mappedProjects);
-  };
+  }, []);
+
+  const handleAddEducation = useCallback((education: IEducation) => {
+    const educationToAdd: IEducation = {
+      ...education,
+      id: uuidv4(),
+    };
+    setEducations((prev) => [...prev, educationToAdd]);
+  }, []);
+
+  const handleDeleteEducation = useCallback((education: IEducation) => {
+    setEducations((prev) => prev.filter((el) => el.id !== education.id));
+  }, []);
+
+  const handleEditEducation = useCallback((education: IEducation) => {
+    const mappedEducations = educations.map((el) => {
+      if (el.id !== education.id) {
+        return el;
+      } else {
+        return education;
+      }
+    });
+    setEducations(mappedEducations);
+  }, []);
+
+  const handleAddLanguage = useCallback((language: ILanguage) => {
+    const languageToAdd: ILanguage = {
+      ...language,
+      id: uuidv4(),
+    };
+    setLanguages((prev) => [...prev, languageToAdd]);
+  }, []);
+
+  const handleDeleteLanguage = useCallback((language: ILanguage) => {
+    setLanguages((prev) => prev.filter((el) => el.id !== language.id));
+  }, []);
+
+  const handleEditLanguage = useCallback((language: ILanguage) => {
+    const mappedLanguages = languages.map((el) => {
+      if (el.id !== language.id) {
+        return el;
+      } else {
+        return language;
+      }
+    });
+    setLanguages(mappedLanguages);
+  }, []);
 
   const positionsOptions = useMemo(
-    () => allPositions.map((el) => ({ value: String(el.id), label: el.name })),
+    () => allPositions.map((el) => ({ value: el.name, label: el.name })),
     [allPositions]
   );
-  const levelsOptions = useMemo(() => allLevels.map((el) => ({ value: String(el.id), label: el.name })), [allLevels]);
+  const levelsOptions = useMemo(() => allLevels.map((el) => ({ value: el.name, label: el.name })), [allLevels]);
 
   return (
     <div>
       <GenerateCvHeader backPath={routes.generateCVemployeesList} />
-      <div className={classes.gridContainer}>
-        <TextField
-          value={employee.fullName || ''}
-          label={'Full name'}
-          name="fullname"
-          placeholder={'Add name'}
-          onChange={(e) => handleChangeInput({ fullName: e.target.value })}
-        />
-        <CustomSelect
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-          ]}
-          value={employee.gender || ''}
-          label={'Gender'}
-          name="gender"
-          onChange={(e) => handleChangeInput({ gender: e.target.value })}
-        />
-        <TextField
-          value={employee.location || ''}
-          label={'Location'}
-          name="location"
-          placeholder={'Add location'}
-          onChange={(e) => handleChangeInput({ location: e.target.value })}
-        />
-        <CustomSelect
-          options={timezones}
-          value={employee.timezone || ''}
-          label={'Time zone'}
-          name="timezone"
-          onChange={(e) => handleChangeInput({ timezone: e.target.value })}
-        />
-      </div>
-      <Typography sx={{ mb: '16px' }} variant="h2">
-        CONTACTS
-      </Typography>
-      <TextField
-        value={employee.mobileNumber || ''}
-        label={'Mobile number'}
-        name="mobileNumber"
-        placeholder={'Add number'}
-        onChange={(e) => handleChangeInput({ mobileNumber: e.target.value })}
+      <PersonalInformation
+        fullName={employee.fullName}
+        gender={employee.gender}
+        location={employee.location}
+        timezone={employee.timezone}
+        handleChangeInput={handleChangeInput}
       />
-      <div className={classes.gridContainer}>
-        <TextField
-          value={employee.email || ''}
-          label={'Email'}
-          name="email"
-          type="email"
-          placeholder={'Add email'}
-          onChange={(e) => handleChangeInput({ email: e.target.value })}
-        />
-        <TextField
-          value={employee.personalEmail || ''}
-          label={'Personal email'}
-          name="personalEmail"
-          type="email"
-          placeholder={'Add email'}
-          onChange={(e) => handleChangeInput({ personalEmail: e.target.value })}
-        />
-      </div>
-      <Typography sx={{ mb: '8px' }} variant="h2">
-        WORK EXPERIENCE
-      </Typography>
-      <div className={classes.gridContainer}>
-        <TextField
-          value={employee.hiredOn || ''}
-          label={'Hired on'}
-          name="hiredOn"
-          placeholder={'Add date'}
-          type="date"
-          onChange={(e) => handleChangeInput({ hiredOn: e.target.value })}
-        />
-        <TextField
-          value={employee.yearsOfExperience || ''}
-          label={'Experience in years'}
-          name="yearsOfExperience"
-          type="number"
-          onChange={(e) => handleChangeInput({ yearsOfExperience: Number(e.target.value) })}
-        />
-        <CustomSelect
-          options={positionsOptions}
-          value={employee.position || ''}
-          label={'Position'}
-          name="position"
-          onChange={(e) => handleChangeInput({ position: e.target.value })}
-        />
-        <CustomSelect
-          options={levelsOptions}
-          value={employee.level || ''}
-          label={'Position level'}
-          name="level"
-          onChange={(e) => handleChangeInput({ level: e.target.value })}
-        />
-      </div>
+      <Contacts
+        mobileNumber={employee.mobileNumber}
+        email={employee.email}
+        personalEmail={employee.personalEmail}
+        handleChangeInput={handleChangeInput}
+      />
+      <WorkExperience
+        hiredOn={employee.hiredOn}
+        yearsOfExperience={employee.yearsOfExperience}
+        position={employee.position}
+        level={employee.level}
+        positionsOptions={positionsOptions}
+        levelsOptions={levelsOptions}
+        handleChangeInput={handleChangeInput}
+      />
       <Typography sx={{ mb: '8px' }} variant="h2">
         LANGUAGE AND EDUCATION
       </Typography>
-      <Typography sx={{ mb: '8px' }} variant="h2">
-        SOCIAL NETWORKS
-      </Typography>
-      <div className={classes.gridContainer}>
-        <TextField
-          value={employee.skypeUsername || ''}
-          label={'Skype'}
-          name="skypeUsername"
-          placeholder={'Add username'}
-          onChange={(e) => handleChangeInput({ skypeUsername: e.target.value })}
-        />
-        <TextField
-          value={employee.slackUsername || ''}
-          label={'Slack'}
-          name="slackUsername"
-          placeholder={'Add username'}
-          onChange={(e) => handleChangeInput({ slackUsername: e.target.value })}
-        />
-        <TextField
-          value={employee.twitterUsername || ''}
-          label={'Twitter'}
-          name="twitterUsername"
-          placeholder={'Add username'}
-          onChange={(e) => handleChangeInput({ twitterUsername: e.target.value })}
-        />
-        <TextField
-          value={employee.facebookUrl || ''}
-          label={'Facebook'}
-          name="facebookUrl"
-          placeholder={'Add link'}
-          onChange={(e) => handleChangeInput({ facebookUrl: e.target.value })}
-        />
-      </div>
-      <TextField
-        value={employee.linkedinUrl || ''}
-        label={'Linkedin'}
-        name="linkedinUrl"
-        placeholder={'Add link'}
-        onChange={(e) => handleChangeInput({ linkedinUrl: e.target.value })}
+      <Languages
+        languages={languages}
+        handleAddToState={handleAddLanguage}
+        handleDeleteFromState={handleDeleteLanguage}
+        handleEditInState={handleEditLanguage}
+      />
+      <Education
+        education={educations}
+        handleAddToState={handleAddEducation}
+        handleDeleteFromState={handleDeleteEducation}
+        handleEditInState={handleEditEducation}
+      />
+      <SocialNetworks
+        skypeUsername={employee.skypeUsername}
+        slackUsername={employee.slackUsername}
+        twitterUsername={employee.twitterUsername}
+        facebookUrl={employee.facebookUrl}
+        linkedinUrl={employee.linkedinUrl}
+        handleChangeInput={handleChangeInput}
       />
       <Projects
         handleAddToState={handleAddProject}
@@ -223,7 +211,9 @@ export const CreateEmployee = () => {
         handleDeleteFromState={handleDeleteProject}
         projects={projects}
       />
-      <div className={classes.createButtonContainer}></div>
+      <div className={classes.createButtonContainer}>
+        <SaveButton title={'CREATE EMPLOYEE'} error={error} handleClickOkButton={handleSaveEmployee} />
+      </div>
     </div>
   );
 };

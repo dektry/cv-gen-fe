@@ -33,6 +33,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     '&.MuiButton-root': {
       width: '12%',
       minWidth: '170px',
+      margin: '8px 0',
     },
   },
 });

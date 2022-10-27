@@ -19,13 +19,22 @@ import { useStyles } from './styles';
 
 interface IProps {
   languages?: ILanguage[];
-  handleUpdateLanguage: (
+  handleUpdateLanguage?: (
     dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>,
     currentLanguage: ILanguage
   ) => void;
+  handleAddToState?: (project: ILanguage) => void;
+  handleDeleteFromState?: (project: ILanguage) => void;
+  handleEditInState?: (project: ILanguage) => void;
 }
 
-export const Languages = ({ languages, handleUpdateLanguage }: IProps) => {
+export const Languages = ({
+  languages,
+  handleUpdateLanguage,
+  handleAddToState,
+  handleDeleteFromState,
+  handleEditInState,
+}: IProps) => {
   const classes = useStyles({ theme });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -44,7 +53,11 @@ export const Languages = ({ languages, handleUpdateLanguage }: IProps) => {
   };
 
   const onDeleteSubmit = () => {
-    handleUpdateLanguage(deleteLanguage, currentLanguage);
+    if (handleUpdateLanguage) {
+      handleUpdateLanguage(deleteLanguage, currentLanguage);
+    } else if (handleDeleteFromState) {
+      handleDeleteFromState(currentLanguage);
+    }
     setCurrentLanguage({} as ILanguage);
     setIsDeleteModalOpen(false);
   };
@@ -59,7 +72,11 @@ export const Languages = ({ languages, handleUpdateLanguage }: IProps) => {
   };
 
   const onAddSubmit = () => {
-    handleUpdateLanguage(createLanguage, currentLanguage);
+    if (handleUpdateLanguage) {
+      handleUpdateLanguage(createLanguage, currentLanguage);
+    } else if (handleAddToState) {
+      handleAddToState(currentLanguage);
+    }
     setIsAddModalOpen(false);
     setCurrentLanguage({} as ILanguage);
   };
@@ -75,7 +92,11 @@ export const Languages = ({ languages, handleUpdateLanguage }: IProps) => {
   };
 
   const onEditSubmit = () => {
-    handleUpdateLanguage(editLanguage, currentLanguage);
+    if (handleUpdateLanguage) {
+      handleUpdateLanguage(editLanguage, currentLanguage);
+    } else if (handleEditInState) {
+      handleEditInState(currentLanguage);
+    }
     setIsEditModalOpen(false);
     setCurrentLanguage({} as ILanguage);
   };

@@ -10,7 +10,9 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     gap: gap + 'px',
     padding: '16px 0',
   },
-  experienceContainer: {},
-  socialNetworksContainer: {},
-  createButtonContainer: {},
+  createButtonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
 });
