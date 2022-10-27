@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { throttle } from 'lodash';
 
-import { employeesSelector, saveChangesToEmployee } from 'store/reducers/employees';
+import { employeesSelector } from 'store/reducers/employees';
+import { saveChangesToEmployee } from 'store/reducers/employees/thunks';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { IProject, IProjectFromDB } from 'models/IProject';

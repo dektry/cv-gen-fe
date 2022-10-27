@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import { Spin } from 'antd';
 
 import { useAppDispatch } from 'store';
-import { employeesSelector, loadEmployee, setEmployee, saveChangesToEmployee } from 'store/reducers/employees';
+import { employeesSelector, setEmployee } from 'store/reducers/employees';
+import { loadEmployee, saveChangesToEmployee } from 'store/reducers/employees/thunks';
 import { getProjectsList } from 'store/reducers/projects/thunks';
 import { setProjectsList, projectsSelector } from 'store/reducers/projects';
 

@@ -1,5 +1,8 @@
 import { ITableExtension } from './ICommon';
 import { NullableField } from './TNullableField';
+import { IProject } from './IProject';
+import { IEducation } from './IEducation';
+import { ILanguage } from './ILanguage';
 
 interface IEmployeeDepartment {
   id: string;
@@ -28,12 +31,17 @@ export interface IEmployee {
   level: NullableField<string>;
   location: NullableField<string>;
   timezone: NullableField<string>;
-  languages: NullableField<string>;
+  languages: NullableField<ILanguage[]>;
   formalEducation: NullableField<string>;
   startingPoint: NullableField<string>;
   interests: NullableField<string>;
   description: NullableField<string>;
   softSkillsToCv?: string[];
+}
+
+export interface ICreateEmployee extends IEmployee {
+  projects: IProject[];
+  educations: IEducation[];
 }
 
 export interface IEmployeesState extends ITableExtension {

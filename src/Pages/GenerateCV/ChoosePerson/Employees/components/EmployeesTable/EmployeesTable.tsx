@@ -1,11 +1,16 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { isArray } from 'lodash';
 import { SorterResult, SortOrder } from 'antd/es/table/interface';
 import { TablePaginationConfig } from 'antd/es/table/Table';
 
+import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { useAppDispatch } from 'store';
-import { setLoading, setPageSize, setCurrentPage, getEmployeesList } from 'store/reducers/employees';
+import { useSelector } from 'react-redux';
+import { setLoading, setPageSize, setCurrentPage, setEmployee, employeesSelector } from 'store/reducers/employees';
+import { getEmployeesList, deleteEmployee } from 'store/reducers/employees/thunks';
 
 import { EmployeeShortCard } from '../EmployeeShortCard';
 import { useIsMobile } from 'theme/Responsive';
@@ -16,6 +21,10 @@ import { ITableParams, IExpandableParams } from 'models/ICommon';
 import paths from 'config/routes.json';
 
 import { TableComponent as Table } from 'common-components/Table';
+import { DeleteModal } from 'common-components/DeleteModal';
+
+import theme from 'theme/theme';
+import { useStyles } from './styles';
 
 interface IEmployeeTableProps {
   currentPage: number;
@@ -36,10 +45,14 @@ export const EmployeesTable = ({
   isLoading,
   employees,
 }: IEmployeeTableProps) => {
+  const classes = useStyles({ theme });
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   const isMobile = useIsMobile();
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { currentEmployee } = useSelector(employeesSelector);
 
   const handleChange = async (
     pagination: TablePaginationConfig,
@@ -83,7 +96,7 @@ export const EmployeesTable = ({
   const createPath = (record: IEmployee) => {
     navigate(
       generatePath(paths.employee, {
-        id: record.id || ''
+        id: record.id || '',
       })
     );
   };
@@ -101,6 +114,42 @@ export const EmployeesTable = ({
     [editAction, history]
   );
 
+  const handleOpenDeleteModal = (e: React.MouseEvent<HTMLElement>, record: IEmployee) => {
+    e.stopPropagation();
+    dispatch(setEmployee(record));
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    dispatch(setEmployee({} as IEmployee));
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteEmployeeConfirm = () => {
+    if (currentEmployee.id) {
+      dispatch(deleteEmployee(currentEmployee)).then(() => {
+        dispatch(
+          getEmployeesList({
+            page: defaultCurrentPage,
+            limit: defaultPageSize,
+            sorter: { order: 'ascend', field: 'fullName' },
+          })
+        );
+      });
+      handleDeleteModalClose();
+    }
+  };
+
+  const renderActions = useCallback((record: IEmployee) => {
+    return (
+      <Button
+        className={classes.button}
+        endIcon={<DeleteIcon />}
+        onClick={(e: React.MouseEvent<HTMLElement>) => handleOpenDeleteModal(e, record)}
+      />
+    );
+  }, []);
+
   const params: ITableParams<IEmployee> = {
     handleChange,
     entity: EMPLOYEES,
@@ -110,7 +159,19 @@ export const EmployeesTable = ({
     handleRowClick,
     paginationObj,
     loading: isLoading,
+    renderActions,
   };
 
-  return <Table<IEmployee> params={params} />;
+  return (
+    <>
+      <Table<IEmployee> params={params} />
+      <DeleteModal
+        onSubmit={handleDeleteEmployeeConfirm}
+        onClose={handleDeleteModalClose}
+        isOpen={isDeleteModalOpen}
+        modalTitle={'DELETE EDUCATION'}
+        modalText={'Are you sure you want to delete this education? All data will be lost'}
+      />
+    </>
+  );
 };

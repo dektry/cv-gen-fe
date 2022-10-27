@@ -12,7 +12,8 @@ import {
   chooseInterviewPosition,
   setTechAssessments,
 } from 'store/reducers/techAssessment';
-import { employeesSelector, loadEmployee, setChosenEmployee } from 'store/reducers/employees';
+import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
+import { loadEmployee } from 'store/reducers/employees/thunks';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
