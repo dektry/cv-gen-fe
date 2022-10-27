@@ -121,6 +121,7 @@ export const defaultEmployee: IEmployee = {
   startingPoint: null,
   interests: null,
   description: null,
+  yearsOfExperience: null,
 };
 
 export const defaultPageSize = 10;

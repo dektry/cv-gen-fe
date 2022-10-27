@@ -18,6 +18,7 @@ export enum navigationKeys {
   '/cv-list' = 'cv-list',
   '/settings' = 'settings',
   '/ui-elements' = 'ui-elements',
+  '/create-employee' = 'create-employee',
 }
 
 /* eslint-disable no-shadow */

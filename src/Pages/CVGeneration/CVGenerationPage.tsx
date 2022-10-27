@@ -217,7 +217,7 @@ export const CVGenerationPage = React.memo(() => {
         education={education}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects employeeId={currentEmployee.id || ''} handleUpdateProject={handleUpdateProject} />
+      <Projects employeeId={currentEmployee.id || ''} handleUpdateProject={handleUpdateProject} projects={projects} />
       <div className={classes.genCVbtnBlock}>
         <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV

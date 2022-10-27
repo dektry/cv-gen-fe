@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { employeesSelector } from 'store/reducers/employees';
 import { technologiesSelector } from 'store/reducers/technologies';
 import { getTechnologiesList } from 'store/reducers/technologies/thunks';
 
@@ -23,7 +22,6 @@ interface IProps {
 export const ProjectForm = ({ project, setCommonError, setProjectInfo }: IProps) => {
   const classes = useStyles({ theme });
   const dispatch = useAppDispatch();
-  const { currentEmployee } = useSelector(employeesSelector);
   const { technologiesNames } = useSelector(technologiesSelector);
 
   const currentInfo: Partial<IProject> = project
@@ -44,8 +42,6 @@ export const ProjectForm = ({ project, setCommonError, setProjectInfo }: IProps)
   useEffect(() => {
     if (
       project &&
-      currentEmployee &&
-      currentEmployee.id &&
       project.name &&
       project.duration &&
       project.position &&

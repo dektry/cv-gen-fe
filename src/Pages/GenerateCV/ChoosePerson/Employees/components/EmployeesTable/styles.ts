@@ -19,4 +19,11 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       marginLeft: '10px',
     },
   },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: '100%',
+    marginBottom: '30px',
+  },
 });

@@ -59,7 +59,7 @@ export function TableComponent<T extends { id: string | NullableField<string> }>
         />
       )}
       {entity.TYPE && <Column title={entity.TYPE} dataIndex={tableKeys.type} key={tableKeys.type} sorter />}
-      <Column className={classes.tableActions} title={'Delete'} render={renderActions} />
+      {renderActions && <Column className={classes.tableActions} title={'Delete'} render={renderActions} />}
     </Table>
   );
 }

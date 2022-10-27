@@ -24,6 +24,7 @@ interface IEmployeeProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
   handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
+  projects: IProject[] | [];
 }
 
 export const EmployeeUI = ({
@@ -36,6 +37,7 @@ export const EmployeeUI = ({
   currentEmployee,
   employeeId,
   handleUpdateProject,
+  projects,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -229,7 +231,7 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
-          <Projects employeeId={employeeId || ''} handleUpdateProject={handleUpdateProject} />
+          <Projects employeeId={employeeId || ''} handleUpdateProject={handleUpdateProject} projects={projects} />
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button

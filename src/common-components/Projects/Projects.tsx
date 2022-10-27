@@ -4,8 +4,6 @@ import { AsyncThunk } from '@reduxjs/toolkit';
 import { Typography } from '@mui/material';
 
 import { useAppDispatch } from 'store';
-import { useSelector } from 'react-redux';
-import { projectsSelector } from 'store/reducers/projects';
 import { deleteProject, getProjectsList, createProject } from 'store/reducers/projects/thunks';
 
 import { IProject, IProjectFromDB } from 'models/IProject';
@@ -17,11 +15,25 @@ import { CreateEditModal } from './components/CreateEditModal';
 import { useStyles } from './styles';
 
 interface IProps {
-  employeeId: string;
-  handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
+  projects: [] | IProject[];
+  employeeId?: string;
+  handleUpdateProject?: (
+    dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>,
+    project: IProject
+  ) => void;
+  handleAddToState?: (project: IProject) => void;
+  handleDeleteFromState?: (project: IProject) => void;
+  handleEditInState?: (project: IProject) => void;
 }
 
-export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
+export const Projects = ({
+  projects,
+  employeeId,
+  handleUpdateProject,
+  handleAddToState,
+  handleDeleteFromState,
+  handleEditInState,
+}: IProps) => {
   const classes = useStyles();
   const [error, setError] = useState(false);
 
@@ -29,8 +41,6 @@ export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [projectInfo, setProjectInfo] = useState<Partial<IProject> | null>(null);
-
-  const { projects } = useSelector(projectsSelector);
 
   const dispatch = useAppDispatch();
 
@@ -40,9 +50,13 @@ export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
 
   const handleClickDeleteProjectConfirm = useCallback(
     (project: IProject) => {
-      dispatch(deleteProject(project.id));
-      dispatch(getProjectsList(employeeId));
-      setIsDeleteProjectModalOpen(false);
+      if (employeeId) {
+        dispatch(deleteProject(project.id));
+        dispatch(getProjectsList(employeeId));
+        setIsDeleteProjectModalOpen(false);
+      } else if (handleDeleteFromState) {
+        handleDeleteFromState(project);
+      }
     },
     [projects]
   );
@@ -69,7 +83,11 @@ export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
   };
 
   const handleAddProject = (project: IProject) => {
-    handleUpdateProject(createProject, project);
+    if (handleUpdateProject) {
+      handleUpdateProject(createProject, project);
+    } else if (handleAddToState) {
+      handleAddToState(project);
+    }
   };
 
   return (
@@ -99,6 +117,7 @@ export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
           error={error}
           setError={setError}
           setProjectInfo={setProjectInfo}
+          handleEditInState={handleEditInState}
         />
       ))}
       <CreateEditModal
@@ -106,6 +125,7 @@ export const Projects = ({ employeeId, handleUpdateProject }: IProps) => {
         modalTitle="ADD NEW PROJECT"
         onClose={handleCloseCreateModal}
         onSubmit={handleAddProject}
+        handleAddToState={handleAddToState}
         error={error}
         setError={setError}
         setProjectInfo={setProjectInfo}

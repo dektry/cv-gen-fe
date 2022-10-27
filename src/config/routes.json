@@ -26,5 +26,6 @@
     "login": "/login",
     "users": "/users",
     "settings": "/settings",
-    "uiElements": "/ui-elements"
+    "uiElements": "/ui-elements",
+    "createEmployee": "/create-employee"
 }

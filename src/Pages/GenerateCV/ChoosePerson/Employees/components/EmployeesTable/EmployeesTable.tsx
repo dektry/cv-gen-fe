@@ -22,6 +22,7 @@ import paths from 'config/routes.json';
 
 import { TableComponent as Table } from 'common-components/Table';
 import { DeleteModal } from 'common-components/DeleteModal';
+import { AddButton } from 'common-components/AddButton';
 
 import theme from 'theme/theme';
 import { useStyles } from './styles';
@@ -140,6 +141,10 @@ export const EmployeesTable = ({
     }
   };
 
+  const handleAddButtonClick = () => {
+    navigate(paths.createEmployee);
+  };
+
   const renderActions = useCallback((record: IEmployee) => {
     return (
       <Button
@@ -164,6 +169,9 @@ export const EmployeesTable = ({
 
   return (
     <>
+      <div className={classes.buttonContainer}>
+        <AddButton title={'Add new'} onClick={handleAddButtonClick} />
+      </div>
       <Table<IEmployee> params={params} />
       <DeleteModal
         onSubmit={handleDeleteEmployeeConfirm}

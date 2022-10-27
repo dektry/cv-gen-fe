@@ -23,6 +23,8 @@ export const Employee = () => {
 
   const { id } = useParams<{ id: string }>();
 
+  const { projects } = useSelector(projectsSelector);
+
   const [isChanged, setIsChanged] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
 
@@ -55,7 +57,6 @@ export const Employee = () => {
     }
   }, [id, dispatch]);
 
-  const { projects } = useSelector(projectsSelector);
   useEffect(() => {
     if (id) {
       dispatch(getProjectsList(id));
@@ -92,6 +93,7 @@ export const Employee = () => {
       currentEmployee={currentEmployee}
       employeeId={id}
       handleUpdateProject={handleUpdateProject}
+      projects={projects}
     />
   );
 };
