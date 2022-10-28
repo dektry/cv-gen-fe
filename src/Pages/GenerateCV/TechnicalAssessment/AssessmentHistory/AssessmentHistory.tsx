@@ -68,7 +68,7 @@ export const AssessmentHistory = () => {
 
   const createPath = (record: IAssessmentFromDB) => {
     navigate(
-      generatePath(paths.generateCVprevTechnicalAssessment, {
+      generatePath(paths.prevTechnicalAssessment, {
         id: id || '',
         assessmentId: record.id,
       })
@@ -103,9 +103,7 @@ export const AssessmentHistory = () => {
 
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
-      navigate(
-        generatePath(paths.generateCVtechnicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel })
-      );
+      navigate(generatePath(paths.technicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel }));
     } else {
       message.warn('You should choose level and position');
     }
@@ -136,7 +134,7 @@ export const AssessmentHistory = () => {
 
   return (
     <>
-      <EmployeeHeader personalData={personalData} backPath={paths.generateCVemployeesList} />
+      <EmployeeHeader personalData={personalData} backPath={paths.employeesList} />
       <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
       {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
       <InterviewModal

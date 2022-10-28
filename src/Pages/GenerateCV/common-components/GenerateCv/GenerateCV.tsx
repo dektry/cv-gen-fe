@@ -8,7 +8,7 @@ import { useStyles } from './styles';
 
 const { TabPane } = Tabs;
 
-const tabPaths = [paths.home, paths.generateCVtechnicalInterview, paths.generateCVsoftskillsInterview];
+const tabPaths = [paths.home, paths.technicalInterview, paths.softSkillsInterview];
 
 export const GenerateCV = ({ ...props }) => {
   const classes = useStyles(props);
@@ -30,7 +30,7 @@ export const GenerateCV = ({ ...props }) => {
   }, [location.pathname]);
 
   const handleTabClick = (key: string) => {
-    const allowedPaths = [paths.generateCVtechnicalInterview, paths.generateCVsoftskillsInterview, paths.candidate];
+    const allowedPaths = [paths.technicalInterview, paths.softSkillsInterview, paths.candidate];
 
     if (+key > 0) return;
 

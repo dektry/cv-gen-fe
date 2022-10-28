@@ -42,13 +42,13 @@ export const InterviewSetUp = () => {
   useEffect(() => {
     if (interviewResult && !isResultPage)
       navigate(
-        generatePath(paths.generateCVtechnicalInterview, {
+        generatePath(paths.technicalInterview, {
           id,
         })
       );
     if (!interviewResult && isResultPage)
       navigate(
-        generatePath(paths.generateCVtechnicalInterviewResult, {
+        generatePath(paths.technicalInterviewResult, {
           id,
         })
       );
@@ -81,7 +81,7 @@ export const InterviewSetUp = () => {
       />
       <Button className={classes.linkToResults} type="primary" disabled={!interviewResult?.answers}>
         <Link
-          to={generatePath(paths.generateCVtechnicalInterviewResult, {
+          to={generatePath(paths.technicalInterviewResult, {
             candidateId: currentCandidate.id,
           })}
         >

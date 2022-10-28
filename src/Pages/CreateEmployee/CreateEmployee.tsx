@@ -75,7 +75,7 @@ export const CreateEmployee = () => {
 
   const handleSaveEmployee = () => {
     dispatch(createEmployee(employee));
-    navigate(routes.generateCVemployeesList);
+    navigate(routes.employeesList);
   };
 
   const handleChangeInput = useCallback((fields: Partial<ICreateEmployee>) => {
@@ -159,7 +159,7 @@ export const CreateEmployee = () => {
 
   return (
     <div>
-      <GenerateCvHeader backPath={routes.generateCVemployeesList} />
+      <GenerateCvHeader backPath={routes.employeesList} />
       <PersonalInformation
         fullName={employee.fullName}
         gender={employee.gender}

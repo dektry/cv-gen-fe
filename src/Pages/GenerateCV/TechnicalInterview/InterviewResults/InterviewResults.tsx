@@ -17,13 +17,9 @@ export const InterviewResults = () => {
   return (
     <>
       <GenerateCV />
-      <GenerateCvHeader backPath={paths.generateCVtechnicalInterview.replace(':id', id ? id : '')} />
+      <GenerateCvHeader backPath={paths.technicalInterview.replace(':id', id ? id : '')} />
       <InterviewResult />
-      <ButtonWithLink
-        path={paths.generateCVsoftskillsInterview}
-        id={currentCandidate?.id}
-        text={'Start soft skills interview'}
-      />
+      <ButtonWithLink path={paths.softSkillsInterview} id={currentCandidate?.id} text={'Start soft skills interview'} />
     </>
   );
 };

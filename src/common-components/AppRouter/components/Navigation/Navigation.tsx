@@ -36,24 +36,24 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
       <ul className={classNames(defaultMenuClasses, collapsed ? menuCollapsedClasses : menuNotCollapsedClasses)}>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={[navigationKeys['/candidates']]}
+          itemKey={[navigationKeys['/candidates'] || navigationKeys['/candidate']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
           icon={<StarFilled />}
         >
           <Tooltip placement="right" title={collapsed ? CANDIDATES : ''}>
-            <Link to={paths.generateCVcandidateList}>{CANDIDATES}</Link>
+            <Link to={paths.candidateList}>{CANDIDATES}</Link>
           </Tooltip>
         </NavigationItem>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={[navigationKeys['/employees']]}
+          itemKey={[navigationKeys['/employees'] || navigationKeys['/employee']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
           icon={<StarFilled />}
         >
           <Tooltip placement="right" title={collapsed ? EMPLOYEES : ''}>
-            <Link to={paths.generateCVemployeesList}>{EMPLOYEES}</Link>
+            <Link to={paths.employeesList}>{EMPLOYEES}</Link>
           </Tooltip>
         </NavigationItem>
         <NavigationItem

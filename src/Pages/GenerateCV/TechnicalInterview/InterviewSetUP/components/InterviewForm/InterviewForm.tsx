@@ -127,7 +127,7 @@ export const InterviewForm = ({
     }
 
     navigate(
-      generatePath(paths.generateCVtechnicalInterviewResult.replace(':candidateId', currentCandidate.id), {
+      generatePath(paths.technicalInterviewResult.replace(':candidateId', currentCandidate.id), {
         id: currentCandidate?.id,
       })
     );

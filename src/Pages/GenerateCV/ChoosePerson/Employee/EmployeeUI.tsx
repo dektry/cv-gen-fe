@@ -48,7 +48,7 @@ export const EmployeeUI = ({
     level: currentEmployee.level,
   };
 
-  const backPath = generatePath(paths.generateCVemployeesList);
+  const backPath = generatePath(paths.employeesList);
 
   return (
     <>

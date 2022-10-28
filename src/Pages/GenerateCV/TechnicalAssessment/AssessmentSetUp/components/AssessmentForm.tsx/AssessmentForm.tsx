@@ -145,7 +145,7 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
     }
 
     navigate(
-      generatePath(paths.generateCVtechnicalInterviewResult, {
+      generatePath(paths.technicalInterviewResult, {
         id: currentEmployee?.id || '',
       })
     );

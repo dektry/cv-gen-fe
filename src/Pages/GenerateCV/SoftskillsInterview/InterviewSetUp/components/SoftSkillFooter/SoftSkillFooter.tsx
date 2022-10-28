@@ -27,7 +27,6 @@ export const SoftSkillFotter = ({
 }: ISoftSkillFooterProps) => {
   const classes = useStyles();
 
-
   return (
     <div className={classes.footer}>
       <Tooltip placement="right" title={SOFT_SKILL_INTERVIEW.NEW_SKILL}>
@@ -48,16 +47,8 @@ export const SoftSkillFotter = ({
         onChange={handleChange}
         value={comment}
       />
-      <ButtonWithLink
-        path={paths.generateCVsoftskillsInterviewResult}
-        text={'See results'}
-        id={currentCandidate?.id}
-      />
-      <ButtonWithLink
-        path={paths.generateCVtechnicalInterview}
-        text={'Start tech interview'}
-        id={currentCandidate?.id}
-      />
+      <ButtonWithLink path={paths.softSkillsInterviewResult} text={'See results'} id={currentCandidate?.id} />
+      <ButtonWithLink path={paths.technicalInterview} text={'Start tech interview'} id={currentCandidate?.id} />
     </div>
   );
 };
