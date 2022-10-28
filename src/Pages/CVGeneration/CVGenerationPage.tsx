@@ -136,7 +136,7 @@ export const CVGenerationPage = React.memo(() => {
   const updateCvFields = useCallback((fields: Partial<CvInfo>) => {
     const key: TextFieldOptions = Object.keys(fields)[0] as TextFieldOptions;
 
-    if (Object.keys(fields)[0] === 'firstName') {
+    if (key === 'firstName') {
       const updatedEmployee: IEmployee = {
         ...currentEmployee,
         fullName: `${currentEmployee.fullName.split(' ')[0]} ${fields['firstName']}`,
