@@ -43,6 +43,7 @@ export interface IEmployee {
 export interface ICreateEmployee extends IEmployee {
   projects: IProject[];
   educations: IEducation[];
+
 }
 
 export interface IEmployeesState extends ITableExtension {
