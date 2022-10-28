@@ -1,5 +1,5 @@
 import { AsyncThunk } from '@reduxjs/toolkit';
-import { Input, Typography } from 'antd';
+import { Typography } from 'antd';
 import { TextField } from '@mui/material';
 
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
@@ -15,12 +15,9 @@ const { Title } = Typography;
 interface CVGenerationInfoProps {
   cvInfo: Partial<CvInfo>;
   softSkillsOptions: string[];
-  updateCvInfo: (fields: Partial<CvInfo>) => void;
   softSkillsSearch: (value: string) => void;
   updateCvSoftSkills: (tags: string[]) => void;
-  updateCvDescription: (value: string) => void;
   softSkillsOfEmployee: string[];
-  employeeDescription: string;
   handleUpdateEducation: (
     dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
     currEducation: IEducation
@@ -31,58 +28,58 @@ interface CVGenerationInfoProps {
   ) => void;
   languages: ILanguage[] | [];
   education: IEducation[] | [];
+  updateCvFields: (fields: Partial<CvInfo>) => void;
 }
 
 export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
   const {
-    updateCvInfo,
     cvInfo,
     softSkillsOptions,
     softSkillsSearch,
     updateCvSoftSkills,
     softSkillsOfEmployee,
-    updateCvDescription,
-    employeeDescription,
     handleUpdateEducation,
     handleUpdateLanguage,
     languages,
     education,
+    updateCvFields,
   } = props;
-  const { firstName, level, position, experience } = cvInfo;
+  const { firstName, level, position, experience, description } = cvInfo;
 
   const classes = useStyles();
 
   return (
     <div>
       <div className={classes.row}>
-        <Input
+        <TextField
           name="fullName"
+          label={'Name'}
           placeholder={'Name'}
-          addonBefore="First Name"
-          onChange={(e) => updateCvInfo({ firstName: e.target.value })}
+          onChange={(e) => updateCvFields({ firstName: e.target.value })}
           value={firstName ? firstName : ''}
         />
-        <Input
+        <TextField
           name="experience"
+          label={'Experience'}
           placeholder={'years'}
-          addonBefore="Experience in years"
-          onChange={(e) => (isNaN(Number(e.target.value)) ? '' : updateCvInfo({ experience: Number(e.target.value) }))}
+          type="number"
+          onChange={(e) => updateCvFields({ experience: Number(e.target.value) })}
           value={experience !== undefined ? experience : ''}
         />
       </div>
       <div className={classes.row}>
-        <Input
+        <TextField
           name="position"
+          label={'Position'}
           placeholder={'Position'}
-          addonBefore="Position"
-          onChange={(e) => updateCvInfo({ position: e.target.value })}
+          onChange={(e) => updateCvFields({ position: e.target.value })}
           value={position ? position : ''}
         />
-        <Input
+        <TextField
           name="level"
           placeholder={'Level'}
-          addonBefore="Level"
-          onChange={(e) => updateCvInfo({ level: e.target.value })}
+          label={'Position'}
+          onChange={(e) => updateCvFields({ level: e.target.value })}
           value={level ? level : ''}
         />
       </div>
@@ -92,8 +89,8 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
           multiline={true}
           label={'Description'}
           placeholder={'Description'}
-          onChange={(e) => updateCvDescription(e.target.value)}
-          value={employeeDescription ? employeeDescription : ''}
+          onChange={(e) => updateCvFields({ description: e.target.value })}
+          value={description}
         />
       </div>{' '}
       <div className={classes.row}>

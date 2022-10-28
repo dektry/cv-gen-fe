@@ -34,6 +34,7 @@ export interface IEmployee {
   interests: NullableField<string>;
   description: NullableField<string>;
   softSkillsToCv?: string[];
+  yearsOfExperience: NullableField<number>;
 }
 
 export interface IEmployeesState extends ITableExtension {

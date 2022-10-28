@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { throttle } from 'lodash';
 
-import { employeesSelector, saveChangesToEmployee } from 'store/reducers/employees';
+import { employeesSelector, saveChangesToEmployee, setEmployee } from 'store/reducers/employees';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { IProject, IProjectFromDB } from 'models/IProject';
@@ -65,6 +65,8 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   male: boolean;
 };
 
+export type TextFieldOptions = 'firstName' | 'experience' | 'position' | 'level' | 'description';
+
 export const CVGenerationPage = React.memo(() => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -80,7 +82,6 @@ export const CVGenerationPage = React.memo(() => {
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [employeeDescription, setEmployeeDescription] = useState(currentEmployee?.description || '');
 
   // todo: not the best way to check if employee is loaded
   // todo: after routing refactoring replace with more robust solution
@@ -88,16 +89,16 @@ export const CVGenerationPage = React.memo(() => {
     if (!currentEmployee.id) {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { startingPoint, hiredOn, position } = currentEmployee;
+      const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
 
       setCvInfo({
         ...currentEmployee,
         firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
-        experience: calcExperienceInYears(startingPoint || hiredOn),
+        experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
         softSkills: skillsOfEmployee,
         // todo: add this field on BE side
-        description: employeeDescription,
+        description: currentEmployee?.description || '',
         male: currentEmployee.gender === 'male',
         projects,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -132,6 +133,32 @@ export const CVGenerationPage = React.memo(() => {
     []
   );
 
+  const updateCvFields = useCallback((fields: Partial<CvInfo>) => {
+    const key: TextFieldOptions = Object.keys(fields)[0] as TextFieldOptions;
+    if (key === 'firstName') {
+      const updatedEmployee: IEmployee = {
+        ...currentEmployee,
+        fullName: `${currentEmployee.fullName.split(' ')[0]} ${fields['firstName']}`,
+      };
+
+      dispatch(setEmployee(updatedEmployee));
+    } else if (key === 'experience') {
+      const updatedEmployee: IEmployee = {
+        ...currentEmployee,
+        yearsOfExperience: Number(fields['experience']),
+      };
+
+      dispatch(setEmployee(updatedEmployee));
+    } else {
+      const updatedEmployee: IEmployee = {
+        ...currentEmployee,
+        [`${Object.keys(fields)[0]}`]: fields[key],
+      };
+
+      dispatch(setEmployee(updatedEmployee));
+    }
+  }, []);
+
   const tagsSearch = (value: string) => {
     dispatch(getSoftSkillsToCvList({ query: value }));
   };
@@ -148,10 +175,6 @@ export const CVGenerationPage = React.memo(() => {
 
   const updateCvSoftSkills = useCallback((tags: string[]) => {
     dispatch(setSoftSkillsToCvOfEmployee(tags));
-  }, []);
-
-  const updateCvDescription = useCallback((value: string) => {
-    setEmployeeDescription(value);
   }, []);
 
   const handleUpdateProject = useCallback(
@@ -203,13 +226,11 @@ export const CVGenerationPage = React.memo(() => {
       ></CVGenerationHeader>
       <CVGenerationInfo
         cvInfo={cvInfo}
-        updateCvInfo={updateCvInfo}
         softSkillsOptions={skills}
         softSkillsOfEmployee={skillsOfEmployee}
         softSkillsSearch={tagsSearch}
         updateCvSoftSkills={updateCvSoftSkills}
-        updateCvDescription={updateCvDescription}
-        employeeDescription={employeeDescription}
+        updateCvFields={updateCvFields}
         handleUpdateEducation={handleUpdateEducation}
         handleUpdateLanguage={handleUpdateLanguage}
         languages={languages}
