@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { SortOrder, Key } from 'antd/lib/table/interface';
 
-import { IEmployee } from 'models/IEmployee';
+import { ICreateEmployee, IEmployee } from 'models/IEmployee';
 import endpoints from 'config/endpoint.json';
 
 import Helper from 'helper';
@@ -57,6 +57,24 @@ export const updateEmployee = async (employee: IEmployee) => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_UPDATE_EMPLOYEE_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpDeleteEmployee = async (employee: IEmployee) => {
+  try {
+    await apiClient.delete(`${endpoints.employee}/${employee.id}`);
+  } catch (error) {
+    console.error('[API_CLIENT_DELETE_EMPLOYEE_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpCreateEmployee = async (employee: ICreateEmployee) => {
+  try {
+    await apiClient.post(endpoints.employee, employee);
+  } catch (error) {
+    console.error('[API_CLIENT_CREATE_EMPLOYEE_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };

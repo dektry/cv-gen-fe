@@ -30,10 +30,14 @@ type TProps = {
   handleOpenEditModal: (project: IProject) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
-  handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
+  handleUpdateProject?: (
+    dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>,
+    project: IProject
+  ) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
+  handleEditInState?: (project: IProject) => void;
 };
 
 export const ProjectCard = React.memo(
@@ -52,11 +56,16 @@ export const ProjectCard = React.memo(
     setError,
     setProjectInfo,
     projectInfo,
+    handleEditInState,
   }: TProps) => {
     const classes = useStyles({ theme });
 
     const handleEditProject = (currentProject: IProject) => {
-      handleUpdateProject(editProject, currentProject);
+      if (handleUpdateProject) {
+        handleUpdateProject(editProject, currentProject);
+      } else if (handleEditInState) {
+        handleEditInState(currentProject);
+      }
     };
 
     return (

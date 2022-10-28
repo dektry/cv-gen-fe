@@ -27,6 +27,7 @@ interface IProps {
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
   projectInfo: Partial<IProject> | null;
+  handleAddToState?: (project: IProject) => void;
 }
 
 export const CreateEditModal = ({
@@ -38,6 +39,7 @@ export const CreateEditModal = ({
   setError,
   setProjectInfo,
   projectInfo,
+  handleAddToState,
 }: IProps) => {
   const classes = useStyles({ theme });
 
@@ -59,6 +61,9 @@ export const CreateEditModal = ({
       onSubmit(projectToSave);
       setOpenChildModal(false);
       onClose();
+    } else if (handleAddToState && projectInfo) {
+      const projectToAdd = formatProject(projectInfo);
+      handleAddToState(projectToAdd);
     }
   };
 

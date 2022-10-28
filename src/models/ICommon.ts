@@ -20,10 +20,10 @@ export interface IExpandableParams<T> {
 }
 
 interface ITablePaginationObj {
-    pageSize: number;
-    total: number;
-    current: number;
-    showTotal: (total: number) => string;
+  pageSize: number;
+  total: number;
+  current: number;
+  showTotal: (total: number) => string;
 }
 
 interface Entity {
@@ -47,8 +47,7 @@ interface TableKeys {
 }
 
 export interface ITableParams<T> {
-  handleChange?: (pagination: TablePaginationConfig,
-    sorter: SorterResult<T> | SorterResult<T>[]) => Promise<void>;
+  handleChange?: (pagination: TablePaginationConfig, sorter: SorterResult<T> | SorterResult<T>[]) => Promise<void>;
   entity: Entity;
   tableKeys: TableKeys;
   dataSource: T[];
@@ -58,6 +57,7 @@ export interface ITableParams<T> {
   };
   paginationObj: ITablePaginationObj;
   loading: boolean;
+  renderActions?: (record: T) => JSX.Element;
 }
 
 export interface IPersonalData {

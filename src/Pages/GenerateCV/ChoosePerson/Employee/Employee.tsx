@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import { Spin } from 'antd';
 
 import { useAppDispatch } from 'store';
-import { employeesSelector, loadEmployee, setEmployee, saveChangesToEmployee } from 'store/reducers/employees';
+import { employeesSelector, setEmployee } from 'store/reducers/employees';
+import { loadEmployee, saveChangesToEmployee } from 'store/reducers/employees/thunks';
 import { getProjectsList } from 'store/reducers/projects/thunks';
 import { setProjectsList, projectsSelector } from 'store/reducers/projects';
 
@@ -21,6 +22,8 @@ export const Employee = () => {
   const { currentEmployee, isLoading, isLoadingOneEmployee } = useSelector(employeesSelector);
 
   const { id } = useParams<{ id: string }>();
+
+  const { projects } = useSelector(projectsSelector);
 
   const [isChanged, setIsChanged] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
@@ -54,7 +57,6 @@ export const Employee = () => {
     }
   }, [id, dispatch]);
 
-  const { projects } = useSelector(projectsSelector);
   useEffect(() => {
     if (id) {
       dispatch(getProjectsList(id));
@@ -91,6 +93,7 @@ export const Employee = () => {
       currentEmployee={currentEmployee}
       employeeId={id}
       handleUpdateProject={handleUpdateProject}
+      projects={projects}
     />
   );
 };

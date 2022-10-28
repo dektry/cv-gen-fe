@@ -31,6 +31,8 @@ export const EmployeeTabs = () => {
       setCurrentTab('3');
     } else if (location.pathname.includes('summary')) {
       setCurrentTab('4');
+    } else {
+      setCurrentTab('0');
     }
   }, [location]);
 

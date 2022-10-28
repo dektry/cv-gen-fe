@@ -5,7 +5,8 @@ import { Spin } from 'antd';
 
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
-import { employeesSelector, loadEmployee } from 'store/reducers/employees';
+import { employeesSelector } from 'store/reducers/employees';
+import { loadEmployee } from 'store/reducers/employees/thunks';
 import { positionsSelector, loadPositions, loadSkillMatrix } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 import { loadInterviewMatrix } from 'store/reducers/interview';

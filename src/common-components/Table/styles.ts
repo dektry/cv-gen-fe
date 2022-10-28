@@ -9,6 +9,8 @@ export const useStyles = createUseStyles({
   },
   tableActions: {
     display: 'flex',
+    alignItems: 'center',
+    minHeight: '4rem',
     marginLeft: 'auto',
     marginRight: '10px',
     flexDirection: 'row-reverse',

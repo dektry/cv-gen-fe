@@ -2,16 +2,6 @@ import { createUseStyles } from 'react-jss';
 import { Theme } from '@mui/material/styles/createTheme';
 
 export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  infoContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: '10px 0',
-  },
   button: {
     '&.MuiButton-root': {
       display: 'flex',
@@ -29,11 +19,11 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       marginLeft: '10px',
     },
   },
-  addButton: {
-    '&.MuiButton-root': {
-      width: '12%',
-      minWidth: '170px',
-      margin: '8px 0',
-    },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: '100%',
+    marginBottom: '30px',
   },
 });

@@ -12,7 +12,8 @@ import { EMPLOYEES } from '../../utils/constants';
 import { defaultCurrentPage, defaultPageSize } from './components/EmployeesTable/utils/constants';
 
 import { useAppDispatch } from 'store';
-import { getEmployeesList, employeesSelector } from 'store/reducers/employees';
+import { employeesSelector } from 'store/reducers/employees';
+import { getEmployeesList } from 'store/reducers/employees/thunks';
 
 import { useStyles } from './styles';
 

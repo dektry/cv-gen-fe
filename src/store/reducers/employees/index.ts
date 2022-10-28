@@ -1,32 +1,14 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../..';
 
-import {
-  appStoreName,
-  loadEmployeeAction,
-  loadEmployeesListAction,
-  updateEmployeeAction,
-} from 'store/reducers/employees/actionTypes';
+import { appStoreName } from 'store/reducers/employees/actionTypes';
 
-import { getAllEmployees, ILoadEmployeeProps, getEmployee, updateEmployee } from 'services/requests/employee';
+import { getEmployeesList, loadEmployee, saveChangesToEmployee } from './thunks';
 
 import { IEmployeesState, IEmployee } from 'models/IEmployee';
 
 import { defaultEmployee, defaultCurrentPage, defaultPageSize } from 'store/constants';
-
-export const getEmployeesList = createAsyncThunk(
-  loadEmployeesListAction,
-  ({ limit, page, sorter, fullName }: ILoadEmployeeProps) => {
-    return getAllEmployees({ limit, page, sorter, fullName });
-  }
-);
-
-export const loadEmployee = createAsyncThunk(loadEmployeeAction, (id: string) => getEmployee(id));
-
-export const saveChangesToEmployee = createAsyncThunk(updateEmployeeAction, (employee: IEmployee) =>
-  updateEmployee(employee)
-);
 
 const initialState: IEmployeesState = {
   currentEmployee: defaultEmployee,
