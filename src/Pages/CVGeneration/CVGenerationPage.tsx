@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { throttle } from 'lodash';
 
-import { employeesSelector, saveChangesToEmployee } from 'store/reducers/employees';
+import { employeesSelector, saveChangesToEmployee, setEmployee } from 'store/reducers/employees';
 import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { IProject, IProjectFromDB } from 'models/IProject';
@@ -64,6 +64,8 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   firstName: string;
   male: boolean;
 };
+
+export type TextFieldOptions = 'firstName' | 'experience' | 'position' | 'level' | 'description';
 
 export const CVGenerationPage = React.memo(() => {
   const navigate = useNavigate();
@@ -132,7 +134,23 @@ export const CVGenerationPage = React.memo(() => {
   );
 
   const updateCvFields = useCallback((fields: Partial<CvInfo>) => {
-    setCvInfo((prev) => ({ ...prev, ...fields }));
+    const key: TextFieldOptions = Object.keys(fields)[0] as TextFieldOptions;
+
+    if (Object.keys(fields)[0] === 'firstName') {
+      const updatedEmployee: IEmployee = {
+        ...currentEmployee,
+        fullName: `${currentEmployee.fullName.split(' ')[0]} ${fields['firstName']}`,
+      };
+
+      dispatch(setEmployee(updatedEmployee));
+    } else {
+      const updatedEmployee: IEmployee = {
+        ...currentEmployee,
+        [`${Object.keys(fields)[0]}`]: fields[key],
+      };
+
+      dispatch(setEmployee(updatedEmployee));
+    }
   }, []);
 
   const tagsSearch = (value: string) => {
