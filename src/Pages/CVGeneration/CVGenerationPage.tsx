@@ -89,13 +89,13 @@ export const CVGenerationPage = React.memo(() => {
     if (!currentEmployee.id) {
       navigate(routes.generateCVemployeesList);
     } else {
-      const { startingPoint, hiredOn, position } = currentEmployee;
+      const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
 
       setCvInfo({
         ...currentEmployee,
         firstName: currentEmployee.fullName.split(' ')[1],
         position: position?.split(' –– ')[0] || '',
-        experience: calcExperienceInYears(startingPoint || hiredOn),
+        experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
         softSkills: skillsOfEmployee,
         // todo: add this field on BE side
         description: currentEmployee?.description || '',
@@ -135,11 +135,17 @@ export const CVGenerationPage = React.memo(() => {
 
   const updateCvFields = useCallback((fields: Partial<CvInfo>) => {
     const key: TextFieldOptions = Object.keys(fields)[0] as TextFieldOptions;
-
     if (key === 'firstName') {
       const updatedEmployee: IEmployee = {
         ...currentEmployee,
         fullName: `${currentEmployee.fullName.split(' ')[0]} ${fields['firstName']}`,
+      };
+
+      dispatch(setEmployee(updatedEmployee));
+    } else if (key === 'experience') {
+      const updatedEmployee: IEmployee = {
+        ...currentEmployee,
+        yearsOfExperience: Number(fields['experience']),
       };
 
       dispatch(setEmployee(updatedEmployee));
