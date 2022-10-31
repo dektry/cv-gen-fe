@@ -79,6 +79,7 @@ export const CVPreview = React.memo((props: ICVPreviewProps) => {
       setPages([]);
     };
   }, [compiledTemplates, isModalOpen]);
+
   useEffect(() => {
     if (!isModalOpen) setCurrentPage(1);
   }, [isModalOpen]);

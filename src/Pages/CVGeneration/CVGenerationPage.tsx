@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { throttle } from 'lodash';
 
-
 import { employeesSelector, setEmployee } from 'store/reducers/employees';
 import { saveChangesToEmployee } from 'store/reducers/employees/thunks';
 

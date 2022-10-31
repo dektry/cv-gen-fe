@@ -60,7 +60,7 @@ export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
 
   const handleSkillLevelChange = (groupIndex: number, skillIndex: number, value: string) => {
     const skills = [...groupState.skills];
-    skills[skillIndex].level = value;
+    skills[skillIndex] = { ...skills[skillIndex], level: value };
     setGroupState((prevState) => ({
       ...prevState,
       skills,
