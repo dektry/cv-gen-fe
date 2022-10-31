@@ -39,10 +39,10 @@ export interface ICandidate {
   location: NullableField<string>;
   timezone: NullableField<string>;
   email?: string;
-  education: ICandidateEducation[];
+  education?: ICandidateEducation[];
   experience: ICandidateExperience[];
   yearsOfExperience?: number;
-  languages: ICandidateLanguage[];
+  languages?: ICandidateLanguage[];
 }
 
 export type ICandidateTable = Omit<ICandidate, 'education' | 'experience' | 'languages'>;

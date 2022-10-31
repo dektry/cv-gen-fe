@@ -49,7 +49,7 @@ export const AssessmentHistory = () => {
       dispatch(loadTechAssessments(id));
       dispatch(loadEmployee(id));
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     return function clear() {

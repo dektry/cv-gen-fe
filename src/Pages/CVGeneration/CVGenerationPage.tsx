@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Spin } from 'antd';
+import { Button } from 'antd';
 import { throttle } from 'lodash';
 
 import { employeesSelector, setEmployee } from 'store/reducers/employees';
@@ -38,6 +38,8 @@ import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
 import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
 import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
+
+import { Spinner } from 'common-components/Spinner';
 
 export type TProfSkill = {
   groupName?: string;
@@ -100,7 +102,6 @@ export const CVGenerationPage = React.memo(() => {
       position: position?.split(' –– ')[0] || '',
       experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
       softSkills: skillsOfEmployee,
-      // todo: add this field on BE side
       description: currentEmployee?.description || '',
       male: currentEmployee.gender === 'male',
       projects,
@@ -219,7 +220,7 @@ export const CVGenerationPage = React.memo(() => {
     [languages]
   );
 
-  if (isLoadingOneEmployee) return <Spin size="large" tip={'Loading employee information...'} />;
+  if (isLoadingOneEmployee) return <Spinner text={'Loading employee information...'} />;
 
   return (
     <div>
