@@ -42,6 +42,7 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
         <>
           {profSkills?.map((skillGroup, groupIndex) => (
             <ProfSkillGroup
+              key={'group' + groupIndex}
               profSkills={profSkills}
               skillGroup={skillGroup}
               groupIndex={groupIndex}
