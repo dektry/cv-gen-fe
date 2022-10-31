@@ -36,7 +36,7 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
       <ul className={classNames(defaultMenuClasses, collapsed ? menuCollapsedClasses : menuNotCollapsedClasses)}>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={[navigationKeys['/candidates'] || navigationKeys['/candidate']]}
+          itemKey={[navigationKeys['/candidate']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
           icon={<StarFilled />}
@@ -47,7 +47,7 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
         </NavigationItem>
         <NavigationItem
           selectedItem={selectedItem}
-          itemKey={[navigationKeys['/employees'] || navigationKeys['/employee']]}
+          itemKey={[navigationKeys['/employee']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
           icon={<StarFilled />}
