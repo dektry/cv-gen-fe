@@ -86,12 +86,7 @@ export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
   };
 
   return (
-    <Accordion
-      key={'group' + groupIndex}
-      className={classes.accordion}
-      disableGutters
-      TransitionProps={{ unmountOnExit: true }}
-    >
+    <Accordion className={classes.accordion} disableGutters TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
         <SkillGroupField value={groupState.groupName} onChange={(e) => handleSkillGroupChange(e.target.value)} />
       </AccordionSummary>

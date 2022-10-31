@@ -90,7 +90,6 @@ const cvGeneration = createSlice({
 export const { resetCvGeneration } = cvGeneration.actions;
 
 export const cvGenerationSelector = (state: RootState) => state.cvGeneration;
-// have to use cloneDeep to avoid unnecessary object "freezing"
 export const profSkillsSelector = (state: RootState) => state.cvGeneration.profSkills;
 
 export default cvGeneration.reducer;
