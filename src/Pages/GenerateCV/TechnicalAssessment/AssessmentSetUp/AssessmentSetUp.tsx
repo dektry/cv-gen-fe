@@ -74,7 +74,7 @@ export const AssessmentSetUp = () => {
     };
   }, [currentEmployee]);
 
-  const backPath = generatePath(paths.generateCVtechnicalAssessmentHistory, { id });
+  const backPath = generatePath(paths.technicalAssessmentHistory, { id });
 
   const currentPosition = useMemo(
     () => allPositions.filter((el) => el.id === positionId)[0],

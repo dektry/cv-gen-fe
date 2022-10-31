@@ -45,24 +45,24 @@ export const EmployeeTabs = () => {
   const handleTabClick = (key: string) => {
     switch (key) {
       case '0': {
-        navigate(generatePath(paths.generateCVemployeesList, { id }));
+        navigate(generatePath(paths.employeesList, { id }));
         break;
       }
       case '1': {
-        navigate(generatePath(paths.generateCVtechnicalAssessmentHistory, { id }));
+        navigate(generatePath(paths.technicalAssessmentHistory, { id }));
         break;
       }
       case '2': {
-        navigate(generatePath(paths.generateCVsoftSkillAssessmentHistory, { id }));
+        navigate(generatePath(paths.softSkillAssessmentHistory, { id }));
         break;
       }
       // TODO: fix paths for tabs with EI and Summary
       case '3': {
-        navigate(generatePath(paths.generateCVemployeesList, { id }));
+        navigate(generatePath(paths.employeesList, { id }));
         break;
       }
       case '4': {
-        navigate(generatePath(paths.generateCVemployeesList, { id }));
+        navigate(generatePath(paths.employeesList, { id }));
         break;
       }
     }

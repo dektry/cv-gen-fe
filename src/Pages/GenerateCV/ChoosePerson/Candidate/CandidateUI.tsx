@@ -39,7 +39,7 @@ export const CandidateUI = ({
     <>
       <GenerateCV />
       <div>
-        <GenerateCvHeader backPath={paths.generateCVcandidateList} />
+        <GenerateCvHeader backPath={paths.candidateList} />
         <Form className={classes.form}>
           <Button className={classes.editButton} onClick={handleClickEdit}>
             {isEdited ? 'Disable edit' : 'Edit'}
@@ -109,7 +109,7 @@ export const CandidateUI = ({
               disabled={!isEdited}
             />
           </Form.Item>
-          {currentCandidate?.languages[0] && (
+          {currentCandidate?.languages && (
             <Form.Item>
               <Typography.Title level={5}>Languages</Typography.Title>
               {currentCandidate.languages.map((language) => {
@@ -128,7 +128,7 @@ export const CandidateUI = ({
               })}
             </Form.Item>
           )}
-          {currentCandidate?.education[0] && (
+          {currentCandidate?.education && (
             <Form.Item>
               <Typography.Title level={5}>Education</Typography.Title>
               {currentCandidate.education.map((school) => {
@@ -165,18 +165,10 @@ export const CandidateUI = ({
 
             <div className={classes.interviewButtons}>
               <div style={{ width: '100%' }}>
-                <ButtonWithLink
-                  id={candidateId}
-                  path={paths.generateCVtechnicalInterview}
-                  text="Start tech interview    "
-                />
+                <ButtonWithLink id={candidateId} path={paths.technicalInterview} text="Start tech interview    " />
               </div>
               <div style={{ width: '100%' }}>
-                <ButtonWithLink
-                  id={candidateId}
-                  path={paths.generateCVsoftskillsInterview}
-                  text="Start softskills interview"
-                />
+                <ButtonWithLink id={candidateId} path={paths.softSkillsInterview} text="Start softskills interview" />
               </div>
             </div>
           </div>

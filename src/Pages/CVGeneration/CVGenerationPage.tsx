@@ -1,15 +1,13 @@
 import { useSelector } from 'react-redux';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
 import { throttle } from 'lodash';
 
-
 import { employeesSelector, setEmployee } from 'store/reducers/employees';
-import { saveChangesToEmployee } from 'store/reducers/employees/thunks';
+import { saveChangesToEmployee, loadEmployee } from 'store/reducers/employees/thunks';
 
-import routes from 'config/routes.json';
 import { IEmployee } from 'models/IEmployee';
 import { IProject, IProjectFromDB } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
@@ -41,6 +39,8 @@ import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
 import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
 
+import { Spinner } from 'common-components/Spinner';
+
 export type TProfSkill = {
   groupName?: string;
   skills: { name: string; level: string }[];
@@ -71,11 +71,12 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
 export type TextFieldOptions = 'firstName' | 'experience' | 'position' | 'level' | 'description';
 
 export const CVGenerationPage = React.memo(() => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
-  const { currentEmployee } = useSelector(employeesSelector);
+  const { id } = useParams<{ id: string }>();
+
+  const { currentEmployee, isLoadingOneEmployee } = useSelector(employeesSelector);
 
   const { projects } = useSelector(projectsSelector);
   const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
@@ -86,43 +87,42 @@ export const CVGenerationPage = React.memo(() => {
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // todo: not the best way to check if employee is loaded
-  // todo: after routing refactoring replace with more robust solution
   useEffect(() => {
-    if (!currentEmployee.id) {
-      navigate(routes.generateCVemployeesList);
-    } else {
-      const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
-
-      setCvInfo({
-        ...currentEmployee,
-        firstName: currentEmployee.fullName.split(' ')[1],
-        position: position?.split(' –– ')[0] || '',
-        experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
-        softSkills: skillsOfEmployee,
-        // todo: add this field on BE side
-        description: currentEmployee?.description || '',
-        male: currentEmployee.gender === 'male',
-        projects,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        languages: languages.map((el) => `${el.value} - ${el.level}`),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        education: formatEducationBeforeCvGen(education),
-        profSkills,
-      });
+    if (id) {
+      dispatch(loadEmployee(id));
     }
-  }, [profSkills, skillsOfEmployee, education]);
+  }, []);
 
   useEffect(() => {
-    if (currentEmployee.id) {
-      dispatch(fetchProfSkills(currentEmployee.id));
-      dispatch(getProjectsList(currentEmployee.id));
+    const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
+
+    setCvInfo({
+      ...currentEmployee,
+      firstName: currentEmployee.fullName.split(' ')[1],
+      position: position?.split(' –– ')[0] || '',
+      experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
+      softSkills: skillsOfEmployee,
+      description: currentEmployee?.description || '',
+      male: currentEmployee.gender === 'male',
+      projects,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      languages: languages.map((el) => `${el.value} - ${el.level}`),
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      education: formatEducationBeforeCvGen(education),
+      profSkills,
+    });
+  }, [currentEmployee, profSkills, skillsOfEmployee, education]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchProfSkills(id));
+      dispatch(getProjectsList(id));
       dispatch(getSoftSkillsToCvList({ query: '' }));
-      dispatch(getSoftSkillsToCvOfEmployee(currentEmployee.id));
-      dispatch(getEducation(currentEmployee.id));
-      dispatch(getLanguages(currentEmployee.id));
+      dispatch(getSoftSkillsToCvOfEmployee(id));
+      dispatch(getEducation(id));
+      dispatch(getLanguages(id));
     }
     return () => {
       dispatch(resetCvGeneration());
@@ -168,10 +168,10 @@ export const CVGenerationPage = React.memo(() => {
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
-    if (currentEmployee.id && cvInfo.softSkills) {
+    if (id && cvInfo.softSkills) {
       const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
 
-      dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: currentEmployee.id }));
+      dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: id }));
       dispatch(saveChangesToEmployee(formattedEmployee));
     }
   };
@@ -182,10 +182,10 @@ export const CVGenerationPage = React.memo(() => {
 
   const handleUpdateProject = useCallback(
     (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
-      if (currentEmployee.id) {
-        const projectToSave = projectFormatter(project, currentEmployee.id);
+      if (id) {
+        const projectToSave = projectFormatter(project, id);
 
-        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
+        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(id)));
       }
     },
     [projects]
@@ -193,12 +193,12 @@ export const CVGenerationPage = React.memo(() => {
 
   const handleUpdateEducation = useCallback(
     (dispatcher: AsyncThunk<void, IEducation, Record<string, never>>, currEducation: IEducation) => {
-      if (currentEmployee?.id) {
+      if (id) {
         const educationToSave: IEducation = {
           ...currEducation,
-          employeeId: currentEmployee?.id,
+          employeeId: id,
         };
-        dispatch(dispatcher(educationToSave)).then(() => dispatch(getEducation(String(currentEmployee?.id))));
+        dispatch(dispatcher(educationToSave)).then(() => dispatch(getEducation(id)));
         updateCvInfo({ education });
       }
     },
@@ -207,18 +207,20 @@ export const CVGenerationPage = React.memo(() => {
 
   const handleUpdateLanguage = useCallback(
     (dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>, currentLanguage: ILanguage) => {
-      if (currentEmployee?.id) {
+      if (id) {
         const languageToSave: ILanguage = {
           ...currentLanguage,
-          employeeId: currentEmployee?.id,
+          employeeId: id,
         };
-        dispatch(dispatcher(languageToSave)).then(() => dispatch(getLanguages(String(currentEmployee?.id))));
+        dispatch(dispatcher(languageToSave)).then(() => dispatch(getLanguages(id)));
         const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
         updateCvInfo({ languages: updatedLanguages });
       }
     },
     [languages]
   );
+
+  if (isLoadingOneEmployee) return <Spinner text={'Loading employee information...'} />;
 
   return (
     <div>
@@ -240,7 +242,7 @@ export const CVGenerationPage = React.memo(() => {
         education={education}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects employeeId={currentEmployee.id || ''} handleUpdateProject={handleUpdateProject} projects={projects} />
+      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={projects} />
       <div className={classes.genCVbtnBlock}>
         <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV
