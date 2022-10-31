@@ -145,7 +145,7 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
     }
 
     navigate(
-      generatePath(paths.technicalInterviewResult, {
+      generatePath(paths.technicalAssessmentHistory, {
         id: currentEmployee?.id || '',
       })
     );

@@ -109,10 +109,10 @@ export const CandidateUI = ({
               disabled={!isEdited}
             />
           </Form.Item>
-          {currentCandidate?.languages[0] && (
+          {currentCandidate?.languages?.[0] && (
             <Form.Item>
               <Typography.Title level={5}>Languages</Typography.Title>
-              {currentCandidate.languages.map((language) => {
+              {currentCandidate.languages?.map((language) => {
                 if (Languages[language.code] && LanguageLevels[language.level]) {
                   return (
                     <Input
@@ -128,10 +128,10 @@ export const CandidateUI = ({
               })}
             </Form.Item>
           )}
-          {currentCandidate?.education[0] && (
+          {currentCandidate?.education?.[0] && (
             <Form.Item>
               <Typography.Title level={5}>Education</Typography.Title>
-              {currentCandidate.education.map((school) => {
+              {currentCandidate.education?.map((school) => {
                 return (
                   <Input
                     key={school.name}

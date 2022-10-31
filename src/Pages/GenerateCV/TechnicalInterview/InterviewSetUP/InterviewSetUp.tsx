@@ -26,6 +26,7 @@ export const InterviewSetUp = () => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
+
   const { pathname } = useLocation();
 
   const { currentCandidate, isLoadingOneCandidate } = useSelector(candidatesSelector);
@@ -68,7 +69,7 @@ export const InterviewSetUp = () => {
   return (
     <>
       <GenerateCV />
-      <GenerateCvHeader backPath={paths.candidate.replace(':id', id ? id : '')}>
+      <GenerateCvHeader backPath={generatePath(paths.candidate, { id })}>
         <CandidatePopOver />
       </GenerateCvHeader>
       <InterviewForm
@@ -80,13 +81,7 @@ export const InterviewSetUp = () => {
         isLoadingInterviewMatrix={isLoadingInterviewMatrix}
       />
       <Button className={classes.linkToResults} type="primary" disabled={!interviewResult?.answers}>
-        <Link
-          to={generatePath(paths.technicalInterviewResult, {
-            candidateId: currentCandidate.id,
-          })}
-        >
-          See results
-        </Link>
+        <Link to={generatePath(paths.technicalInterviewResult, { id })}>See results</Link>
       </Button>
     </>
   );
