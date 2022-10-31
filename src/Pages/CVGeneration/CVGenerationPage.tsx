@@ -86,31 +86,33 @@ export const CVGenerationPage = React.memo(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!currentEmployee.id && id) {
+    if (id) {
       dispatch(loadEmployee(id));
-    } else {
-      const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
-
-      setCvInfo({
-        ...currentEmployee,
-        firstName: currentEmployee.fullName.split(' ')[1],
-        position: position?.split(' –– ')[0] || '',
-        experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
-        softSkills: skillsOfEmployee,
-        // todo: add this field on BE side
-        description: currentEmployee?.description || '',
-        male: currentEmployee.gender === 'male',
-        projects,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        languages: languages.map((el) => `${el.value} - ${el.level}`),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        education: formatEducationBeforeCvGen(education),
-        profSkills,
-      });
     }
-  }, [profSkills, skillsOfEmployee, education]);
+  }, []);
+
+  useEffect(() => {
+    const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
+
+    setCvInfo({
+      ...currentEmployee,
+      firstName: currentEmployee.fullName.split(' ')[1],
+      position: position?.split(' –– ')[0] || '',
+      experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
+      softSkills: skillsOfEmployee,
+      // todo: add this field on BE side
+      description: currentEmployee?.description || '',
+      male: currentEmployee.gender === 'male',
+      projects,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      languages: languages.map((el) => `${el.value} - ${el.level}`),
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      education: formatEducationBeforeCvGen(education),
+      profSkills,
+    });
+  }, [currentEmployee, profSkills, skillsOfEmployee, education]);
 
   useEffect(() => {
     if (id) {
