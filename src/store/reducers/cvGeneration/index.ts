@@ -9,7 +9,6 @@ import {
   fetchProfSkills,
 } from 'store/reducers/cvGeneration/thunks';
 import { TProfSkill } from 'Pages/CVGeneration';
-import { cloneDeep } from 'lodash';
 
 export type TTemplatesDic = { [name: string]: string };
 
