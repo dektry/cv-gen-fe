@@ -9,7 +9,7 @@ import {
   templatePadding,
 } from '../constants';
 
-type TNextPageStart = { group: number; skill: number | null };
+type TNextPageStart = { group: number; skill: number };
 
 export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
   let dataForPages: Partial<CvInfo>[] = [];
@@ -19,20 +19,10 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
 
   const cvInfo = { ...cvInfoData };
 
-  // due current implementation is not used, but it is needed for future
-  // send level label for cv generation
-  // cvInfo.profSkills = cloneDeep(cvInfo.profSkills).map((group) => {
-  //   group.skills = group.skills.map((skill) => {
-  //     skill.level = mockLevels.find((l) => l.value === skill.level)?.label || '';
-  //     return skill;
-  //   });
-  //   return group;
-  // });
-
   try {
     const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
       templates['v2-intro'],
-      'firstName',
+      cvInfo.firstName,
       cvInfo.description,
       cvInfo.softSkills,
       cvInfo.profSkills,
@@ -44,11 +34,20 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
       profSkills: profSkillsOnIntroPage,
     });
 
-    dataForPages = dataForPages.concat(
-      groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
-    );
+    if (
+      (cvInfo.profSkills.length - 1 === nextPageStart.group &&
+        cvInfo.profSkills[nextPageStart.group].skills.length - 1 >= nextPageStart.skill) ||
+      cvInfo.profSkills.length - 1 > nextPageStart.group
+    ) {
+      dataForPages = dataForPages.concat(
+        groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
+      );
+    }
 
-    dataForPages = dataForPages.concat(groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[]));
+    if (cvInfo.projects && cvInfo.projects.length > 0)
+      dataForPages = dataForPages.concat(
+        groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[])
+      );
   } catch (error) {
     console.error('[CALCULATION_PAGES_AMOUNT_ERROR]', error);
     message.error(`Server error. Please contact admin`);
@@ -59,7 +58,7 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
       result.push(templates['v2-intro']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
     } else if (data.profSkills) {
       result.push(templates['v2-prof-skills']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
-    } else if (data.projects) {
+    } else if (data.projects && data.projects.length > 0) {
       result.push(templates['v2-projects']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
     }
   });
@@ -92,7 +91,7 @@ const countProfSkillsOnIntroPage = (
 
   const result: TProfSkill[] = [];
   let group = 0;
-  let skill = null;
+  let skill = 0;
 
   // count how many prof skills can be placed on intro page
   for (let i = 0; i < profSkills.length; i++) {
@@ -105,10 +104,11 @@ const countProfSkillsOnIntroPage = (
     result.push({ ...profSkills[i], skills: [] });
 
     for (let j = 0; j < profSkills[i].skills.length; j++) {
-      if (availableSpace < profSkillLineHeight * 2 && j % 2 === 0) {
+      if (availableSpace < profSkillLineHeight && j % 2 === 0) {
         break;
       }
-      availableSpace -= profSkillLineHeight;
+      // there are two skills in one line
+      if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
 
       result[result.length - 1].skills.push(profSkills[i].skills[j]);
 
@@ -148,9 +148,12 @@ const groupProfSkillsForPages = (
 
   for (let i = group; i < profSkills.length; i++) {
     // if true - group name was already added to intro page
-    if (i === group && skill !== null) {
+    if (i === group && profSkills[i].skills[skill]) {
       currentPage.profSkills.push({ skills: [] });
     } else {
+      // if condition above is false - skip current group
+      if (i === group) ++i;
+
       availableSpace -= profSkillGroupHeight;
 
       if (availableSpace < profSkillLineHeight) {
@@ -166,13 +169,14 @@ const groupProfSkillsForPages = (
       // if we are on the first page, we need to skip skills, which were already placed on intro page
       if (i == group && skill !== null && j < skill) continue;
 
-      if (availableSpace < profSkillLineHeight * 2) {
+      if (availableSpace < profSkillLineHeight) {
         availableSpace = availableSpaceOnSinglePage;
         currentPage = { profSkills: [{ skills: [] }] };
         result.push(currentPage as { profSkills: TProfSkill[] });
       }
 
-      availableSpace -= profSkillLineHeight;
+      // there are two skills in one line
+      if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
 
       currentPage.profSkills[currentPage.profSkills.length - 1].skills.push(profSkills[i].skills[j]);
     }
