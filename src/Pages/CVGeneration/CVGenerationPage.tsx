@@ -22,7 +22,7 @@ import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
 import { getProjectsList } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
-import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
+import { softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
   getSoftSkillsToCvList,
   getSoftSkillsToCvOfEmployee,
@@ -137,10 +137,6 @@ export const CVGenerationPage = React.memo(() => {
     }
   };
 
-  const updateCvSoftSkills = useCallback((tags: string[]) => {
-    dispatch(setSoftSkillsToCvOfEmployee(tags));
-  }, []);
-
   const handleUpdateProject = useCallback(
     (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
       if (id) {
@@ -195,7 +191,6 @@ export const CVGenerationPage = React.memo(() => {
         softSkillsOptions={skills}
         softSkillsOfEmployee={skillsOfEmployee}
         softSkillsSearch={tagsSearch}
-        updateCvSoftSkills={updateCvSoftSkills}
         handleUpdateEducation={handleUpdateEducation}
         handleUpdateLanguage={handleUpdateLanguage}
         languages={languages}

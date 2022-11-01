@@ -16,7 +16,6 @@ interface CVGenerationInfoProps {
   cvInfo: Partial<CvInfo>;
   softSkillsOptions: string[];
   softSkillsSearch: (value: string) => void;
-  updateCvSoftSkills: (tags: string[]) => void;
   softSkillsOfEmployee: string[];
   handleUpdateEducation: (
     dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
@@ -36,8 +35,6 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     cvInfo,
     softSkillsOptions,
     softSkillsSearch,
-    updateCvSoftSkills,
-    softSkillsOfEmployee,
     handleUpdateEducation,
     handleUpdateLanguage,
     languages,
@@ -103,11 +100,10 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
         <div className={classes.softSkillsSelect}>
           <Title level={5}>Soft skills</Title>
           <TagsInput
-            updateTags={updateCvSoftSkills}
+            updateTags={(tags: string[]) => updateCvInfo({ softSkills: tags })}
             value={softSkillsOptions}
-            skills={softSkillsOfEmployee}
+            skills={cvInfo.softSkills || []}
             onSearch={softSkillsSearch}
-            key={JSON.stringify(softSkillsOfEmployee)}
           />
         </div>
       </div>
