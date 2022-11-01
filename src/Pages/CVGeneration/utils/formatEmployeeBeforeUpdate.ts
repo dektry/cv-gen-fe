@@ -8,5 +8,6 @@ export function formatEmployeeBeforeUpdate(employee: IEmployee, cvInfo: CvInfo) 
     position: `${cvInfo.position} –– ${employee.position?.split(' –– ')[0] || ''}`,
     description: cvInfo.description,
     softSkillsToCv: cvInfo.softSkills,
+    yearsOfExperience: cvInfo.yearsOfExperience,
   };
 }

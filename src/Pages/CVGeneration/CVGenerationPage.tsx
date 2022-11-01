@@ -3,15 +3,13 @@ import { AsyncThunk } from '@reduxjs/toolkit';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
-import { throttle } from 'lodash';
 
-import { employeesSelector, setEmployee } from 'store/reducers/employees';
+import { employeesSelector } from 'store/reducers/employees';
 import { saveChangesToEmployee, loadEmployee } from 'store/reducers/employees/thunks';
 
 import { IEmployee } from 'models/IEmployee';
 import { IProject, IProjectFromDB } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
-import { calcExperienceInYears } from 'Pages/CVGeneration/utils/calculateExperienceInYears';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
 import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
@@ -24,7 +22,7 @@ import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
 import { getProjectsList } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
-import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
+import { softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
   getSoftSkillsToCvList,
   getSoftSkillsToCvOfEmployee,
@@ -55,8 +53,7 @@ export type TProject = {
   tools: string[];
 };
 
-export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
-  experience: number;
+export type CvInfo = Pick<IEmployee, 'level' | 'yearsOfExperience' | 'position' | 'avatarUrl'> & {
   description: string;
   education: IEducation[];
   languages: string[];
@@ -66,8 +63,6 @@ export type CvInfo = Pick<IEmployee, 'level' | 'position' | 'avatarUrl'> & {
   firstName: string;
   male: boolean;
 };
-
-export type TextFieldOptions = 'firstName' | 'experience' | 'position' | 'level' | 'description';
 
 export const CVGenerationPage = React.memo(() => {
   const dispatch = useAppDispatch();
@@ -93,19 +88,17 @@ export const CVGenerationPage = React.memo(() => {
   }, []);
 
   useEffect(() => {
-    const { startingPoint, hiredOn, position, yearsOfExperience } = currentEmployee;
+    const { position, yearsOfExperience } = currentEmployee;
 
     setCvInfo({
       ...currentEmployee,
       firstName: currentEmployee.fullName.split(' ')[1],
       position: position?.split(' –– ')[0] || '',
-      experience: yearsOfExperience || calcExperienceInYears(startingPoint || hiredOn),
+      yearsOfExperience,
       softSkills: skillsOfEmployee,
       description: currentEmployee?.description || '',
       male: currentEmployee.gender === 'male',
       projects,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       languages: languages.map((el) => `${el.value} - ${el.level}`),
       education,
       profSkills,
@@ -126,37 +119,8 @@ export const CVGenerationPage = React.memo(() => {
     };
   }, []);
 
-  const updateCvInfo = useCallback(
-    throttle((fields: Partial<CvInfo>) => {
-      setCvInfo((prev) => ({ ...prev, ...fields }));
-    }, 700),
-    []
-  );
-
-  const updateCvFields = useCallback((fields: Partial<CvInfo>) => {
-    const key: TextFieldOptions = Object.keys(fields)[0] as TextFieldOptions;
-    if (key === 'firstName') {
-      const updatedEmployee: IEmployee = {
-        ...currentEmployee,
-        fullName: `${currentEmployee.fullName.split(' ')[0]} ${fields['firstName']}`,
-      };
-
-      dispatch(setEmployee(updatedEmployee));
-    } else if (key === 'experience') {
-      const updatedEmployee: IEmployee = {
-        ...currentEmployee,
-        yearsOfExperience: Number(fields['experience']),
-      };
-
-      dispatch(setEmployee(updatedEmployee));
-    } else {
-      const updatedEmployee: IEmployee = {
-        ...currentEmployee,
-        [`${Object.keys(fields)[0]}`]: fields[key],
-      };
-
-      dispatch(setEmployee(updatedEmployee));
-    }
+  const updateCvInfo = useCallback((fields: Partial<CvInfo>) => {
+    setCvInfo((prev) => ({ ...prev, ...fields }));
   }, []);
 
   const tagsSearch = (value: string) => {
@@ -172,10 +136,6 @@ export const CVGenerationPage = React.memo(() => {
       dispatch(saveChangesToEmployee(formattedEmployee));
     }
   };
-
-  const updateCvSoftSkills = useCallback((tags: string[]) => {
-    dispatch(setSoftSkillsToCvOfEmployee(tags));
-  }, []);
 
   const handleUpdateProject = useCallback(
     (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
@@ -231,12 +191,11 @@ export const CVGenerationPage = React.memo(() => {
         softSkillsOptions={skills}
         softSkillsOfEmployee={skillsOfEmployee}
         softSkillsSearch={tagsSearch}
-        updateCvSoftSkills={updateCvSoftSkills}
-        updateCvFields={updateCvFields}
         handleUpdateEducation={handleUpdateEducation}
         handleUpdateLanguage={handleUpdateLanguage}
         languages={languages}
         education={education}
+        updateCvInfo={updateCvInfo}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={projects} />

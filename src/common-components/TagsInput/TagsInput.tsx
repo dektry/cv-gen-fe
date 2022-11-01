@@ -10,7 +10,7 @@ import { useStyles } from './styles';
 import theme from 'theme/theme';
 
 interface IProps {
-  skills?: string[];
+  skills: string[];
   updateTags: (tags: string[]) => void;
   label?: string;
   placeholder?: string;
@@ -18,7 +18,6 @@ interface IProps {
   errorText?: string;
   value: string[];
   onSearch: (value: string) => void;
-  key?: string;
 }
 
 export const TagsInput = ({
@@ -31,7 +30,6 @@ export const TagsInput = ({
   value,
   onSearch,
 }: IProps) => {
-  const [tags, setTags] = useState(skills || []);
   const [inputValue, setInputValue] = useState('');
   const [isChanged, setIsChanged] = useState(false);
   const [error, setError] = useState(false);
@@ -39,23 +37,23 @@ export const TagsInput = ({
   const classes = useStyles({ theme });
 
   useEffect(() => {
-    if ((tags?.length >= maxTagsNumber || !tags?.length) && isChanged) {
+    if ((skills.length >= maxTagsNumber || !skills?.length) && isChanged) {
       setError(true);
     } else {
       setError(false);
     }
-  }, [tags]);
+  }, [skills]);
 
   const handleInputChange = (value: string[]) => {
     const lastElementInInput = value[value.length - 1];
-    const tagsLengthIsNotExceeded = tags?.length < maxTagsNumber;
-    const isExisting = tags?.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
+    const tagsLengthIsNotExceeded = skills.length < maxTagsNumber;
+    const isExisting = skills.some((el) => el?.toLowerCase() === lastElementInInput?.toLowerCase());
     if (!isExisting && tagsLengthIsNotExceeded && lastElementInInput) {
       setIsChanged(true);
-      const tagsCopy = [...tags];
+      const tagsCopy = [...skills];
       tagsCopy.push(lastElementInInput);
 
-      setTags(tagsCopy);
+      // setTags(tagsCopy);
       updateTags(tagsCopy);
     }
   };
@@ -65,19 +63,19 @@ export const TagsInput = ({
   };
 
   const handleClickTag = (tag: string) => {
-    const newTags = tags?.filter((el) => el !== tag);
-    setTags(newTags);
+    const newTags = skills.filter((el) => el !== tag);
+    // setTags(newTags);
     updateTags(newTags);
   };
 
-  const helperText = errorText ? errorText : tags?.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
+  const helperText = errorText ? errorText : skills.length ? `*Maximum ${maxTagsNumber} skills` : '*Required field';
 
   return (
     <Autocomplete
       multiple
       id="tags-outlined"
       options={value}
-      value={tags}
+      value={skills}
       inputValue={inputValue}
       disableClearable
       freeSolo
@@ -94,7 +92,7 @@ export const TagsInput = ({
           label={label}
           placeholder={placeholder}
           multiline={multiline}
-          value={tags}
+          value={skills}
           error={error}
           helperText={helperText}
         />
