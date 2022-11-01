@@ -104,10 +104,11 @@ const countProfSkillsOnIntroPage = (
     result.push({ ...profSkills[i], skills: [] });
 
     for (let j = 0; j < profSkills[i].skills.length; j++) {
-      if (availableSpace < profSkillLineHeight * 2 && j % 2 === 0) {
+      if (availableSpace < profSkillLineHeight && j % 2 === 0) {
         break;
       }
-      availableSpace -= profSkillLineHeight;
+      // there are two skills in one line
+      if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
 
       result[result.length - 1].skills.push(profSkills[i].skills[j]);
 
@@ -147,9 +148,12 @@ const groupProfSkillsForPages = (
 
   for (let i = group; i < profSkills.length; i++) {
     // if true - group name was already added to intro page
-    if (i === group && skill !== null) {
+    if (i === group && profSkills[i].skills[skill]) {
       currentPage.profSkills.push({ skills: [] });
     } else {
+      // if condition above is false - skip current group
+      if (i === group) ++i;
+
       availableSpace -= profSkillGroupHeight;
 
       if (availableSpace < profSkillLineHeight) {
@@ -165,13 +169,14 @@ const groupProfSkillsForPages = (
       // if we are on the first page, we need to skip skills, which were already placed on intro page
       if (i == group && skill !== null && j < skill) continue;
 
-      if (availableSpace < profSkillLineHeight * 2) {
+      if (availableSpace < profSkillLineHeight) {
         availableSpace = availableSpaceOnSinglePage;
         currentPage = { profSkills: [{ skills: [] }] };
         result.push(currentPage as { profSkills: TProfSkill[] });
       }
 
-      availableSpace -= profSkillLineHeight;
+      // there are two skills in one line
+      if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
 
       currentPage.profSkills[currentPage.profSkills.length - 1].skills.push(profSkills[i].skills[j]);
     }
