@@ -35,7 +35,6 @@ import { educationSelector } from 'store/reducers/education';
 import { getLanguages } from 'store/reducers/languages/thunks';
 import { languagesSelector } from 'store/reducers/languages';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
-import { formatEducationBeforeCvGen } from './utils/formatEducationBeforeCvGen';
 import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
 
@@ -108,9 +107,7 @@ export const CVGenerationPage = React.memo(() => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       languages: languages.map((el) => `${el.value} - ${el.level}`),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      education: formatEducationBeforeCvGen(education),
+      education,
       profSkills,
     });
   }, [currentEmployee, profSkills, skillsOfEmployee, education]);

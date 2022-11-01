@@ -8,6 +8,7 @@ import {
   projectBottomMargin,
   templatePadding,
 } from '../constants';
+import { formatEducationBeforeCvGen } from 'Pages/CVGeneration/utils/formatEducationBeforeCvGen';
 
 type TNextPageStart = { group: number; skill: number };
 
@@ -55,7 +56,14 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
 
   dataForPages.forEach((data, index) => {
     if (data.firstName) {
-      result.push(templates['v2-intro']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
+      result.push(
+        templates['v2-intro']({
+          ...data,
+          education: data.education && formatEducationBeforeCvGen(data.education),
+          currentPage: ++index,
+          pageCount: dataForPages.length,
+        })
+      );
     } else if (data.profSkills) {
       result.push(templates['v2-prof-skills']({ ...data, currentPage: ++index, pageCount: dataForPages.length }));
     } else if (data.projects && data.projects.length > 0) {
