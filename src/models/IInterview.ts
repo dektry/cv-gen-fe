@@ -33,7 +33,7 @@ export type IInterviewMatrix = IInterviewSkillGroup[];
 export enum LevelTypesEnum {
   None = 'None',
   Basic = 'Basic',
-  Regular = 'Regular',
+  Expert = 'Expert',
   Advanced = 'Advanced',
 }
 
