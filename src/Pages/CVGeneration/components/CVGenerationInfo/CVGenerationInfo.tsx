@@ -28,7 +28,7 @@ interface CVGenerationInfoProps {
   ) => void;
   languages: ILanguage[] | [];
   education: IEducation[] | [];
-  updateCvFields: (fields: Partial<CvInfo>) => void;
+  updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
 export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
@@ -42,9 +42,9 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     handleUpdateLanguage,
     languages,
     education,
-    updateCvFields,
+    updateCvInfo,
   } = props;
-  const { firstName, level, position, experience, description } = cvInfo;
+  const { firstName, level, position, yearsOfExperience, description } = cvInfo;
 
   const classes = useStyles();
 
@@ -55,16 +55,16 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
           name="fullName"
           label={'Name'}
           placeholder={'Name'}
-          onChange={(e) => updateCvFields({ firstName: e.target.value })}
+          onChange={(e) => updateCvInfo({ firstName: e.target.value })}
           value={firstName ? firstName : ''}
         />
         <TextField
-          name="experience"
+          name="yearsOfExperience"
           label={'Experience'}
           placeholder={'years'}
           type="number"
-          onChange={(e) => updateCvFields({ experience: Number(e.target.value) })}
-          value={experience !== undefined ? experience : ''}
+          onChange={(e) => updateCvInfo({ yearsOfExperience: Number(e.target.value) })}
+          value={!!yearsOfExperience ? yearsOfExperience : ''}
         />
       </div>
       <div className={classes.row}>
@@ -72,14 +72,14 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
           name="position"
           label={'Position'}
           placeholder={'Position'}
-          onChange={(e) => updateCvFields({ position: e.target.value })}
+          onChange={(e) => updateCvInfo({ position: e.target.value })}
           value={position ? position : ''}
         />
         <TextField
           name="level"
           placeholder={'Level'}
           label={'Position'}
-          onChange={(e) => updateCvFields({ level: e.target.value })}
+          onChange={(e) => updateCvInfo({ level: e.target.value })}
           value={level ? level : ''}
         />
       </div>
@@ -89,7 +89,7 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
           multiline={true}
           label={'Description'}
           placeholder={'Description'}
-          onChange={(e) => updateCvFields({ description: e.target.value })}
+          onChange={(e) => updateCvInfo({ description: e.target.value })}
           value={description}
         />
       </div>{' '}

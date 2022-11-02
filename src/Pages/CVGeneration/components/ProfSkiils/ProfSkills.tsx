@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, LinearProgress, Typography } from '@mui/material';
+import { throttle } from 'lodash';
 
 import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
 import { AddButton } from 'common-components/AddButton';
@@ -31,6 +32,9 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
     newProfSkills.splice(groupIndex, 1);
     updateCvInfo({ profSkills: newProfSkills });
   };
+
+  const updateCvInfoThrottled = useCallback(throttle(updateCvInfo, 700), [updateCvInfo]);
+
   return (
     <Box>
       <Typography variant="h2" sx={{ marginBottom: '24px' }}>
@@ -46,7 +50,7 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
               profSkills={profSkills}
               skillGroup={skillGroup}
               groupIndex={groupIndex}
-              updateCvInfo={updateCvInfo}
+              updateCvInfo={updateCvInfoThrottled}
               handleDeleteSkillGroup={handleDeleteSkillGroup}
             />
           ))}
