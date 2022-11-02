@@ -30,7 +30,10 @@ type TProps = {
   handleOpenEditModal: (project: IProject) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
-  handleUpdateProject?: (dispatcher: AsyncThunk<void, any, Record<string, never>>, project: IProject) => void;
+  handleUpdateProject?: (
+    dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>,
+    project: IProject
+  ) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
