@@ -5,10 +5,9 @@ import { Typography } from '@mui/material';
 
 import { useAppDispatch } from 'store';
 import {
-  deleteProject,
-  getProjectsList,
   TUpdateProjectListPayload,
   createProjectAndUpdateList,
+  deleteProjectAndUpdateList,
 } from 'store/reducers/projects/thunks';
 
 import { IProject } from 'models/IProject';
@@ -56,8 +55,7 @@ export const Projects = ({
   const handleClickDeleteProjectConfirm = useCallback(
     (project: IProject) => {
       if (employeeId) {
-        dispatch(deleteProject(project.id));
-        dispatch(getProjectsList(employeeId));
+        dispatch(deleteProjectAndUpdateList({ projectId: project.id, employeeId }));
       } else if (handleDeleteFromState) {
         handleDeleteFromState(project);
       }

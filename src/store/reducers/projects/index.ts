@@ -6,6 +6,7 @@ import { appStoreName } from './actionTypes';
 import {
   createProject,
   createProjectAndUpdateList,
+  deleteProjectAndUpdateList,
   editProject,
   editProjectAndUpdateList,
   getProjectsList,
@@ -81,6 +82,18 @@ const projects = createSlice({
       state.isLoading = false;
     });
     builder.addCase(createProjectAndUpdateList.fulfilled, (state, { payload }) => {
+      state.projects = payload.map((project: IProjectFromDB) => {
+        return formatProjectFromDb(project);
+      });
+      state.isLoading = false;
+    });
+    builder.addCase(deleteProjectAndUpdateList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteProjectAndUpdateList.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteProjectAndUpdateList.fulfilled, (state, { payload }) => {
       state.projects = payload.map((project: IProjectFromDB) => {
         return formatProjectFromDb(project);
       });
