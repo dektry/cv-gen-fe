@@ -3,7 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
-import { getProjectsList, createProject, editProject } from './thunks';
+import {
+  createProject,
+  createProjectAndUpdateList,
+  deleteProjectAndUpdateList,
+  editProject,
+  editProjectAndUpdateList,
+  getProjectsList,
+} from './thunks';
 
 import { IProject, IProjectFromDB, IProjectsState } from 'models/IProject';
 
@@ -55,6 +62,42 @@ const projects = createSlice({
     });
     builder.addCase(editProject.pending, (state) => {
       state.isLoading = true;
+    });
+    builder.addCase(editProjectAndUpdateList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(editProjectAndUpdateList.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(editProjectAndUpdateList.fulfilled, (state, { payload }) => {
+      state.projects = payload.map((project: IProjectFromDB) => {
+        return formatProjectFromDb(project);
+      });
+      state.isLoading = false;
+    });
+    builder.addCase(createProjectAndUpdateList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createProjectAndUpdateList.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(createProjectAndUpdateList.fulfilled, (state, { payload }) => {
+      state.projects = payload.map((project: IProjectFromDB) => {
+        return formatProjectFromDb(project);
+      });
+      state.isLoading = false;
+    });
+    builder.addCase(deleteProjectAndUpdateList.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteProjectAndUpdateList.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteProjectAndUpdateList.fulfilled, (state, { payload }) => {
+      state.projects = payload.map((project: IProjectFromDB) => {
+        return formatProjectFromDb(project);
+      });
+      state.isLoading = false;
     });
   },
 });

@@ -4,9 +4,13 @@ import { AsyncThunk } from '@reduxjs/toolkit';
 import { Typography } from '@mui/material';
 
 import { useAppDispatch } from 'store';
-import { deleteProject, getProjectsList, createProject } from 'store/reducers/projects/thunks';
+import {
+  TUpdateProjectListPayload,
+  createProjectAndUpdateList,
+  deleteProjectAndUpdateList,
+} from 'store/reducers/projects/thunks';
 
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProject } from 'models/IProject';
 
 import { AddButton } from 'common-components/AddButton';
 import { ProjectCard } from './components/ProjectCard';
@@ -18,7 +22,7 @@ interface IProps {
   projects: [] | IProject[];
   employeeId?: string;
   handleUpdateProject?: (
-    dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>,
+    dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>,
     project: IProject
   ) => void;
   handleAddToState?: (project: IProject) => void;
@@ -51,8 +55,7 @@ export const Projects = ({
   const handleClickDeleteProjectConfirm = useCallback(
     (project: IProject) => {
       if (employeeId) {
-        dispatch(deleteProject(project.id));
-        dispatch(getProjectsList(employeeId));
+        dispatch(deleteProjectAndUpdateList({ projectId: project.id, employeeId }));
       } else if (handleDeleteFromState) {
         handleDeleteFromState(project);
       }
@@ -84,7 +87,7 @@ export const Projects = ({
 
   const handleAddProject = (project: IProject) => {
     if (handleUpdateProject) {
-      handleUpdateProject(createProject, project);
+      handleUpdateProject(createProjectAndUpdateList, project);
     } else if (handleAddToState) {
       handleAddToState(project);
     }

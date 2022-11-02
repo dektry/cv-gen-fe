@@ -8,7 +8,7 @@ import { employeesSelector } from 'store/reducers/employees';
 import { saveChangesToEmployee, loadEmployee } from 'store/reducers/employees/thunks';
 
 import { IEmployee } from 'models/IEmployee';
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProject } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
@@ -20,7 +20,7 @@ import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
-import { getProjectsList } from 'store/reducers/projects/thunks';
+import { getProjectsList, TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
@@ -43,23 +43,13 @@ export type TProfSkill = {
   skills: { name: string; level: string }[];
 };
 
-export type TProject = {
-  name: string;
-  description: string;
-  duration: string;
-  position: string;
-  teamSize: number;
-  responsibilities: string[];
-  tools: string[];
-};
-
 export type CvInfo = Pick<IEmployee, 'level' | 'yearsOfExperience' | 'position' | 'avatarUrl'> & {
   description: string;
   education: IEducation[];
   languages: string[];
   softSkills: string[];
   profSkills: TProfSkill[];
-  projects?: TProject[];
+  projects?: IProject[];
   firstName: string;
   male: boolean;
 };
@@ -72,7 +62,7 @@ export const CVGenerationPage = React.memo(() => {
 
   const { currentEmployee, isLoadingOneEmployee } = useSelector(employeesSelector);
 
-  const { projects } = useSelector(projectsSelector);
+  const { projects, isLoading: projectsIsLoading } = useSelector(projectsSelector);
   const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
   const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
   const { education } = useSelector(educationSelector);
@@ -103,7 +93,7 @@ export const CVGenerationPage = React.memo(() => {
       education,
       profSkills,
     });
-  }, [currentEmployee, profSkills, skillsOfEmployee, education]);
+  }, [currentEmployee, profSkills, skillsOfEmployee, education, projects]);
 
   useEffect(() => {
     if (id) {
@@ -142,11 +132,11 @@ export const CVGenerationPage = React.memo(() => {
   }, []);
 
   const handleUpdateProject = useCallback(
-    (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
+    (dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>, project: IProject) => {
       if (id) {
         const projectToSave = projectFormatter(project, id);
 
-        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(id)));
+        dispatch(dispatcher({ project: projectToSave, employeeId: id }));
       }
     },
     [projects]
@@ -183,12 +173,14 @@ export const CVGenerationPage = React.memo(() => {
 
   if (isLoadingOneEmployee) return <Spinner text={'Loading employee information...'} />;
 
+  const isLoadingCVGenerateBtn = isLoading || projectsIsLoading;
+
   return (
     <div>
       <CVGenerationHeader
         avatarUrl={cvInfo.avatarUrl}
         showCvPreview={handleModalOpen}
-        disableCvGenBtn={isLoading}
+        isLoadingCVGenerateBtn={isLoadingCVGenerateBtn}
       ></CVGenerationHeader>
       <CVGenerationInfo
         cvInfo={cvInfo}
@@ -203,9 +195,9 @@ export const CVGenerationPage = React.memo(() => {
         updateCvInfo={updateCvInfo}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={projects} />
+      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={cvInfo.projects || []} />
       <div className={classes.genCVbtnBlock}>
-        <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
+        <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV
         </Button>
       </div>

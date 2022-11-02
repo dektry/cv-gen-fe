@@ -1,6 +1,6 @@
 import { message } from 'antd';
 
-import { CvInfo, TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
+import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
 import {
   invisibleBorderToWrapWithoutSkills,
   profSkillGroupHeight,
@@ -9,6 +9,7 @@ import {
   templatePadding,
 } from '../constants';
 import { formatEducationBeforeCvGen } from 'Pages/CVGeneration/utils/formatEducationBeforeCvGen';
+import { IProject } from 'models/IProject';
 
 type TNextPageStart = { group: number; skill: number };
 
@@ -47,7 +48,7 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
 
     if (cvInfo.projects && cvInfo.projects.length > 0)
       dataForPages = dataForPages.concat(
-        groupProjectsForPages(templates['v2-projects'], cvInfo.projects as TProject[])
+        groupProjectsForPages(templates['v2-projects'], cvInfo.projects as IProject[])
       );
   } catch (error) {
     console.error('[CALCULATION_PAGES_AMOUNT_ERROR]', error);
@@ -195,8 +196,8 @@ const groupProfSkillsForPages = (
 
 const groupProjectsForPages = (
   template: HandlebarsTemplateDelegate,
-  projects: TProject[]
-): { projects: TProject[] }[] => {
+  projects: IProject[]
+): { projects: IProject[] }[] => {
   const body = document.body;
   const div = document.createElement('div');
   div.style.position = 'absolute';
@@ -219,15 +220,15 @@ const groupProjectsForPages = (
 
   div.remove();
 
-  const result: { projects: TProject[] }[] = [];
-  let currentPage: { projects: TProject[] } = { projects: [] };
-  result.push(currentPage as { projects: TProject[] });
+  const result: { projects: IProject[] }[] = [];
+  let currentPage: { projects: IProject[] } = { projects: [] };
+  result.push(currentPage as { projects: IProject[] });
 
   for (let i = 0; i < projects.length; i++) {
     if (availableSpace < projectsElementsHeight[i]) {
       availableSpace = availableSpaceOnSinglePage;
       currentPage = { projects: [] };
-      result.push(currentPage as { projects: TProject[] });
+      result.push(currentPage as { projects: IProject[] });
     }
     availableSpace -= projectsElementsHeight[i];
 

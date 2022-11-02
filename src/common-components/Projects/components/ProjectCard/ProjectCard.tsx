@@ -7,9 +7,9 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 
-import { editProject } from 'store/reducers/projects/thunks';
+import { editProjectAndUpdateList, TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProject } from 'models/IProject';
 
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
@@ -31,7 +31,7 @@ type TProps = {
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
   handleUpdateProject?: (
-    dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>,
+    dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>,
     project: IProject
   ) => void;
   error: boolean;
@@ -62,7 +62,7 @@ export const ProjectCard = React.memo(
 
     const handleEditProject = (currentProject: IProject) => {
       if (handleUpdateProject) {
-        handleUpdateProject(editProject, currentProject);
+        handleUpdateProject(editProjectAndUpdateList, currentProject);
       } else if (handleEditInState) {
         handleEditInState(currentProject);
       }

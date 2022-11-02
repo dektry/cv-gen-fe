@@ -8,7 +8,7 @@ import { Spin } from 'antd';
 import { useAppDispatch } from 'store';
 import { employeesSelector, setEmployee } from 'store/reducers/employees';
 import { loadEmployee, saveChangesToEmployee } from 'store/reducers/employees/thunks';
-import { getProjectsList } from 'store/reducers/projects/thunks';
+import { getProjectsList, TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 import { setProjectsList, projectsSelector } from 'store/reducers/projects';
 
 import { projectFormatter } from './utils/helpers/projectFormatter';
@@ -64,11 +64,11 @@ export const Employee = () => {
   }, []);
 
   const handleUpdateProject = useCallback(
-    (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
+    (dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>, project: IProject) => {
       if (currentEmployee.id) {
         const projectToSave = projectFormatter(project, currentEmployee.id);
 
-        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(String(currentEmployee.id))));
+        dispatch(dispatcher({ project: projectToSave, employeeId: currentEmployee.id }));
       }
     },
     [projects]

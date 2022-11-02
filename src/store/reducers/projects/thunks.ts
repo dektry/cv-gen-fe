@@ -8,6 +8,9 @@ import {
   deleteProjectAction,
   createProjectAction,
   editProjectAction,
+  editProjectAndUpdateListAction,
+  createProjectAndUpdateListAction,
+  deleteProjectAndUpdateListAction,
 } from './actionTypes';
 
 export const getProjectsList = createAsyncThunk(loadAllEmployeeProjectsAction, (employeeId: string) => {
@@ -25,3 +28,34 @@ export const createProject = createAsyncThunk(createProjectAction, (project: IPr
 export const editProject = createAsyncThunk(editProjectAction, (project: IProjectFromDB) => {
   return httpEditProject(project);
 });
+
+export type TUpdateProjectListPayload = { project: IProjectFromDB; employeeId: string };
+
+export const editProjectAndUpdateList = createAsyncThunk(
+  editProjectAndUpdateListAction,
+  async (payload: TUpdateProjectListPayload) => {
+    await httpEditProject(payload.project);
+
+    return await httpGetProjectsList(payload.employeeId);
+  }
+);
+
+export const createProjectAndUpdateList = createAsyncThunk(
+  createProjectAndUpdateListAction,
+  async (payload: TUpdateProjectListPayload) => {
+    await httpCreateProject(payload.project);
+
+    return await httpGetProjectsList(payload.employeeId);
+  }
+);
+
+export type TDeleteProjectPayload = { projectId: string; employeeId: string };
+
+export const deleteProjectAndUpdateList = createAsyncThunk(
+  deleteProjectAndUpdateListAction,
+  async (payload: TDeleteProjectPayload) => {
+    await httpDeleteProject(payload.projectId);
+
+    return await httpGetProjectsList(payload.employeeId);
+  }
+);
