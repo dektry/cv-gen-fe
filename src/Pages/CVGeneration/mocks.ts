@@ -1,4 +1,5 @@
-import { TProfSkill, TProject } from 'Pages/CVGeneration/CVGenerationPage';
+import { TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { IProject } from 'models/IProject';
 
 // I believe this list should be stored in the database
 export const mockSoftSkillsOptions = [
@@ -302,7 +303,7 @@ export const profSkillsMock: TProfSkill[] = [
   return group;
 });
 
-export const mockProjects: TProject[] = [
+export const mockProjects: Partial<IProject>[] = [
   {
     name: 'Project 1',
     duration: '8 months',

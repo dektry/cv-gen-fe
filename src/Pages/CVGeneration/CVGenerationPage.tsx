@@ -43,23 +43,13 @@ export type TProfSkill = {
   skills: { name: string; level: string }[];
 };
 
-export type TProject = {
-  name: string;
-  description: string;
-  duration: string;
-  position: string;
-  teamSize: number;
-  responsibilities: string[];
-  tools: string[];
-};
-
 export type CvInfo = Pick<IEmployee, 'level' | 'yearsOfExperience' | 'position' | 'avatarUrl'> & {
   description: string;
   education: IEducation[];
   languages: string[];
   softSkills: string[];
   profSkills: TProfSkill[];
-  projects?: TProject[];
+  projects?: IProject[];
   firstName: string;
   male: boolean;
 };
@@ -203,7 +193,7 @@ export const CVGenerationPage = React.memo(() => {
         updateCvInfo={updateCvInfo}
       />
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={projects} />
+      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={cvInfo.projects || []} />
       <div className={classes.genCVbtnBlock}>
         <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV
