@@ -4,3 +4,5 @@ export const loadAllEmployeeProjectsAction = `${appStoreName}/loadAllEmployeePro
 export const deleteProjectAction = `${appStoreName}/deleteProject`;
 export const createProjectAction = `${appStoreName}/createProject`;
 export const editProjectAction = `${appStoreName}/editProject`;
+export const editProjectAndUpdateListAction = `${appStoreName}/editProjectAndUpdateList`;
+export const createProjectAndUpdateListAction = `${appStoreName}/createProjectAndUpdateList`;

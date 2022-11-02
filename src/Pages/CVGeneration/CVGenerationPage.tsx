@@ -20,7 +20,7 @@ import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
-import { getProjectsList } from 'store/reducers/projects/thunks';
+import { getProjectsList, TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
@@ -93,7 +93,7 @@ export const CVGenerationPage = React.memo(() => {
       education,
       profSkills,
     });
-  }, [currentEmployee, profSkills, skillsOfEmployee, education]);
+  }, [currentEmployee, profSkills, skillsOfEmployee, education, projects]);
 
   useEffect(() => {
     if (id) {
@@ -132,11 +132,11 @@ export const CVGenerationPage = React.memo(() => {
   }, []);
 
   const handleUpdateProject = useCallback(
-    (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => {
+    (dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>, project: IProject) => {
       if (id) {
         const projectToSave = projectFormatter(project, id);
 
-        dispatch(dispatcher(projectToSave)).then(() => dispatch(getProjectsList(id)));
+        dispatch(dispatcher({ project: projectToSave, employeeId: id }));
       }
     },
     [projects]

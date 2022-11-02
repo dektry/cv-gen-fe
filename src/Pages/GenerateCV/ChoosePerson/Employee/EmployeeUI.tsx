@@ -13,6 +13,7 @@ import { IProject, IProjectFromDB } from 'models/IProject';
 import paths from 'config/routes.json';
 
 import { useStyles } from './styles';
+import { TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 
 interface IEmployeeProps {
   currentEmployee: IEmployee;
@@ -23,7 +24,10 @@ interface IEmployeeProps {
   handleClickEdit: () => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmployeeSave: () => void;
-  handleUpdateProject: (dispatcher: AsyncThunk<void, IProjectFromDB, Record<string, never>>, project: IProject) => void;
+  handleUpdateProject: (
+    dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>,
+    project: IProject
+  ) => void;
   projects: IProject[] | [];
 }
 
