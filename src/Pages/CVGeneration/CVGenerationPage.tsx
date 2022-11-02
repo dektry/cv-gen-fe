@@ -8,7 +8,7 @@ import { employeesSelector } from 'store/reducers/employees';
 import { saveChangesToEmployee, loadEmployee } from 'store/reducers/employees/thunks';
 
 import { IEmployee } from 'models/IEmployee';
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProject } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
@@ -62,7 +62,7 @@ export const CVGenerationPage = React.memo(() => {
 
   const { currentEmployee, isLoadingOneEmployee } = useSelector(employeesSelector);
 
-  const { projects } = useSelector(projectsSelector);
+  const { projects, isLoading: projectsIsLoading } = useSelector(projectsSelector);
   const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
   const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
   const { education } = useSelector(educationSelector);
@@ -173,12 +173,14 @@ export const CVGenerationPage = React.memo(() => {
 
   if (isLoadingOneEmployee) return <Spinner text={'Loading employee information...'} />;
 
+  const isLoadingCVGenerateBtn = isLoading || projectsIsLoading;
+
   return (
     <div>
       <CVGenerationHeader
         avatarUrl={cvInfo.avatarUrl}
         showCvPreview={handleModalOpen}
-        disableCvGenBtn={isLoading}
+        isLoadingCVGenerateBtn={isLoadingCVGenerateBtn}
       ></CVGenerationHeader>
       <CVGenerationInfo
         cvInfo={cvInfo}
@@ -195,7 +197,7 @@ export const CVGenerationPage = React.memo(() => {
       <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
       <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={cvInfo.projects || []} />
       <div className={classes.genCVbtnBlock}>
-        <Button disabled={isLoading} size="large" type="primary" onClick={handleModalOpen}>
+        <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV
         </Button>
       </div>
