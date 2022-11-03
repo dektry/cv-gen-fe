@@ -62,7 +62,7 @@ export const CreateEmployee = () => {
 
   useEffect(() => {
     if (
-      (employee.fullName && employee.gender,
+      (employee.firstName && employee.lastName && employee.gender,
       employee.location,
       employee.email,
       employee.hiredOn,
@@ -161,7 +161,8 @@ export const CreateEmployee = () => {
     <div>
       <GenerateCvHeader backPath={routes.employeesList} />
       <PersonalInformation
-        fullName={employee.fullName}
+        firstName={employee.firstName}
+        lastName={employee.lastName}
         gender={employee.gender}
         location={employee.location}
         timezone={employee.timezone}

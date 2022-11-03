@@ -133,7 +133,7 @@ export const EmployeesTable = ({
           getEmployeesList({
             page: defaultCurrentPage,
             limit: defaultPageSize,
-            sorter: { order: 'ascend', field: 'fullName' },
+            sorter: { order: 'ascend', field: 'lastName' },
           })
         );
       });

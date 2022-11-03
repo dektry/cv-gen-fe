@@ -67,7 +67,8 @@ export const AssessmentSetUp = () => {
 
   const personalData = useMemo(() => {
     return {
-      fullName: currentEmployee.fullName,
+      firstName: currentEmployee.firstName,
+      lastName: currentEmployee.lastName,
       location: currentEmployee.location,
       position: currentEmployee.position,
       level: currentEmployee.level,

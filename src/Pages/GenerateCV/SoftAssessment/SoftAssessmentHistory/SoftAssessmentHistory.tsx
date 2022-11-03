@@ -39,7 +39,7 @@ export const SoftAssessmentHistory = () => {
   const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } =
     useSelector(softSkillInterviewSelector);
   const {
-    currentEmployee: { fullName, position, level, location },
+    currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
   const { allPositions, positionsLoading } = useSelector(positionsSelector);
   const { allLevels, levelsLoading } = useSelector(levelsSelector);
@@ -127,7 +127,7 @@ export const SoftAssessmentHistory = () => {
     };
   }, []);
 
-  const personalData = { fullName, location, position, level };
+  const personalData = { firstName, lastName, location, position, level };
   const state = { positions: allPositions, levels: allLevels };
 
   if (isLoading) return <Spin size="large" tip={'Loading soft skill assessment...'} />;

@@ -13,7 +13,7 @@ import { setProjectsList, projectsSelector } from 'store/reducers/projects';
 
 import { projectFormatter } from './utils/helpers/projectFormatter';
 
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProject } from 'models/IProject';
 
 import { EmployeeUI } from './EmployeeUI';
 

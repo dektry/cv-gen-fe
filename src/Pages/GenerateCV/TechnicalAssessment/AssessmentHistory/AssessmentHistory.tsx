@@ -39,7 +39,7 @@ export const AssessmentHistory = () => {
   const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } =
     useSelector(techAssessmentSelector);
   const {
-    currentEmployee: { fullName, position, level, location },
+    currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
   const { allPositions, positionsLoading } = useSelector(positionsSelector);
   const { allLevels, levelsLoading } = useSelector(levelsSelector);
@@ -121,7 +121,7 @@ export const AssessmentHistory = () => {
     dispatch(chooseInterviewPosition(position));
   };
 
-  const personalData = { fullName, location, position, level };
+  const personalData = { firstName, lastName, location, position, level };
   const state = { positions: allPositions, levels: allLevels };
 
   useEffect(() => {

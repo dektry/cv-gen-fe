@@ -20,7 +20,7 @@ export const getAllEmployees = async ({ limit = 10, page = 1, sorter, fullName =
     field: Key | readonly Key[] | undefined;
   } = {
     order: 'ASC',
-    field: 'fullName',
+    field: 'lastName',
   };
 
   if (sorter?.order) {

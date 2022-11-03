@@ -13,7 +13,8 @@ export interface IEmployee {
   id: NullableField<string>;
   pfId: number;
   pfUpdatedAt: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: NullableField<string>;
   personalEmail: NullableField<string>;
   mobileNumber: NullableField<string>;
@@ -43,7 +44,6 @@ export interface IEmployee {
 export interface ICreateEmployee extends IEmployee {
   projects: IProject[];
   educations: IEducation[];
-
 }
 
 export interface IEmployeesState extends ITableExtension {

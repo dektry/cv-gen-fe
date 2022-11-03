@@ -52,7 +52,7 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     <div>
       <div className={classes.row}>
         <TextField
-          name="fullName"
+          name="firstName"
           label={'Name'}
           placeholder={'Name'}
           onChange={(e) => updateCvInfo({ firstName: e.target.value })}
@@ -78,7 +78,7 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
         <TextField
           name="level"
           placeholder={'Level'}
-          label={'Position'}
+          label={'Level'}
           onChange={(e) => updateCvInfo({ level: e.target.value })}
           value={level ? level : ''}
         />
