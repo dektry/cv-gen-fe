@@ -37,6 +37,12 @@ export function TableComponent<T extends { id: string | NullableField<string> }>
       {entity.FULLNAME && (
         <Column title={entity.FULLNAME} dataIndex={tableKeys.fullName} key={tableKeys.fullName} sorter />
       )}
+      {entity.LASTNAME && (
+        <Column title={entity.LASTNAME} dataIndex={tableKeys.lastName} key={tableKeys.lastName} sorter />
+      )}
+      {entity.FIRSTNAME && (
+        <Column title={entity.FIRSTNAME} dataIndex={tableKeys.firstName} key={tableKeys.firstName} sorter />
+      )}
       {entity.POSITION && (
         <Column title={entity.POSITION} dataIndex={tableKeys.position} key={tableKeys.position} sorter />
       )}

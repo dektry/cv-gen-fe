@@ -82,7 +82,7 @@ export const CVGenerationPage = React.memo(() => {
 
     setCvInfo({
       ...currentEmployee,
-      firstName: currentEmployee.fullName.split(' ')[1],
+      firstName: currentEmployee.firstName,
       position: position?.split(' –– ')[0] || '',
       yearsOfExperience,
       softSkills: skillsOfEmployee,

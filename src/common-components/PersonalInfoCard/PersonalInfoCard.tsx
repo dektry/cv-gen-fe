@@ -7,14 +7,17 @@ interface IProps {
   children?: React.ReactNode | React.ReactNode[];
 }
 
-export const PersonalInfoCard = ({ personalData: { fullName, location, level, position }, children }: IProps) => {
+export const PersonalInfoCard = ({
+  personalData: { firstName, lastName, location, level, position },
+  children,
+}: IProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.mainContainer}>
       <div className={classes.infoContainer}>
         <div>
-          <h2 className={classes.name}>{fullName}</h2>
+          <h2 className={classes.name}>{`${lastName} ${firstName}`}</h2>
           <p className={classes.greyText}>{location}</p>
         </div>
         <div className={classes.positionAndLevelContainer}>
@@ -31,4 +34,4 @@ export const PersonalInfoCard = ({ personalData: { fullName, location, level, po
       {children}
     </div>
   );
-}
+};

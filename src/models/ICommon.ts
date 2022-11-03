@@ -29,6 +29,8 @@ interface ITablePaginationObj {
 interface Entity {
   TITLE?: string;
   FULLNAME?: string;
+  FIRSTNAME?: string;
+  LASTNAME?: string;
   POSITION?: string;
   LOCATION?: string;
   LEVEL?: string;
@@ -39,6 +41,8 @@ interface Entity {
 interface TableKeys {
   id?: string;
   fullName?: string;
+  firstName?: string;
+  lastName?: string;
   position?: string;
   level?: string;
   location?: string;
@@ -61,7 +65,8 @@ export interface ITableParams<T> {
 }
 
 export interface IPersonalData {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   location: NullableField<string>;
   position: NullableField<string>;
   level: NullableField<string>;

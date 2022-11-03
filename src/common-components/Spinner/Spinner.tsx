@@ -9,7 +9,7 @@ interface IProps {
 export const Spinner = ({ text }: IProps) => {
   return (
     <Box sx={{ position: 'absolute', top: '50%', left: '50%' }}>
-      <Typography variant="h4">{text}</Typography>
+      <Typography variant="h3">{text}</Typography>
       <CircularProgress />
     </Box>
   );

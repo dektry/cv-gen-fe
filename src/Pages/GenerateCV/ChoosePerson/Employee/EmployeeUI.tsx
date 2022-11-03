@@ -8,7 +8,7 @@ import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeade
 import { Projects } from 'common-components/Projects';
 
 import { IEmployee } from 'models/IEmployee';
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProject } from 'models/IProject';
 
 import paths from 'config/routes.json';
 
@@ -46,7 +46,8 @@ export const EmployeeUI = ({
   const classes = useStyles();
 
   const personalData = {
-    fullName: currentEmployee.fullName,
+    firstName: currentEmployee.firstName,
+    lastName: currentEmployee.lastName,
     location: currentEmployee.location,
     position: currentEmployee.position,
     level: currentEmployee.level,
@@ -68,12 +69,21 @@ export const EmployeeUI = ({
           <Form.Item>
             <Space direction="vertical" className={classes.space}>
               <Input
-                name="fullName"
+                name="firstName"
                 onChange={handleChange}
                 className={classes.nameInput}
-                placeholder={'Name'}
-                addonBefore="Full Name"
-                value={`${currentEmployee.fullName || ''}`}
+                placeholder={'First name'}
+                addonBefore="First Name"
+                value={currentEmployee.firstName}
+                disabled={!isEdited}
+              />
+              <Input
+                name="lastName"
+                onChange={handleChange}
+                className={classes.nameInput}
+                placeholder={'Last name'}
+                addonBefore="Last Name"
+                value={currentEmployee.lastName}
                 disabled={!isEdited}
               />
               <Input
