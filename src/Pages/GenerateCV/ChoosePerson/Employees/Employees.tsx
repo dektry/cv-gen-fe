@@ -34,8 +34,6 @@ export const Employees = () => {
     );
   }, []);
 
-  // if (isLoading) return ;
-
   return (
     <>
       <div className={classes.container}>
@@ -47,8 +45,9 @@ export const Employees = () => {
             fullNameRef={fullNameRef}
           />
         </GenerateCvHeader>
-        {isLoading && <Spinner text={'Loading employees...'} />}
-        {!isLoading && (
+        {isLoading ? (
+          <Spinner text={'Loading employees...'} />
+        ) : (
           <EmployeesTable
             employees={employees}
             currentPage={currentPage}
