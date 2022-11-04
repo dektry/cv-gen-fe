@@ -213,7 +213,7 @@ export const CreateEmployee = () => {
         projects={projects}
       />
       <div className={classes.createButtonContainer}>
-        <SaveButton title={'CREATE EMPLOYEE'} error={error} handleClickOkButton={handleSaveEmployee} />
+        <SaveButton title={'CREATE EMPLOYEE'} error={error} handleSave={handleSaveEmployee} />
       </div>
     </div>
   );

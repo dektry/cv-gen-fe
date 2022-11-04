@@ -37,6 +37,7 @@ import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
 
 import { Spinner } from 'common-components/Spinner';
+import { SaveButton } from 'common-components/SaveButton';
 
 export type TProfSkill = {
   groupName?: string;
@@ -119,12 +120,6 @@ export const CVGenerationPage = React.memo(() => {
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
-    if (id && cvInfo.softSkills) {
-      const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
-
-      dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: id }));
-      dispatch(saveChangesToEmployee(formattedEmployee));
-    }
   };
 
   const updateCvSoftSkills = useCallback((tags: string[]) => {
@@ -171,6 +166,15 @@ export const CVGenerationPage = React.memo(() => {
     [languages]
   );
 
+  const handleSaveChanges = () => {
+    if (id && cvInfo.softSkills) {
+      const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
+
+      dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: id }));
+      dispatch(saveChangesToEmployee(formattedEmployee));
+    }
+  };
+
   if (isLoadingOneEmployee) return <Spinner text={'Loading employee information...'} />;
 
   const isLoadingCVGenerateBtn = isLoading || projectsIsLoading;
@@ -200,6 +204,7 @@ export const CVGenerationPage = React.memo(() => {
         <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV
         </Button>
+        <SaveButton title={'Save changes'} error={isLoadingCVGenerateBtn} handleSave={handleSaveChanges} />
       </div>
       <CVPreview
         isModalOpen={isModalOpen}

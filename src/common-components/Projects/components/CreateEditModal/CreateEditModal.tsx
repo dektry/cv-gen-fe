@@ -86,7 +86,7 @@ export const CreateEditModal = ({
             <Button className={classes.cancelButton} onClick={onClose}>
               Cancel
             </Button>
-            <SaveButton title={'Save Changes'} handleClickOkButton={handleClickSaveButton} error={error} />
+            <SaveButton title={'Save Changes'} handleSave={handleClickSaveButton} error={error} />
           </div>
         </Box>
       </Modal>
@@ -103,7 +103,7 @@ export const CreateEditModal = ({
             <Button className={classes.cancelButton} onClick={handleChildModalClose}>
               No
             </Button>
-            <SaveButton title={'Yes'} handleClickOkButton={handleSubmit} error={false} />
+            <SaveButton title={'Yes'} handleSave={handleSubmit} error={false} />
           </div>
         </Box>
       </Modal>

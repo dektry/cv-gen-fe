@@ -7,11 +7,11 @@ import theme from 'theme/theme';
 interface ISaveButton extends ButtonProps {
   title?: string;
   error: boolean;
-  handleClickOkButton?: () => void;
+  handleSave?: () => void;
 }
 
 export const SaveButton = (props: ISaveButton) => {
-  const { title, error, handleClickOkButton, ...rest } = props;
+  const { title, error, handleSave, ...rest } = props;
 
   let sxProp: SxProps = [
     {
@@ -44,7 +44,7 @@ export const SaveButton = (props: ISaveButton) => {
   }
 
   return (
-    <Button sx={sxProp} onClick={handleClickOkButton} disabled={error}>
+    <Button sx={sxProp} onClick={handleSave} disabled={error}>
       {title}
     </Button>
   );
