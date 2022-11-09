@@ -44,7 +44,7 @@ export const Projects = ({
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [projectInfo, setProjectInfo] = useState<Partial<IProject> | null>(null);
+  const [projectInfo, setProjectInfo] = useState<IProject>({} as IProject);
 
   const dispatch = useAppDispatch();
 

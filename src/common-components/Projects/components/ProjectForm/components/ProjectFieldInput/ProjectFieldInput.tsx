@@ -1,35 +1,38 @@
-import { useState } from 'react';
 import { TextField } from '@mui/material';
 
 interface IProps {
-  updateProjectInfo: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   value?: string | string[] | number;
   fieldName: string;
+  id?: string;
   type?: string;
   placeholder: string;
   label: string;
   multiline: boolean;
+  onChange: {
+    (e: React.ChangeEvent<HTMLElement>): void;
+    <T = string | React.ChangeEvent<HTMLElement>>(field: T): T extends React.ChangeEvent<HTMLElement>
+      ? void
+      : (e: string | React.ChangeEvent<HTMLElement>) => void;
+  };
+  onBlur: {
+    (e: React.FocusEvent<HTMLElement, Element>): void;
+    <T = HTMLElement>(fieldOrEvent: T): T extends string ? (e: HTMLElement) => void : void;
+  };
+  touched: boolean | undefined;
+  error: string | string[] | undefined;
 }
 export const ProjectFieldInput = ({
-  updateProjectInfo,
   value,
   fieldName,
   type,
   placeholder,
   label,
   multiline,
+  onChange,
+  onBlur,
+  error,
+  touched,
 }: IProps) => {
-  const [error, setError] = useState(false);
-
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (!e.target.value) {
-      setError(true);
-      updateProjectInfo(e);
-    } else {
-      setError(false);
-      updateProjectInfo(e);
-    }
-  };
   return (
     <TextField
       multiline={multiline}
@@ -37,10 +40,11 @@ export const ProjectFieldInput = ({
       type={type}
       placeholder={placeholder}
       name={fieldName}
-      error={error}
-      helperText={'*Required field'}
+      error={!!(error && touched)}
+      helperText={error}
       onChange={(e) => onChange(e)}
       value={value}
+      onBlur={onBlur}
     />
   );
 };

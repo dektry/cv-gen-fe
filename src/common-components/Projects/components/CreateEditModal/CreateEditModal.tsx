@@ -25,8 +25,8 @@ interface IProps {
   onSubmit?: (project: IProject) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
-  projectInfo: Partial<IProject> | null;
+  setProjectInfo: React.Dispatch<React.SetStateAction<IProject>>;
+  projectInfo: IProject;
   handleAddToState?: (project: IProject) => void;
 }
 
@@ -55,21 +55,21 @@ export const CreateEditModal = ({
     setOpenChildModal(false);
   };
 
-  const handleSubmit = () => {
-    if (projectInfo && projectInfo && onSubmit) {
-      const projectToSave = formatProject(projectInfo, currentEmployee);
+  const handleSubmit = (project: IProject) => {
+    if (project && onSubmit) {
+      const projectToSave = formatProject(project, currentEmployee);
       onSubmit(projectToSave);
       setOpenChildModal(false);
       onClose();
-    } else if (handleAddToState && projectInfo) {
-      const projectToAdd = formatProject(projectInfo);
+    } else if (handleAddToState && project) {
+      const projectToAdd = formatProject(project);
       handleAddToState(projectToAdd);
     }
   };
 
   useEffect(() => {
     return () => {
-      setProjectInfo(null);
+      setProjectInfo({} as IProject);
     };
   }, []);
 
@@ -81,29 +81,19 @@ export const CreateEditModal = ({
           <Typography variant="h2" className={classes.title}>
             {modalTitle}
           </Typography>
-          <ProjectForm project={projectInfo} setCommonError={setError} setProjectInfo={setProjectInfo} />
+          <ProjectForm
+            project={projectInfo}
+            setCommonError={setError}
+            setProjectInfo={setProjectInfo}
+            openChildModal={openChildModal}
+            handleChildModalClose={handleChildModalClose}
+            handleSubmit={handleSubmit}
+          />
           <div className={classes.buttonContainer}>
             <Button className={classes.cancelButton} onClick={onClose}>
               Cancel
             </Button>
             <SaveButton title={'Save Changes'} handleSave={handleClickSaveButton} error={error} />
-          </div>
-        </Box>
-      </Modal>
-      <Modal open={openChildModal} onClose={handleChildModalClose}>
-        <Box className={classes.innerBox}>
-          <CloseIcon className={classes.closeChildModalIcon} onClick={handleChildModalClose} />
-          <Typography variant="h2" className={classes.title}>
-            SAVE CHANGES
-          </Typography>
-          <Typography variant="h3" className={classes.text}>
-            Do you want to save changes before moving on to another action?
-          </Typography>
-          <div className={classes.buttonContainer}>
-            <Button className={classes.cancelButton} onClick={handleChildModalClose}>
-              No
-            </Button>
-            <SaveButton title={'Yes'} handleSave={handleSubmit} error={false} />
           </div>
         </Box>
       </Modal>

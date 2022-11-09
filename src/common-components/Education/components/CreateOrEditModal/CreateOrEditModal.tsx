@@ -1,6 +1,6 @@
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
@@ -14,7 +14,7 @@ interface IProps {
   modalTitle: string;
   submitText: string;
   onClose: () => void;
-  onSubmit?: () => void;
+  onSubmit: (education: IEducation) => void;
   education: IEducation;
   setCurrentEducation: React.Dispatch<React.SetStateAction<IEducation>>;
 }
@@ -30,12 +30,6 @@ export const CreateOrEditModal = ({
 }: IProps) => {
   const classes = useStyles({ theme });
 
-  const disabled = !education.university || !education.specialization || !education.startYear || !education.endYear;
-
-  const onChange = (fields: Partial<IEducation>) => {
-    setCurrentEducation((prev) => ({ ...prev, ...fields }));
-  };
-
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box className={classes.box}>
@@ -43,15 +37,7 @@ export const CreateOrEditModal = ({
         <Typography variant="h2" className={classes.title}>
           {modalTitle}
         </Typography>
-        <EducationForm education={education} onChange={onChange} />
-        <div className={classes.buttonContainer}>
-          <Button className={classes.cancelButton} onClick={onClose}>
-            Cancel
-          </Button>
-          <Button className={classes.saveButton} onClick={onSubmit} disabled={disabled}>
-            {submitText}
-          </Button>
-        </div>
+        <EducationForm education={education} onClose={onClose} onSubmit={onSubmit} submitText={submitText} />
       </Box>
     </Modal>
   );

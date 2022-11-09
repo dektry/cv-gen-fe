@@ -71,11 +71,11 @@ export const Languages = ({
     setCurrentLanguage({} as ILanguage);
   };
 
-  const onAddSubmit = () => {
+  const onAddSubmit = (language: ILanguage) => {
     if (handleUpdateLanguage) {
-      handleUpdateLanguage(createLanguage, currentLanguage);
+      handleUpdateLanguage(createLanguage, language);
     } else if (handleAddToState) {
-      handleAddToState(currentLanguage);
+      handleAddToState(language);
     }
     setIsAddModalOpen(false);
     setCurrentLanguage({} as ILanguage);
@@ -91,11 +91,11 @@ export const Languages = ({
     setCurrentLanguage({} as ILanguage);
   };
 
-  const onEditSubmit = () => {
+  const onEditSubmit = (language: ILanguage) => {
     if (handleUpdateLanguage) {
-      handleUpdateLanguage(editLanguage, currentLanguage);
+      handleUpdateLanguage(editLanguage, language);
     } else if (handleEditInState) {
-      handleEditInState(currentLanguage);
+      handleEditInState(language);
     }
     setIsEditModalOpen(false);
     setCurrentLanguage({} as ILanguage);

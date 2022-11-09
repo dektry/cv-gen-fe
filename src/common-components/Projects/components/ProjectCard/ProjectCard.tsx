@@ -22,7 +22,7 @@ import { useStyles } from './styles';
 type TProps = {
   id: number;
   project: IProject;
-  projectInfo: Partial<IProject> | null;
+  projectInfo: IProject;
   handleClickDeleteProjectButton: (project: IProject) => void;
   handleClickDeleteProjectConfirm: (project: IProject) => void;
   handleCloseDeleteProjectModal: () => void;
@@ -36,7 +36,7 @@ type TProps = {
   ) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
+  setProjectInfo: React.Dispatch<React.SetStateAction<IProject>>;
   handleEditInState?: (project: IProject) => void;
 };
 

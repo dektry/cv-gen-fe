@@ -23,6 +23,7 @@
     "clsx": "^1.2.1",
     "cors": "^2.8.5",
     "express": "^4.18.1",
+    "formik": "^2.2.9",
     "handlebars": "^4.7.7",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -36,7 +37,8 @@
     "react-scripts": "5.0.1",
     "typescript": "^4.7.4",
     "uuid": "^8.3.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",

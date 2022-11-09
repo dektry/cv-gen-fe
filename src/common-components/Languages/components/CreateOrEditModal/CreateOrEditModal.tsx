@@ -1,6 +1,5 @@
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
@@ -14,7 +13,7 @@ interface IProps {
   modalTitle: string;
   submitText: string;
   onClose: () => void;
-  onSubmit?: () => void;
+  onSubmit: (language: ILanguage) => void;
   language: ILanguage;
   setCurrentLanguage: React.Dispatch<React.SetStateAction<ILanguage>>;
 }
@@ -30,12 +29,6 @@ export const CreateOrEditModal = ({
 }: IProps) => {
   const classes = useStyles({ theme });
 
-  const disabled = !language.value || !language.level;
-
-  const onChange = (fields: Partial<ILanguage>) => {
-    setCurrentLanguage((prev) => ({ ...prev, ...fields }));
-  };
-
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box className={classes.box}>
@@ -43,15 +36,7 @@ export const CreateOrEditModal = ({
         <Typography variant="h2" className={classes.title}>
           {modalTitle}
         </Typography>
-        <LanguageForm language={language} onChange={onChange} />
-        <div className={classes.buttonContainer}>
-          <Button className={classes.cancelButton} onClick={onClose}>
-            Cancel
-          </Button>
-          <Button className={classes.saveButton} onClick={onSubmit} disabled={disabled}>
-            {submitText}
-          </Button>
-        </div>
+        <LanguageForm language={language} submitText={submitText} onClose={onClose} onSubmit={onSubmit} />
       </Box>
     </Modal>
   );

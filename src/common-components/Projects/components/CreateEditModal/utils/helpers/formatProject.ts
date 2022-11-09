@@ -1,7 +1,14 @@
 import { IEmployee } from 'models/IEmployee';
 import { IProject } from 'models/IProject';
 
-export function formatProject(project: Partial<IProject>, employee?: IEmployee): IProject {
+export function formatProject(project: IProject, employee?: IEmployee): IProject {
+  let responsibilities: string[] = [];
+  if (typeof project.responsibilities === 'string') {
+    responsibilities = String(project.responsibilities).split(',');
+  } else if (project.responsibilities) {
+    responsibilities = project.responsibilities;
+  }
+
   return {
     id: project.id || '',
     employeeId: employee?.id || '',
@@ -10,7 +17,7 @@ export function formatProject(project: Partial<IProject>, employee?: IEmployee):
     duration: project.duration || '',
     position: project.position || '',
     description: project.description || '',
-    responsibilities: project.responsibilities || [],
+    responsibilities: responsibilities || [],
     tools: project.tools || [],
   };
 }

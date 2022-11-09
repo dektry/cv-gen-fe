@@ -71,11 +71,11 @@ export const Education = ({
     setCurrentEducation({} as IEducation);
   };
 
-  const onAddSubmit = () => {
+  const onAddSubmit = (education: IEducation) => {
     if (handleUpdateEducation) {
-      handleUpdateEducation(createEducation, currentEducation);
+      handleUpdateEducation(createEducation, education);
     } else if (handleAddToState) {
-      handleAddToState(currentEducation);
+      handleAddToState(education);
     }
     setIsAddModalOpen(false);
     setCurrentEducation({} as IEducation);
@@ -91,11 +91,11 @@ export const Education = ({
     setCurrentEducation({} as IEducation);
   };
 
-  const onEditSubmit = () => {
+  const onEditSubmit = (education: IEducation) => {
     if (handleUpdateEducation) {
-      handleUpdateEducation(editEducation, currentEducation);
+      handleUpdateEducation(editEducation, education);
     } else if (handleEditInState) {
-      handleEditInState(currentEducation);
+      handleEditInState(education);
     }
     setIsEditModalOpen(false);
     setCurrentEducation({} as IEducation);

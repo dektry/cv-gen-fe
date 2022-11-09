@@ -102,13 +102,13 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
       <div className={classes.row}>
         <div className={classes.softSkillsSelect}>
           <Title level={5}>Soft skills</Title>
-          <TagsInput
+          {/* <TagsInput
             updateTags={updateCvSoftSkills}
             value={softSkillsOptions}
             skills={softSkillsOfEmployee}
             onSearch={softSkillsSearch}
             key={JSON.stringify(softSkillsOfEmployee)}
-          />
+          /> */}
         </div>
       </div>
     </div>
