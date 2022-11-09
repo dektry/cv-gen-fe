@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Formik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import Modal from '@mui/material/Modal';
@@ -95,7 +95,7 @@ export const ProjectForm = ({
         };
 
         return (
-          <form className={classes.box}>
+          <Form className={classes.box}>
             <div className={classes.upperContainer}>
               <ProjectFieldInput
                 onChange={handleChange}
@@ -199,7 +199,7 @@ export const ProjectForm = ({
                 </div>
               </Box>
             </Modal>
-          </form>
+          </Form>
         );
       }}
     </Formik>

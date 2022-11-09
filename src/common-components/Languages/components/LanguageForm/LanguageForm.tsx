@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Formik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import Autocomplete from '@mui/material/Autocomplete';
@@ -39,7 +39,7 @@ export const LanguageForm = ({ language, submitText, onClose, onSubmit }: IProps
         const disabled = !values.value || !values.level;
 
         return (
-          <form className={classes.container}>
+          <Form className={classes.container}>
             <Autocomplete
               options={languages}
               inputValue={values.value || ''}
@@ -81,7 +81,7 @@ export const LanguageForm = ({ language, submitText, onClose, onSubmit }: IProps
                 {submitText}
               </Button>
             </div>
-          </form>
+          </Form>
         );
       }}
     </Formik>

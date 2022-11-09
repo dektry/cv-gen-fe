@@ -18,15 +18,16 @@ const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
 }));
 
 interface IProfSkillGroup {
+  name: string;
   skillGroup: TProfSkill;
   groupIndex: number;
   profSkills: TProfSkill[];
   updateCvInfo: (fields: Partial<CvInfo>) => void;
-  handleDeleteSkillGroup: (groupIndex: number) => void;
+  remove: <T>(index: number) => T | undefined;
 }
 
 export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
-  const { skillGroup, groupIndex, profSkills, updateCvInfo, handleDeleteSkillGroup } = props;
+  const { skillGroup, groupIndex, profSkills, updateCvInfo, remove } = props;
 
   const classes = useStyles({ theme });
 
@@ -115,7 +116,7 @@ export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
       </AccordionDetails>
       <AccordionActions sx={{ justifyContent: 'space-between' }}>
         <AddButton title="Add field" onClick={() => handleAddSkill()} />
-        <DeleteButton title="Delete section" onClick={() => handleDeleteSkillGroup(groupIndex)} />
+        <DeleteButton title="Delete section" onClick={() => remove(groupIndex)} />
       </AccordionActions>
     </Accordion>
   );

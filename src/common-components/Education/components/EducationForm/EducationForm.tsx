@@ -4,7 +4,7 @@ import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { IEducation } from 'models/IEducation';
 
-import { Formik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { yearOptions } from '../../utils/constants';
@@ -39,7 +39,7 @@ export const EducationForm = ({ education, onClose, onSubmit, submitText }: IPro
         const disabled = !values.university || !values.specialization || !values.startYear || !values.endYear;
 
         return (
-          <form className={classes.container}>
+          <Form className={classes.container}>
             <TextField
               label={'University'}
               name="university"
@@ -86,7 +86,7 @@ export const EducationForm = ({ education, onClose, onSubmit, submitText }: IPro
                 {submitText}
               </Button>
             </div>
-          </form>
+          </Form>
         );
       }}
     </Formik>
