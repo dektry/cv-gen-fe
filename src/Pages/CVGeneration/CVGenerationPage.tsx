@@ -12,8 +12,6 @@ import { IProject } from 'models/IProject';
 import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
-import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
-import { Projects } from 'common-components/Projects';
 
 import { useStyles } from './styles';
 import { useAppDispatch } from 'store';
@@ -197,9 +195,8 @@ export const CVGenerationPage = React.memo(() => {
         languages={languages}
         education={education}
         updateCvInfo={updateCvInfo}
+        employeeId={id}
       />
-      <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
-      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={cvInfo.projects || []} />
       <div className={classes.genCVbtnBlock}>
         <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
           Generate CV

@@ -24,7 +24,6 @@ import theme from 'theme/theme';
 
 interface IProfSkills {
   profSkills: TProfSkill[];
-  updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
@@ -33,27 +32,13 @@ const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
 }));
 
 export const ProfSkills = React.memo((props: IProfSkills) => {
-  const { profSkills, updateCvInfo } = props;
+  const { profSkills } = props;
 
   const classes = useStyles({ theme });
 
   const { isLoading } = useSelector(profSkillsSelector);
 
   const deferredLoading = useDeferredLoading(isLoading);
-
-  const handleAddSkillGroup = () => {
-    const newProfSkills = [...profSkills];
-    newProfSkills.push({ groupName: '', skills: [] });
-    updateCvInfo({ profSkills: newProfSkills });
-  };
-
-  const handleDeleteSkillGroup = (groupIndex: number) => {
-    const newProfSkills = [...profSkills];
-    newProfSkills.splice(groupIndex, 1);
-    updateCvInfo({ profSkills: newProfSkills });
-  };
-
-  const updateCvInfoThrottled = useCallback(throttle(updateCvInfo, 700), [updateCvInfo]);
 
   return (
     <Box>
@@ -65,12 +50,11 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
       ) : profSkills && profSkills.length ? (
         <Formik initialValues={{ skillGroups: profSkills }} onSubmit={(values) => console.log(values)}>
           {({ values, handleChange }) => {
-            console.log(values);
-
             return (
               <Form>
-                <FieldArray name="skillGroups">
-                  {({ insert, remove, push }) => (
+                <FieldArray
+                  name="skillGroups"
+                  render={(arrayHelpers) => (
                     <div>
                       {values &&
                         values.skillGroups.map((skillGroup, groupIndex) => (
@@ -78,60 +62,37 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
                             className={classes.accordion}
                             disableGutters
                             TransitionProps={{ unmountOnExit: true }}
+                            key={`skillGroups.${groupIndex}`}
                           >
                             <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
                               <SkillGroupField
-                                name={`skillGroups.${groupIndex}.groupName`}
                                 value={skillGroup.groupName}
+                                name={`skillGroups.${groupIndex}.groupName`}
                                 onChange={handleChange}
                               />
                             </AccordionSummary>
                             <AccordionDetails>
-                              <FieldArray name="skillGroup">
-                                {({ insert, remove, push }) => (
-                                  <>
-                                    {skillGroup.skills.map((skill, skillIndex) => (
-                                      <Box key={'skill' + groupIndex + skillIndex} className={classes.skill}>
-                                        <TextField
-                                          label="Skill"
-                                          name={`skillGroup.${skillIndex}.name`}
-                                          value={skill.name}
-                                          onChange={handleChange}
-                                        />
-                                        <CustomSelect
-                                          value={skill.level}
-                                          options={levelsOptions}
-                                          sx={{ width: '220px' }}
-                                          onChange={handleChange}
-                                          name={`skillGroup.${skillIndex}.level`}
-                                        />
-                                        <Button
-                                          className={classes.deleteSkillBtn}
-                                          variant="contained"
-                                          endIcon={<AddRoundedIcon />}
-                                          onClick={() => remove(skillIndex)}
-                                        />
-                                      </Box>
-                                    ))}
-                                    <AddButton title="Add field" onClick={() => push({ name: '', level: '' })} />
-                                  </>
-                                )}
-                              </FieldArray>
+                              <ProfSkillGroup
+                                name={`skillGroups.${groupIndex}.skills`}
+                                skillGroup={skillGroup}
+                                groupIndex={groupIndex}
+                                handleChange={handleChange}
+                              />
                             </AccordionDetails>
                             <AccordionActions sx={{ justifyContent: 'space-between' }}>
-                              <DeleteButton title="Delete section" onClick={() => remove(groupIndex)} />
+                              <DeleteButton title="Delete section" onClick={() => arrayHelpers.remove(groupIndex)} />
                             </AccordionActions>
                           </Accordion>
                         ))}
                       <AddButton
                         title="Add new section"
                         sx={{ marginTop: '24px' }}
-                        onClick={() => push({ groupName: '', skills: [] })}
+                        onClick={() => arrayHelpers.push({ groupName: '', skills: [] })}
                         disabled={deferredLoading}
                       />
                     </div>
                   )}
-                </FieldArray>
+                />
               </Form>
             );
           }}

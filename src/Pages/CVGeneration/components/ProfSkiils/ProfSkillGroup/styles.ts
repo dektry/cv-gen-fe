@@ -72,4 +72,11 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       },
     },
   },
+  addSkillBtn: {
+    '&.MuiButtonBase-root': {
+      position: 'absolute',
+      bottom: '1.5rem',
+      left: '44.2rem',
+    },
+  },
 });
