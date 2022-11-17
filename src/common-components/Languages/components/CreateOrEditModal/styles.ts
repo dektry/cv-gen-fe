@@ -42,7 +42,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       height: '56px',
       marginRight: '8px',
       fontStyle: 'normal',
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: '16px',
       lineHeight: '24px',
       backgroundColor: ({ theme }) => theme.palette.background.default,

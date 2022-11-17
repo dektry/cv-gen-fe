@@ -27,7 +27,7 @@ export const SocialNetworks = ({
   const classes = useStyles({ theme });
   return (
     <div>
-      <Typography sx={{ mb: '8px' }} variant="h2">
+      <Typography sx={{ mb: '8px', mt: '24px' }} variant="h2">
         SOCIAL NETWORKS
       </Typography>
       <div className={classes.gridContainer}>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Typography } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Button from '@mui/material/Button';
 
 import { useStyles } from 'common-components/GenerateCVHeader/styles';
 
@@ -30,12 +31,13 @@ export const GenerateCvHeader = ({ backPath, children, disabled, noBackBtn = fal
       {!noBackBtn && (
         <div>
           <Button
-            type="default"
-            icon={<ArrowLeftOutlined />}
             className={classes.backBtn}
+            startIcon={<ArrowBackIosNewIcon />}
             onClick={handleClick}
             disabled={disabled}
-          />
+          >
+            <Typography variant="h2">BACK</Typography>
+          </Button>
         </div>
       )}
       {children}

@@ -127,7 +127,7 @@ export const ProjectForm = ({ project, setCommonError, setProjectInfo }: IProps)
           placeholder="Add project description"
           label="Description"
           value={project?.description}
-          multiline={true}
+          multiline={false}
         />
         <ProjectFieldInput
           updateProjectInfo={updateProjectInfo}
@@ -135,14 +135,14 @@ export const ProjectForm = ({ project, setCommonError, setProjectInfo }: IProps)
           placeholder="Add project responsibilities"
           label="Responsibilities"
           value={project?.responsibilities}
-          multiline={true}
+          multiline={false}
         />
         <TagsInput
           skills={project?.tools || []}
           updateTags={updateProjectTags}
           label="Search technologies"
           placeholder="Search technologies"
-          multiline={true}
+          multiline={false}
           value={technologiesNames}
           onSearch={tagsSearch}
         />
