@@ -11,7 +11,9 @@ export const useStyles = createUseStyles({
     // padding: `calc(24px - ${window.devicePixelRatio}px)`,
   },
   backBtn: {
-    width: '5rem',
-    height: '25px',
+    '&:hover': {
+      cursor: 'pointer',
+      background: '#F4F7FC',
+    },
   },
 });

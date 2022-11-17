@@ -30,9 +30,6 @@ export const SaveButton = (props: ISaveButton) => {
           '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12)',
       },
     },
-    error && {
-      opacity: '0.6',
-    },
   ];
 
   if (props.sx) {

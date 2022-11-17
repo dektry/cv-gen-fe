@@ -102,7 +102,7 @@ export const Education = ({
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={{ marginTop: '16px' }}>
       {education?.map((el, idx) => {
         return (
           <div className={classes.infoContainer} key={el.id}>

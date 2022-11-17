@@ -30,7 +30,7 @@ let theme = createTheme({
   typography: {
     h2: {
       fontSize: '20px',
-      fontWeight: 500,
+      fontWeight: 600,
       lineHeight: '24px',
     },
     h3: {
@@ -58,6 +58,9 @@ let theme = createTheme({
 // A custom theme for this app
 theme = createTheme(theme, {
   components: {
+    MuiAutoComplete: {
+      defaultProps: { InputLabelProps: { shrink: true } },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
@@ -71,6 +74,7 @@ theme = createTheme(theme, {
           '& .MuiInputLabel-root': {
             color: theme.palette.primary.dark,
             fontSize: '12px',
+            paddingTop: '5px',
             '&.Mui-focused': {
               color: theme.palette.primary.dark,
             },
@@ -128,12 +132,19 @@ theme = createTheme(theme, {
         root: {
           fontSize: '16px',
           lineHeight: '20px',
+          letterSpacing: '0.4px',
+          textTransform: 'uppercase',
           '&.MuiButton-containedSecondary': {
             border: `1px solid rgba(0,0,0,0)`,
             '&:hover': {
               backgroundColor: theme.palette.secondary.main,
               border: `1px solid ${theme.palette.primary.main}`,
             },
+          },
+          '&.Mui-disabled': {
+            // background: "initial",
+            color: theme.palette.background.default,
+            opacity: 0.2,
           },
         },
       },

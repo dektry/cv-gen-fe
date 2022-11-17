@@ -41,6 +41,7 @@ export const ProjectFieldInput = ({
       helperText={'*Required field'}
       onChange={(e) => onChange(e)}
       value={value}
+      InputProps={{ inputProps: { min: 1 } }}
     />
   );
 };

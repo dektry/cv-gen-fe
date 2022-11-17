@@ -19,7 +19,7 @@ export const Contacts = ({ mobileNumber, email, personalEmail, handleChangeInput
 
   return (
     <div>
-      <Typography sx={{ mb: '16px' }} variant="h2">
+      <Typography sx={{ mb: '24px', mt: '8px' }} variant="h2">
         CONTACTS
       </Typography>
       <TextField

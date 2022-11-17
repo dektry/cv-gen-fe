@@ -183,7 +183,7 @@ export const CreateEmployee = () => {
         levelsOptions={levelsOptions}
         handleChangeInput={handleChangeInput}
       />
-      <Typography sx={{ mb: '8px' }} variant="h2">
+      <Typography sx={{ mb: '8px', mt: '8px' }} variant="h2">
         LANGUAGE AND EDUCATION
       </Typography>
       <Languages
