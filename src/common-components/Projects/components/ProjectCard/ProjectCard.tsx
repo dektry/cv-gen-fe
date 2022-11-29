@@ -22,12 +22,12 @@ import { useStyles } from './styles';
 type TProps = {
   id: number;
   project: IProject;
-  projectInfo: Partial<IProject> | null;
+  projectInfo: IProject;
   handleClickDeleteProjectButton: (project: IProject) => void;
-  handleClickDeleteProjectConfirm: (project: IProject) => void;
+  handleClickDeleteProjectConfirm: (project: IProject, id: number) => void;
   handleCloseDeleteProjectModal: () => void;
   isDeleteProjectModalOpen: boolean;
-  handleOpenEditModal: (project: IProject) => void;
+  handleOpenEditModal: (project: IProject, id: number) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
   handleUpdateProject?: (
@@ -36,8 +36,9 @@ type TProps = {
   ) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<Partial<IProject> | null>>;
+  setProjectInfo: React.Dispatch<React.SetStateAction<IProject>>;
   handleEditInState?: (project: IProject) => void;
+  handleEditProjectForm?: (project: IProject) => void;
 };
 
 export const ProjectCard = React.memo(
@@ -57,12 +58,14 @@ export const ProjectCard = React.memo(
     setProjectInfo,
     projectInfo,
     handleEditInState,
+    handleEditProjectForm,
   }: TProps) => {
     const classes = useStyles({ theme });
 
     const handleEditProject = (currentProject: IProject) => {
-      if (handleUpdateProject) {
-        handleUpdateProject(editProjectAndUpdateList, currentProject);
+      if (handleUpdateProject && handleEditProjectForm) {
+        handleEditProjectForm(currentProject);
+        // handleUpdateProject(editProjectAndUpdateList, currentProject);
       } else if (handleEditInState) {
         handleEditInState(currentProject);
       }
@@ -123,8 +126,8 @@ export const ProjectCard = React.memo(
                     Responsibilities
                   </Typography>
                   <ul className={classes.list}>
-                    {project.responsibilities?.map((el) => (
-                      <li key={el}>
+                    {project.responsibilities?.map((el, id) => (
+                      <li key={`${el}-${id}`}>
                         <Typography variant={'h5'}>{el}</Typography>
                       </li>
                     ))}
@@ -136,8 +139,8 @@ export const ProjectCard = React.memo(
                   Tools & technologies
                 </Typography>
                 <Stack direction={'row'} spacing={0} sx={{ flexWrap: 'wrap', gap: 1, mt: '4px' }}>
-                  {project.tools?.map((tool) => (
-                    <Chip key={tool} className={classes.chip} label={tool} />
+                  {project.tools?.map((tool, id) => (
+                    <Chip key={`${tool}-${id}`} className={classes.chip} label={tool} />
                   ))}
                 </Stack>
               </div>
@@ -145,12 +148,12 @@ export const ProjectCard = React.memo(
           </AccordionDetails>
           <AccordionActions sx={{ justifyContent: 'flex-end' }}>
             <DeleteButton title="Delete project" onClick={() => handleClickDeleteProjectButton(project)} />
-            <EditButton title="Edit project" onClick={() => handleOpenEditModal(project)} />
+            <EditButton title="Edit project" onClick={() => handleOpenEditModal(project, id)} />
           </AccordionActions>
         </Accordion>
 
         <DeleteModal
-          onSubmit={() => handleClickDeleteProjectConfirm(project)}
+          onSubmit={() => handleClickDeleteProjectConfirm(project, id)}
           onClose={handleCloseDeleteProjectModal}
           isOpen={isDeleteProjectModalOpen}
           modalTitle={'DELETE PROJECT'}

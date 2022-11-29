@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AsyncThunk } from '@reduxjs/toolkit';
 
-import { TextField } from '@mui/material';
+import { useForm, useFieldArray } from 'react-hook-form';
+
+import { TextField, FormControl } from '@mui/material';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
-import { deleteEducation, createEducation, editEducation } from 'store/reducers/education/thunks';
 
 import { IEducation } from 'models/IEducation';
 
@@ -18,7 +18,7 @@ import theme from 'theme/theme';
 import { useStyles } from './styles';
 
 interface IProps {
-  education?: IEducation[];
+  education: IEducation[];
   handleUpdateEducation?: (
     dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
     currEducation: IEducation
@@ -26,6 +26,10 @@ interface IProps {
   handleAddToState?: (project: IEducation) => void;
   handleDeleteFromState?: (project: IEducation) => void;
   handleEditInState?: (project: IEducation) => void;
+}
+
+interface FormValues {
+  education: IEducation[];
 }
 
 export const Education = ({
@@ -41,9 +45,24 @@ export const Education = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentEducation, setCurrentEducation] = useState<IEducation>({} as IEducation);
+  const [id, setId] = useState(0);
 
-  const handleDeleteModalOpen = (el: IEducation) => {
+  const { control, reset } = useForm<FormValues>({ defaultValues: { education } });
+
+  const { fields, append, remove, update } = useFieldArray({
+    name: 'education',
+    keyName: 'fieldKey',
+    control,
+  });
+
+  useEffect(() => {
+    const defaultValues = { education };
+    reset({ ...defaultValues });
+  }, [education]);
+
+  const handleDeleteModalOpen = (el: IEducation, idx: number) => {
     setCurrentEducation(el);
+    setId(idx);
     setIsDeleteModalOpen(true);
   };
 
@@ -54,11 +73,14 @@ export const Education = ({
 
   const onDeleteSubmit = () => {
     if (handleUpdateEducation) {
-      handleUpdateEducation(deleteEducation, currentEducation);
+      remove(id);
+      // handleUpdateEducation(deleteEducation, currentEducation);
     } else if (handleDeleteFromState) {
       handleDeleteFromState(currentEducation);
+      remove(id);
     }
     setCurrentEducation({} as IEducation);
+    setId(0);
     setIsDeleteModalOpen(false);
   };
 
@@ -71,18 +93,21 @@ export const Education = ({
     setCurrentEducation({} as IEducation);
   };
 
-  const onAddSubmit = () => {
+  const onAddSubmit = (education: IEducation) => {
     if (handleUpdateEducation) {
-      handleUpdateEducation(createEducation, currentEducation);
+      append(education);
+      // handleUpdateEducation(createEducation, currentEducation);
     } else if (handleAddToState) {
-      handleAddToState(currentEducation);
+      append(education);
+      handleAddToState(education);
     }
     setIsAddModalOpen(false);
     setCurrentEducation({} as IEducation);
   };
 
-  const handleEditModalOpen = (education: IEducation) => {
+  const handleEditModalOpen = (education: IEducation, idx: number) => {
     setCurrentEducation(education);
+    setId(idx);
     setIsEditModalOpen(true);
   };
 
@@ -91,11 +116,13 @@ export const Education = ({
     setCurrentEducation({} as IEducation);
   };
 
-  const onEditSubmit = () => {
+  const onEditSubmit = (education: IEducation) => {
     if (handleUpdateEducation) {
-      handleUpdateEducation(editEducation, currentEducation);
+      update(id, education);
+      // handleUpdateEducation(editEducation, currentEducation);
     } else if (handleEditInState) {
-      handleEditInState(currentEducation);
+      handleEditInState(education);
+      update(id, education);
     }
     setIsEditModalOpen(false);
     setCurrentEducation({} as IEducation);
@@ -103,22 +130,28 @@ export const Education = ({
 
   return (
     <div className={classes.container} style={{ marginTop: '16px' }}>
-      {education?.map((el, idx) => {
-        return (
-          <div className={classes.infoContainer} key={el.id}>
-            <TextField
-              value={`${el.university} - ${el.specialization} - ${el.startYear}-${el.endYear}`}
-              label={'Education'}
-              name="education"
-            />
-            <Button className={classes.button} endIcon={<EditIcon />} onClick={() => handleEditModalOpen(el)} />
-            {idx > 0 && (
-              <Button className={classes.button} endIcon={<DeleteIcon />} onClick={() => handleDeleteModalOpen(el)} />
-            )}
-          </div>
-        );
-      })}
-      <AddButton className={classes.addButton} title={'Add education'} onClick={handleAddModalOpen} />
+      <FormControl>
+        {fields?.map((el, idx) => {
+          return (
+            <div className={classes.infoContainer} key={el.fieldKey}>
+              <TextField
+                value={`${el.university} - ${el.specialization} - ${el.startYear}-${el.endYear}`}
+                label={'Education'}
+                name="education"
+              />
+              <Button className={classes.button} endIcon={<EditIcon />} onClick={() => handleEditModalOpen(el, idx)} />
+              {idx > 0 && (
+                <Button
+                  className={classes.button}
+                  endIcon={<DeleteIcon />}
+                  onClick={() => handleDeleteModalOpen(el, idx)}
+                />
+              )}
+            </div>
+          );
+        })}
+        <AddButton className={classes.addButton} title={'Add education'} onClick={handleAddModalOpen} />
+      </FormControl>
 
       <CreateOrEditModal
         modalTitle={'ADD EDUCATION'}
@@ -127,7 +160,6 @@ export const Education = ({
         onClose={handleCloseAddModal}
         onSubmit={onAddSubmit}
         education={currentEducation}
-        setCurrentEducation={setCurrentEducation}
       />
 
       <CreateOrEditModal
@@ -137,7 +169,6 @@ export const Education = ({
         onClose={handleCloseEditModal}
         onSubmit={onEditSubmit}
         education={currentEducation}
-        setCurrentEducation={setCurrentEducation}
       />
 
       <DeleteModal

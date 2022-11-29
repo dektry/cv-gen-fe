@@ -22,4 +22,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     gap: inputsGap + 'px',
     padding: '16px 16px',
   },
+  projectForm: {
+    '&.MuiFormControl-root': {
+      margin: 0,
+      width: '100%',
+    },
+  },
 });

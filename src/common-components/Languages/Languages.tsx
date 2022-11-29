@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AsyncThunk } from '@reduxjs/toolkit';
 
-import { TextField } from '@mui/material';
-import { Button } from '@mui/material';
+import { useForm, useFieldArray } from 'react-hook-form';
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
-import { createLanguage, editLanguage, deleteLanguage } from 'store/reducers/languages/thunks';
 
 import { ILanguage } from 'models/ILanguage';
 
@@ -28,6 +29,10 @@ interface IProps {
   handleEditInState?: (project: ILanguage) => void;
 }
 
+interface FormValues {
+  languages: ILanguage[];
+}
+
 export const Languages = ({
   languages,
   handleUpdateLanguage,
@@ -41,9 +46,24 @@ export const Languages = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<ILanguage>({} as ILanguage);
+  const [id, setId] = useState(0);
 
-  const handleDeleteModalOpen = (el: ILanguage) => {
+  const { control, reset } = useForm<FormValues>({ defaultValues: { languages } });
+
+  const { fields, append, remove, update } = useFieldArray({
+    name: 'languages',
+    keyName: 'fieldKey',
+    control,
+  });
+
+  useEffect(() => {
+    const defaultValues = { languages };
+    reset({ ...defaultValues });
+  }, [languages]);
+
+  const handleDeleteModalOpen = (el: ILanguage, idx: number) => {
     setCurrentLanguage(el);
+    setId(idx);
     setIsDeleteModalOpen(true);
   };
 
@@ -54,8 +74,10 @@ export const Languages = ({
 
   const onDeleteSubmit = () => {
     if (handleUpdateLanguage) {
-      handleUpdateLanguage(deleteLanguage, currentLanguage);
+      remove(id);
+      // handleUpdateLanguage(deleteLanguage, currentLanguage);
     } else if (handleDeleteFromState) {
+      remove(id);
       handleDeleteFromState(currentLanguage);
     }
     setCurrentLanguage({} as ILanguage);
@@ -71,18 +93,21 @@ export const Languages = ({
     setCurrentLanguage({} as ILanguage);
   };
 
-  const onAddSubmit = () => {
+  const onAddSubmit = (language: ILanguage) => {
     if (handleUpdateLanguage) {
-      handleUpdateLanguage(createLanguage, currentLanguage);
+      append(language);
+      // handleUpdateLanguage(createLanguage, currentLanguage);
     } else if (handleAddToState) {
+      append(language);
       handleAddToState(currentLanguage);
     }
     setIsAddModalOpen(false);
     setCurrentLanguage({} as ILanguage);
   };
 
-  const handleEditModalOpen = (language: ILanguage) => {
+  const handleEditModalOpen = (language: ILanguage, idx: number) => {
     setCurrentLanguage(language);
+    setId(idx);
     setIsEditModalOpen(true);
   };
 
@@ -91,10 +116,12 @@ export const Languages = ({
     setCurrentLanguage({} as ILanguage);
   };
 
-  const onEditSubmit = () => {
+  const onEditSubmit = (language: ILanguage) => {
     if (handleUpdateLanguage) {
-      handleUpdateLanguage(editLanguage, currentLanguage);
+      update(id, language);
+      // handleUpdateLanguage(editLanguage, currentLanguage);
     } else if (handleEditInState) {
+      update(id, language);
       handleEditInState(currentLanguage);
     }
     setIsEditModalOpen(false);
@@ -103,18 +130,24 @@ export const Languages = ({
 
   return (
     <div className={classes.container}>
-      {languages?.map((el, idx) => {
-        return (
-          <div className={classes.infoContainer} key={el.id}>
-            <TextField value={`${el.value} - ${el.level}`} label={'Languages'} name="languages" />
-            <Button className={classes.button} endIcon={<EditIcon />} onClick={() => handleEditModalOpen(el)} />
-            {idx > 0 && (
-              <Button className={classes.button} endIcon={<DeleteIcon />} onClick={() => handleDeleteModalOpen(el)} />
-            )}
-          </div>
-        );
-      })}
-      <AddButton className={classes.addButton} title={'Add language'} onClick={handleAddModalOpen} />
+      <FormControl>
+        {fields?.map((el, idx) => {
+          return (
+            <div className={classes.infoContainer} key={el.fieldKey}>
+              <TextField value={`${el.value} - ${el.level}`} label={'Languages'} name="languages" />
+              <Button className={classes.button} endIcon={<EditIcon />} onClick={() => handleEditModalOpen(el, idx)} />
+              {idx > 0 && (
+                <Button
+                  className={classes.button}
+                  endIcon={<DeleteIcon />}
+                  onClick={() => handleDeleteModalOpen(el, idx)}
+                />
+              )}
+            </div>
+          );
+        })}
+        <AddButton className={classes.addButton} title={'Add language'} onClick={handleAddModalOpen} />
+      </FormControl>
 
       <CreateOrEditModal
         modalTitle={'ADD LANGUAGE'}
@@ -123,7 +156,6 @@ export const Languages = ({
         onClose={handleCloseAddModal}
         onSubmit={onAddSubmit}
         language={currentLanguage}
-        setCurrentLanguage={setCurrentLanguage}
       />
 
       <CreateOrEditModal
@@ -133,7 +165,6 @@ export const Languages = ({
         onClose={handleCloseEditModal}
         onSubmit={onEditSubmit}
         language={currentLanguage}
-        setCurrentLanguage={setCurrentLanguage}
       />
 
       <DeleteModal

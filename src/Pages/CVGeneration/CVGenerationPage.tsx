@@ -135,6 +135,7 @@ export const CVGenerationPage = React.memo(() => {
     (dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>, project: IProject) => {
       if (id) {
         const projectToSave = projectFormatter(project, id);
+        console.log('TO SAVE', projectToSave);
 
         dispatch(dispatcher({ project: projectToSave, employeeId: id }));
       }

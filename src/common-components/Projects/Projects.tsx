@@ -1,14 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+
+import { useForm, useFieldArray } from 'react-hook-form';
+
 import { AsyncThunk } from '@reduxjs/toolkit';
 
-import { Typography } from '@mui/material';
+import { Typography, FormControl } from '@mui/material';
 
-import { useAppDispatch } from 'store';
-import {
-  TUpdateProjectListPayload,
-  createProjectAndUpdateList,
-  deleteProjectAndUpdateList,
-} from 'store/reducers/projects/thunks';
+import { TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 
 import { IProject } from 'models/IProject';
 
@@ -30,6 +28,10 @@ interface IProps {
   handleEditInState?: (project: IProject) => void;
 }
 
+interface FormValues {
+  projects: IProject[];
+}
+
 export const Projects = ({
   projects,
   employeeId,
@@ -44,19 +46,32 @@ export const Projects = ({
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [projectInfo, setProjectInfo] = useState<Partial<IProject> | null>(null);
+  const [projectInfo, setProjectInfo] = useState<IProject>({} as IProject);
+  const [id, setId] = useState(0);
 
-  const dispatch = useAppDispatch();
+  const { control, reset } = useForm<FormValues>({ defaultValues: { projects } });
+
+  const { fields, append, remove, update } = useFieldArray({
+    name: 'projects',
+    keyName: 'fieldKey',
+    control,
+  });
+
+  useEffect(() => {
+    const defaultValues = { projects };
+    reset({ ...defaultValues });
+  }, [projects]);
 
   const handleClickDeleteProjectButton = () => {
     setIsDeleteProjectModalOpen(true);
   };
 
   const handleClickDeleteProjectConfirm = useCallback(
-    (project: IProject) => {
+    (project: IProject, id: number) => {
       if (employeeId) {
-        dispatch(deleteProjectAndUpdateList({ projectId: project.id, employeeId }));
+        remove(id);
       } else if (handleDeleteFromState) {
+        remove(id);
         handleDeleteFromState(project);
       }
       setIsDeleteProjectModalOpen(false);
@@ -76,8 +91,9 @@ export const Projects = ({
     setCreateModalOpen(false);
   };
 
-  const handleOpenEditModal = (project: IProject) => {
+  const handleOpenEditModal = (project: IProject, id: number) => {
     setProjectInfo(project);
+    setId(id);
     setEditModalOpen(true);
   };
 
@@ -87,10 +103,15 @@ export const Projects = ({
 
   const handleAddProject = (project: IProject) => {
     if (handleUpdateProject) {
-      handleUpdateProject(createProjectAndUpdateList, project);
+      append(project);
     } else if (handleAddToState) {
+      append(project);
       handleAddToState(project);
     }
+  };
+
+  const handleEditProject = (project: IProject) => {
+    update(id, project);
   };
 
   return (
@@ -103,26 +124,29 @@ export const Projects = ({
           <AddButton onClick={handleOpenCreateModal} />
         </div>
       </div>
-      {projects?.map((project, idx) => (
-        <ProjectCard
-          key={project.id}
-          id={idx}
-          project={project}
-          projectInfo={projectInfo}
-          handleClickDeleteProjectButton={handleClickDeleteProjectButton}
-          handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
-          handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
-          isDeleteProjectModalOpen={isDeleteProjectModalOpen}
-          handleCloseEditModal={handleCloseEditModal}
-          handleOpenEditModal={handleOpenEditModal}
-          editModalOpen={editModalOpen}
-          handleUpdateProject={handleUpdateProject}
-          error={error}
-          setError={setError}
-          setProjectInfo={setProjectInfo}
-          handleEditInState={handleEditInState}
-        />
-      ))}
+      <FormControl className={classes.projectsContainer}>
+        {fields?.map((project, idx) => (
+          <ProjectCard
+            key={project.fieldKey}
+            id={idx}
+            project={project}
+            projectInfo={projectInfo}
+            handleClickDeleteProjectButton={handleClickDeleteProjectButton}
+            handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
+            handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
+            isDeleteProjectModalOpen={isDeleteProjectModalOpen}
+            handleCloseEditModal={handleCloseEditModal}
+            handleOpenEditModal={handleOpenEditModal}
+            editModalOpen={editModalOpen}
+            handleUpdateProject={handleUpdateProject}
+            error={error}
+            setError={setError}
+            setProjectInfo={setProjectInfo}
+            handleEditInState={handleEditInState}
+            handleEditProjectForm={handleEditProject}
+          />
+        ))}
+      </FormControl>
       <CreateEditModal
         isOpen={createModalOpen}
         modalTitle="ADD NEW PROJECT"
