@@ -7,7 +7,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 
-import { editProjectAndUpdateList, TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
+import { TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
 
 import { IProject } from 'models/IProject';
 

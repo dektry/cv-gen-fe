@@ -1,6 +1,8 @@
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { Typography } from 'antd';
-import { TextField } from '@mui/material';
+import { TextField, FormControl } from '@mui/material';
+
+import { useForm, Controller, useWatch } from 'react-hook-form';
 
 import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
 import { useStyles } from 'Pages/CVGeneration/components/CVGenerationInfo/styles';
@@ -9,11 +11,49 @@ import { Education } from 'common-components/Education';
 import { Languages } from 'common-components/Languages';
 import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
+import { useEffect } from 'react';
+import { NullableField } from 'models/TNullableField';
 
 const { Title } = Typography;
 
+interface CvInfoForm {
+  description?: string;
+  education?: {
+    id?: string;
+    university?: string;
+    specialization?: string;
+    startYear?: number;
+    endYear?: number;
+    employeeId?: string;
+  }[];
+  languages?: string[];
+  softSkills?: string[];
+  level?: NullableField<string>;
+  position?: NullableField<string>;
+  yearsOfExperience?: NullableField<number>;
+  avatarUrl?: NullableField<string>;
+  male?: boolean;
+  firstName?: string;
+  profSkills?: {
+    groupName?: string;
+    skills?: { name?: string; level?: string }[];
+  }[];
+  projects?: {
+    id?: string;
+    team_size?: string;
+    employeeId?: string;
+    name?: string;
+    duration?: string;
+    position?: string;
+    teamSize?: number;
+    description?: string;
+    responsibilities?: string[];
+    tools?: string[];
+  }[];
+}
+
 interface CVGenerationInfoProps {
-  cvInfo: Partial<CvInfo>;
+  cvInfo: CvInfoForm;
   softSkillsOptions: string[];
   softSkillsSearch: (value: string) => void;
   updateCvSoftSkills: (tags: string[]) => void;
@@ -42,55 +82,64 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
     handleUpdateLanguage,
     languages,
     education,
-    updateCvInfo,
   } = props;
-  const { firstName, level, position, yearsOfExperience, description } = cvInfo;
+
+  const { control, reset } = useForm({
+    defaultValues: cvInfo,
+  });
+
+  const values = useWatch({ control });
+  console.log(values.description);
 
   const classes = useStyles();
 
   return (
-    <div>
+    <FormControl className={classes.container}>
       <div className={classes.row}>
-        <TextField
+        <Controller
           name="firstName"
-          label={'Name'}
-          placeholder={'Name'}
-          onChange={(e) => updateCvInfo({ firstName: e.target.value })}
-          value={firstName ? firstName : ''}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField label={'Name'} placeholder={'Name'} onChange={onChange} value={value} />
+          )}
         />
-        <TextField
+        <Controller
           name="yearsOfExperience"
-          label={'Experience'}
-          placeholder={'years'}
-          type="number"
-          onChange={(e) => updateCvInfo({ yearsOfExperience: Number(e.target.value) })}
-          value={!!yearsOfExperience ? yearsOfExperience : ''}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField label={'Experience'} placeholder={'years'} type="number" onChange={onChange} value={value} />
+          )}
         />
       </div>
       <div className={classes.row}>
-        <TextField
+        <Controller
           name="position"
-          label={'Position'}
-          placeholder={'Position'}
-          onChange={(e) => updateCvInfo({ position: e.target.value })}
-          value={position ? position : ''}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField label={'Position'} placeholder={'Position'} onChange={onChange} value={value} />
+          )}
         />
-        <TextField
+        <Controller
           name="level"
-          placeholder={'Level'}
-          label={'Level'}
-          onChange={(e) => updateCvInfo({ level: e.target.value })}
-          value={level ? level : ''}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField placeholder={'Level'} label={'Level'} onChange={onChange} value={value} />
+          )}
         />
       </div>
       <div className={classes.row}>
-        <TextField
+        <Controller
           name="description"
-          multiline={true}
-          label={'Description'}
-          placeholder={'Description'}
-          onChange={(e) => updateCvInfo({ description: e.target.value })}
-          value={description}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField
+              multiline={true}
+              label={'Description'}
+              placeholder={'Description'}
+              onChange={onChange}
+              value={value}
+            />
+          )}
         />
       </div>{' '}
       <div className={classes.row}>
@@ -111,6 +160,6 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
           />
         </div>
       </div>
-    </div>
+    </FormControl>
   );
 };

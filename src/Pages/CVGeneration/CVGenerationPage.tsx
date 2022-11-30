@@ -4,6 +4,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
 
+import FormControl from '@mui/material/FormControl';
+
+import { useForm, useWatch } from 'react-hook-form';
+
 import { employeesSelector } from 'store/reducers/employees';
 import { saveChangesToEmployee, loadEmployee } from 'store/reducers/employees/thunks';
 
@@ -71,6 +75,12 @@ export const CVGenerationPage = React.memo(() => {
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { control, reset } = useForm<CvInfo>({
+    defaultValues: cvInfo,
+  });
+
+  const values = useWatch<CvInfo>({ control });
+
   useEffect(() => {
     if (id) {
       dispatch(loadEmployee(id));
@@ -82,7 +92,6 @@ export const CVGenerationPage = React.memo(() => {
 
     setCvInfo({
       ...currentEmployee,
-      firstName: currentEmployee.firstName,
       position: position?.split(' –– ')[0] || '',
       yearsOfExperience,
       softSkills: skillsOfEmployee,
@@ -94,6 +103,11 @@ export const CVGenerationPage = React.memo(() => {
       profSkills,
     });
   }, [currentEmployee, profSkills, skillsOfEmployee, education, projects]);
+
+  useEffect(() => {
+    const defaultValues = cvInfo;
+    reset({ ...defaultValues });
+  }, [cvInfo]);
 
   useEffect(() => {
     if (id) {
@@ -177,14 +191,14 @@ export const CVGenerationPage = React.memo(() => {
   const isLoadingCVGenerateBtn = isLoading || projectsIsLoading;
 
   return (
-    <div>
+    <FormControl className={classes.container}>
       <CVGenerationHeader
         avatarUrl={cvInfo.avatarUrl}
         showCvPreview={handleModalOpen}
         isLoadingCVGenerateBtn={isLoadingCVGenerateBtn}
       ></CVGenerationHeader>
       <CVGenerationInfo
-        cvInfo={cvInfo}
+        cvInfo={values}
         softSkillsOptions={skills}
         softSkillsOfEmployee={skillsOfEmployee}
         softSkillsSearch={tagsSearch}
@@ -195,7 +209,7 @@ export const CVGenerationPage = React.memo(() => {
         education={education}
         updateCvInfo={updateCvInfo}
       />
-      <ProfSkills profSkills={cvInfo.profSkills} updateCvInfo={updateCvInfo} />
+      <ProfSkills />
       <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={cvInfo.projects || []} />
       <div className={classes.genCVbtnBlock}>
         <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
@@ -208,6 +222,6 @@ export const CVGenerationPage = React.memo(() => {
         handleCancel={() => setIsModalOpen(false)}
         cvInfo={cvInfo}
       ></CVPreview>
-    </div>
+    </FormControl>
   );
 });

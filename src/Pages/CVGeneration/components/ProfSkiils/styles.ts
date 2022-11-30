@@ -72,4 +72,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       },
     },
   },
+  skillsContainer: {
+    '&.MuiFormControl-root': {
+      margin: 0,
+      width: '100%',
+    },
+  },
 });

@@ -5,4 +5,9 @@ export const useStyles = createUseStyles({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  container: {
+    '&.MuiFormControl-root': {
+      width: '100%',
+    },
+  },
 });

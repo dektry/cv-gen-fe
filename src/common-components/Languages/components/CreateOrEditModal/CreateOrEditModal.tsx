@@ -19,7 +19,7 @@ import { CustomSelect } from 'common-components/CustomSelect';
 import { ILanguage } from 'models/ILanguage';
 
 import { languageLevels, languages } from '../../utils/constants';
-import { formattedLanguageLevels } from './utils/helpers';
+import { formattedLanguageLevels } from '../LanguageForm/utils/helpers';
 
 interface IProps {
   isOpen: boolean;
