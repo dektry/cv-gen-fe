@@ -15,15 +15,15 @@ import { yearOptions } from '../../utils/constants';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { CustomSelect } from 'common-components/CustomSelect';
-import { IEducation } from 'models/IEducation';
+import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 interface IProps {
   isOpen: boolean;
   modalTitle: string;
   submitText: string;
   onClose: () => void;
-  onSubmit?: (education: IEducation) => void;
-  education: IEducation;
+  onSubmit?: (education: ICvEducation) => void;
+  education: ICvEducation;
 }
 
 const schema = yup.object({
@@ -42,12 +42,12 @@ export const CreateOrEditModal = ({ isOpen, modalTitle, submitText, onClose, onS
     control,
     formState: { errors },
     reset,
-  } = useForm<IEducation>({
+  } = useForm<ICvEducation>({
     defaultValues: education,
     resolver: yupResolver(schema),
   });
 
-  const values = useWatch<IEducation>({
+  const values = useWatch<ICvEducation>({
     control,
   });
 
@@ -58,9 +58,9 @@ export const CreateOrEditModal = ({ isOpen, modalTitle, submitText, onClose, onS
 
   const disabled = !values.university || !values.specialization || !values.startYear || !values.endYear;
 
-  const handleSubmit = (values: Partial<IEducation>) => {
+  const handleSubmit = (values: Partial<ICvEducation>) => {
     if (onSubmit && values.university && values.specialization && values.startYear && values.endYear) {
-      const currEducation: IEducation = {
+      const currEducation: ICvEducation = {
         university: values.university,
         specialization: values.specialization,
         startYear: values.startYear,

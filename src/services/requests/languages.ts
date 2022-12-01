@@ -2,6 +2,7 @@ import { message } from 'antd';
 import { apiClient } from '../apiService';
 import endpoints from 'config/endpoint.json';
 import { ILanguage } from 'models/ILanguage';
+import { ICvLanguage } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 export const httpGetLanguages = async (employeeId: string) => {
   try {
@@ -14,7 +15,7 @@ export const httpGetLanguages = async (employeeId: string) => {
   }
 };
 
-export const httpPostLanguage = async (language: ILanguage) => {
+export const httpPostLanguage = async (language: ICvLanguage) => {
   try {
     await apiClient.post(endpoints.language, language);
   } catch (error) {
@@ -23,7 +24,7 @@ export const httpPostLanguage = async (language: ILanguage) => {
   }
 };
 
-export const httpPutLanguage = async (language: ILanguage) => {
+export const httpPutLanguage = async (language: ICvLanguage) => {
   try {
     await apiClient.put(endpoints.language, language);
   } catch (error) {

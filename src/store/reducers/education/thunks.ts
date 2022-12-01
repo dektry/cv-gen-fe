@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { IEducation } from 'models/IEducation';
+import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 import {
   httpGetEducation,
@@ -19,14 +20,14 @@ export const getEducation = createAsyncThunk(loadEducationListAction, (employeeI
   return httpGetEducation(employeeId);
 });
 
-export const createEducation = createAsyncThunk(createEducationAction, (education: IEducation) => {
+export const createEducation = createAsyncThunk(createEducationAction, (education: ICvEducation) => {
   return httpPostEducation(education);
 });
 
-export const editEducation = createAsyncThunk(editEducationAction, (education: IEducation) => {
+export const editEducation = createAsyncThunk(editEducationAction, (education: ICvEducation) => {
   return httpPutEducation(education);
 });
 
-export const deleteEducation = createAsyncThunk(deleteEducationAction, (education: IEducation) => {
+export const deleteEducation = createAsyncThunk(deleteEducationAction, (education: ICvEducation) => {
   return httpDeleteEducation(String(education.id));
 });

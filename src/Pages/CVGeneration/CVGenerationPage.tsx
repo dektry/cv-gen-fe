@@ -1,46 +1,47 @@
 import { useSelector } from 'react-redux';
-import { AsyncThunk } from '@reduxjs/toolkit';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
 
 import FormControl from '@mui/material/FormControl';
 
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch, FormProvider } from 'react-hook-form';
 
 import { employeesSelector } from 'store/reducers/employees';
 import { saveChangesToEmployee, loadEmployee } from 'store/reducers/employees/thunks';
 
 import { IEmployee } from 'models/IEmployee';
 import { IProject } from 'models/IProject';
-import { CVGenerationInfo } from 'Pages/CVGeneration/components/CVGenerationInfo';
 import { CVPreview } from 'Pages/CVGeneration/components/CVPreview';
 import { CVGenerationHeader } from 'Pages/CVGeneration/components/CVGenerationHeader';
 import { ProfSkills } from 'Pages/CVGeneration/components/ProfSkiils';
 import { Projects } from 'common-components/Projects';
-
+import { CVGenerationInfo } from './components/CVGenerationInfo';
 import { useStyles } from './styles';
 import { useAppDispatch } from 'store';
 import { profSkillsSelector, resetCvGeneration } from 'store/reducers/cvGeneration';
 import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
-import { getProjectsList, TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
-import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
+import { createProject, editProject, getProjectsList } from 'store/reducers/projects/thunks';
 import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
 import {
   getSoftSkillsToCvList,
   getSoftSkillsToCvOfEmployee,
   createSoftSkillsToCv,
 } from 'store/reducers/softSkillsToCV/thunks';
-import { getEducation } from 'store/reducers/education/thunks';
+import { createEducation, editEducation, getEducation } from 'store/reducers/education/thunks';
 import { educationSelector } from 'store/reducers/education';
-import { getLanguages } from 'store/reducers/languages/thunks';
+import { createLanguage, editLanguage, getLanguages } from 'store/reducers/languages/thunks';
 import { languagesSelector } from 'store/reducers/languages';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
 import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
 
+import { SaveButton } from 'common-components/SaveButton';
+
 import { Spinner } from 'common-components/Spinner';
+
+import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 
 export type TProfSkill = {
   groupName?: string;
@@ -50,7 +51,7 @@ export type TProfSkill = {
 export type CvInfo = Pick<IEmployee, 'level' | 'yearsOfExperience' | 'position' | 'avatarUrl'> & {
   description: string;
   education: IEducation[];
-  languages: string[];
+  languages: ILanguage[];
   softSkills: string[];
   profSkills: TProfSkill[];
   projects?: IProject[];
@@ -75,11 +76,11 @@ export const CVGenerationPage = React.memo(() => {
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { control, reset } = useForm<CvInfo>({
+  const methods = useForm<CvInfo>({
     defaultValues: cvInfo,
   });
 
-  const values = useWatch<CvInfo>({ control });
+  const values = useWatch<CvInfo>({ control: methods.control });
 
   useEffect(() => {
     if (id) {
@@ -98,7 +99,7 @@ export const CVGenerationPage = React.memo(() => {
       description: currentEmployee?.description || '',
       male: currentEmployee.gender === 'male',
       projects,
-      languages: languages.map((el) => `${el.value} - ${el.level}`),
+      languages: languages,
       education,
       profSkills,
     });
@@ -106,7 +107,7 @@ export const CVGenerationPage = React.memo(() => {
 
   useEffect(() => {
     const defaultValues = cvInfo;
-    reset({ ...defaultValues });
+    methods.reset({ ...defaultValues });
   }, [cvInfo]);
 
   useEffect(() => {
@@ -133,95 +134,81 @@ export const CVGenerationPage = React.memo(() => {
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
-    if (id && cvInfo.softSkills) {
-      const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, cvInfo);
-
-      dispatch(createSoftSkillsToCv({ skills: cvInfo.softSkills, employeeId: id }));
-      dispatch(saveChangesToEmployee(formattedEmployee));
-    }
   };
 
   const updateCvSoftSkills = useCallback((tags: string[]) => {
     dispatch(setSoftSkillsToCvOfEmployee(tags));
   }, []);
 
-  const handleUpdateProject = useCallback(
-    (dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>, project: IProject) => {
-      if (id) {
+  const handleSubmit = useCallback(() => {
+    if (id && values.softSkills) {
+      const formattedEmployee = formatEmployeeBeforeUpdate(currentEmployee, values);
+
+      dispatch(createSoftSkillsToCv({ skills: values.softSkills, employeeId: id }));
+      dispatch(saveChangesToEmployee(formattedEmployee));
+    }
+
+    if (id && values.projects) {
+      for (const project of values.projects) {
         const projectToSave = projectFormatter(project, id);
-        console.log('TO SAVE', projectToSave);
-
-        dispatch(dispatcher({ project: projectToSave, employeeId: id }));
+        projectToSave.id ? dispatch(editProject(projectToSave)) : dispatch(createProject(projectToSave));
       }
-    },
-    [projects]
-  );
+    }
 
-  const handleUpdateEducation = useCallback(
-    (dispatcher: AsyncThunk<void, IEducation, Record<string, never>>, currEducation: IEducation) => {
-      if (id) {
-        const educationToSave: IEducation = {
-          ...currEducation,
+    if (values.education && id) {
+      for (const ed of values.education) {
+        const edToSave = {
+          ...ed,
           employeeId: id,
         };
-        dispatch(dispatcher(educationToSave)).then(() => dispatch(getEducation(id)));
-        updateCvInfo({ education });
+        edToSave.id ? dispatch(editEducation(edToSave)) : dispatch(createEducation(edToSave));
       }
-    },
-    [education]
-  );
+    }
 
-  const handleUpdateLanguage = useCallback(
-    (dispatcher: AsyncThunk<void, ILanguage, Record<string, never>>, currentLanguage: ILanguage) => {
-      if (id) {
-        const languageToSave: ILanguage = {
-          ...currentLanguage,
+    if (values.languages && id) {
+      for (const lang of values.languages) {
+        const langToSave = {
+          ...lang,
           employeeId: id,
         };
-        dispatch(dispatcher(languageToSave)).then(() => dispatch(getLanguages(id)));
-        const updatedLanguages = languages.map((el) => `${el.value} - ${el.level}`);
-        updateCvInfo({ languages: updatedLanguages });
+        langToSave.id ? dispatch(editLanguage(langToSave)) : dispatch(createLanguage(langToSave));
       }
-    },
-    [languages]
-  );
+    }
+  }, [values]);
 
   if (isLoadingOneEmployee) return <Spinner text={'Loading employee information...'} />;
 
   const isLoadingCVGenerateBtn = isLoading || projectsIsLoading;
 
   return (
-    <FormControl className={classes.container}>
-      <CVGenerationHeader
-        avatarUrl={cvInfo.avatarUrl}
-        showCvPreview={handleModalOpen}
-        isLoadingCVGenerateBtn={isLoadingCVGenerateBtn}
-      ></CVGenerationHeader>
-      <CVGenerationInfo
-        cvInfo={values}
-        softSkillsOptions={skills}
-        softSkillsOfEmployee={skillsOfEmployee}
-        softSkillsSearch={tagsSearch}
-        updateCvSoftSkills={updateCvSoftSkills}
-        handleUpdateEducation={handleUpdateEducation}
-        handleUpdateLanguage={handleUpdateLanguage}
-        languages={languages}
-        education={education}
-        updateCvInfo={updateCvInfo}
-      />
-      <ProfSkills />
-      <Projects employeeId={id} handleUpdateProject={handleUpdateProject} projects={cvInfo.projects || []} />
-      <div className={classes.genCVbtnBlock}>
-        <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
-          Generate CV
-        </Button>
-      </div>
-      <CVPreview
-        isModalOpen={isModalOpen}
-        handleOk={() => setIsModalOpen(false)}
-        handleCancel={() => setIsModalOpen(false)}
-        cvInfo={cvInfo}
-      ></CVPreview>
-    </FormControl>
+    <FormProvider {...methods}>
+      <FormControl className={classes.container}>
+        <CVGenerationHeader
+          avatarUrl={cvInfo.avatarUrl}
+          showCvPreview={handleModalOpen}
+          isLoadingCVGenerateBtn={isLoadingCVGenerateBtn}
+        ></CVGenerationHeader>
+        <CVGenerationInfo
+          softSkillsOptions={skills}
+          softSkillsOfEmployee={skillsOfEmployee}
+          softSkillsSearch={tagsSearch}
+          updateCvSoftSkills={updateCvSoftSkills}
+        />
+        <ProfSkills profSkills={profSkills} updateCvInfo={updateCvInfo} />
+        <Projects />
+        <div className={classes.genCVbtnBlock}>
+          <SaveButton error={false} title={'SAVE CHANGES'} handleClickOkButton={() => handleSubmit()} />
+          <Button loading={isLoadingCVGenerateBtn} size="large" type="primary" onClick={handleModalOpen}>
+            Generate CV
+          </Button>
+        </div>
+        <CVPreview
+          isModalOpen={isModalOpen}
+          handleOk={() => setIsModalOpen(false)}
+          handleCancel={() => setIsModalOpen(false)}
+          cvInfo={values}
+        ></CVPreview>
+      </FormControl>
+    </FormProvider>
   );
 });

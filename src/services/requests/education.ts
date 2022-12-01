@@ -2,6 +2,7 @@ import { message } from 'antd';
 import { apiClient } from '../apiService';
 import endpoints from 'config/endpoint.json';
 import { IEducation } from 'models/IEducation';
+import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 export const httpGetEducation = async (employeeId: string) => {
   try {
@@ -14,7 +15,7 @@ export const httpGetEducation = async (employeeId: string) => {
   }
 };
 
-export const httpPostEducation = async (education: IEducation) => {
+export const httpPostEducation = async (education: ICvEducation) => {
   try {
     await apiClient.post(endpoints.education, education);
   } catch (error) {
@@ -23,7 +24,7 @@ export const httpPostEducation = async (education: IEducation) => {
   }
 };
 
-export const httpPutEducation = async (education: IEducation) => {
+export const httpPutEducation = async (education: ICvEducation) => {
   try {
     await apiClient.put(endpoints.education, education);
   } catch (error) {

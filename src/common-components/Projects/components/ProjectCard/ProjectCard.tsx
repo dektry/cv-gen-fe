@@ -1,5 +1,4 @@
 import React from 'react';
-import { AsyncThunk } from '@reduxjs/toolkit';
 
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -7,9 +6,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 
-import { TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
-
-import { IProject } from 'models/IProject';
+import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';
@@ -21,24 +18,20 @@ import { useStyles } from './styles';
 
 type TProps = {
   id: number;
-  project: IProject;
-  projectInfo: IProject;
-  handleClickDeleteProjectButton: (project: IProject) => void;
-  handleClickDeleteProjectConfirm: (project: IProject, id: number) => void;
+  project: ICvProject;
+  projectInfo: ICvProject;
+  handleClickDeleteProjectButton: (project: ICvProject) => void;
+  handleClickDeleteProjectConfirm: (id: number) => void;
   handleCloseDeleteProjectModal: () => void;
   isDeleteProjectModalOpen: boolean;
-  handleOpenEditModal: (project: IProject, id: number) => void;
+  handleOpenEditModal: (project: ICvProject, id: number) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
-  handleUpdateProject?: (
-    dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>,
-    project: IProject
-  ) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<IProject>>;
-  handleEditInState?: (project: IProject) => void;
-  handleEditProjectForm?: (project: IProject) => void;
+  setProjectInfo: React.Dispatch<React.SetStateAction<ICvProject>>;
+  handleEditInState?: (project: ICvProject) => void;
+  handleEditProjectForm: (project: ICvProject) => void;
 };
 
 export const ProjectCard = React.memo(
@@ -52,23 +45,16 @@ export const ProjectCard = React.memo(
     handleOpenEditModal,
     handleCloseEditModal,
     editModalOpen,
-    handleUpdateProject,
     error,
     setError,
     setProjectInfo,
     projectInfo,
-    handleEditInState,
     handleEditProjectForm,
   }: TProps) => {
     const classes = useStyles({ theme });
 
-    const handleEditProject = (currentProject: IProject) => {
-      if (handleUpdateProject && handleEditProjectForm) {
-        handleEditProjectForm(currentProject);
-        // handleUpdateProject(editProjectAndUpdateList, currentProject);
-      } else if (handleEditInState) {
-        handleEditInState(currentProject);
-      }
+    const handleEditProject = (currentProject: ICvProject) => {
+      handleEditProjectForm(currentProject);
     };
 
     return (
@@ -153,7 +139,7 @@ export const ProjectCard = React.memo(
         </Accordion>
 
         <DeleteModal
-          onSubmit={() => handleClickDeleteProjectConfirm(project, id)}
+          onSubmit={() => handleClickDeleteProjectConfirm(id)}
           onClose={handleCloseDeleteProjectModal}
           isOpen={isDeleteProjectModalOpen}
           modalTitle={'DELETE PROJECT'}

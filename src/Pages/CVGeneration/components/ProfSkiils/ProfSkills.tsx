@@ -1,47 +1,39 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, LinearProgress, Typography } from '@mui/material';
+import { throttle } from 'lodash';
 
-import { useForm, useFieldArray } from 'react-hook-form';
-
-import FormControl from '@mui/material/FormControl';
-
-import { TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
 import { AddButton } from 'common-components/AddButton';
 import { profSkillsSelector } from 'store/reducers/cvGeneration';
 import { useDeferredLoading } from 'hooks/useDeferredLoading';
 import { ProfSkillGroup } from 'Pages/CVGeneration/components/ProfSkiils/ProfSkillGroup';
 
-import { useStyles } from './styles';
-import theme from 'theme/theme';
-
-interface FormValues {
+interface IProfSkills {
   profSkills: TProfSkill[];
+  updateCvInfo: (fields: Partial<CvInfo>) => void;
 }
 
-export const ProfSkills = React.memo(() => {
-  const classes = useStyles({ theme });
+export const ProfSkills = React.memo((props: IProfSkills) => {
+  const { profSkills, updateCvInfo } = props;
 
-  const { isLoading, data } = useSelector(profSkillsSelector);
-
-  const { control, reset } = useForm<FormValues>({ defaultValues: { profSkills: data } });
-
-  const { fields, append, remove } = useFieldArray({
-    name: 'profSkills',
-    keyName: 'fieldKey',
-    control,
-  });
-
-  useEffect(() => {
-    const defaultValues = { profSkills: data };
-    reset({ ...defaultValues });
-  }, [data]);
+  const { isLoading } = useSelector(profSkillsSelector);
 
   const deferredLoading = useDeferredLoading(isLoading);
 
   const handleAddSkillGroup = () => {
-    append({ groupName: '', skills: [] });
+    const newProfSkills = [...profSkills];
+    newProfSkills.push({ groupName: '', skills: [] });
+    updateCvInfo({ profSkills: newProfSkills });
   };
+
+  const handleDeleteSkillGroup = (groupIndex: number) => {
+    const newProfSkills = [...profSkills];
+    newProfSkills.splice(groupIndex, 1);
+    updateCvInfo({ profSkills: newProfSkills });
+  };
+
+  const updateCvInfoThrottled = useCallback(throttle(updateCvInfo, 700), [updateCvInfo]);
 
   return (
     <Box>
@@ -51,16 +43,18 @@ export const ProfSkills = React.memo(() => {
       {deferredLoading ? (
         <LinearProgress></LinearProgress>
       ) : (
-        <FormControl className={classes.skillsContainer}>
-          {fields?.map((skillGroup, groupIndex) => (
+        <>
+          {profSkills?.map((skillGroup, groupIndex) => (
             <ProfSkillGroup
-              key={skillGroup.fieldKey}
+              key={'group' + groupIndex}
+              profSkills={profSkills}
               skillGroup={skillGroup}
               groupIndex={groupIndex}
-              removeSkillGroup={remove}
+              updateCvInfo={updateCvInfoThrottled}
+              handleDeleteSkillGroup={handleDeleteSkillGroup}
             />
           ))}
-        </FormControl>
+        </>
       )}
       <AddButton
         title="Add new section"

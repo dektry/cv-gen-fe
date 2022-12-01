@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
-import { AsyncThunk } from '@reduxjs/toolkit';
+import { useState } from 'react';
 
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
+
+import { useAppDispatch } from 'store';
+import { deleteEducation } from 'store/reducers/education/thunks';
 
 import { TextField, FormControl } from '@mui/material';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { IEducation } from 'models/IEducation';
+import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
@@ -17,50 +19,26 @@ import { CreateOrEditModal } from './components/CreateOrEditModal';
 import theme from 'theme/theme';
 import { useStyles } from './styles';
 
-interface IProps {
-  education: IEducation[];
-  handleUpdateEducation?: (
-    dispatcher: AsyncThunk<void, IEducation, Record<string, never>>,
-    currEducation: IEducation
-  ) => void;
-  handleAddToState?: (project: IEducation) => void;
-  handleDeleteFromState?: (project: IEducation) => void;
-  handleEditInState?: (project: IEducation) => void;
-}
-
-interface FormValues {
-  education: IEducation[];
-}
-
-export const Education = ({
-  education,
-  handleUpdateEducation,
-  handleAddToState,
-  handleDeleteFromState,
-  handleEditInState,
-}: IProps) => {
+export const Education = () => {
   const classes = useStyles({ theme });
+  const dispatch = useAppDispatch();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [currentEducation, setCurrentEducation] = useState<IEducation>({} as IEducation);
+  const [currentEducation, setCurrentEducation] = useState<ICvEducation>({} as ICvEducation);
   const [id, setId] = useState(0);
 
-  const { control, reset } = useForm<FormValues>({ defaultValues: { education } });
+  const { control } = useFormContext();
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { append, remove, update } = useFieldArray({
     name: 'education',
-    keyName: 'fieldKey',
     control,
   });
 
-  useEffect(() => {
-    const defaultValues = { education };
-    reset({ ...defaultValues });
-  }, [education]);
+  const { education } = useWatch();
 
-  const handleDeleteModalOpen = (el: IEducation, idx: number) => {
+  const handleDeleteModalOpen = (el: ICvEducation, idx: number) => {
     setCurrentEducation(el);
     setId(idx);
     setIsDeleteModalOpen(true);
@@ -68,18 +46,13 @@ export const Education = ({
 
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentEducation({} as ICvEducation);
   };
 
   const onDeleteSubmit = () => {
-    if (handleUpdateEducation) {
-      remove(id);
-      // handleUpdateEducation(deleteEducation, currentEducation);
-    } else if (handleDeleteFromState) {
-      handleDeleteFromState(currentEducation);
-      remove(id);
-    }
-    setCurrentEducation({} as IEducation);
+    remove(id);
+    setCurrentEducation({} as ICvEducation);
+    dispatch(deleteEducation(currentEducation));
     setId(0);
     setIsDeleteModalOpen(false);
   };
@@ -90,22 +63,16 @@ export const Education = ({
 
   const handleCloseAddModal = () => {
     setIsAddModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentEducation({} as ICvEducation);
   };
 
-  const onAddSubmit = (education: IEducation) => {
-    if (handleUpdateEducation) {
-      append(education);
-      // handleUpdateEducation(createEducation, currentEducation);
-    } else if (handleAddToState) {
-      append(education);
-      handleAddToState(education);
-    }
+  const onAddSubmit = (education: ICvEducation) => {
+    append(education);
     setIsAddModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentEducation({} as ICvEducation);
   };
 
-  const handleEditModalOpen = (education: IEducation, idx: number) => {
+  const handleEditModalOpen = (education: ICvEducation, idx: number) => {
     setCurrentEducation(education);
     setId(idx);
     setIsEditModalOpen(true);
@@ -113,27 +80,21 @@ export const Education = ({
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentEducation({} as ICvEducation);
   };
 
-  const onEditSubmit = (education: IEducation) => {
-    if (handleUpdateEducation) {
-      update(id, education);
-      // handleUpdateEducation(editEducation, currentEducation);
-    } else if (handleEditInState) {
-      handleEditInState(education);
-      update(id, education);
-    }
+  const onEditSubmit = (education: ICvEducation) => {
+    update(id, education);
     setIsEditModalOpen(false);
-    setCurrentEducation({} as IEducation);
+    setCurrentEducation({} as ICvEducation);
   };
 
   return (
     <div className={classes.container} style={{ marginTop: '16px' }}>
       <FormControl>
-        {fields?.map((el, idx) => {
+        {education?.map((el: ICvEducation, idx: number) => {
           return (
-            <div className={classes.infoContainer} key={el.fieldKey}>
+            <div className={classes.infoContainer} key={el.id}>
               <TextField
                 value={`${el.university} - ${el.specialization} - ${el.startYear}-${el.endYear}`}
                 label={'Education'}

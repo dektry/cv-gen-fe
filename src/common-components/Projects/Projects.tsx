@@ -1,78 +1,48 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 
-import { AsyncThunk } from '@reduxjs/toolkit';
+import { useAppDispatch } from 'store';
+import { deleteProject } from 'store/reducers/projects/thunks';
 
 import { Typography, FormControl } from '@mui/material';
-
-import { TUpdateProjectListPayload } from 'store/reducers/projects/thunks';
-
-import { IProject } from 'models/IProject';
 
 import { AddButton } from 'common-components/AddButton';
 import { ProjectCard } from './components/ProjectCard';
 import { CreateEditModal } from './components/CreateEditModal';
 
 import { useStyles } from './styles';
+import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
-interface IProps {
-  projects: [] | IProject[];
-  employeeId?: string;
-  handleUpdateProject?: (
-    dispatcher: AsyncThunk<void, TUpdateProjectListPayload, Record<string, never>>,
-    project: IProject
-  ) => void;
-  handleAddToState?: (project: IProject) => void;
-  handleDeleteFromState?: (project: IProject) => void;
-  handleEditInState?: (project: IProject) => void;
-}
-
-interface FormValues {
-  projects: IProject[];
-}
-
-export const Projects = ({
-  projects,
-  employeeId,
-  handleUpdateProject,
-  handleAddToState,
-  handleDeleteFromState,
-  handleEditInState,
-}: IProps) => {
+export const Projects = () => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
   const [error, setError] = useState(false);
 
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [projectInfo, setProjectInfo] = useState<IProject>({} as IProject);
+  const [projectInfo, setProjectInfo] = useState<ICvProject>({} as ICvProject);
   const [id, setId] = useState(0);
 
-  const { control, reset } = useForm<FormValues>({ defaultValues: { projects } });
-
-  const { fields, append, remove, update } = useFieldArray({
+  const { control } = useFormContext();
+  const { append, remove, update } = useFieldArray({
     name: 'projects',
-    keyName: 'fieldKey',
     control,
   });
 
-  useEffect(() => {
-    const defaultValues = { projects };
-    reset({ ...defaultValues });
-  }, [projects]);
+  const { projects } = useWatch({ control });
 
-  const handleClickDeleteProjectButton = () => {
+  const handleClickDeleteProjectButton = (project: ICvProject) => {
+    setProjectInfo(project);
     setIsDeleteProjectModalOpen(true);
   };
 
   const handleClickDeleteProjectConfirm = useCallback(
-    (project: IProject, id: number) => {
-      if (employeeId) {
-        remove(id);
-      } else if (handleDeleteFromState) {
-        remove(id);
-        handleDeleteFromState(project);
+    (id: number) => {
+      remove(id);
+      if (projectInfo.id) {
+        dispatch(deleteProject(projectInfo.id));
       }
       setIsDeleteProjectModalOpen(false);
     },
@@ -91,7 +61,7 @@ export const Projects = ({
     setCreateModalOpen(false);
   };
 
-  const handleOpenEditModal = (project: IProject, id: number) => {
+  const handleOpenEditModal = (project: ICvProject, id: number) => {
     setProjectInfo(project);
     setId(id);
     setEditModalOpen(true);
@@ -101,16 +71,11 @@ export const Projects = ({
     setEditModalOpen(false);
   };
 
-  const handleAddProject = (project: IProject) => {
-    if (handleUpdateProject) {
-      append(project);
-    } else if (handleAddToState) {
-      append(project);
-      handleAddToState(project);
-    }
+  const handleAddProject = (project: ICvProject) => {
+    append(project);
   };
 
-  const handleEditProject = (project: IProject) => {
+  const handleEditProject = (project: ICvProject) => {
     update(id, project);
   };
 
@@ -125,9 +90,9 @@ export const Projects = ({
         </div>
       </div>
       <FormControl className={classes.projectsContainer}>
-        {fields?.map((project, idx) => (
+        {projects?.map((project: ICvProject, idx: number) => (
           <ProjectCard
-            key={project.fieldKey}
+            key={project.id}
             id={idx}
             project={project}
             projectInfo={projectInfo}
@@ -138,11 +103,9 @@ export const Projects = ({
             handleCloseEditModal={handleCloseEditModal}
             handleOpenEditModal={handleOpenEditModal}
             editModalOpen={editModalOpen}
-            handleUpdateProject={handleUpdateProject}
             error={error}
             setError={setError}
             setProjectInfo={setProjectInfo}
-            handleEditInState={handleEditInState}
             handleEditProjectForm={handleEditProject}
           />
         ))}
@@ -152,7 +115,6 @@ export const Projects = ({
         modalTitle="ADD NEW PROJECT"
         onClose={handleCloseCreateModal}
         onSubmit={handleAddProject}
-        handleAddToState={handleAddToState}
         error={error}
         setError={setError}
         setProjectInfo={setProjectInfo}

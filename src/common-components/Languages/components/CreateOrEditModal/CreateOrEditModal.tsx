@@ -16,18 +16,18 @@ import * as yup from 'yup';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { CustomSelect } from 'common-components/CustomSelect';
-import { ILanguage } from 'models/ILanguage';
 
 import { languageLevels, languages } from '../../utils/constants';
 import { formattedLanguageLevels } from '../LanguageForm/utils/helpers';
+import { ICvLanguage } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 interface IProps {
   isOpen: boolean;
   modalTitle: string;
   submitText: string;
   onClose: () => void;
-  onSubmit?: (language: ILanguage) => void;
-  language: ILanguage;
+  onSubmit?: (language: ICvLanguage) => void;
+  language: ICvLanguage;
 }
 
 const schema = yup.object({
@@ -43,12 +43,12 @@ export const CreateOrEditModal = ({ isOpen, modalTitle, submitText, onClose, onS
     control,
     formState: { errors },
     reset,
-  } = useForm<ILanguage>({
+  } = useForm<ICvLanguage>({
     defaultValues: language,
     resolver: yupResolver(schema),
   });
 
-  const values = useWatch<ILanguage>({
+  const values = useWatch<ICvLanguage>({
     control,
   });
 
@@ -59,9 +59,9 @@ export const CreateOrEditModal = ({ isOpen, modalTitle, submitText, onClose, onS
 
   const disabled = !values.value || !values.level;
 
-  const handleSubmit = (values: Partial<ILanguage>) => {
+  const handleSubmit = (values: Partial<ICvLanguage>) => {
     if (onSubmit && values.value && values.level) {
-      const currLanguage: ILanguage = {
+      const currLanguage: ICvLanguage = {
         value: values.value,
         level: values.level,
       };

@@ -5,7 +5,6 @@ import { generatePath } from 'react-router-dom';
 import { Form, Input, Image, Button, Space, Spin } from 'antd';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { Projects } from 'common-components/Projects';
 
 import { IEmployee } from 'models/IEmployee';
 import { IProject } from 'models/IProject';
@@ -39,9 +38,6 @@ export const EmployeeUI = ({
   handleEmployeeSave,
   handleChange,
   currentEmployee,
-  employeeId,
-  handleUpdateProject,
-  projects,
 }: IEmployeeProps) => {
   const classes = useStyles();
 
@@ -245,7 +241,7 @@ export const EmployeeUI = ({
               />
             </Space>
           </Form.Item>
-          <Projects employeeId={employeeId || ''} handleUpdateProject={handleUpdateProject} projects={projects} />
+          {/* <Projects /> */}
           <div className={classes.buttonsContainer}>
             {!isLoading ? (
               <Button

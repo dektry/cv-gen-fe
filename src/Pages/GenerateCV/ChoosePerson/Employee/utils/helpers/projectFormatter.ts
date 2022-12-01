@@ -1,18 +1,19 @@
-import { IProject, IProjectFromDB } from 'models/IProject';
+import { IProjectFromDB } from 'models/IProject';
+import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
-export function projectFormatter(project: IProject, id: string): IProjectFromDB {
-  const processedTools = project.tools.map((el) => {
+export function projectFormatter(project: ICvProject, id: string): IProjectFromDB {
+  const processedTools = project.tools?.map((el) => {
     return { name: el };
   });
   return {
-    id: project.id,
+    id: project.id || '',
     employeeId: id,
-    team_size: String(project.teamSize),
-    name: project.name,
-    duration: project.duration,
-    role: project.position,
-    description: project.description,
-    responsibilities: project.responsibilities,
-    technologies: processedTools,
+    team_size: String(project.teamSize || ''),
+    name: project.name || '',
+    duration: project.duration || '',
+    role: project.position || '',
+    description: project.description || '',
+    responsibilities: project.responsibilities || [],
+    technologies: processedTools || [],
   };
 }

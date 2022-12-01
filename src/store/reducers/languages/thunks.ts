@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ILanguage } from 'models/ILanguage';
+import { ICvLanguage } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 import { httpGetLanguages, httpPostLanguage, httpPutLanguage, httpDeleteLanguage } from 'services/requests/languages';
 
@@ -9,14 +10,14 @@ export const getLanguages = createAsyncThunk(loadLanguagesListAction, (employeeI
   return httpGetLanguages(employeeId);
 });
 
-export const createLanguage = createAsyncThunk(createLanguageAction, (language: ILanguage) => {
+export const createLanguage = createAsyncThunk(createLanguageAction, (language: ICvLanguage) => {
   return httpPostLanguage(language);
 });
 
-export const editLanguage = createAsyncThunk(editLanguageAction, (language: ILanguage) => {
+export const editLanguage = createAsyncThunk(editLanguageAction, (language: ICvLanguage) => {
   return httpPutLanguage(language);
 });
 
-export const deleteLanguage = createAsyncThunk(deleteLanguageAction, (language: ILanguage) => {
+export const deleteLanguage = createAsyncThunk(deleteLanguageAction, (language: ICvLanguage) => {
   return httpDeleteLanguage(String(language.id));
 });

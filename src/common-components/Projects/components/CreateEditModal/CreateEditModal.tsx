@@ -19,7 +19,7 @@ import { employeesSelector } from 'store/reducers/employees';
 import { technologiesSelector } from 'store/reducers/technologies';
 import { getTechnologiesList } from 'store/reducers/technologies/thunks';
 
-import { IProject } from 'models/IProject';
+import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 import { TagsInput } from 'common-components/TagsInput';
 
@@ -33,12 +33,12 @@ interface IProps {
   isOpen: boolean;
   modalTitle: string;
   onClose: () => void;
-  onSubmit?: (project: IProject) => void;
+  onSubmit?: (project: ICvProject) => void;
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<IProject>>;
-  projectInfo: IProject;
-  handleAddToState?: (project: IProject) => void;
+  setProjectInfo: React.Dispatch<React.SetStateAction<ICvProject>>;
+  projectInfo: ICvProject;
+  handleAddToState?: (project: ICvProject) => void;
 }
 
 const schema = yup.object({
@@ -51,7 +51,7 @@ const schema = yup.object({
   tools: yup.array().required(),
 });
 
-interface FormValues extends IProject {
+interface FormValues extends ICvProject {
   formResponsibilities: string;
 }
 
@@ -85,7 +85,7 @@ export const CreateEditModal = ({
 
   const values = useWatch<FormValues>({ control });
 
-  const currentInfo: IProject = projectInfo
+  const currentInfo: ICvProject = projectInfo
     ? projectInfo
     : {
         id: '',
@@ -139,7 +139,7 @@ export const CreateEditModal = ({
 
   useEffect(() => {
     return () => {
-      setProjectInfo({} as IProject);
+      setProjectInfo({} as ICvProject);
       const emptyProject = {
         id: '',
         employeeId: '',
