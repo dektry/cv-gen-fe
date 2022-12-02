@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { IEducation } from 'models/IEducation';
 import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
 
 import {
