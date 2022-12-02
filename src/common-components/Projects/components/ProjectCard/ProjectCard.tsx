@@ -27,10 +27,6 @@ type TProps = {
   handleOpenEditModal: (project: ICvProject, id: number) => void;
   handleCloseEditModal: () => void;
   editModalOpen: boolean;
-  error: boolean;
-  setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<ICvProject>>;
-  handleEditInState?: (project: ICvProject) => void;
   handleEditProjectForm: (project: ICvProject) => void;
 };
 
@@ -38,6 +34,7 @@ export const ProjectCard = React.memo(
   ({
     id,
     project,
+    projectInfo,
     handleClickDeleteProjectButton,
     handleClickDeleteProjectConfirm,
     handleCloseDeleteProjectModal,
@@ -45,17 +42,9 @@ export const ProjectCard = React.memo(
     handleOpenEditModal,
     handleCloseEditModal,
     editModalOpen,
-    error,
-    setError,
-    setProjectInfo,
-    projectInfo,
     handleEditProjectForm,
   }: TProps) => {
     const classes = useStyles({ theme });
-
-    const handleEditProject = (currentProject: ICvProject) => {
-      handleEditProjectForm(currentProject);
-    };
 
     return (
       <>
@@ -150,10 +139,7 @@ export const ProjectCard = React.memo(
           isOpen={editModalOpen}
           modalTitle="EDIT PROJECT"
           onClose={handleCloseEditModal}
-          onSubmit={handleEditProject}
-          error={error}
-          setError={setError}
-          setProjectInfo={setProjectInfo}
+          onSubmit={handleEditProjectForm}
         />
       </>
     );

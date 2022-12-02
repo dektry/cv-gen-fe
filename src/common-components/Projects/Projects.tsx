@@ -17,7 +17,6 @@ import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
 export const Projects = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const [error, setError] = useState(false);
 
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -54,20 +53,24 @@ export const Projects = () => {
   };
 
   const handleOpenCreateModal = () => {
+    setProjectInfo({} as ICvProject);
     setCreateModalOpen(true);
   };
 
   const handleCloseCreateModal = () => {
+    setProjectInfo({} as ICvProject);
     setCreateModalOpen(false);
   };
 
   const handleOpenEditModal = (project: ICvProject, id: number) => {
     setProjectInfo(project);
+
     setId(id);
     setEditModalOpen(true);
   };
 
   const handleCloseEditModal = () => {
+    setProjectInfo({} as ICvProject);
     setEditModalOpen(false);
   };
 
@@ -103,9 +106,6 @@ export const Projects = () => {
             handleCloseEditModal={handleCloseEditModal}
             handleOpenEditModal={handleOpenEditModal}
             editModalOpen={editModalOpen}
-            error={error}
-            setError={setError}
-            setProjectInfo={setProjectInfo}
             handleEditProjectForm={handleEditProject}
           />
         ))}
@@ -115,9 +115,6 @@ export const Projects = () => {
         modalTitle="ADD NEW PROJECT"
         onClose={handleCloseCreateModal}
         onSubmit={handleAddProject}
-        error={error}
-        setError={setError}
-        setProjectInfo={setProjectInfo}
         projectInfo={projectInfo}
       />
     </div>

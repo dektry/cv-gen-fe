@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,11 +34,8 @@ interface IProps {
   modalTitle: string;
   onClose: () => void;
   onSubmit?: (project: ICvProject) => void;
-  error: boolean;
-  setError: React.Dispatch<React.SetStateAction<boolean>>;
-  setProjectInfo: React.Dispatch<React.SetStateAction<ICvProject>>;
+
   projectInfo: ICvProject;
-  handleAddToState?: (project: ICvProject) => void;
 }
 
 const schema = yup.object({
@@ -55,15 +52,7 @@ interface FormValues extends ICvProject {
   formResponsibilities: string;
 }
 
-export const CreateEditModal = ({
-  isOpen,
-  modalTitle,
-  onClose,
-  onSubmit,
-  setProjectInfo,
-  projectInfo,
-  handleAddToState,
-}: IProps) => {
+export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubmit, projectInfo }: IProps) => {
   const classes = useStyles({ theme });
 
   const [openChildModal, setOpenChildModal] = useState(false);
@@ -76,8 +65,8 @@ export const CreateEditModal = ({
     control,
     formState: { errors },
     setValue,
-    register,
     reset,
+    register,
   } = useForm<FormValues>({
     defaultValues: projectInfo,
     resolver: yupResolver(schema),
@@ -85,31 +74,12 @@ export const CreateEditModal = ({
 
   const values = useWatch<FormValues>({ control });
 
-  const currentInfo: ICvProject = projectInfo
-    ? projectInfo
-    : {
-        id: '',
-        employeeId: '',
-        teamSize: 0,
-        name: '',
-        duration: '',
-        position: '',
-        description: '',
-        responsibilities: [],
-        tools: [],
-      };
-
-  useEffect(() => {
-    setProjectInfo(currentInfo);
-  }, []);
-
   useEffect(() => {
     const defaultValues = { ...projectInfo, formResponsibilities: projectInfo.responsibilities?.toString() };
     reset({ ...defaultValues });
   }, [projectInfo]);
 
   const updateProjectTags = useCallback((tags: string[]) => {
-    setProjectInfo((prev) => ({ ...prev, ...{ tools: tags } }));
     setValue('tools', tags, { shouldValidate: true });
   }, []);
 
@@ -126,34 +96,13 @@ export const CreateEditModal = ({
   };
 
   const handleSubmit = () => {
-    if (projectInfo && projectInfo && onSubmit) {
+    if (projectInfo && onSubmit) {
       const projectToSave = formatProject(values, values.formResponsibilities, currentEmployee);
       onSubmit(projectToSave);
       setOpenChildModal(false);
       onClose();
-    } else if (handleAddToState && projectInfo) {
-      const projectToAdd = formatProject(projectInfo);
-      handleAddToState(projectToAdd);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      setProjectInfo({} as ICvProject);
-      const emptyProject = {
-        id: '',
-        employeeId: '',
-        teamSize: 0,
-        name: '',
-        duration: '',
-        position: '',
-        description: '',
-        formResponsibilities: '',
-      };
-      reset({ ...emptyProject });
-      setValue('tools', []);
-    };
-  }, []);
 
   const error =
     !values.name ||
@@ -274,15 +223,20 @@ export const CreateEditModal = ({
                     />
                   )}
                 />
-                <TagsInput
-                  skills={values?.tools || []}
-                  updateTags={updateProjectTags}
-                  label="Search technologies"
-                  placeholder="Search technologies"
-                  multiline={false}
-                  value={technologiesNames}
-                  onSearch={tagsSearch}
-                  {...register('tools')}
+                <Controller
+                  name="tools"
+                  control={control}
+                  render={({ field: { value } }) => (
+                    <TagsInput
+                      skills={value}
+                      updateTags={updateProjectTags}
+                      label="Search technologies"
+                      placeholder="Search technologies"
+                      multiline={false}
+                      value={technologiesNames}
+                      onSearch={tagsSearch}
+                    />
+                  )}
                 />
               </div>
             </FormControl>
@@ -314,4 +268,4 @@ export const CreateEditModal = ({
       </Modal>
     </>
   );
-};
+});
