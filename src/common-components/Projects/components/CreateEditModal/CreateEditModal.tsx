@@ -66,7 +66,6 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
     formState: { errors },
     setValue,
     reset,
-    register,
   } = useForm<FormValues>({
     defaultValues: projectInfo,
     resolver: yupResolver(schema),
