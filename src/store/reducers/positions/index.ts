@@ -8,7 +8,7 @@ import {
   loadSkillMatrixAction,
   updatePositionAction,
 } from 'store/reducers/positions/actionTypes';
-import { IDBPosition, IMatrix, IPositionsState, IUpdatePosition } from 'models/IUser';
+import { IDBPosition, IMatrix, IPositionsState } from 'models/IUser';
 import { defaultPosition, DELETED_POSITION } from 'store/constants';
 import { createPositionRequest, getAllPositions, updatePositionRequest } from 'services/requests/positions';
 import { getSkillMatrixByPositionId } from 'services/requests/skills';
@@ -30,12 +30,9 @@ export const createPosition = createAsyncThunk(
   }
 );
 
-export const updatePosition = createAsyncThunk(
-  updatePositionAction,
-  ({ positionId, position }: IUpdatePosition): Promise<IDBPosition> => {
-    return updatePositionRequest(positionId, position);
-  }
-);
+export const updatePosition = createAsyncThunk(updatePositionAction, (position: IDBPosition): Promise<IDBPosition> => {
+  return updatePositionRequest(position);
+});
 
 const initialState: IPositionsState = {
   chosenPosition: defaultPosition,

@@ -1,5 +1,9 @@
+import { SettingsTabs } from './components/Tabs';
+
 export const Settings = () => {
   return (
-    <div>There will be settings page</div>
+    <div>
+      <SettingsTabs />
+    </div>
   );
-}
+};

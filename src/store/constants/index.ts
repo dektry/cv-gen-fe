@@ -9,26 +9,13 @@ export const defaultGroup = {
 };
 
 export const defaultPosition: IDBPosition = {
-  level: '',
-  from: '',
-  to: '',
-  duties: '',
   id: '',
   name: 'undefined',
-  requirements: '',
-  salaryMaxLimit: 2000,
-  salaryMinLimit: 500,
-  group: defaultGroup,
 };
 
 export const defaultLevel: IDBLevels = {
   id: '',
   name: 'undefined',
-  requirements: '',
-  from: '',
-  to: '',
-  level: '',
-  group: defaultGroup,
 };
 
 export const defaultUser: IDBUser = {

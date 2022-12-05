@@ -35,13 +35,9 @@ export const getAllPositions = async () => {
   }
 };
 
-export const updatePositionRequest = async (id: string, request: IDBPosition) => {
+export const updatePositionRequest = async (position: IDBPosition) => {
   try {
-    const transformedPosition = {
-      ...request,
-      group: request.group?.id,
-    };
-    const { data } = await apiClient.post(`${endpoints.positions}/${id}`, transformedPosition);
+    const { data } = await apiClient.post(`${endpoints.positions}/${position.id}`, position);
     return data;
   } catch (error) {
     console.error('[API_CLIENT_UPDATE_POSITION_ERROR]', error);

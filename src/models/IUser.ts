@@ -6,26 +6,13 @@ export interface IDBPermissions {
 }
 
 export interface IDBPosition {
-  duties: string;
   id?: string;
   name: string;
-  requirements: string;
-  level: string;
-  salaryMaxLimit: number;
-  salaryMinLimit: number;
-  group?: IDBPositionGroup;
-  from: string;
-  to: NullableField<string>;
 }
 
 export interface IDBLevels {
-  level: string;
   id?: string;
   name: string;
-  requirements: string;
-  group: IDBLevelGroup;
-  from: string;
-  to: NullableField<string>;
 }
 
 export interface IDBPositionGroup {
@@ -129,11 +116,6 @@ export interface IPositionsState {
   positionsLoading: boolean;
   skillMatrix: IMatrix;
   skillId?: string;
-}
-
-export interface IUpdatePosition {
-  positionId: string;
-  position: Omit<IDBPosition, 'id'>;
 }
 
 export interface ILevelsState {

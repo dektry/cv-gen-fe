@@ -6,7 +6,7 @@ import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
 import { CANT_LOGIN, AUTH_OUTDATED } from 'services/requests/constants';
 
-import { IDBCareer, IDBRole, IDBUser, IUpdatePosition } from 'models/IUser';
+import { IDBCareer, IDBPosition, IDBRole, IDBUser } from 'models/IUser';
 import { ICredentials } from 'models/ILogin';
 
 interface IResponse {
@@ -58,11 +58,11 @@ export const getAllRoles = async () => {
   }
 };
 
-export const updateUser = async (id: string, user: IDBUser & IUpdatePosition) => {
+export const updateUser = async (id: string, user: IDBUser & IDBPosition) => {
   try {
     const updatedUser = {
       ...user,
-      position: user.positionId,
+      position: user.position?.id,
       roleId: user.role.id,
     };
     const { data } = await apiClient.put(`${endpoints.users}/${id}`, updatedUser);
