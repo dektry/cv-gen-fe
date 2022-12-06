@@ -12,29 +12,40 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
+import { CreateEditModal } from '../CreateEditModal';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 
-interface IProps {
-  data: { id?: string; name: string }[];
+export interface IListElement {
+  id?: string;
   name: string;
 }
 
-interface FormValues {
-  data: { id?: string; name: string }[];
+interface IProps {
+  data: IListElement[];
+  name: string;
+  handleCreate: (name: string) => void;
+  handleUpdate: (data: IListElement) => void;
+  handleDelete: (id: string) => void;
 }
 
-export const TableComponent = ({ data, name }: IProps) => {
+interface FormValues {
+  data: IListElement[];
+}
+
+export const TableComponent = ({ data, name, handleCreate, handleDelete, handleUpdate }: IProps) => {
   const classes = useStyles({ theme });
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [id, setId] = useState(0);
+  const [currentEl, setCurrentEl] = useState<IListElement>({} as IListElement);
 
   const { control, reset } = useForm<FormValues>({
     defaultValues: { data },
@@ -51,16 +62,17 @@ export const TableComponent = ({ data, name }: IProps) => {
     keyName: 'fieldKey',
   });
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClosePopover = () => {
     setAnchorEl(null);
   };
 
-  const handleOpenDeleteModal = (idx: number) => {
+  const handleOpenDeleteModal = (idx: number, el: IListElement) => {
     setId(idx);
+    setCurrentEl(el);
     setIsDeleteModalOpen(true);
     setAnchorEl(null);
   };
@@ -71,8 +83,42 @@ export const TableComponent = ({ data, name }: IProps) => {
 
   const handleDeleteSubmit = () => {
     remove(id);
+    handleDelete(currentEl.id || '');
     setId(0);
     setIsDeleteModalOpen(false);
+  };
+
+  const handleCreateModalOpen = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCreateModaleClose = () => {
+    setIsCreateModalOpen(false);
+  };
+
+  const hanldeCreateSubmit = (name: string) => {
+    append({ name });
+    handleCreate(name);
+    setIsCreateModalOpen(false);
+  };
+
+  const handleOpenEditModal = (idx: number, el: IListElement) => {
+    setCurrentEl(el);
+    setId(idx);
+    setAnchorEl(null);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setCurrentEl({} as IListElement);
+  };
+
+  const handleEditSubmit = (name: string) => {
+    update(id, { id: currentEl.id, name });
+    handleUpdate({ id: currentEl.id || '', name });
+    setCurrentEl({} as IListElement);
+    setIsEditModalOpen(false);
   };
 
   const open = Boolean(anchorEl);
@@ -83,11 +129,19 @@ export const TableComponent = ({ data, name }: IProps) => {
 
   return (
     <FormControl className={classes.container}>
+      <div className={classes.upperContainer}>
+        <Typography variant="h2" sx={{ marginBottom: '24px' }}>
+          {`${text.toUpperCase()}`}
+        </Typography>
+        <div className={classes.addButton}>
+          <AddButton onClick={handleCreateModalOpen} />
+        </div>
+      </div>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>{name}</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>{name}</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
@@ -100,22 +154,30 @@ export const TableComponent = ({ data, name }: IProps) => {
                 <TableCell className={classes.cellRight}>
                   <Button
                     className={classes.more}
-                    onClick={handleClick}
-                    endIcon={<MoreVertIcon className={classes.icon} />}
+                    onClick={handleClickPopover}
+                    endIcon={<MoreVertIcon className={classes.icon} color="disabled" />}
                   />
                   <Popover
                     className={classes.popOver}
                     id={popOverId}
                     open={open}
                     anchorEl={anchorEl}
-                    onClose={handleClose}
+                    onClose={handleClosePopover}
                     anchorOrigin={{
                       vertical: 'bottom',
                       horizontal: 'left',
                     }}
                   >
-                    <Button className={classes.button}>Edit</Button>
-                    <Button className={classes.deleteButton} onClick={() => handleOpenDeleteModal(idx)}>
+                    <Button
+                      className={classes.button}
+                      onClick={() => handleOpenEditModal(idx, { id: row.id || '', name: row.name })}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      className={classes.deleteButton}
+                      onClick={() => handleOpenDeleteModal(idx, { id: row.id || '', name: row.name })}
+                    >
                       Delete
                     </Button>
                   </Popover>
@@ -125,6 +187,23 @@ export const TableComponent = ({ data, name }: IProps) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <CreateEditModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCreateModaleClose}
+        onSubmit={hanldeCreateSubmit}
+        modalTitle={`ADD NEW ${text.toUpperCase()}`}
+        label={text}
+        buttonText={`Add ${text}`}
+      />
+      <CreateEditModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditModalClose}
+        onSubmit={handleEditSubmit}
+        modalTitle={`EDIT ${text.toUpperCase()}`}
+        label={text}
+        buttonText={'Save'}
+        inputValue={currentEl.name}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}

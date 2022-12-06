@@ -6,11 +6,6 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { TextField, Typography } from '@mui/material';
 
-import { useSelector } from 'react-redux';
-import { employeesSelector } from 'store/reducers/employees';
-
-import { IProject } from 'models/IProject';
-
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 
@@ -20,15 +15,16 @@ interface IProps {
   isOpen: boolean;
   modalTitle: string;
   onClose: () => void;
-  onSubmit?: () => void;
+  onSubmit: (name: string) => void;
   label: string;
   buttonText: string;
+  inputValue?: string;
 }
 
-export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, buttonText }: IProps) => {
+export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, buttonText, inputValue }: IProps) => {
   const classes = useStyles({ theme });
 
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(inputValue || '');
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -38,6 +34,12 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, 
       setDisabled(true);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (inputValue) {
+      setValue(inputValue);
+    }
+  }, [inputValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -51,12 +53,12 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, 
           <Typography variant="h2" className={classes.title}>
             {modalTitle}
           </Typography>
-          <TextField onChange={handleChange} label={label} />
+          <TextField value={value} onChange={handleChange} label={label} />
           <div className={classes.buttonContainer}>
             <Button className={classes.cancelButton} onClick={onClose}>
               Cancel
             </Button>
-            <SaveButton title={buttonText} handleClickOkButton={onSubmit} error={disabled} />
+            <SaveButton title={buttonText} handleClickOkButton={() => onSubmit(value)} error={disabled} />
           </div>
         </Box>
       </Modal>

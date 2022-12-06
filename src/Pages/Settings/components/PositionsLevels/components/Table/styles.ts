@@ -12,12 +12,12 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   cellLeft: {
     '&.MuiTableCell-root': {
-      width: '90%',
+      width: '99%',
     },
   },
   cellRight: {
     '&.MuiTableCell-root': {
-      width: '10%',
+      width: '1%',
     },
   },
   popOver: {
@@ -42,6 +42,11 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       '&.MuiSvgIcon-root': {
         margin: '0',
       },
+      '&.MuiButton-endIcon': {
+        '&:nth-of-type(1)': {
+          fontSize: '48px',
+        },
+      },
     },
   },
   button: {
@@ -60,5 +65,13 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       display: 'flex',
       justifyContent: 'flex-start',
     },
+  },
+  upperContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: 'center',
+  },
+  addButton: {
+    marginLeft: '8px',
   },
 });
