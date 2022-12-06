@@ -29,7 +29,6 @@ export const PositionsLevels = () => {
   };
 
   const handleUpdatePosition = (data: IListElement) => {
-    console.log(data);
     dispatch(updatePosition(data));
   };
 

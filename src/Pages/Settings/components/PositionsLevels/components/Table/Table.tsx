@@ -40,12 +40,12 @@ interface FormValues {
 
 export const TableComponent = ({ data, name, handleCreate, handleDelete, handleUpdate }: IProps) => {
   const classes = useStyles({ theme });
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [popoverAnchorElement, setPopoverAnchorElement] = useState<HTMLButtonElement | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [id, setId] = useState(0);
-  const [currentEl, setCurrentEl] = useState<IListElement>({} as IListElement);
+  const [listElementNumericId, setListElementNumericId] = useState(0);
+  const [activeListElement, setActiveListElement] = useState<IListElement>({} as IListElement);
 
   const { control, reset } = useForm<FormValues>({
     defaultValues: { data },
@@ -63,18 +63,18 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   });
 
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    setPopoverAnchorElement(event.currentTarget);
   };
 
   const handleClosePopover = () => {
-    setAnchorEl(null);
+    setPopoverAnchorElement(null);
   };
 
   const handleOpenDeleteModal = (idx: number, el: IListElement) => {
-    setId(idx);
-    setCurrentEl(el);
+    setListElementNumericId(idx);
+    setActiveListElement(el);
     setIsDeleteModalOpen(true);
-    setAnchorEl(null);
+    setPopoverAnchorElement(null);
   };
 
   const handleDeleteModalClose = () => {
@@ -82,9 +82,9 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   };
 
   const handleDeleteSubmit = () => {
-    remove(id);
-    handleDelete(currentEl.id || '');
-    setId(0);
+    remove(listElementNumericId);
+    handleDelete(activeListElement.id || '');
+    setListElementNumericId(0);
     setIsDeleteModalOpen(false);
   };
 
@@ -103,25 +103,25 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   };
 
   const handleOpenEditModal = (idx: number, el: IListElement) => {
-    setCurrentEl(el);
-    setId(idx);
-    setAnchorEl(null);
+    setActiveListElement(el);
+    setListElementNumericId(listElementNumericId);
+    setPopoverAnchorElement(null);
     setIsEditModalOpen(true);
   };
 
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
-    setCurrentEl({} as IListElement);
+    setActiveListElement({} as IListElement);
   };
 
   const handleEditSubmit = (name: string) => {
-    update(id, { id: currentEl.id, name });
-    handleUpdate({ id: currentEl.id || '', name });
-    setCurrentEl({} as IListElement);
+    update(listElementNumericId, { id: activeListElement.id, name });
+    handleUpdate({ id: activeListElement.id || '', name });
+    setActiveListElement({} as IListElement);
     setIsEditModalOpen(false);
   };
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(popoverAnchorElement);
   const popOverId = open ? 'simple-popover' : undefined;
   const modalTitle = name.includes('Position') ? 'Delete position' : 'Delete level';
   const text = name.includes('Position') ? 'Position' : 'Level';
@@ -161,7 +161,7 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
                     className={classes.popOver}
                     id={popOverId}
                     open={open}
-                    anchorEl={anchorEl}
+                    anchorEl={popoverAnchorElement}
                     onClose={handleClosePopover}
                     anchorOrigin={{
                       vertical: 'bottom',
@@ -202,7 +202,7 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
         modalTitle={`EDIT ${text.toUpperCase()}`}
         label={text}
         buttonText={'Save'}
-        inputValue={currentEl.name}
+        inputValue={activeListElement.name}
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}
