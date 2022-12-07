@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { StarFilled } from '@ant-design/icons';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { Tooltip } from 'antd';
 
 import { navigationKeys, mainPath, CANDIDATES, EMPLOYEES, SETTINGS } from './utils/constants';
@@ -61,7 +62,7 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
           itemKey={[navigationKeys['/settings']]}
           setSelectedItem={setSelectedItem}
           setCollapse={setCollapse}
-          icon={<StarFilled />}
+          icon={<SettingsIcon />}
         >
           <Tooltip placement="right" title={collapsed ? SETTINGS : ''}>
             <Link to={paths.settings}>{SETTINGS}</Link>

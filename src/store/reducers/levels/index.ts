@@ -6,10 +6,11 @@ import {
   createLevelAction,
   loadLevelsAction,
   updateLevelAction,
+  deleteLevelAction,
 } from 'store/reducers/levels/actionTypes';
-import { IDBLevels, ILevelsState, IUpdateLevel } from 'models/IUser';
+import { IDBLevels, ILevelsState } from 'models/IUser';
 import { defaultLevel, DELETED_LEVELS } from 'store/constants';
-import { createLevelRequest, getAllLevels, updateLevelRequest } from 'services/requests/levels';
+import { createLevelRequest, getAllLevels, updateLevelRequest, deleteLevelRequest } from 'services/requests/levels';
 import { sortLevels } from 'store/helpers/sortLevels';
 
 export const loadLevels = createAsyncThunk(loadLevelsAction, async (): Promise<IDBLevels[]> => {
@@ -25,12 +26,13 @@ export const createLevel = createAsyncThunk(
   }
 );
 
-export const updateLevel = createAsyncThunk(
-  updateLevelAction,
-  ({ levelId, level }: IUpdateLevel): Promise<IDBLevels> => {
-    return updateLevelRequest(levelId, level);
-  }
-);
+export const updateLevel = createAsyncThunk(updateLevelAction, (level: IDBLevels): Promise<IDBLevels> => {
+  return updateLevelRequest(level);
+});
+
+export const deleteLevel = createAsyncThunk(deleteLevelAction, (id: string): Promise<void> => {
+  return deleteLevelRequest(id);
+});
 
 const initialState: ILevelsState = {
   chosenLevel: defaultLevel,

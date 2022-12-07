@@ -35,13 +35,9 @@ export const getAllPositions = async () => {
   }
 };
 
-export const updatePositionRequest = async (id: string, request: IDBPosition) => {
+export const updatePositionRequest = async (position: IDBPosition) => {
   try {
-    const transformedPosition = {
-      ...request,
-      group: request.group?.id,
-    };
-    const { data } = await apiClient.post(`${endpoints.positions}/${id}`, transformedPosition);
+    const { data } = await apiClient.put(`${endpoints.positions}/${position.id}`, position);
     return data;
   } catch (error) {
     console.error('[API_CLIENT_UPDATE_POSITION_ERROR]', error);
@@ -55,6 +51,15 @@ export const createPositionRequest = async (request: IDBPosition) => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_POSITION_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const deletePositionRequest = async (id: string) => {
+  try {
+    await apiClient.delete(`${endpoints.positions}/${id}`);
+  } catch (error) {
+    console.error('[API_CLIENT_DELETE_POSITION_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };

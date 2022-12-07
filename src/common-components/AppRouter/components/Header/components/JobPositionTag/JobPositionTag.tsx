@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export const JobPositionTag = ({ position, className }: IProps) => {
-  const roleColor = position?.group?.color || defaultUserColor;
+  const roleColor = defaultUserColor;
   const classes = useStyles();
   return (
     <>
