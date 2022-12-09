@@ -1,0 +1,63 @@
+import { message } from 'antd';
+
+import { apiClient } from 'services/apiService';
+import endpoints from 'config/endpoint.json';
+import { IHardSkillsMatrix, ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
+
+export const httpGetAllHardSkillsMatrix = async () => {
+  try {
+    const { data } = await apiClient.get(endpoints.hardSkillsMatrix);
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_HARD_SKILLS_MATRIX_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpGetOneHardSkillsMatrix = async (id: string) => {
+  try {
+    const { data } = await apiClient.get(`${endpoints.hardSkillsMatrix}/${id}`);
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_ONE_HARD_SKILLS_MATRIX_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpCreateHardSkillsMatrix = async (matrix: IHardSkillsMatrix) => {
+  try {
+    const { data } = await apiClient.post(endpoints.hardSkillsMatrix, matrix);
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpEditHardSkillsMatrix = async (matrix: IHardSkillsMatrix) => {
+  try {
+    const { data } = await apiClient.put(`${endpoints.hardSkillsMatrix}/${matrix.id}`, matrix);
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpDeleteHardSkillsMatrix = async (id: string) => {
+  try {
+    await apiClient.delete(`${endpoints.hardSkillsMatrix}/${id}`);
+  } catch (error) {
+    console.error('[API_CLIENT_DELETE_HARD_SKILLS_MATRIX_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpCopyHardSkillsMatrix = async (props: ICopyHardSkillsMatrixProps) => {
+  try {
+    const data = await apiClient.post(`${endpoints.hardSkillsMatrix}/copy`, props);
+  } catch (error) {
+    console.error('[API_CLIENT_COPY_HARD_SKILLS_MATRIX_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};

@@ -10,6 +10,8 @@ import { useStyles } from './styles';
 import theme from 'theme/theme';
 
 import { SaveButton } from 'common-components/SaveButton';
+import { CustomSelect } from 'common-components/CustomSelect';
+import { IListElement } from '../Table';
 
 interface IProps {
   isOpen: boolean;
@@ -19,9 +21,19 @@ interface IProps {
   label: string;
   buttonText: string;
   inputValue?: string;
+  data?: IListElement[];
 }
 
-export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, buttonText, inputValue }: IProps) => {
+export const CreateEditModal = ({
+  isOpen,
+  modalTitle,
+  onClose,
+  onSubmit,
+  label,
+  buttonText,
+  inputValue,
+  data,
+}: IProps) => {
   const classes = useStyles({ theme });
 
   const [value, setValue] = useState(inputValue || '');
@@ -45,6 +57,11 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, 
     setValue(e.target.value);
   };
 
+  let options: { value: string; label: string }[] = [];
+  if (data) {
+    options = data.map((el) => ({ value: el.name, label: el.name }));
+  }
+
   return (
     <>
       <Modal open={isOpen} onClose={onClose}>
@@ -53,12 +70,20 @@ export const CreateEditModal = ({ isOpen, modalTitle, onClose, onSubmit, label, 
           <Typography variant="h2" className={classes.title}>
             {modalTitle}
           </Typography>
-          <TextField value={value} onChange={handleChange} label={label} />
+          {data ? (
+            <CustomSelect options={options} value={value} onChange={handleChange} />
+          ) : (
+            <TextField value={value} onChange={handleChange} label={label} />
+          )}
           <div className={classes.buttonContainer}>
             <Button className={classes.cancelButton} onClick={onClose}>
               Cancel
             </Button>
-            <SaveButton title={buttonText} handleClickOkButton={() => onSubmit(value)} error={disabled} />
+            <SaveButton
+              title={data ? 'Start' : buttonText}
+              handleClickOkButton={() => onSubmit(value)}
+              error={disabled}
+            />
           </div>
         </Box>
       </Modal>

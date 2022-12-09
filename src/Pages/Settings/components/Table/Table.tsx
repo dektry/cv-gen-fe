@@ -20,30 +20,54 @@ import { CreateEditModal } from '../CreateEditModal';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
+import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 export interface IListElement {
   id?: string;
+  positionId?: string;
   name: string;
+}
+
+export interface IHandleCopyProp {
+  positionId: string;
+  hardSkillMatrixId: string;
 }
 
 interface IProps {
   data: IListElement[];
   name: string;
-  handleCreate: (name: string) => void;
-  handleUpdate: (data: IListElement) => void;
+  handleCreate?: (name: string, positionId?: string) => void;
+  handleUpdate?: (data: IListElement) => void;
   handleDelete: (id: string) => void;
+  handleCopy?: (data: IHandleCopyProp) => void;
+  positions?: IListElement[];
+  addModalTitle: string;
+  editModalTitle: string;
+  copyModalTitle?: string;
 }
 
 interface FormValues {
   data: IListElement[];
 }
 
-export const TableComponent = ({ data, name, handleCreate, handleDelete, handleUpdate }: IProps) => {
+export const TableComponent = ({
+  data,
+  name,
+  handleCreate,
+  handleDelete,
+  handleUpdate,
+  handleCopy,
+  positions,
+  addModalTitle,
+  editModalTitle,
+  copyModalTitle,
+}: IProps) => {
   const classes = useStyles({ theme });
   const [popoverAnchorElement, setPopoverAnchorElement] = useState<HTMLButtonElement | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
   const [listElementNumericId, setListElementNumericId] = useState(0);
   const [activeListElement, setActiveListElement] = useState<IListElement>({} as IListElement);
 
@@ -62,7 +86,9 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
     keyName: 'fieldKey',
   });
 
-  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>, el: IListElement, idx: number) => {
+    setActiveListElement(el);
+    setListElementNumericId(idx);
     setPopoverAnchorElement(event.currentTarget);
   };
 
@@ -70,9 +96,7 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
     setPopoverAnchorElement(null);
   };
 
-  const handleOpenDeleteModal = (idx: number, el: IListElement) => {
-    setListElementNumericId(idx);
-    setActiveListElement(el);
+  const handleOpenDeleteModal = () => {
     setIsDeleteModalOpen(true);
     setPopoverAnchorElement(null);
   };
@@ -96,15 +120,15 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
     setIsCreateModalOpen(false);
   };
 
-  const hanldeCreateSubmit = (name: string) => {
-    append({ name });
-    handleCreate(name);
+  const hanldeCreateSubmit = (name: string, positionId?: string) => {
+    append({ name, positionId });
+    if (handleCreate) {
+      handleCreate(name, positionId);
+    }
     setIsCreateModalOpen(false);
   };
 
-  const handleOpenEditModal = (idx: number, el: IListElement) => {
-    setActiveListElement(el);
-    setListElementNumericId(listElementNumericId);
+  const handleOpenEditModal = () => {
     setPopoverAnchorElement(null);
     setIsEditModalOpen(true);
   };
@@ -115,10 +139,28 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   };
 
   const handleEditSubmit = (name: string) => {
-    update(listElementNumericId, { id: activeListElement.id, name });
-    handleUpdate({ id: activeListElement.id || '', name });
+    update(listElementNumericId, { id: activeListElement.id, name, positionId: activeListElement.positionId });
+    if (handleUpdate) {
+      handleUpdate({ id: activeListElement.id || '', name });
+    }
     setActiveListElement({} as IListElement);
     setIsEditModalOpen(false);
+  };
+
+  const handleOpenCopyModal = () => {
+    setPopoverAnchorElement(null);
+    setIsCopyModalOpen(true);
+  };
+
+  const handleCloseCopyModal = () => {
+    setIsCopyModalOpen(false);
+    setActiveListElement({} as IListElement);
+  };
+
+  const handleCopySubmit = () => {
+    if (handleCopy && activeListElement.id && activeListElement.positionId) {
+      handleCopy({ positionId: activeListElement.positionId, hardSkillMatrixId: activeListElement.id });
+    }
   };
 
   const open = Boolean(popoverAnchorElement);
@@ -154,7 +196,9 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
                 <TableCell className={classes.cellRight}>
                   <Button
                     className={classes.more}
-                    onClick={handleClickPopover}
+                    onClick={(e) =>
+                      handleClickPopover(e, { id: row.id || '', name: row.name, positionId: row.positionId }, idx)
+                    }
                     endIcon={<MoreVertIcon className={classes.icon} color="disabled" />}
                   />
                   <Popover
@@ -168,16 +212,15 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
                       horizontal: 'left',
                     }}
                   >
-                    <Button
-                      className={classes.button}
-                      onClick={() => handleOpenEditModal(idx, { id: row.id || '', name: row.name })}
-                    >
+                    {handleCopy && (
+                      <Button className={classes.button} onClick={handleOpenCopyModal}>
+                        Copy
+                      </Button>
+                    )}
+                    <Button className={classes.button} onClick={handleOpenEditModal}>
                       Edit
                     </Button>
-                    <Button
-                      className={classes.deleteButton}
-                      onClick={() => handleOpenDeleteModal(idx, { id: row.id || '', name: row.name })}
-                    >
+                    <Button className={classes.deleteButton} onClick={handleOpenDeleteModal}>
                       Delete
                     </Button>
                   </Popover>
@@ -191,19 +234,33 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
         isOpen={isCreateModalOpen}
         onClose={handleCreateModaleClose}
         onSubmit={hanldeCreateSubmit}
-        modalTitle={`ADD NEW ${text.toUpperCase()}`}
+        modalTitle={addModalTitle}
         label={text}
         buttonText={`Add ${text}`}
+        data={positions}
       />
       <CreateEditModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
         onSubmit={handleEditSubmit}
-        modalTitle={`EDIT ${text.toUpperCase()}`}
+        modalTitle={editModalTitle}
         label={text}
         buttonText={'Save'}
         inputValue={activeListElement.name}
+        data={positions}
       />
+      {handleCopy && copyModalTitle && (
+        <CreateEditModal
+          isOpen={isCopyModalOpen}
+          onClose={handleCloseCopyModal}
+          onSubmit={handleCopySubmit}
+          modalTitle={copyModalTitle}
+          label={text}
+          buttonText={'Save'}
+          inputValue={activeListElement.name}
+          data={positions}
+        />
+      )}
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}

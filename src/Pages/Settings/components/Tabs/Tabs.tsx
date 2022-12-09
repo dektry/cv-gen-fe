@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 import { PositionsLevels } from '../PositionsLevels';
+import { AssessmentsList } from '../AssessmentsList';
 import { TabPanel } from './components/TabPanel';
 
 import { useStyles } from './styles';
@@ -18,7 +19,7 @@ function tabsProps(index: number) {
 
 const tabs = [
   { label: 'Positions & Levels', component: <PositionsLevels /> },
-  { label: 'Technical assessment', component: <span /> },
+  { label: 'Technical assessment', component: <AssessmentsList /> },
   { label: 'Soft assessment', component: <span /> },
   { label: 'English assessment', component: <span /> },
 ];
@@ -36,7 +37,7 @@ export const SettingsTabs = () => {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="settings tabs">
           {tabs.map((el, index) => (
-            <Tab className={classes.tab} label={el.label} {...tabsProps(index)} />
+            <Tab key={el.label} className={classes.tab} label={el.label} {...tabsProps(index)} />
           ))}
         </Tabs>
       </Box>

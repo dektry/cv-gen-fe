@@ -11,7 +11,7 @@ import {
 } from 'store/reducers/positions';
 import { levelsSelector, loadLevels, createLevel, updateLevel, deleteLevel } from 'store/reducers/levels';
 
-import { IListElement, TableComponent } from './components/Table';
+import { IListElement, TableComponent } from '../../components/Table';
 
 export const PositionsLevels = () => {
   const { allPositions } = useSelector(positionsSelector);
@@ -56,6 +56,8 @@ export const PositionsLevels = () => {
         handleCreate={handleCreatePosition}
         handleUpdate={handleUpdatePosition}
         handleDelete={handleDeletePosition}
+        addModalTitle={'ADD NEW POSITION'}
+        editModalTitle={'EDIT POSITION'}
       />
       <TableComponent
         data={allLevels}
@@ -63,6 +65,8 @@ export const PositionsLevels = () => {
         handleCreate={handleCreateLevel}
         handleUpdate={handleUpdateLevel}
         handleDelete={handleDeleteLevel}
+        addModalTitle={'ADD NEW LEVEL'}
+        editModalTitle={'EDIT LEVEL'}
       />
     </>
   );
