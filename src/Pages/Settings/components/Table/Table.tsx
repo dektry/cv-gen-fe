@@ -40,6 +40,7 @@ interface IProps {
   handleUpdate?: (data: IListElement) => void;
   handleDelete: (id: string) => void;
   handleCopy?: (data: IHandleCopyProp) => void;
+  handleOpenDetailsPage?: (id: string) => void;
   positions?: IListElement[];
   addModalTitle: string;
   editModalTitle: string;
@@ -121,7 +122,7 @@ export const TableComponent = ({
   };
 
   const hanldeCreateSubmit = (name: string, positionId?: string) => {
-    append({ name, positionId });
+    !positions && append({ name, positionId });
     if (handleCreate) {
       handleCreate(name, positionId);
     }
@@ -139,7 +140,8 @@ export const TableComponent = ({
   };
 
   const handleEditSubmit = (name: string) => {
-    update(listElementNumericId, { id: activeListElement.id, name, positionId: activeListElement.positionId });
+    !positions &&
+      update(listElementNumericId, { id: activeListElement.id, name, positionId: activeListElement.positionId });
     if (handleUpdate) {
       handleUpdate({ id: activeListElement.id || '', name });
     }

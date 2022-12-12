@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+import { IHardSkillsMatrix, ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
 
 import {
   httpGetAllHardSkillsMatrix,
@@ -7,6 +7,7 @@ import {
   httpDeleteHardSkillsMatrix,
   httpCreateHardSkillsMatrix,
   httpEditHardSkillsMatrix,
+  httpCopyHardSkillsMatrix,
 } from 'services/requests/hardSkillsMatrix';
 
 import {
@@ -15,6 +16,7 @@ import {
   createHardSkillsMatrixAction,
   deleteHardSkillsMatrixAction,
   editHardSkillsMatrixAction,
+  copyHardSkillsMatrixAction,
 } from './actionTypes';
 
 export const getAllHardSkillsMatrix = createAsyncThunk(loadAllHardSkillsMatrix, () => {
@@ -35,4 +37,8 @@ export const createHardSkillsMatrix = createAsyncThunk(createHardSkillsMatrixAct
 
 export const edtHardSkillsMatrix = createAsyncThunk(editHardSkillsMatrixAction, (matrix: IHardSkillsMatrix) => {
   return httpEditHardSkillsMatrix(matrix);
+});
+
+export const copyHardSkillsMatrix = createAsyncThunk(copyHardSkillsMatrixAction, (data: ICopyHardSkillsMatrixProps) => {
+  return httpCopyHardSkillsMatrix(data);
 });

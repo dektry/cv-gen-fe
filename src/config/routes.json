@@ -26,5 +26,8 @@
     "users": "/users",
     "settings": "/settings",
     "uiElements": "/ui-elements",
-    "createEmployee": "/create-employee"
+    "createEmployee": "/create-employee",
+    "techAssessmentSetUp": "/settings/tech-assessment",
+    "techAssessmentDetails": "/settings/tech-assessment/:id",
+    "techAssessmentCopy": "/settings/tech-assessment/copy"
 }

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useNavigate, generatePath } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
@@ -10,11 +11,14 @@ import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 
 import { TableComponent } from '../../components/Table';
 
+import routes from 'config/routes.json';
+
 export const AssessmentsList = () => {
   const { allPositions } = useSelector(positionsSelector);
   const { matrix } = useSelector(hardSkillsMatrixSelector);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(loadPositions());
@@ -25,7 +29,15 @@ export const AssessmentsList = () => {
     dispatch(deleteHardSkillsMatrix(id));
   };
 
-  const handleCopy = () => {
+  const handleCreateHardSkillsMatrix = () => {
+    navigate(routes.techAssessmentSetUp);
+  };
+
+  const handleOpenHardSkillsMatrixDetails = (id: string) => {
+    navigate(generatePath(routes.techAssessmentDetails, { id }));
+  };
+
+  const handleCopyHrdSkillsMatrix = () => {
     console.log('COPY');
   };
 
@@ -39,7 +51,9 @@ export const AssessmentsList = () => {
       data={datatoShow}
       name={'Position'}
       handleDelete={handleDeleteMatrix}
-      handleCopy={handleCopy}
+      handleCopy={handleCopyHrdSkillsMatrix}
+      handleCreate={handleCreateHardSkillsMatrix}
+      handleOpenDetailsPage={handleOpenHardSkillsMatrixDetails}
       positions={allPositions}
       addModalTitle={'ADD NEW POSITION TECHNICAL ASSESSMENT'}
       editModalTitle={'EDIT POSITION TECHNICAL ASSESSMENT'}
