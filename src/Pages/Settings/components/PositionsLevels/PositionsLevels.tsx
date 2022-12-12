@@ -24,8 +24,8 @@ export const PositionsLevels = () => {
     dispatch(loadLevels());
   }, []);
 
-  const handleCreatePosition = (name: string) => {
-    dispatch(createPosition({ name }));
+  const handleCreatePosition = (name?: string) => {
+    dispatch(createPosition({ name: name || '' }));
   };
 
   const handleUpdatePosition = (data: IListElement) => {
@@ -36,8 +36,8 @@ export const PositionsLevels = () => {
     dispatch(deletePosition(id));
   };
 
-  const handleCreateLevel = (name: string) => {
-    dispatch(createLevel({ name }));
+  const handleCreateLevel = (name?: string) => {
+    dispatch(createLevel({ name: name || '' }));
   };
 
   const handleUpdateLevel = (data: IListElement) => {

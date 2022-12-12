@@ -7,11 +7,12 @@ import { useAppDispatch } from 'store';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 
 import { getAllHardSkillsMatrix, deleteHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
-import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
+import { hardSkillsMatrixSelector, setCurrentPosition } from 'store/reducers/hardSkillsMatrix';
 
 import { TableComponent } from '../../components/Table';
 
 import routes from 'config/routes.json';
+import { IDBPosition } from 'models/IUser';
 
 export const AssessmentsList = () => {
   const { allPositions } = useSelector(positionsSelector);
@@ -29,7 +30,10 @@ export const AssessmentsList = () => {
     dispatch(deleteHardSkillsMatrix(id));
   };
 
-  const handleCreateHardSkillsMatrix = () => {
+  const handleCreateHardSkillsMatrix = (name?: string, position?: IDBPosition) => {
+    if (position) {
+      dispatch(setCurrentPosition(position));
+    }
     navigate(routes.techAssessmentSetUp);
   };
 
@@ -37,7 +41,7 @@ export const AssessmentsList = () => {
     navigate(generatePath(routes.techAssessmentDetails, { id }));
   };
 
-  const handleCopyHrdSkillsMatrix = () => {
+  const handleCopyHardSkillsMatrix = () => {
     console.log('COPY');
   };
 
@@ -51,7 +55,7 @@ export const AssessmentsList = () => {
       data={datatoShow}
       name={'Position'}
       handleDelete={handleDeleteMatrix}
-      handleCopy={handleCopyHrdSkillsMatrix}
+      handleCopy={handleCopyHardSkillsMatrix}
       handleCreate={handleCreateHardSkillsMatrix}
       handleOpenDetailsPage={handleOpenHardSkillsMatrixDetails}
       positions={allPositions}

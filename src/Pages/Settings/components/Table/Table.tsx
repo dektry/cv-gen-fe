@@ -20,7 +20,7 @@ import { CreateEditModal } from '../CreateEditModal';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+import { IDBPosition } from 'models/IUser';
 
 export interface IListElement {
   id?: string;
@@ -36,7 +36,7 @@ export interface IHandleCopyProp {
 interface IProps {
   data: IListElement[];
   name: string;
-  handleCreate?: (name: string, positionId?: string) => void;
+  handleCreate?: (name?: string, position?: IDBPosition) => void;
   handleUpdate?: (data: IListElement) => void;
   handleDelete: (id: string) => void;
   handleCopy?: (data: IHandleCopyProp) => void;
@@ -121,10 +121,10 @@ export const TableComponent = ({
     setIsCreateModalOpen(false);
   };
 
-  const hanldeCreateSubmit = (name: string, positionId?: string) => {
-    !positions && append({ name, positionId });
+  const hanldeCreateSubmit = (name: string, position?: IDBPosition) => {
+    !positions && append({ name, positionId: position?.id || '' });
     if (handleCreate) {
-      handleCreate(name, positionId);
+      handleCreate(name, position);
     }
     setIsCreateModalOpen(false);
   };

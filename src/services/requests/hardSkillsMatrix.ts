@@ -56,6 +56,8 @@ export const httpDeleteHardSkillsMatrix = async (id: string) => {
 export const httpCopyHardSkillsMatrix = async (props: ICopyHardSkillsMatrixProps) => {
   try {
     const data = await apiClient.post(`${endpoints.hardSkillsMatrix}/copy`, props);
+
+    return data;
   } catch (error) {
     console.error('[API_CLIENT_COPY_HARD_SKILLS_MATRIX_ERROR]', error);
     message.error(`Server error. Please contact admin`);

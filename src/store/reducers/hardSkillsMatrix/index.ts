@@ -4,6 +4,7 @@ import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
 import { IHardSkillsMatrix, IHardSkillsMatrixState } from 'models/IHardSkillsMatrix';
+import { IDBPosition } from 'models/IUser';
 
 import { getAllHardSkillsMatrix } from './thunks';
 
@@ -22,6 +23,9 @@ const harSkillsMatrix = createSlice({
     },
     setCurrentHradSkillsMatrix: (state, { payload }: PayloadAction<IHardSkillsMatrix>) => {
       state.currentMatrix = payload;
+    },
+    setCurrentPosition: (state, { payload }: PayloadAction<IDBPosition>) => {
+      state.currentMatrix.position = payload;
     },
   },
   extraReducers: (builder) => {
@@ -42,4 +46,4 @@ export default harSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
-export const { setHardSkillsMatrixIsLoading, setCurrentHradSkillsMatrix } = harSkillsMatrix.actions;
+export const { setHardSkillsMatrixIsLoading, setCurrentHradSkillsMatrix, setCurrentPosition } = harSkillsMatrix.actions;

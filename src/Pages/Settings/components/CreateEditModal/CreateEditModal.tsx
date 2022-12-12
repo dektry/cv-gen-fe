@@ -12,12 +12,13 @@ import theme from 'theme/theme';
 import { SaveButton } from 'common-components/SaveButton';
 import { CustomSelect } from 'common-components/CustomSelect';
 import { IListElement } from '../Table';
+import { IDBPosition } from 'models/IUser';
 
 interface IProps {
   isOpen: boolean;
   modalTitle: string;
   onClose: () => void;
-  onSubmit: (name: string) => void;
+  onSubmit: (name: string, position?: IDBPosition) => void;
   label: string;
   buttonText: string;
   inputValue?: string;
@@ -37,25 +38,33 @@ export const CreateEditModal = ({
   const classes = useStyles({ theme });
 
   const [value, setValue] = useState(inputValue || '');
+  const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     if (value) {
       setDisabled(false);
+      if (data) {
+        const currentPosition = data.find((el) => el.name === value);
+        if (currentPosition) {
+          setPosition(currentPosition);
+        }
+      }
     } else {
       setDisabled(true);
     }
   }, [value]);
 
-  useEffect(() => {
-    if (inputValue) {
-      setValue(inputValue);
-    }
-  }, [inputValue]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
+
+  useEffect(() => {
+    return () => {
+      setValue('');
+      setPosition({} as IDBPosition);
+    };
+  }, []);
 
   let options: { value: string; label: string }[] = [];
   if (data) {
@@ -81,7 +90,7 @@ export const CreateEditModal = ({
             </Button>
             <SaveButton
               title={data ? 'Start' : buttonText}
-              handleClickOkButton={() => onSubmit(value)}
+              handleClickOkButton={() => onSubmit(value, position)}
               error={disabled}
             />
           </div>
