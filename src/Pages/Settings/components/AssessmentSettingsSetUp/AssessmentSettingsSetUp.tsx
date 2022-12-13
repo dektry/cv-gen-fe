@@ -16,7 +16,8 @@ import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 
-import { AssessmentQuestions } from './components/AssessmentQuestions';
+import { AssessmentQuestions } from './components/AssessmentQuestions/components/AssessmentQuestions';
+import { AssessmentLevels } from './components/AssessmentLevels';
 
 const steps = ['Technical assessment questions', 'Setting the level'];
 
@@ -37,6 +38,7 @@ export const AssessmentSettingsSetUp = () => {
   }, [id]);
 
   const handleStep = (step: number) => () => {
+    console.log(step);
     setActiveStep(step);
   };
 
@@ -60,9 +62,9 @@ export const AssessmentSettingsSetUp = () => {
         </Stepper>
         <div>
           {activeStep === 0 ? (
-            <AssessmentQuestions skillGroups={currentMatrix.skillGroups} />
+            <AssessmentQuestions skillGroups={currentMatrix.skillGroups} setActiveStep={setActiveStep} />
           ) : (
-            <p>There gonne be levels</p>
+            <AssessmentLevels />
           )}
         </div>
       </Box>

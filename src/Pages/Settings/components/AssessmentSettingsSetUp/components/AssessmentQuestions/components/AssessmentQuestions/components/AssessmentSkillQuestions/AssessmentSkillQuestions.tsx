@@ -1,12 +1,11 @@
+import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { IFormQuestion } from 'models/IHardSkillsMatrix';
-
-import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
-
+import { AddButton } from 'common-components/AddButton';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 
@@ -30,7 +29,7 @@ export const AssessmentSkillQuestions = ({ groupIndex, skillIndex }: IProps) => 
     <>
       {fields.map((question, questionId) => {
         return (
-          <Box key={question.questionKey}>
+          <Box key={question.questionKey} className={classes.question}>
             <Controller
               name={`skillGroups.${groupIndex}.skills.${skillIndex}.questions.${questionId}.value`}
               control={control}
@@ -48,7 +47,7 @@ export const AssessmentSkillQuestions = ({ groupIndex, skillIndex }: IProps) => 
         );
       })}
 
-      <Button onClick={() => append({ value: '' })}>Add question</Button>
+      <AddButton onClick={() => append({ value: '' })} title={'Add question'} />
     </>
   );
 };

@@ -24,9 +24,12 @@ export const httpGetOneHardSkillsMatrix = async (id: string) => {
   }
 };
 
-export const httpCreateHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix) => {
+export const httpCreateHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix, positionId: string) => {
   try {
-    const { data } = await apiClient.post(endpoints.hardSkillsMatrix, matrix);
+    const { data } = await apiClient.post(endpoints.hardSkillsMatrix, {
+      skillGroups: matrix.skillGroups,
+      positionId: positionId,
+    });
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
@@ -34,9 +37,12 @@ export const httpCreateHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix) 
   }
 };
 
-export const httpEditHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix) => {
+export const httpEditHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix, positionId: string) => {
   try {
-    const { data } = await apiClient.put(`${endpoints.hardSkillsMatrix}/${matrix.id}`, matrix);
+    const { data } = await apiClient.put(`${endpoints.hardSkillsMatrix}/${matrix.id}`, {
+      skillGroups: matrix.skillGroups,
+      positionId: positionId,
+    });
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);

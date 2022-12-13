@@ -1,14 +1,10 @@
 import { useState } from 'react';
 
-import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove, useForm } from 'react-hook-form';
+import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import AddRoundedIcon from '@mui/icons-material/DeleteRounded';
-import CloseIcon from '@mui/icons-material/Close';
-
-import { ISkillGroup } from 'models/IHardSkillsMatrix';
 
 import { SkillGroupField } from 'common-components/SkillGroupField';
 import { DeleteButton } from 'common-components/DeleteButton';
@@ -17,7 +13,8 @@ import { DeleteModal } from 'common-components/DeleteModal';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { AddButton } from 'common-components/AddButton';
-import { AssessmentSkillQuestions } from './components/AssessmentSkillQuestions';
+import { SkillNameField } from 'common-components/SkillNameField';
+import { AssessmentSkillQuestions } from '../AssessmentSkillQuestions';
 
 interface IProps {
   idx: number;
@@ -80,27 +77,27 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
 
         {fields.map((skill, skillIndex) => (
           <Box key={skill.skillKey} className={classes.skill}>
-            <>
-              <Controller
-                name={`skillGroups.${idx}.skills.${skillIndex}.value`}
-                control={methods.control}
-                render={({ field: { value, onChange } }) => (
-                  <TextField label="Skill" value={value} onChange={onChange} />
-                )}
-              />
-              <Button
-                className={classes.deleteSkillBtn}
-                variant="contained"
-                endIcon={<AddRoundedIcon />}
-                onClick={() => handleDeleteSkillModalOpen(skillIndex)}
-              />
+            <Controller
+              name={`skillGroups.${idx}.skills.${skillIndex}.value`}
+              control={methods.control}
+              render={({ field: { value, onChange } }) => <SkillNameField value={value} onChange={onChange} />}
+            />
+            <Button
+              className={classes.deleteSkillBtn}
+              variant="contained"
+              endIcon={<AddRoundedIcon />}
+              onClick={() => handleDeleteSkillModalOpen(skillIndex)}
+            />
 
-              <AssessmentSkillQuestions groupIndex={idx} skillIndex={skillIndex} />
-            </>
+            <AssessmentSkillQuestions groupIndex={idx} skillIndex={skillIndex} />
           </Box>
         ))}
 
-        <AddButton title="Add field" onClick={() => append({ value: '', questions: [] })} />
+        <AddButton
+          className={classes.addButton}
+          title="Add field"
+          onClick={() => append({ value: '', questions: [] })}
+        />
       </div>
       <DeleteModal
         isOpen={isDeleteGroupModalOpen}

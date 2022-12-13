@@ -33,14 +33,17 @@ export const deleteHardSkillsMatrix = createAsyncThunk(deleteHardSkillsMatrixAct
 
 export const createHardSkillsMatrix = createAsyncThunk(
   createHardSkillsMatrixAction,
-  (matrix: IFormHardSkillsMatrix) => {
-    return httpCreateHardSkillsMatrix(matrix);
+  ({ matrix, positionId }: { matrix: IFormHardSkillsMatrix; positionId: string }) => {
+    return httpCreateHardSkillsMatrix(matrix, positionId);
   }
 );
 
-export const editHardSkillsMatrix = createAsyncThunk(editHardSkillsMatrixAction, (matrix: IFormHardSkillsMatrix) => {
-  return httpEditHardSkillsMatrix(matrix);
-});
+export const editHardSkillsMatrix = createAsyncThunk(
+  editHardSkillsMatrixAction,
+  ({ matrix, positionId }: { matrix: IFormHardSkillsMatrix; positionId: string }) => {
+    return httpEditHardSkillsMatrix(matrix, positionId);
+  }
+);
 
 export const copyHardSkillsMatrix = createAsyncThunk(copyHardSkillsMatrixAction, (data: ICopyHardSkillsMatrixProps) => {
   return httpCopyHardSkillsMatrix(data);
