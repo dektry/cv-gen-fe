@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
+import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -15,16 +16,25 @@ import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 
+import { AssessmentQuestions } from './components/AssessmentQuestions';
+
 const steps = ['Technical assessment questions', 'Setting the level'];
 
 export const AssessmentSettingsSetUp = () => {
   const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
 
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const classes = useStyles({ theme });
 
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getOneHardSkillsMatrix(id));
+    }
+  }, [id]);
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
@@ -48,7 +58,13 @@ export const AssessmentSettingsSetUp = () => {
             </Step>
           ))}
         </Stepper>
-        <div>{activeStep === 0 ? <p>There gonna be questions</p> : <p>There gonne be levels</p>}</div>
+        <div>
+          {activeStep === 0 ? (
+            <AssessmentQuestions skillGroups={currentMatrix.skillGroups} />
+          ) : (
+            <p>There gonne be levels</p>
+          )}
+        </div>
       </Box>
     </div>
   );

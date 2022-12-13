@@ -2,7 +2,7 @@ import { message } from 'antd';
 
 import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
-import { IHardSkillsMatrix, ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
+import { ICopyHardSkillsMatrixProps, IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 export const httpGetAllHardSkillsMatrix = async () => {
   try {
@@ -24,7 +24,7 @@ export const httpGetOneHardSkillsMatrix = async (id: string) => {
   }
 };
 
-export const httpCreateHardSkillsMatrix = async (matrix: IHardSkillsMatrix) => {
+export const httpCreateHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix) => {
   try {
     const { data } = await apiClient.post(endpoints.hardSkillsMatrix, matrix);
     return data;
@@ -34,7 +34,7 @@ export const httpCreateHardSkillsMatrix = async (matrix: IHardSkillsMatrix) => {
   }
 };
 
-export const httpEditHardSkillsMatrix = async (matrix: IHardSkillsMatrix) => {
+export const httpEditHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix) => {
   try {
     const { data } = await apiClient.put(`${endpoints.hardSkillsMatrix}/${matrix.id}`, matrix);
     return data;

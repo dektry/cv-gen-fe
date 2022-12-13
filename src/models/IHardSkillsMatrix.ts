@@ -1,5 +1,10 @@
 import { IDBPosition } from './IUser';
 
+export interface IFormPosition {
+  id?: string;
+  name?: string;
+}
+
 export interface IQuestion {
   id?: string;
   value: string;
@@ -32,4 +37,27 @@ export interface IHardSkillsMatrixState {
 export interface ICopyHardSkillsMatrixProps {
   positionId: string;
   hardSkillMatrixId: string;
+}
+
+export interface IFormQuestion {
+  id?: string;
+  value?: string;
+}
+
+export interface IFormSkill {
+  value?: string;
+  id?: string;
+  questions?: IFormQuestion[];
+}
+
+export interface IFormSkillGroup {
+  id?: string;
+  value?: string;
+  skills?: IFormSkill[];
+}
+
+export interface IFormHardSkillsMatrix {
+  id?: string;
+  position?: IFormPosition;
+  skillGroups?: IFormSkillGroup[];
 }
