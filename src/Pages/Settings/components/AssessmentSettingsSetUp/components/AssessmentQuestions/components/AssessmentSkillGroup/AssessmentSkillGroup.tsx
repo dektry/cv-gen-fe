@@ -20,12 +20,11 @@ import { AddButton } from 'common-components/AddButton';
 import { AssessmentSkillQuestions } from './components/AssessmentSkillQuestions';
 
 interface IProps {
-  skillGroup: ISkillGroup;
   idx: number;
   removeSection: UseFieldArrayRemove;
 }
 
-export const AssessmentSkillGroup = ({ skillGroup, idx, removeSection }: IProps) => {
+export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const classes = useStyles({ theme });
 
   const [isDeleteGroupModalOpen, setIsDeleteGroupModalOpen] = useState(false);
@@ -34,13 +33,9 @@ export const AssessmentSkillGroup = ({ skillGroup, idx, removeSection }: IProps)
 
   const methods = useFormContext();
 
-  const { control } = useForm({
-    defaultValues: { skills: skillGroup.skills },
-  });
-
-  const { fields, remove, append, update } = useFieldArray({
-    name: 'skills',
-    control,
+  const { fields, remove, append } = useFieldArray({
+    name: `skillGroups.${idx}.skills`,
+    control: methods.control,
     keyName: 'skillKey',
   });
 
@@ -87,8 +82,8 @@ export const AssessmentSkillGroup = ({ skillGroup, idx, removeSection }: IProps)
           <Box key={skill.skillKey} className={classes.skill}>
             <>
               <Controller
-                name={`skills.${skillIndex}.value`}
-                control={control}
+                name={`skillGroups.${idx}.skills.${skillIndex}.value`}
+                control={methods.control}
                 render={({ field: { value, onChange } }) => (
                   <TextField label="Skill" value={value} onChange={onChange} />
                 )}
@@ -100,7 +95,7 @@ export const AssessmentSkillGroup = ({ skillGroup, idx, removeSection }: IProps)
                 onClick={() => handleDeleteSkillModalOpen(skillIndex)}
               />
 
-              <AssessmentSkillQuestions questions={skill.questions} />
+              <AssessmentSkillQuestions groupIndex={idx} skillIndex={skillIndex} />
             </>
           </Box>
         ))}

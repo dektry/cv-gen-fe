@@ -46,13 +46,15 @@ export const AssessmentQuestions = ({ skillGroups, id }: IProps) => {
     defaultValues: { skillGroups },
   });
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: 'skillGroups',
     control: methods.control,
     keyName: 'fieldKey',
   });
 
   const values = useWatch({ control: methods.control });
+
+  console.log(values);
 
   const handleAddSkillGroup = () => {
     append({ value: '', skills: [] as ISkill[] });
@@ -66,7 +68,7 @@ export const AssessmentQuestions = ({ skillGroups, id }: IProps) => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(handleSaveMatrix)} className={classes.container}>
         {fields.map((group, idx) => (
-          <AssessmentSkillGroup key={group.fieldKey} skillGroup={group} idx={idx} removeSection={remove} />
+          <AssessmentSkillGroup key={group.fieldKey} idx={idx} removeSection={remove} />
         ))}
         <AddButton title={'Add new section'} onClick={handleAddSkillGroup} />
         <div className={classes.buttonsContainer}>

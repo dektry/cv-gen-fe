@@ -5,24 +5,23 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { IFormQuestion } from 'models/IHardSkillsMatrix';
 
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 
 interface IProps {
-  questions: IFormQuestion[];
+  groupIndex: number;
+  skillIndex: number;
 }
 
-export const AssessmentSkillQuestions = ({ questions }: IProps) => {
+export const AssessmentSkillQuestions = ({ groupIndex, skillIndex }: IProps) => {
   const classes = useStyles({ theme });
 
-  const { control } = useForm({
-    defaultValues: { questions },
-  });
+  const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
-    name: 'questions',
+    name: `skillGroups.${groupIndex}.skills.${skillIndex}.questions`,
     control,
     keyName: 'questionKey',
   });
@@ -33,7 +32,7 @@ export const AssessmentSkillQuestions = ({ questions }: IProps) => {
         return (
           <Box key={question.questionKey}>
             <Controller
-              name={`questions.${questionId}.value`}
+              name={`skillGroups.${groupIndex}.skills.${skillIndex}.questions.${questionId}.value`}
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField label="Question" value={value} onChange={onChange} />
