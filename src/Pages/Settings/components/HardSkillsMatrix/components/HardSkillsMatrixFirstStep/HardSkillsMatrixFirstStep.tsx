@@ -11,7 +11,7 @@ import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
 
 import { AssessmentSkillGroup } from './components/AssessmentSkillGroup';
 import { AddButton } from 'common-components/AddButton';
-import { ResetModal } from './components/ResetModal';
+import { ResetModal } from 'common-components/ResetModal';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -40,7 +40,7 @@ const sxProp: SxProps = [
   },
 ];
 
-export const AssessmentQuestions = ({ skillGroups, setActiveStep }: IProps) => {
+export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps) => {
   const dispatch = useAppDispatch();
   const classes = useStyles({ theme });
 

@@ -16,12 +16,12 @@ import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 
-import { AssessmentQuestions } from './components/AssessmentQuestions/components/AssessmentQuestions';
-import { AssessmentLevels } from './components/AssessmentLevels';
+import { HardSkillsMatrixFirstStep } from './components/HardSkillsMatrixFirstStep';
+import { HardSkillsMatrixSecondStep } from './components/HardSkillsMatrixSecondStep';
 
 const steps = ['Technical assessment questions', 'Setting the level'];
 
-export const AssessmentSettingsSetUp = () => {
+export const HardSkillsMatrix = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -38,7 +38,6 @@ export const AssessmentSettingsSetUp = () => {
   }, [id]);
 
   const handleStep = (step: number) => () => {
-    console.log(step);
     setActiveStep(step);
   };
 
@@ -62,9 +61,9 @@ export const AssessmentSettingsSetUp = () => {
         </Stepper>
         <div>
           {activeStep === 0 ? (
-            <AssessmentQuestions skillGroups={currentMatrix.skillGroups} setActiveStep={setActiveStep} />
+            <HardSkillsMatrixFirstStep skillGroups={currentMatrix.skillGroups} setActiveStep={setActiveStep} />
           ) : (
-            <AssessmentLevels />
+            <HardSkillsMatrixSecondStep />
           )}
         </div>
       </Box>
