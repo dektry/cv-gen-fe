@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
-import { IHardSkillsMatrix, IHardSkillsMatrixState } from 'models/IHardSkillsMatrix';
+import { IFormHardSkillsMatrix, IHardSkillsMatrix, IHardSkillsMatrixState } from 'models/IHardSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
 import { getAllHardSkillsMatrix } from './thunks';
 
 const initialState: IHardSkillsMatrixState = {
   matrix: [],
-  currentMatrix: {} as IHardSkillsMatrix,
+  currentMatrix: {} as IFormHardSkillsMatrix,
   isLoading: false,
 };
 
@@ -21,11 +21,16 @@ const harSkillsMatrix = createSlice({
     setHardSkillsMatrixIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
     },
-    setCurrentHradSkillsMatrix: (state, { payload }: PayloadAction<IHardSkillsMatrix>) => {
+    setCurrentHardSkillsMatrix: (state, { payload }: PayloadAction<IHardSkillsMatrix>) => {
       state.currentMatrix = payload;
     },
     setCurrentPosition: (state, { payload }: PayloadAction<IDBPosition>) => {
       state.currentMatrix.position = payload;
+    },
+    setCurrentSkillGroups: (state, { payload }: PayloadAction<IFormHardSkillsMatrix>) => {
+      if (payload.skillGroups) {
+        state.currentMatrix.skillGroups = payload.skillGroups;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -46,4 +51,5 @@ export default harSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
-export const { setHardSkillsMatrixIsLoading, setCurrentHradSkillsMatrix, setCurrentPosition } = harSkillsMatrix.actions;
+export const { setHardSkillsMatrixIsLoading, setCurrentHardSkillsMatrix, setCurrentPosition, setCurrentSkillGroups } =
+  harSkillsMatrix.actions;
