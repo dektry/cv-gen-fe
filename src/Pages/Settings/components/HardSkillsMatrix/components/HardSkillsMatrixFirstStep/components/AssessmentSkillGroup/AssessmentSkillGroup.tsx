@@ -13,7 +13,7 @@ import { DeleteModal } from 'common-components/DeleteModal';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { AddButton } from 'common-components/AddButton';
-import { SkillNameField } from 'common-components/SkillNameField';
+import { CustomTextField } from 'common-components/CustomTextField';
 import { AssessmentSkillQuestions } from '../AssessmentSkillQuestions';
 
 interface IProps {
@@ -80,7 +80,7 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
             <Controller
               name={`skillGroups.${idx}.skills.${skillIndex}.value`}
               control={methods.control}
-              render={({ field: { value, onChange } }) => <SkillNameField value={value} onChange={onChange} />}
+              render={({ field: { value, onChange } }) => <CustomTextField value={value} onChange={onChange} />}
             />
             <Button
               className={classes.deleteSkillBtn}

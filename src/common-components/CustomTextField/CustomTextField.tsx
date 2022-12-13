@@ -9,7 +9,7 @@ type ISkillGroupField = {
   hint?: string;
 } & TextFieldProps;
 
-export const SkillNameField = (props: ISkillGroupField) => {
+export const CustomTextField = (props: ISkillGroupField) => {
   const { value, error } = props;
 
   const classes = useStyles({ theme });
