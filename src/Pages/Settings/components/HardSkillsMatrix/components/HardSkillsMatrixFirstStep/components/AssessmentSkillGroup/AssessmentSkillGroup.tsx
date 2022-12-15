@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+
+import { useAppDispatch } from 'store';
+import { useSelector } from 'react-redux';
+import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,24 +13,38 @@ import AddRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { SkillGroupField } from 'common-components/SkillGroupField';
 import { DeleteButton } from 'common-components/DeleteButton';
 import { DeleteModal } from 'common-components/DeleteModal';
-
-import { useStyles } from './styles';
-import theme from 'theme/theme';
 import { AddButton } from 'common-components/AddButton';
 import { CustomTextField } from 'common-components/CustomTextField';
 import { AssessmentSkillQuestions } from '../AssessmentSkillQuestions';
+
+import { piskStartLevel } from './utils/helpers/pickStartLevel';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 interface IProps {
   idx: number;
   removeSection: UseFieldArrayRemove;
 }
 
+const startLevel = piskStartLevel();
+
 export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const classes = useStyles({ theme });
+
+  const dispatch = useAppDispatch();
 
   const [isDeleteGroupModalOpen, setIsDeleteGroupModalOpen] = useState(false);
   const [isDeleteSkillModalOpen, setIsDeleteSkillModalOpen] = useState(false);
   const [deletingSkillId, setDeletingSkillId] = useState(0);
+
+  const { allLevels } = useSelector(levelsSelector);
+
+  const defaultGrades = allLevels.map((level) => ({ value: startLevel, levelId: level.id }));
+
+  useEffect(() => {
+    dispatch(loadLevels());
+  }, []);
 
   const methods = useFormContext();
 
@@ -96,7 +114,7 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
         <AddButton
           className={classes.addButton}
           title="Add field"
-          onClick={() => append({ value: '', questions: [] })}
+          onClick={() => append({ value: '', questions: [], grades: defaultGrades })}
         />
       </div>
       <DeleteModal
