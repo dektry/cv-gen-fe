@@ -45,6 +45,7 @@ interface IProps {
   addModalTitle: string;
   editModalTitle: string;
   copyModalTitle?: string;
+  hardSkillsMatrixId?: string;
 }
 
 interface FormValues {
@@ -123,7 +124,7 @@ export const TableComponent = ({
 
   const hanldeCreateSubmit = (name: string, position?: IDBPosition) => {
     !positions && append({ name, positionId: position?.id || '' });
-    if (handleCreate) {
+    if (handleCreate && position) {
       handleCreate(name, position);
     }
     setIsCreateModalOpen(false);

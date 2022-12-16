@@ -11,7 +11,7 @@ import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
 
 import { AssessmentSkillGroup } from './components/AssessmentSkillGroup';
 import { AddButton } from 'common-components/AddButton';
-import { ResetModal } from 'common-components/ResetModal';
+import { SimpleTextModal } from 'common-components/SimpleTextModal';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -98,7 +98,13 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
         </form>
       </FormProvider>
 
-      <ResetModal isOpen={isResetModalOpen} onClose={handleResetModalClose} onSubmit={handleResetSubmit} />
+      <SimpleTextModal
+        isOpen={isResetModalOpen}
+        onClose={handleResetModalClose}
+        onSubmit={handleResetSubmit}
+        modalTitle={'RESET CHANGES'}
+        modalText={'Are you sure you want to reset all changes made? All data will be lost.'}
+      />
     </>
   );
 };

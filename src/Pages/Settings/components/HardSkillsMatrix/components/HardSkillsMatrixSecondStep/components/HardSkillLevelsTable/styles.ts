@@ -14,6 +14,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   header: {
     marginBottom: '24px',
+    width: '100%',
   },
   headerCell: {
     '&.MuiTableCell-root': {

@@ -69,7 +69,7 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
           </TableHead>
           <TableBody>
             {skillGroup.skills?.map((skill, skillIndex) => (
-              <TableRow key={skill.value} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableRow key={skill.value} sx={{ border: 0 }}>
                 <TableCell component="th" scope="row">
                   {skill.value}
                 </TableCell>
