@@ -40,7 +40,7 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "node index.ts",
+    "start": "react-scripts start",
     "start:dev": "cross-env REACT_APP_NODE_ENV=development react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
