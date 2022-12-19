@@ -187,11 +187,6 @@ export const EditableMatrix = ({
                         className={classes.skillInput}
                       />
                       <div className={classes.rightSkillElementsContainer}>
-                        {skill.levels.map((level) => (
-                          <strong key={level.value} className={classes.greenColor}>
-                            {levelTypes[level.value]}
-                          </strong>
-                        ))}
                         <Select
                           onChange={(level) => handleSkillChange(level, skill)}
                           placeholder={INTERVIEW.LEVEL_PLACEHOLDER}
