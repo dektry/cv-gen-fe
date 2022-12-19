@@ -47,8 +47,8 @@ export const privateRoutes: IRoute[] = [
   { path: routes.prevSoftSkillsAssessment, component: SoftAssessmentSetUp },
   { path: routes.softAssessment, component: SoftAssessmentSetUp },
   { path: routes.createEmployee, component: CreateEmployee },
-  { path: routes.techAssessmentSetUp, component: HardSkillsMatrix },
-  { path: routes.techAssessmentDetails, component: HardSkillsMatrix },
+  { path: routes.hardSkillsMatrixSetUp, component: HardSkillsMatrix },
+  { path: routes.hardSkillsMatrixDetails, component: HardSkillsMatrix },
 ];
 
 if (process.env.REACT_APP_ENV === 'development') {

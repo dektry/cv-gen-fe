@@ -13,13 +13,13 @@ import {
 } from 'store/reducers/hardSkillsMatrix/thunks';
 import { hardSkillsMatrixSelector, setCurrentPosition } from 'store/reducers/hardSkillsMatrix';
 
-import { TableComponent } from '../../components/Table';
+import { TableComponent } from '../Table';
 
 import routes from 'config/routes.json';
 import { IDBPosition } from 'models/IUser';
 import { ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
 
-export const AssessmentsList = () => {
+export const HardSkillsMatrixList = () => {
   const { allPositions } = useSelector(positionsSelector);
   const { matrix, currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
@@ -39,16 +39,16 @@ export const AssessmentsList = () => {
     if (position) {
       dispatch(setCurrentPosition(position));
     }
-    navigate(routes.techAssessmentSetUp);
+    navigate(routes.hardSkillsMatrixSetUp);
   };
 
   const handleOpenHardSkillsMatrixDetails = (id: string) => {
-    navigate(generatePath(routes.techAssessmentDetails, { id }));
+    navigate(generatePath(routes.hardSkillsMatrixDetails, { id }));
   };
 
   const handleCopyHardSkillsMatrix = ({ hardSkillMatrixId, positionId }: ICopyHardSkillsMatrixProps) => {
     dispatch(copyHardSkillsMatrix({ positionId, hardSkillMatrixId }));
-    navigate(generatePath(routes.techAssessmentDetails, { id: currentMatrix.id }));
+    navigate(generatePath(routes.hardSkillsMatrixDetails, { id: currentMatrix.id }));
   };
 
   const datatoShow = useMemo(

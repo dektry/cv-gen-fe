@@ -1,8 +1,5 @@
-import { useEffect } from 'react';
-
-import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
-import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { levelsSelector } from 'store/reducers/levels';
 
 import { useFormContext, Controller } from 'react-hook-form';
 
@@ -34,19 +31,11 @@ interface IProps {
 }
 
 export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
-  const dispatch = useAppDispatch();
-
   const classes = useStyles({ theme });
 
   const { allLevels } = useSelector(levelsSelector);
 
   const { control } = useFormContext();
-
-  useEffect(() => {
-    dispatch(loadLevels());
-  }, []);
-
-  console.log('KLKJKJKJOJOI', skillGroup);
 
   return (
     <div className={classes.container}>

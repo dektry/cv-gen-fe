@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 import { PositionsLevels } from '../PositionsLevels';
-import { AssessmentsList } from '../AssessmentsList';
+import { HardSkillsMatrixList } from '../HardSkillsMatrixList';
 import { TabPanel } from './components/TabPanel';
 
 import { useStyles } from './styles';
@@ -19,7 +19,7 @@ function tabsProps(index: number) {
 
 const tabs = [
   { label: 'Positions & Levels', component: <PositionsLevels /> },
-  { label: 'Technical assessment', component: <AssessmentsList /> },
+  { label: 'Technical assessment', component: <HardSkillsMatrixList /> },
   { label: 'Soft assessment', component: <span /> },
   { label: 'English assessment', component: <span /> },
 ];

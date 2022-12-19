@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, generatePath } from 'react-router-dom';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -138,7 +138,7 @@ export const TableComponent = ({
   };
 
   const handleEditClick = () => {
-    navigate(generatePath(paths.techAssessmentDetails, { id: activeListElement.id }));
+    navigate(generatePath(paths.hardSkillsMatrixDetails, { id: activeListElement.id }));
   };
 
   const handleOpenEditModal = () => {
@@ -182,6 +182,12 @@ export const TableComponent = ({
   const modalTitle = name.includes('Position') ? 'Delete position' : 'Delete level';
   const text = name.includes('Position') ? 'Position' : 'Level';
   const modalText = `Are you sure that you want to delete this ${text.toLowerCase()}? All data will be lost.`;
+
+  const positionsIds = useMemo(() => fields.map((el) => el.positionId), [fields]);
+  const positionsThatDontHaveMatrix = useMemo(
+    () => positions?.filter((el: IDBPosition) => !positionsIds.includes(el.id)),
+    [positions]
+  );
 
   return (
     <FormControl className={classes.container}>
@@ -251,7 +257,7 @@ export const TableComponent = ({
         modalTitle={addModalTitle}
         label={text}
         buttonText={`Add ${text}`}
-        data={positions}
+        data={positionsThatDontHaveMatrix}
       />
       <CreateEditModal
         isOpen={isEditModalOpen}
@@ -272,7 +278,7 @@ export const TableComponent = ({
           label={text}
           buttonText={'Save'}
           inputValue={activeListElement.name}
-          data={positions}
+          data={positionsThatDontHaveMatrix}
         />
       )}
       <DeleteModal

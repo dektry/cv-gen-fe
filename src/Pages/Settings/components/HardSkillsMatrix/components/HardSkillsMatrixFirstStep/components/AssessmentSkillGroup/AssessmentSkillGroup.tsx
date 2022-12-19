@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 
 import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
 
-import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
-import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { levelsSelector } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -32,19 +31,16 @@ const startLevel = piskStartLevel();
 export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const classes = useStyles({ theme });
 
-  const dispatch = useAppDispatch();
-
   const [isDeleteGroupModalOpen, setIsDeleteGroupModalOpen] = useState(false);
   const [isDeleteSkillModalOpen, setIsDeleteSkillModalOpen] = useState(false);
   const [deletingSkillId, setDeletingSkillId] = useState(0);
 
   const { allLevels } = useSelector(levelsSelector);
 
-  const defaultGrades = allLevels.map((level) => ({ value: startLevel, levelId: level.id }));
-
-  useEffect(() => {
-    dispatch(loadLevels());
-  }, []);
+  const defaultGrades = useMemo(
+    () => allLevels.map((level) => ({ value: startLevel, levelId: level.id })),
+    [allLevels]
+  );
 
   const methods = useFormContext();
 
@@ -98,7 +94,9 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
             <Controller
               name={`skillGroups.${idx}.skills.${skillIndex}.value`}
               control={methods.control}
-              render={({ field: { value, onChange } }) => <CustomTextField value={value} onChange={onChange} />}
+              render={({ field: { value, onChange } }) => (
+                <CustomTextField fullWidth={true} value={value} onChange={onChange} />
+              )}
             />
             <Button
               className={classes.deleteSkillBtn}

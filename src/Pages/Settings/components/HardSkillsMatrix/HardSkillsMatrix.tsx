@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
+import { loadLevels } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -14,16 +15,20 @@ import Chip from '@mui/material/Chip';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
+import { hardSkillsMatrixSelector, setCurrentHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix';
 
 import { HardSkillsMatrixFirstStep } from './components/HardSkillsMatrixFirstStep';
 import { HardSkillsMatrixSecondStep } from './components/HardSkillsMatrixSecondStep';
+import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+
+import paths from 'config/routes.json';
 
 const steps = ['Technical assessment questions', 'Setting the level'];
 
 export const HardSkillsMatrix = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
@@ -32,9 +37,23 @@ export const HardSkillsMatrix = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
+    dispatch(loadLevels());
+  }, []);
+
+  useEffect(() => {
+    if (!currentMatrix.position?.name) {
+      navigate(paths.settings);
+    }
+  }, [currentMatrix.position?.name]);
+
+  useEffect(() => {
     if (id) {
       dispatch(getOneHardSkillsMatrix(id));
     }
+
+    return () => {
+      setCurrentHardSkillsMatrix({} as IHardSkillsMatrix);
+    };
   }, [id]);
 
   const handleStep = (step: number) => () => {

@@ -1,4 +1,4 @@
-import { SettingsTabs } from './components/Tabs';
+import { SettingsTabs } from './components/SettingsTabs';
 
 export const Settings = () => {
   return (

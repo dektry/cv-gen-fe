@@ -27,6 +27,6 @@
     "settings": "/settings",
     "uiElements": "/ui-elements",
     "createEmployee": "/create-employee",
-    "techAssessmentSetUp": "/settings/tech-assessment",
-    "techAssessmentDetails": "/settings/tech-assessment/:id"
+    "hardSkillsMatrixSetUp": "/settings/hard-skills-matrix",
+    "hardSkillsMatrixDetails": "/settings/hard-skills-matrix/:id"
 }
