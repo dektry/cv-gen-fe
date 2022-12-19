@@ -21,7 +21,7 @@ import { ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
 
 export const AssessmentsList = () => {
   const { allPositions } = useSelector(positionsSelector);
-  const { matrix } = useSelector(hardSkillsMatrixSelector);
+  const { matrix, currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ export const AssessmentsList = () => {
 
   const handleCopyHardSkillsMatrix = ({ hardSkillMatrixId, positionId }: ICopyHardSkillsMatrixProps) => {
     dispatch(copyHardSkillsMatrix({ positionId, hardSkillMatrixId }));
-    navigate(generatePath(routes.techAssessmentCopy, { hardSkillMatrixId }));
+    navigate(generatePath(routes.techAssessmentDetails, { id: currentMatrix.id }));
   };
 
   const datatoShow = useMemo(

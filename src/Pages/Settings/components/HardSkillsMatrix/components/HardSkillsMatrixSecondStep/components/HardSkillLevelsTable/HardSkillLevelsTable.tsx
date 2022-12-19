@@ -46,6 +46,8 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
     dispatch(loadLevels());
   }, []);
 
+  console.log('KLKJKJKJOJOI', skillGroup);
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -68,24 +70,31 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {skillGroup.skills?.map((skill, skillIndex) => (
-              <TableRow key={skill.value} sx={{ border: 0 }}>
-                <TableCell component="th" scope="row">
-                  {skill.value}
-                </TableCell>
-                {skill.grades?.map((grade, gradeIndex) => (
-                  <TableCell key={grade.levelId}>
-                    <Controller
-                      name={`skillGroups.${idx}.skills.${skillIndex}.grades.${gradeIndex}.value`}
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <CustomSelect options={levelsOptions} value={value} onChange={onChange} />
-                      )}
-                    />
+            {skillGroup.skills?.map((skill, skillIndex) => {
+              const data = skill.grades ? skill.grades : skill.levels;
+              return (
+                <TableRow key={skill.value} sx={{ border: 0 }}>
+                  <TableCell component="th" scope="row">
+                    {skill.value}
                   </TableCell>
-                ))}
-              </TableRow>
-            ))}
+                  {data?.map((el, elIndex) => (
+                    <TableCell key={`${el.value}-${elIndex}`}>
+                      <Controller
+                        name={
+                          skill.grades
+                            ? `skillGroups.${idx}.skills.${skillIndex}.grades.${elIndex}.value`
+                            : `skillGroups.${idx}.skills.${skillIndex}.levels.${elIndex}.value`
+                        }
+                        control={control}
+                        render={({ field: { value, onChange } }) => (
+                          <CustomSelect options={levelsOptions} value={value} onChange={onChange} />
+                        )}
+                      />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

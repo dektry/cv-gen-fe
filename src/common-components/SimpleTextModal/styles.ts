@@ -47,6 +47,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       lineHeight: '24px',
       backgroundColor: ({ theme }) => theme.palette.background.default,
       borderRadius: '100px',
+
+      '&:hover': {
+        backgroundColor: ({ theme }) => theme.palette.secondary.light,
+      },
     },
   },
   yesButton: {
@@ -54,12 +58,12 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       width: '94px',
       height: '56px',
       marginLeft: '8px',
-      backgroundColor: ({ theme }) => theme.palette.error.main,
+      backgroundColor: ({ theme }) => theme.palette.primary.main,
       borderRadius: '100px',
       color: ({ theme }) => theme.palette.background.default,
 
       '&:hover': {
-        backgroundColor: ({ theme }) => theme.palette.error.dark,
+        backgroundColor: ({ theme }) => theme.palette.secondary.dark,
       },
     },
   },

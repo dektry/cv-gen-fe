@@ -6,7 +6,7 @@ import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
 import { IFormHardSkillsMatrix, IHardSkillsMatrix, IHardSkillsMatrixState } from 'models/IHardSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
-import { getAllHardSkillsMatrix, copyHardSkillsMatrix } from './thunks';
+import { getAllHardSkillsMatrix, copyHardSkillsMatrix, getOneHardSkillsMatrix } from './thunks';
 
 const initialState: IHardSkillsMatrixState = {
   matrix: [],
@@ -55,6 +55,16 @@ const harSkillsMatrix = createSlice({
       if (payload) {
         state.currentMatrix.id = payload.hardSkillMatrixId;
       }
+    });
+    builder.addCase(getOneHardSkillsMatrix.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getOneHardSkillsMatrix.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getOneHardSkillsMatrix.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.currentMatrix = payload;
     });
   },
 });

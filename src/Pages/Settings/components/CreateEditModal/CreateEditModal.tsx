@@ -37,9 +37,15 @@ export const CreateEditModal = ({
 }: IProps) => {
   const classes = useStyles({ theme });
 
-  const [value, setValue] = useState(inputValue || '');
+  const [value, setValue] = useState('');
   const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (inputValue) {
+      setValue(inputValue);
+    }
+  }, [inputValue]);
 
   useEffect(() => {
     if (value) {

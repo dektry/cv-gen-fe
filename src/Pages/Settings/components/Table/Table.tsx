@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, generatePath } from 'react-router-dom';
 
 import { useForm, useFieldArray } from 'react-hook-form';
 
@@ -17,6 +18,8 @@ import Typography from '@mui/material/Typography';
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
 import { CreateEditModal } from '../CreateEditModal';
+
+import paths from 'config/routes.json';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -65,6 +68,8 @@ export const TableComponent = ({
   copyModalTitle,
 }: IProps) => {
   const classes = useStyles({ theme });
+  const navigate = useNavigate();
+
   const [popoverAnchorElement, setPopoverAnchorElement] = useState<HTMLButtonElement | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -90,12 +95,14 @@ export const TableComponent = ({
 
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>, el: IListElement, idx: number) => {
     setActiveListElement(el);
+
     setListElementNumericId(idx);
     setPopoverAnchorElement(event.currentTarget);
   };
 
   const handleClosePopover = () => {
     setPopoverAnchorElement(null);
+    setActiveListElement({} as IListElement);
   };
 
   const handleOpenDeleteModal = () => {
@@ -130,6 +137,10 @@ export const TableComponent = ({
     setIsCreateModalOpen(false);
   };
 
+  const handleEditClick = () => {
+    navigate(generatePath(paths.techAssessmentDetails, { id: activeListElement.id }));
+  };
+
   const handleOpenEditModal = () => {
     setPopoverAnchorElement(null);
     setIsEditModalOpen(true);
@@ -160,9 +171,9 @@ export const TableComponent = ({
     setActiveListElement({} as IListElement);
   };
 
-  const handleCopySubmit = () => {
-    if (handleCopy && activeListElement.id && activeListElement.positionId) {
-      handleCopy({ positionId: activeListElement.positionId, hardSkillMatrixId: activeListElement.id });
+  const handleCopySubmit = (name: string, position?: IDBPosition) => {
+    if (handleCopy && activeListElement.id && position) {
+      handleCopy({ positionId: position.id || '', hardSkillMatrixId: activeListElement.id });
     }
   };
 
@@ -220,7 +231,7 @@ export const TableComponent = ({
                         Copy
                       </Button>
                     )}
-                    <Button className={classes.button} onClick={handleOpenEditModal}>
+                    <Button className={classes.button} onClick={handleUpdate ? handleOpenEditModal : handleEditClick}>
                       Edit
                     </Button>
                     <Button className={classes.deleteButton} onClick={handleOpenDeleteModal}>

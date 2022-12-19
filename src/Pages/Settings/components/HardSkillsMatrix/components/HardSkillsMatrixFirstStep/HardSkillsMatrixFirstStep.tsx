@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useForm, useFieldArray, FormProvider, useWatch, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import { SxProps } from '@mui/material';
 
 import { useAppDispatch } from 'store';
+import { useSelector } from 'react-redux';
+import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 import { setCurrentSkillGroups } from 'store/reducers/hardSkillsMatrix';
 
 import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
@@ -45,6 +47,7 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
   const classes = useStyles({ theme });
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const methods = useForm<IProps>({
     defaultValues: { skillGroups },
@@ -55,6 +58,11 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
     control: methods.control,
     keyName: 'fieldKey',
   });
+
+  useEffect(() => {
+    const defaultValues = { skillGroups: currentMatrix.skillGroups };
+    methods.reset({ ...defaultValues });
+  }, [currentMatrix.id]);
 
   const values = useWatch({ control: methods.control });
 

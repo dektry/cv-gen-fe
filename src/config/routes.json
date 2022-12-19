@@ -28,6 +28,5 @@
     "uiElements": "/ui-elements",
     "createEmployee": "/create-employee",
     "techAssessmentSetUp": "/settings/tech-assessment",
-    "techAssessmentDetails": "/settings/tech-assessment/:id",
-    "techAssessmentCopy": "/settings/tech-assessment/copy"
+    "techAssessmentDetails": "/settings/tech-assessment/:id"
 }
