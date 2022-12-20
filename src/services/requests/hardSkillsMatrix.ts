@@ -10,7 +10,7 @@ export const httpGetAllHardSkillsMatrix = async () => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_GET_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error(`Server error: ${JSON.stringify(error)}`);
   }
 };
 
@@ -20,7 +20,7 @@ export const httpGetOneHardSkillsMatrix = async (id: string) => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_GET_ONE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error(`Server error: ${JSON.stringify(error)}`);
   }
 };
 
@@ -33,7 +33,7 @@ export const httpCreateHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix, 
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error(`Server error: ${JSON.stringify(error)}`);
   }
 };
 
@@ -46,7 +46,7 @@ export const httpEditHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix, po
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error(`Server error: ${JSON.stringify(error)}`);
   }
 };
 
@@ -55,7 +55,7 @@ export const httpDeleteHardSkillsMatrix = async (id: string) => {
     await apiClient.delete(`${endpoints.hardSkillsMatrix}/${id}`);
   } catch (error) {
     console.error('[API_CLIENT_DELETE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error(`Server error: ${JSON.stringify(error)}`);
   }
 };
 
@@ -68,6 +68,6 @@ export const httpCopyHardSkillsMatrix = async (
     return data;
   } catch (error) {
     console.error('[API_CLIENT_COPY_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    message.error(`Server error: ${JSON.stringify(error)}`);
   }
 };
