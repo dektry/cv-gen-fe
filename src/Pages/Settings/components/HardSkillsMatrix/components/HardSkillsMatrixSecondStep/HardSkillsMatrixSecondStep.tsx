@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useForm, useFieldArray, FormProvider, useWatch } from 'react-hook-form';
@@ -14,13 +14,17 @@ import { HardSkillLevelsTable } from './components/HardSkillLevelsTable';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { createHardSkillsMatrix, editHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
-import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+import { IFormHardSkillsMatrix, IFormSkillGroup } from 'models/IHardSkillsMatrix';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
 
 import paths from 'config/routes.json';
 
-export const HardSkillsMatrixSecondStep = () => {
+interface IProps {
+  matrix?: IFormHardSkillsMatrix;
+}
+
+export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
   const classes = useStyles({ theme });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -31,16 +35,23 @@ export const HardSkillsMatrixSecondStep = () => {
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const methods = useForm({
-    defaultValues: { skillGroups: currentMatrix.skillGroups, matrix: currentMatrix },
+    defaultValues: { matrix },
   });
+
+  useEffect(() => {
+    const defaultValues = { matrix: currentMatrix };
+    methods.reset({ ...defaultValues });
+  }, [currentMatrix.id]);
 
   const values = useWatch({ control: methods.control });
 
   const { fields } = useFieldArray({
-    name: 'skillGroups',
+    name: 'matrix.skillGroups',
     control: methods.control,
     keyName: 'skillGroupKey',
   });
+
+  console.log(values);
 
   const handleSubmitMatrix = () => {
     const requestBody = {
@@ -48,7 +59,11 @@ export const HardSkillsMatrixSecondStep = () => {
       positionId: values.matrix?.position?.id || '',
     };
     currentMatrix.id ? dispatch(editHardSkillsMatrix(requestBody)) : dispatch(createHardSkillsMatrix(requestBody));
-    navigate(paths.settings);
+
+    window.alert('Changes saved successfully');
+    setTimeout(() => {
+      navigate(paths.settings);
+    }, 1000);
   };
 
   const handleResetModalOpen = () => {

@@ -46,12 +46,6 @@ export const HardSkillsMatrix = () => {
   }, []);
 
   useEffect(() => {
-    if (!currentMatrix.position?.name) {
-      navigate(paths.settings);
-    }
-  }, [currentMatrix.position?.name]);
-
-  useEffect(() => {
     if (currentMatrix.skillGroups?.length) {
       setDisabled(false);
     }
@@ -60,8 +54,10 @@ export const HardSkillsMatrix = () => {
   useEffect(() => {
     if (id) {
       dispatch(getOneHardSkillsMatrix(id));
+    } else if (currentMatrix && !currentMatrix.position?.name) {
+      navigate(paths.settings);
     }
-  }, [id]);
+  }, [id, currentMatrix.position?.name]);
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
@@ -89,7 +85,7 @@ export const HardSkillsMatrix = () => {
           {activeStep === 0 ? (
             <HardSkillsMatrixFirstStep skillGroups={currentMatrix.skillGroups} setActiveStep={setActiveStep} />
           ) : (
-            <HardSkillsMatrixSecondStep />
+            <HardSkillsMatrixSecondStep matrix={currentMatrix} />
           )}
         </div>
       </Box>

@@ -35,14 +35,14 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
 
   const { allLevels } = useSelector(levelsSelector);
 
-  const { control } = useFormContext();
+  const methods = useFormContext();
 
   return (
     <div className={classes.container}>
       <div className={classes.header}>
         <Controller
-          name={`skillGroups.${idx}.value`}
-          control={control}
+          name={`matrix.skillGroups.${idx}.value`}
+          control={methods.control}
           render={({ field: { value, onChange } }) => <SkillGroupField value={value} onChange={onChange} />}
         />
       </div>
@@ -71,10 +71,10 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
                       <Controller
                         name={
                           skill.grades
-                            ? `skillGroups.${idx}.skills.${skillIndex}.grades.${elIndex}.value`
-                            : `skillGroups.${idx}.skills.${skillIndex}.levels.${elIndex}.value`
+                            ? `matrix.skillGroups.${idx}.skills.${skillIndex}.grades.${elIndex}.value`
+                            : `matrix.skillGroups.${idx}.skills.${skillIndex}.levels.${elIndex}.value`
                         }
-                        control={control}
+                        control={methods.control}
                         render={({ field: { value, onChange } }) => (
                           <CustomSelect options={levelsOptions} value={value} onChange={onChange} />
                         )}
