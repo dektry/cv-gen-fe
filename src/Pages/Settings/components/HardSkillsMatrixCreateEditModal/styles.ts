@@ -49,7 +49,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     flexDirection: 'row',
     justifyContent: 'flex-end',
     height: '24px',
-    margin: '24px 24px 80px 24px',
+    margin: '16px 24px 80px 24px',
   },
   cancelButton: {
     '&.MuiButton-root': {

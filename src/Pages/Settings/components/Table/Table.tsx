@@ -17,7 +17,7 @@ import Typography from '@mui/material/Typography';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
-import { CreateEditModal } from '../CreateEditModal';
+import { HardSkillsMatrixCreateEditModal } from '../HardSkillsMatrixCreateEditModal';
 
 import paths from 'config/routes.json';
 
@@ -111,6 +111,7 @@ export const TableComponent = ({
   };
 
   const handleDeleteModalClose = () => {
+    setActiveListElement({} as IListElement);
     setIsDeleteModalOpen(false);
   };
 
@@ -126,6 +127,7 @@ export const TableComponent = ({
   };
 
   const handleCreateModaleClose = () => {
+    setActiveListElement({} as IListElement);
     setIsCreateModalOpen(false);
   };
 
@@ -184,9 +186,9 @@ export const TableComponent = ({
   const modalText = `Are you sure that you want to delete this ${text.toLowerCase()}? All data will be lost.`;
 
   const positionsIds = useMemo(() => fields.map((el) => el.positionId), [fields]);
-  const positionsThatDontHaveMatrix = useMemo(
+  const positionsThatAreNotInMatrixList = useMemo(
     () => positions?.filter((el: IDBPosition) => !positionsIds.includes(el.id)),
-    [positions]
+    [positionsIds]
   );
 
   return (
@@ -250,16 +252,16 @@ export const TableComponent = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <CreateEditModal
+      <HardSkillsMatrixCreateEditModal
         isOpen={isCreateModalOpen}
         onClose={handleCreateModaleClose}
         onSubmit={hanldeCreateSubmit}
         modalTitle={addModalTitle}
         label={text}
         buttonText={`Add ${text}`}
-        data={positionsThatDontHaveMatrix}
+        data={positionsThatAreNotInMatrixList}
       />
-      <CreateEditModal
+      <HardSkillsMatrixCreateEditModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
         onSubmit={handleEditSubmit}
@@ -270,7 +272,7 @@ export const TableComponent = ({
         data={positions}
       />
       {handleCopy && copyModalTitle && (
-        <CreateEditModal
+        <HardSkillsMatrixCreateEditModal
           isOpen={isCopyModalOpen}
           onClose={handleCloseCopyModal}
           onSubmit={handleCopySubmit}
@@ -278,7 +280,7 @@ export const TableComponent = ({
           label={text}
           buttonText={'Save'}
           inputValue={activeListElement.name}
-          data={positionsThatDontHaveMatrix}
+          data={positionsThatAreNotInMatrixList}
         />
       )}
       <DeleteModal

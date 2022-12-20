@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useForm, useFieldArray, FormProvider, useWatch } from 'react-hook-form';
 
@@ -17,9 +18,12 @@ import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
 
+import paths from 'config/routes.json';
+
 export const HardSkillsMatrixSecondStep = () => {
   const classes = useStyles({ theme });
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
@@ -44,6 +48,7 @@ export const HardSkillsMatrixSecondStep = () => {
       positionId: values.matrix?.position?.id || '',
     };
     currentMatrix.id ? dispatch(editHardSkillsMatrix(requestBody)) : dispatch(createHardSkillsMatrix(requestBody));
+    navigate(paths.settings);
   };
 
   const handleResetModalOpen = () => {

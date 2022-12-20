@@ -6,8 +6,7 @@ import { SxProps } from '@mui/material';
 
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
-import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
-import { setCurrentSkillGroups } from 'store/reducers/hardSkillsMatrix';
+import { hardSkillsMatrixSelector, setCurrentSkillGroups } from 'store/reducers/hardSkillsMatrix';
 
 import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
 

@@ -35,9 +35,14 @@ export const HardSkillsMatrix = () => {
   const classes = useStyles({ theme });
 
   const [activeStep, setActiveStep] = useState(0);
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     dispatch(loadLevels());
+
+    return () => {
+      dispatch(setCurrentHardSkillsMatrix({} as IHardSkillsMatrix));
+    };
   }, []);
 
   useEffect(() => {
@@ -47,13 +52,15 @@ export const HardSkillsMatrix = () => {
   }, [currentMatrix.position?.name]);
 
   useEffect(() => {
+    if (currentMatrix.skillGroups?.length) {
+      setDisabled(false);
+    }
+  }, [currentMatrix.skillGroups?.length]);
+
+  useEffect(() => {
     if (id) {
       dispatch(getOneHardSkillsMatrix(id));
     }
-
-    return () => {
-      setCurrentHardSkillsMatrix({} as IHardSkillsMatrix);
-    };
   }, [id]);
 
   const handleStep = (step: number) => () => {
@@ -72,7 +79,7 @@ export const HardSkillsMatrix = () => {
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label}>
-              <StepButton color="inherit" onClick={handleStep(index)}>
+              <StepButton color="inherit" onClick={handleStep(index)} disabled={disabled}>
                 {label}
               </StepButton>
             </Step>

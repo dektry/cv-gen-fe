@@ -25,7 +25,7 @@ interface IProps {
   data?: IListElement[];
 }
 
-export const CreateEditModal = ({
+export const HardSkillsMatrixCreateEditModal = ({
   isOpen,
   modalTitle,
   onClose,
@@ -40,6 +40,12 @@ export const CreateEditModal = ({
   const [value, setValue] = useState('');
   const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
   const [disabled, setDisabled] = useState(true);
+  const [error, setError] = useState(false);
+
+  let options: { value: string; label: string }[] = [];
+  if (data) {
+    options = data.map((el) => ({ value: el.name, label: el.name }));
+  }
 
   useEffect(() => {
     if (inputValue) {
@@ -61,6 +67,14 @@ export const CreateEditModal = ({
     }
   }, [value]);
 
+  useEffect(() => {
+    if (data && !data.length) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [data]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
@@ -72,11 +86,6 @@ export const CreateEditModal = ({
     };
   }, []);
 
-  let options: { value: string; label: string }[] = [];
-  if (data) {
-    options = data.map((el) => ({ value: el.name, label: el.name }));
-  }
-
   return (
     <>
       <Modal open={isOpen} onClose={onClose}>
@@ -86,7 +95,15 @@ export const CreateEditModal = ({
             {modalTitle}
           </Typography>
           {data ? (
-            <CustomSelect options={options} value={value} onChange={handleChange} />
+            <CustomSelect
+              options={options}
+              value={value}
+              onChange={handleChange}
+              error={error}
+              helperText={
+                'There is no more positions. Please, create new position before adding new hard skills matrix.'
+              }
+            />
           ) : (
             <TextField value={value} onChange={handleChange} label={label} />
           )}
