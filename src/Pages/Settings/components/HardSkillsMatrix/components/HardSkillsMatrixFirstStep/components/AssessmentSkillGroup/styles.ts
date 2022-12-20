@@ -50,8 +50,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       '& 	.MuiButton-endIcon': {
         margin: 0,
         '& svg': {
+          backgroundColor: ({ theme }) => theme.palette.background.default,
           color: ({ theme }) => theme.palette.primary.main,
           fontSize: '24px',
+          borderRadius: '4px',
         },
       },
     },

@@ -279,7 +279,6 @@ export const TableComponent = ({
           modalTitle={copyModalTitle}
           label={text}
           buttonText={'Save'}
-          inputValue={activeListElement.name}
           data={positionsThatAreNotInMatrixList}
         />
       )}

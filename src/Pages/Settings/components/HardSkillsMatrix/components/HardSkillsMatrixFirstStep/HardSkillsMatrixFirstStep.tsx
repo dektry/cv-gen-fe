@@ -8,7 +8,7 @@ import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import { hardSkillsMatrixSelector, setCurrentSkillGroups } from 'store/reducers/hardSkillsMatrix';
 
-import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
+import { IFormSkill, IFormSkillGroup } from 'models/IHardSkillsMatrix';
 
 import { AssessmentSkillGroup } from './components/AssessmentSkillGroup';
 import { AddButton } from 'common-components/AddButton';
@@ -88,6 +88,13 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
     setIsResetModalOpen(false);
   };
 
+  const disabled =
+    !values.skillGroups ||
+    (values.skillGroups as IFormSkillGroup[])?.some(
+      (el) => !el.value || !el.skills?.length || (el.skills as IFormSkill[]).some((skill) => !skill.value)
+    );
+
+  //TODO: remove submit event on enter pressed
   return (
     <>
       <FormProvider {...methods}>
@@ -98,7 +105,7 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
           <AddButton title={'Add new section'} onClick={handleAddSkillGroup} />
           <div className={classes.buttonsContainer}>
             <Button onClick={handleResetModalOpen}>RESET CHANGES</Button>
-            <Button sx={sxProp} type="submit" className={classes.saveButton} disabled={!values.skillGroups}>
+            <Button sx={sxProp} type="submit" className={classes.saveButton} disabled={disabled}>
               Save changes
             </Button>
           </div>

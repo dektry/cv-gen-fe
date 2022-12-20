@@ -6,12 +6,19 @@ import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
 import { IFormHardSkillsMatrix, IHardSkillsMatrix, IHardSkillsMatrixState } from 'models/IHardSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
-import { getAllHardSkillsMatrix, copyHardSkillsMatrix, getOneHardSkillsMatrix } from './thunks';
+import {
+  getAllHardSkillsMatrix,
+  copyHardSkillsMatrix,
+  getOneHardSkillsMatrix,
+  createHardSkillsMatrix,
+  editHardSkillsMatrix,
+} from './thunks';
 
 const initialState: IHardSkillsMatrixState = {
   matrix: [],
   currentMatrix: {} as IFormHardSkillsMatrix,
   isLoading: false,
+  hardSkillsMatrixError: false,
 };
 
 const harSkillsMatrix = createSlice({
@@ -31,6 +38,9 @@ const harSkillsMatrix = createSlice({
       if (payload.skillGroups) {
         state.currentMatrix.skillGroups = payload.skillGroups;
       }
+    },
+    setHardSkillsMatrixError: (state, { payload }: PayloadAction<boolean>) => {
+      state.hardSkillsMatrixError = payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +76,12 @@ const harSkillsMatrix = createSlice({
       state.isLoading = false;
       state.currentMatrix = payload;
     });
+    builder.addCase(createHardSkillsMatrix.rejected, (state) => {
+      state.hardSkillsMatrixError = true;
+    });
+    builder.addCase(editHardSkillsMatrix.rejected, (state) => {
+      state.hardSkillsMatrixError = true;
+    });
   },
 });
 
@@ -73,5 +89,10 @@ export default harSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
-export const { setHardSkillsMatrixIsLoading, setCurrentHardSkillsMatrix, setCurrentPosition, setCurrentSkillGroups } =
-  harSkillsMatrix.actions;
+export const {
+  setHardSkillsMatrixIsLoading,
+  setCurrentHardSkillsMatrix,
+  setCurrentPosition,
+  setCurrentSkillGroups,
+  setHardSkillsMatrixError,
+} = harSkillsMatrix.actions;

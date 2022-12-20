@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { message } from 'antd';
+
 import { useForm, useFieldArray, FormProvider, useWatch } from 'react-hook-form';
 
 import Button from '@mui/material/Button';
@@ -32,7 +34,7 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
-  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
+  const { currentMatrix, hardSkillsMatrixError } = useSelector(hardSkillsMatrixSelector);
 
   const methods = useForm({
     defaultValues: { matrix },
@@ -51,19 +53,29 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     keyName: 'skillGroupKey',
   });
 
-  console.log(values);
-
   const handleSubmitMatrix = () => {
     const requestBody = {
       matrix: values.matrix || ([] as IFormHardSkillsMatrix),
       positionId: values.matrix?.position?.id || '',
     };
-    currentMatrix.id ? dispatch(editHardSkillsMatrix(requestBody)) : dispatch(createHardSkillsMatrix(requestBody));
 
-    window.alert('Changes saved successfully');
-    setTimeout(() => {
-      navigate(paths.settings);
-    }, 1000);
+    if (!currentMatrix.id) {
+      dispatch(createHardSkillsMatrix(requestBody));
+      if (!hardSkillsMatrixError) {
+        message.success('Matrix was created successfully');
+        setTimeout(() => {
+          navigate(paths.settings);
+        }, 1000);
+      }
+    } else {
+      dispatch(editHardSkillsMatrix(requestBody));
+      if (!hardSkillsMatrixError) {
+        message.success('Changes saved successfully');
+        setTimeout(() => {
+          navigate(paths.settings);
+        }, 1000);
+      }
+    }
   };
 
   const handleResetModalOpen = () => {

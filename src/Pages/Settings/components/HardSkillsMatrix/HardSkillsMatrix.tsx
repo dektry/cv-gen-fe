@@ -15,7 +15,11 @@ import Chip from '@mui/material/Chip';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { hardSkillsMatrixSelector, setCurrentHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix';
+import {
+  hardSkillsMatrixSelector,
+  setCurrentHardSkillsMatrix,
+  setHardSkillsMatrixError,
+} from 'store/reducers/hardSkillsMatrix';
 
 import { HardSkillsMatrixFirstStep } from './components/HardSkillsMatrixFirstStep';
 import { HardSkillsMatrixSecondStep } from './components/HardSkillsMatrixSecondStep';
@@ -42,6 +46,7 @@ export const HardSkillsMatrix = () => {
 
     return () => {
       dispatch(setCurrentHardSkillsMatrix({} as IHardSkillsMatrix));
+      dispatch(setHardSkillsMatrixError(false));
     };
   }, []);
 
