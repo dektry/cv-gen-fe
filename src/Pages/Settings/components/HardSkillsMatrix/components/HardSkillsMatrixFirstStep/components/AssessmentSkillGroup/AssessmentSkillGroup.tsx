@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
 
 import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useSelector } from 'react-redux';
+import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 import { levelsSelector } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
@@ -36,9 +38,23 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const [deletingSkillId, setDeletingSkillId] = useState(0);
 
   const { allLevels } = useSelector(levelsSelector);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const defaultGrades = useMemo(
     () => allLevels.map((level) => ({ value: startLevel, levelId: level.id })),
+    [allLevels]
+  );
+
+  const defaultLevels = useMemo(
+    () =>
+      allLevels.map((level) => ({
+        id: uuidv4(),
+        value: startLevel,
+        level_id: {
+          id: level.id,
+          name: level.name,
+        },
+      })),
     [allLevels]
   );
 
@@ -77,6 +93,10 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
     setIsDeleteSkillModalOpen(false);
   };
 
+  const appendSkillValue = currentMatrix.id
+    ? { value: '', id: uuidv4(), levels: defaultLevels, questions: [] }
+    : { value: '', questions: [], grades: defaultGrades };
+
   return (
     <>
       <div className={classes.container}>
@@ -109,11 +129,7 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
           </Box>
         ))}
 
-        <AddButton
-          className={classes.addButton}
-          title="Add field"
-          onClick={() => append({ value: '', questions: [], grades: defaultGrades })}
-        />
+        <AddButton className={classes.addButton} title="Add field" onClick={() => append(appendSkillValue)} />
       </div>
       <DeleteModal
         isOpen={isDeleteGroupModalOpen}

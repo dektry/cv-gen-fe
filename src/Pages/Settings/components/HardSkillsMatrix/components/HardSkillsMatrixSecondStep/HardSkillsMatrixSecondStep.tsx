@@ -16,7 +16,7 @@ import { HardSkillLevelsTable } from './components/HardSkillLevelsTable';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { createHardSkillsMatrix, editHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
-import { IFormHardSkillsMatrix, IFormSkillGroup } from 'models/IHardSkillsMatrix';
+import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
 
@@ -61,20 +61,24 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
 
     if (!currentMatrix.id) {
       dispatch(createHardSkillsMatrix(requestBody));
-      if (!hardSkillsMatrixError) {
-        message.success('Matrix was created successfully');
-        setTimeout(() => {
-          navigate(paths.settings);
-        }, 1000);
-      }
+      setTimeout(() => {
+        if (!hardSkillsMatrixError) {
+          message.success('Matrix was created successfully');
+          setTimeout(() => {
+            navigate(paths.settings);
+          }, 1000);
+        }
+      }, 1000);
     } else {
       dispatch(editHardSkillsMatrix(requestBody));
-      if (!hardSkillsMatrixError) {
-        message.success('Changes saved successfully');
-        setTimeout(() => {
-          navigate(paths.settings);
-        }, 1000);
-      }
+      setTimeout(() => {
+        if (!hardSkillsMatrixError) {
+          message.success('Changes saved successfully');
+          setTimeout(() => {
+            navigate(paths.settings);
+          }, 1000);
+        }
+      }, 1000);
     }
   };
 

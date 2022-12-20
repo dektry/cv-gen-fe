@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useForm, useFieldArray, FormProvider, useWatch, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -66,7 +67,7 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
   const values = useWatch({ control: methods.control });
 
   const handleAddSkillGroup = () => {
-    append({ value: '', skills: [] });
+    append({ id: uuidv4(), value: '', skills: [] });
   };
 
   const handleSaveMatrix: SubmitHandler<IProps> = (data) => {
