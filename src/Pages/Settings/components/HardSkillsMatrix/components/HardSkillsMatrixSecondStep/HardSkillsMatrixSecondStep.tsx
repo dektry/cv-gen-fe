@@ -1,7 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { message } from 'antd';
 
 import { useForm, useFieldArray, FormProvider, useWatch } from 'react-hook-form';
 
@@ -20,8 +17,6 @@ import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
 
-import paths from 'config/routes.json';
-
 interface IProps {
   matrix?: IFormHardSkillsMatrix;
 }
@@ -29,12 +24,11 @@ interface IProps {
 export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
   const classes = useStyles({ theme });
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
-  const { currentMatrix, hardSkillsMatrixError } = useSelector(hardSkillsMatrixSelector);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const methods = useForm({
     defaultValues: { matrix },
@@ -53,6 +47,8 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     keyName: 'skillGroupKey',
   });
 
+  console.log(values);
+
   const handleSubmitMatrix = () => {
     const requestBody = {
       matrix: values.matrix || ([] as IFormHardSkillsMatrix),
@@ -61,24 +57,8 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
 
     if (!currentMatrix.id) {
       dispatch(createHardSkillsMatrix(requestBody));
-      setTimeout(() => {
-        if (!hardSkillsMatrixError) {
-          message.success('Matrix was created successfully');
-          setTimeout(() => {
-            navigate(paths.settings);
-          }, 1000);
-        }
-      }, 1000);
     } else {
       dispatch(editHardSkillsMatrix(requestBody));
-      setTimeout(() => {
-        if (!hardSkillsMatrixError) {
-          message.success('Changes saved successfully');
-          setTimeout(() => {
-            navigate(paths.settings);
-          }, 1000);
-        }
-      }, 1000);
     }
   };
 

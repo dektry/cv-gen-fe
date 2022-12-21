@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { message } from 'antd';
 
 import { RootState } from '../..';
 
@@ -14,11 +15,12 @@ import {
   editHardSkillsMatrix,
 } from './thunks';
 
+import paths from 'config/routes.json';
+
 const initialState: IHardSkillsMatrixState = {
   matrix: [],
   currentMatrix: {} as IFormHardSkillsMatrix,
   isLoading: false,
-  hardSkillsMatrixError: false,
 };
 
 const harSkillsMatrix = createSlice({
@@ -38,9 +40,6 @@ const harSkillsMatrix = createSlice({
       if (payload.skillGroups) {
         state.currentMatrix.skillGroups = payload.skillGroups;
       }
-    },
-    setHardSkillsMatrixError: (state, { payload }: PayloadAction<boolean>) => {
-      state.hardSkillsMatrixError = payload;
     },
   },
   extraReducers: (builder) => {
@@ -64,6 +63,7 @@ const harSkillsMatrix = createSlice({
       state.isLoading = false;
       if (payload) {
         state.currentMatrix.id = payload.hardSkillMatrixId;
+        window.location.replace(`${paths.hardSkillsMatrixDetails.replace(':id', payload.hardSkillMatrixId)}`);
       }
     });
     builder.addCase(getOneHardSkillsMatrix.pending, (state) => {
@@ -76,11 +76,17 @@ const harSkillsMatrix = createSlice({
       state.isLoading = false;
       state.currentMatrix = payload;
     });
-    builder.addCase(createHardSkillsMatrix.rejected, (state) => {
-      state.hardSkillsMatrixError = true;
+    builder.addCase(createHardSkillsMatrix.fulfilled, () => {
+      message.success('Matrix was created successfully');
+      setTimeout(() => {
+        window.location.replace(`${paths.settings}`);
+      }, 1000);
     });
-    builder.addCase(editHardSkillsMatrix.rejected, (state) => {
-      state.hardSkillsMatrixError = true;
+    builder.addCase(editHardSkillsMatrix.fulfilled, () => {
+      message.success('Changes saved successfully');
+      setTimeout(() => {
+        window.location.replace(`${paths.settings}`);
+      }, 1000);
     });
   },
 });
@@ -89,10 +95,5 @@ export default harSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
-export const {
-  setHardSkillsMatrixIsLoading,
-  setCurrentHardSkillsMatrix,
-  setCurrentPosition,
-  setCurrentSkillGroups,
-  setHardSkillsMatrixError,
-} = harSkillsMatrix.actions;
+export const { setHardSkillsMatrixIsLoading, setCurrentHardSkillsMatrix, setCurrentPosition, setCurrentSkillGroups } =
+  harSkillsMatrix.actions;
