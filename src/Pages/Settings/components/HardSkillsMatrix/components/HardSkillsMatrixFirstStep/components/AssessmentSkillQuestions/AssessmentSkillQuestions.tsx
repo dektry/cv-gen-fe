@@ -1,4 +1,5 @@
 import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -47,7 +48,7 @@ export const AssessmentSkillQuestions = ({ groupIndex, skillIndex }: IProps) => 
         );
       })}
 
-      <AddButton onClick={() => append({ value: '' })} title={'Add question'} />
+      <AddButton onClick={() => append({ id: uuidv4(), value: '' })} title={'Add question'} />
     </>
   );
 };

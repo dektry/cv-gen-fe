@@ -11,9 +11,11 @@ interface IProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit?: () => void;
+  modalTitle: string;
+  modalText: string;
 }
 
-export const ResetModal = ({ isOpen, onClose, onSubmit }: IProps) => {
+export const SimpleTextModal = ({ isOpen, onClose, onSubmit, modalText, modalTitle }: IProps) => {
   const classes = useStyles({ theme });
 
   return (
@@ -21,10 +23,10 @@ export const ResetModal = ({ isOpen, onClose, onSubmit }: IProps) => {
       <Box className={classes.box}>
         <CloseIcon className={classes.closeIcon} onClick={onClose} />
         <Typography variant="h2" className={classes.title}>
-          RESET CHANGES
+          {modalTitle}
         </Typography>
         <Typography variant="h3" className={classes.text}>
-          Are you sure you want to reset all changes made? All data will be lost.
+          {modalText}
         </Typography>
         <div className={classes.buttonContainer}>
           <Button className={classes.noButton} onClick={onClose}>

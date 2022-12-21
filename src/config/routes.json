@@ -24,10 +24,10 @@
       "/candidate/:id/soft-interview/result",
     "login": "/login",
     "users": "/users",
-    "settings": "/settings",
     "uiElements": "/ui-elements",
     "createEmployee": "/create-employee",
-    "techAssessmentSetUp": "/settings/tech-assessment",
-    "techAssessmentDetails": "/settings/tech-assessment/:id",
-    "techAssessmentCopy": "/settings/tech-assessment/copy"
+    "hardSkillsMatrixSetUp": "/settings/hard-skills-matrix",
+    "hardSkillsMatrixDetails": "/settings/hard-skills-matrix/:id",
+    "settingsLevelsPositions": "/settings/positions-and-levels",
+    "settingsHardSkillsMatrixList": "/settings/hard-skills-matrix-list"
 }

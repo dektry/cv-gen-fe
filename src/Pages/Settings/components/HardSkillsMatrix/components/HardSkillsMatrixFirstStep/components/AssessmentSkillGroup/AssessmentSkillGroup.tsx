@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
+
+import { useSelector } from 'react-redux';
+import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
+import { levelsSelector } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,17 +14,21 @@ import AddRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { SkillGroupField } from 'common-components/SkillGroupField';
 import { DeleteButton } from 'common-components/DeleteButton';
 import { DeleteModal } from 'common-components/DeleteModal';
-
-import { useStyles } from './styles';
-import theme from 'theme/theme';
 import { AddButton } from 'common-components/AddButton';
 import { CustomTextField } from 'common-components/CustomTextField';
 import { AssessmentSkillQuestions } from '../AssessmentSkillQuestions';
+
+import { piskStartLevel } from './utils/helpers/pickStartLevel';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 interface IProps {
   idx: number;
   removeSection: UseFieldArrayRemove;
 }
+
+const startLevel = piskStartLevel();
 
 export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const classes = useStyles({ theme });
@@ -27,6 +36,27 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const [isDeleteGroupModalOpen, setIsDeleteGroupModalOpen] = useState(false);
   const [isDeleteSkillModalOpen, setIsDeleteSkillModalOpen] = useState(false);
   const [deletingSkillId, setDeletingSkillId] = useState(0);
+
+  const { allLevels } = useSelector(levelsSelector);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
+
+  const defaultGrades = useMemo(
+    () => allLevels.map((level) => ({ value: startLevel, levelId: level.id })),
+    [allLevels]
+  );
+
+  const defaultLevels = useMemo(
+    () =>
+      allLevels.map((level) => ({
+        id: uuidv4(),
+        value: startLevel,
+        level_id: {
+          id: level.id,
+          name: level.name,
+        },
+      })),
+    [allLevels]
+  );
 
   const methods = useFormContext();
 
@@ -63,6 +93,10 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
     setIsDeleteSkillModalOpen(false);
   };
 
+  const appendSkillValue = currentMatrix.id
+    ? { value: '', id: uuidv4(), levels: defaultLevels, questions: [] }
+    : { value: '', questions: [], grades: defaultGrades };
+
   return (
     <>
       <div className={classes.container}>
@@ -80,7 +114,9 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
             <Controller
               name={`skillGroups.${idx}.skills.${skillIndex}.value`}
               control={methods.control}
-              render={({ field: { value, onChange } }) => <CustomTextField value={value} onChange={onChange} />}
+              render={({ field: { value, onChange } }) => (
+                <CustomTextField fullWidth={true} value={value} onChange={onChange} />
+              )}
             />
             <Button
               className={classes.deleteSkillBtn}
@@ -93,11 +129,7 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
           </Box>
         ))}
 
-        <AddButton
-          className={classes.addButton}
-          title="Add field"
-          onClick={() => append({ value: '', questions: [] })}
-        />
+        <AddButton className={classes.addButton} title="Add field" onClick={() => append(appendSkillValue)} />
       </div>
       <DeleteModal
         isOpen={isDeleteGroupModalOpen}

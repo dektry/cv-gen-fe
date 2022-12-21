@@ -10,7 +10,6 @@ import { InterviewSetUp } from 'Pages/GenerateCV/TechnicalInterview/InterviewSet
 import { SoftskillsInterview } from 'Pages/GenerateCV/SoftskillsInterview/InterviewSetUp';
 import { InterviewResults } from 'Pages/GenerateCV/TechnicalInterview/InterviewResults';
 import { SoftSkillsInterviewResults } from 'Pages/GenerateCV/SoftskillsInterview/InterviewResults';
-import { Settings } from 'Pages/Settings';
 import { AssessmentSetUp } from 'Pages/GenerateCV/TechnicalAssessment/AssessmentSetUp';
 import { AssessmentHistory } from 'Pages/GenerateCV/TechnicalAssessment/AssessmentHistory';
 import { CVGenerationPage } from 'Pages/CVGeneration';
@@ -19,6 +18,8 @@ import { SoftAssessmentSetUp } from 'Pages/GenerateCV/SoftAssessment/SoftAssessm
 import { UIElements } from 'Pages/UIElements';
 import { CreateEmployee } from 'Pages/CreateEmployee';
 import { HardSkillsMatrix } from 'Pages/Settings/components/HardSkillsMatrix';
+import { Settings } from 'Pages/Settings';
+import { HardSkillsMatrixList } from 'Pages/Settings/components/HardSkillsMatrixList';
 
 import routes from 'config/routes.json';
 
@@ -38,7 +39,6 @@ export const privateRoutes: IRoute[] = [
   { path: routes.technicalInterviewResult, component: InterviewResults },
   { path: routes.softSkillsInterview, component: SoftskillsInterview },
   { path: routes.softSkillsInterviewResult, component: SoftSkillsInterviewResults },
-  { path: routes.settings, component: Settings },
   { path: routes.technicalAssessment, component: AssessmentSetUp },
   { path: routes.technicalAssessmentHistory, component: AssessmentHistory },
   { path: routes.prevTechnicalAssessment, component: AssessmentSetUp },
@@ -47,7 +47,10 @@ export const privateRoutes: IRoute[] = [
   { path: routes.prevSoftSkillsAssessment, component: SoftAssessmentSetUp },
   { path: routes.softAssessment, component: SoftAssessmentSetUp },
   { path: routes.createEmployee, component: CreateEmployee },
-  { path: routes.techAssessmentSetUp, component: HardSkillsMatrix },
+  { path: routes.hardSkillsMatrixSetUp, component: HardSkillsMatrix },
+  { path: routes.hardSkillsMatrixDetails, component: HardSkillsMatrix },
+  { path: routes.settingsLevelsPositions, component: Settings },
+  { path: routes.settingsHardSkillsMatrixList, component: HardSkillsMatrixList },
 ];
 
 if (process.env.REACT_APP_ENV === 'development') {

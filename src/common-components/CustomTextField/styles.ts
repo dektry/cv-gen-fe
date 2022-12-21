@@ -25,7 +25,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       display: 'flex',
       '& input': {
         cursor: 'pointer',
-        textAlign: 'center',
+        textAlign: 'left',
         textTransform: 'uppercase',
       },
       '& .MuiOutlinedInput-notchedOutline': {

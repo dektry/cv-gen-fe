@@ -6,6 +6,21 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     '&.MuiBox-root': {
       display: 'flex',
       flexDirection: 'column',
+      width: '600px',
+      height: '276px',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      backgroundColor: ({ theme }) => theme.palette.background.default,
+      borderRadius: '8px',
+      padding: '24px',
+    },
+  },
+  innerBox: {
+    '&.MuiBox-root': {
+      display: 'flex',
+      flexDirection: 'column',
       width: '448px',
       height: '272px',
       position: 'absolute',
@@ -19,7 +34,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   title: {
     '&.MuiTypography-root': {
       textAlign: 'center',
-      margin: '56px 0 4px 0',
+      margin: '56px 0 8px 0',
     },
   },
   text: {
@@ -34,19 +49,34 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     flexDirection: 'row',
     justifyContent: 'flex-end',
     height: '24px',
-    margin: '24px 24px 40px 24px',
+    margin: '16px 24px 80px 24px',
   },
-  noButton: {
+  cancelButton: {
     '&.MuiButton-root': {
-      width: '94px',
+      width: '128px',
       height: '56px',
       marginRight: '8px',
       fontStyle: 'normal',
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: '16px',
       lineHeight: '24px',
       backgroundColor: ({ theme }) => theme.palette.background.default,
       borderRadius: '100px',
+    },
+  },
+  saveButton: {
+    '&.MuiButton-root': {
+      width: '185px',
+      height: '56px',
+      marginLeft: '8px',
+      borderRadius: '100px',
+      color: ({ theme }) => theme.palette.background.default,
+
+      '&:hover': {
+        cursor: 'pointer',
+        boxShadow:
+          '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12)',
+      },
     },
   },
   yesButton: {
@@ -54,16 +84,31 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       width: '94px',
       height: '56px',
       marginLeft: '8px',
-      backgroundColor: ({ theme }) => theme.palette.error.main,
       borderRadius: '100px',
       color: ({ theme }) => theme.palette.background.default,
 
       '&:hover': {
-        backgroundColor: ({ theme }) => theme.palette.error.dark,
+        cursor: 'pointer',
+        boxShadow:
+          '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12)',
       },
     },
   },
   closeIcon: {
+    '&.MuiSvgIcon-root': {
+      position: 'absolute',
+      left: '558.67px',
+      right: '30.67px',
+      top: '30.67px',
+      bottom: '230.67px',
+      color: ({ theme }) => theme.palette.primary.dark,
+
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
+  },
+  closeChildModalIcon: {
     '&.MuiSvgIcon-root': {
       position: 'absolute',
       left: '406.67px',

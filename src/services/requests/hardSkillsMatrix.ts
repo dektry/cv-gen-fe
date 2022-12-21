@@ -10,7 +10,11 @@ export const httpGetAllHardSkillsMatrix = async () => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_GET_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    if (500 <= error.status && error.status <= 599) {
+      message.error(`Server error: ${error.message}`);
+    } else {
+      message.error(`Server error. Please, contact admin`);
+    }
   }
 };
 
@@ -20,7 +24,11 @@ export const httpGetOneHardSkillsMatrix = async (id: string) => {
     return data;
   } catch (error) {
     console.error('[API_CLIENT_GET_ONE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    if (500 <= error.status && error.status <= 599) {
+      message.error(`Server error: ${error.message}`);
+    } else {
+      message.error(`Server error. Please, contact admin`);
+    }
   }
 };
 
@@ -33,7 +41,11 @@ export const httpCreateHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix, 
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    if (500 <= error.status && error.status <= 599) {
+      message.error(`Server error: ${error.message}`);
+    } else {
+      message.error(`Server error. Please, contact admin`);
+    }
   }
 };
 
@@ -46,7 +58,11 @@ export const httpEditHardSkillsMatrix = async (matrix: IFormHardSkillsMatrix, po
     return data;
   } catch (error) {
     console.error('[API_CLIENT_CREATE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    if (500 <= error.status && error.status <= 599) {
+      message.error(`Server error: ${error.message}`);
+    } else {
+      message.error(`Server error. Please, contact admin`);
+    }
   }
 };
 
@@ -55,17 +71,27 @@ export const httpDeleteHardSkillsMatrix = async (id: string) => {
     await apiClient.delete(`${endpoints.hardSkillsMatrix}/${id}`);
   } catch (error) {
     console.error('[API_CLIENT_DELETE_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    if (500 <= error.status && error.status <= 599) {
+      message.error(`Server error: ${error.message}`);
+    } else {
+      message.error(`Server error. Please, contact admin`);
+    }
   }
 };
 
-export const httpCopyHardSkillsMatrix = async (props: ICopyHardSkillsMatrixProps) => {
+export const httpCopyHardSkillsMatrix = async (
+  props: ICopyHardSkillsMatrixProps
+): Promise<{ hardSkillMatrixId: string } | undefined> => {
   try {
-    const data = await apiClient.post(`${endpoints.hardSkillsMatrix}/copy`, props);
+    const { data } = await apiClient.post(`${endpoints.hardSkillsMatrix}/copy`, props);
 
     return data;
   } catch (error) {
     console.error('[API_CLIENT_COPY_HARD_SKILLS_MATRIX_ERROR]', error);
-    message.error(`Server error. Please contact admin`);
+    if (500 <= error.status && error.status <= 599) {
+      message.error(`Server error: ${error.message}`);
+    } else {
+      message.error(`Server error. Please, contact admin`);
+    }
   }
 };

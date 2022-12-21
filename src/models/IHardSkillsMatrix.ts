@@ -10,10 +10,20 @@ export interface IQuestion {
   value: string;
 }
 
+export interface ILevel {
+  value: string;
+  id: string;
+  level_id: {
+    id: string;
+    name: string;
+  };
+}
+
 export interface ISkill {
   value: string;
   id?: string;
   questions: IQuestion[];
+  levels: ILevel[];
 }
 
 export interface ISkillGroup {
