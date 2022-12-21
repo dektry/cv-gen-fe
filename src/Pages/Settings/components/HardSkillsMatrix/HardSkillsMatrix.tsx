@@ -52,7 +52,7 @@ export const HardSkillsMatrix = () => {
   }, [currentMatrix.skillGroups?.length]);
 
   useEffect(() => {
-    if (id) {
+    if (id && id !== currentMatrix.id) {
       dispatch(getOneHardSkillsMatrix(id));
     } else if (currentMatrix && !currentMatrix.position?.name) {
       navigate(paths.settingsHardSkillsMatrixList);
