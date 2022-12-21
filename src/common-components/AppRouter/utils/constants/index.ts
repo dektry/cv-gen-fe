@@ -18,7 +18,7 @@ import { SoftAssessmentSetUp } from 'Pages/GenerateCV/SoftAssessment/SoftAssessm
 import { UIElements } from 'Pages/UIElements';
 import { CreateEmployee } from 'Pages/CreateEmployee';
 import { HardSkillsMatrix } from 'Pages/Settings/components/HardSkillsMatrix';
-import { PositionsLevels } from 'Pages/Settings/components/PositionsLevels';
+import { Settings } from 'Pages/Settings';
 import { HardSkillsMatrixList } from 'Pages/Settings/components/HardSkillsMatrixList';
 
 import routes from 'config/routes.json';
@@ -49,7 +49,7 @@ export const privateRoutes: IRoute[] = [
   { path: routes.createEmployee, component: CreateEmployee },
   { path: routes.hardSkillsMatrixSetUp, component: HardSkillsMatrix },
   { path: routes.hardSkillsMatrixDetails, component: HardSkillsMatrix },
-  { path: routes.settingsLevelsPositions, component: PositionsLevels },
+  { path: routes.settingsLevelsPositions, component: Settings },
   { path: routes.settingsHardSkillsMatrixList, component: HardSkillsMatrixList },
 ];
 
