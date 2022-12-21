@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate, generatePath } from 'react-router-dom';
 
 import { useForm, useFieldArray } from 'react-hook-form';
 
@@ -16,34 +17,64 @@ import Typography from '@mui/material/Typography';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
-import { CreateEditModal } from '../CreateEditModal';
+import { HardSkillsMatrixCreateEditModal } from '../HardSkillsMatrixCreateEditModal';
+
+import paths from 'config/routes.json';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
+import { IDBPosition } from 'models/IUser';
 
 export interface IListElement {
   id?: string;
+  positionId?: string;
   name: string;
+}
+
+export interface IHandleCopyProp {
+  positionId: string;
+  hardSkillMatrixId: string;
 }
 
 interface IProps {
   data: IListElement[];
   name: string;
-  handleCreate: (name: string) => void;
-  handleUpdate: (data: IListElement) => void;
+  handleCreate?: (name?: string, position?: IDBPosition) => void;
+  handleUpdate?: (data: IListElement) => void;
   handleDelete: (id: string) => void;
+  handleCopy?: (data: IHandleCopyProp) => void;
+  handleOpenDetailsPage?: (id: string) => void;
+  positions?: IListElement[];
+  addModalTitle: string;
+  editModalTitle: string;
+  copyModalTitle?: string;
+  hardSkillsMatrixId?: string;
 }
 
 interface FormValues {
   data: IListElement[];
 }
 
-export const TableComponent = ({ data, name, handleCreate, handleDelete, handleUpdate }: IProps) => {
+export const TableComponent = ({
+  data,
+  name,
+  handleCreate,
+  handleDelete,
+  handleUpdate,
+  handleCopy,
+  positions,
+  addModalTitle,
+  editModalTitle,
+  copyModalTitle,
+}: IProps) => {
   const classes = useStyles({ theme });
+  const navigate = useNavigate();
+
   const [popoverAnchorElement, setPopoverAnchorElement] = useState<HTMLButtonElement | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
   const [listElementNumericId, setListElementNumericId] = useState(0);
   const [activeListElement, setActiveListElement] = useState<IListElement>({} as IListElement);
 
@@ -62,22 +93,25 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
     keyName: 'fieldKey',
   });
 
-  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>, el: IListElement, idx: number) => {
+    setActiveListElement(el);
+
+    setListElementNumericId(idx);
     setPopoverAnchorElement(event.currentTarget);
   };
 
   const handleClosePopover = () => {
     setPopoverAnchorElement(null);
+    setActiveListElement({} as IListElement);
   };
 
-  const handleOpenDeleteModal = (idx: number, el: IListElement) => {
-    setListElementNumericId(idx);
-    setActiveListElement(el);
+  const handleOpenDeleteModal = () => {
     setIsDeleteModalOpen(true);
     setPopoverAnchorElement(null);
   };
 
   const handleDeleteModalClose = () => {
+    setActiveListElement({} as IListElement);
     setIsDeleteModalOpen(false);
   };
 
@@ -93,18 +127,23 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   };
 
   const handleCreateModaleClose = () => {
+    setActiveListElement({} as IListElement);
     setIsCreateModalOpen(false);
   };
 
-  const hanldeCreateSubmit = (name: string) => {
-    append({ name });
-    handleCreate(name);
+  const hanldeCreateSubmit = (name: string, position?: IDBPosition) => {
+    !positions && append({ name, positionId: position?.id || '' });
+    if (handleCreate && position) {
+      handleCreate(name, position);
+    }
     setIsCreateModalOpen(false);
   };
 
-  const handleOpenEditModal = (idx: number, el: IListElement) => {
-    setActiveListElement(el);
-    setListElementNumericId(listElementNumericId);
+  const handleEditClick = () => {
+    navigate(generatePath(paths.hardSkillsMatrixDetails, { id: activeListElement.id }));
+  };
+
+  const handleOpenEditModal = () => {
     setPopoverAnchorElement(null);
     setIsEditModalOpen(true);
   };
@@ -115,10 +154,29 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   };
 
   const handleEditSubmit = (name: string) => {
-    update(listElementNumericId, { id: activeListElement.id, name });
-    handleUpdate({ id: activeListElement.id || '', name });
+    !positions &&
+      update(listElementNumericId, { id: activeListElement.id, name, positionId: activeListElement.positionId });
+    if (handleUpdate) {
+      handleUpdate({ id: activeListElement.id || '', name });
+    }
     setActiveListElement({} as IListElement);
     setIsEditModalOpen(false);
+  };
+
+  const handleOpenCopyModal = () => {
+    setPopoverAnchorElement(null);
+    setIsCopyModalOpen(true);
+  };
+
+  const handleCloseCopyModal = () => {
+    setIsCopyModalOpen(false);
+    setActiveListElement({} as IListElement);
+  };
+
+  const handleCopySubmit = (name: string, position?: IDBPosition) => {
+    if (handleCopy && activeListElement.id && position) {
+      handleCopy({ positionId: position.id || '', hardSkillMatrixId: activeListElement.id });
+    }
   };
 
   const open = Boolean(popoverAnchorElement);
@@ -126,6 +184,12 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
   const modalTitle = name.includes('Position') ? 'Delete position' : 'Delete level';
   const text = name.includes('Position') ? 'Position' : 'Level';
   const modalText = `Are you sure that you want to delete this ${text.toLowerCase()}? All data will be lost.`;
+
+  const positionsIds = useMemo(() => fields.map((el) => el.positionId), [fields]);
+  const positionsThatAreNotInMatrixList = useMemo(
+    () => positions?.filter((el: IDBPosition) => !positionsIds.includes(el.id)),
+    [positionsIds]
+  );
 
   return (
     <FormControl className={classes.container}>
@@ -154,7 +218,9 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
                 <TableCell className={classes.cellRight}>
                   <Button
                     className={classes.more}
-                    onClick={handleClickPopover}
+                    onClick={(e) =>
+                      handleClickPopover(e, { id: row.id || '', name: row.name, positionId: row.positionId }, idx)
+                    }
                     endIcon={<MoreVertIcon className={classes.icon} color="disabled" />}
                   />
                   <Popover
@@ -168,16 +234,15 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
                       horizontal: 'left',
                     }}
                   >
-                    <Button
-                      className={classes.button}
-                      onClick={() => handleOpenEditModal(idx, { id: row.id || '', name: row.name })}
-                    >
+                    {handleCopy && (
+                      <Button className={classes.button} onClick={handleOpenCopyModal}>
+                        Copy
+                      </Button>
+                    )}
+                    <Button className={classes.button} onClick={handleUpdate ? handleOpenEditModal : handleEditClick}>
                       Edit
                     </Button>
-                    <Button
-                      className={classes.deleteButton}
-                      onClick={() => handleOpenDeleteModal(idx, { id: row.id || '', name: row.name })}
-                    >
+                    <Button className={classes.deleteButton} onClick={handleOpenDeleteModal}>
                       Delete
                     </Button>
                   </Popover>
@@ -187,23 +252,36 @@ export const TableComponent = ({ data, name, handleCreate, handleDelete, handleU
           </TableBody>
         </Table>
       </TableContainer>
-      <CreateEditModal
+      <HardSkillsMatrixCreateEditModal
         isOpen={isCreateModalOpen}
         onClose={handleCreateModaleClose}
         onSubmit={hanldeCreateSubmit}
-        modalTitle={`ADD NEW ${text.toUpperCase()}`}
+        modalTitle={addModalTitle}
         label={text}
         buttonText={`Add ${text}`}
+        data={positionsThatAreNotInMatrixList}
       />
-      <CreateEditModal
+      <HardSkillsMatrixCreateEditModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
         onSubmit={handleEditSubmit}
-        modalTitle={`EDIT ${text.toUpperCase()}`}
+        modalTitle={editModalTitle}
         label={text}
         buttonText={'Save'}
         inputValue={activeListElement.name}
+        data={positions}
       />
+      {handleCopy && copyModalTitle && (
+        <HardSkillsMatrixCreateEditModal
+          isOpen={isCopyModalOpen}
+          onClose={handleCloseCopyModal}
+          onSubmit={handleCopySubmit}
+          modalTitle={copyModalTitle}
+          label={text}
+          buttonText={'Save'}
+          data={positionsThatAreNotInMatrixList}
+        />
+      )}
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}

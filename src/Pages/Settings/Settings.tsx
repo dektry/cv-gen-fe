@@ -1,9 +1,5 @@
-import { SettingsTabs } from './components/Tabs';
+import { PositionsLevels } from './components/PositionsLevels';
 
 export const Settings = () => {
-  return (
-    <div>
-      <SettingsTabs />
-    </div>
-  );
+  return <PositionsLevels />;
 };

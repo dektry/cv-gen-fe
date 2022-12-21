@@ -17,6 +17,7 @@ import technologies from './reducers/technologies';
 import softSkillsToCV from './reducers/softSkillsToCV';
 import education from './reducers/education';
 import languages from './reducers/languages';
+import hardSkillsMatrix from './reducers/hardSkillsMatrix';
 
 const rootReducer = combineReducers({
   app,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   softSkillsToCV,
   education,
   languages,
+  hardSkillsMatrix,
 });
 
 export const store = configureStore({

@@ -24,7 +24,10 @@
       "/candidate/:id/soft-interview/result",
     "login": "/login",
     "users": "/users",
-    "settings": "/settings",
     "uiElements": "/ui-elements",
-    "createEmployee": "/create-employee"
+    "createEmployee": "/create-employee",
+    "hardSkillsMatrixSetUp": "/settings/hard-skills-matrix",
+    "hardSkillsMatrixDetails": "/settings/hard-skills-matrix/:id",
+    "settingsLevelsPositions": "/settings/positions-and-levels",
+    "settingsHardSkillsMatrixList": "/settings/hard-skills-matrix-list"
 }
