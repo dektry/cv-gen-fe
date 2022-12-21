@@ -4,13 +4,7 @@ import { message } from 'antd';
 import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
-import {
-  IFormHardSkillsMatrix,
-  IHardSkillsMatrix,
-  IHardSkillsMatrixState,
-  ISkill,
-  ISkillGroup,
-} from 'models/IHardSkillsMatrix';
+import { IFormHardSkillsMatrix, IHardSkillsMatrix, IHardSkillsMatrixState, ISkill } from 'models/IHardSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
 import {

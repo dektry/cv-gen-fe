@@ -1,5 +1,5 @@
 import { IDBLevels } from 'models/IUser';
-import { ILevel, ISkill } from 'models/IHardSkillsMatrix';
+import { ILevel } from 'models/IHardSkillsMatrix';
 
 interface IOrder {
   [key: string]: number;
