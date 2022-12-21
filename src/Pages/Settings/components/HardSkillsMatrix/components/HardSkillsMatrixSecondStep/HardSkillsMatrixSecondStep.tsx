@@ -47,8 +47,6 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     keyName: 'skillGroupKey',
   });
 
-  console.log(values);
-
   const handleSubmitMatrix = () => {
     const requestBody = {
       matrix: values.matrix || ([] as IFormHardSkillsMatrix),

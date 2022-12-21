@@ -4,7 +4,13 @@ import { message } from 'antd';
 import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
-import { IFormHardSkillsMatrix, IHardSkillsMatrix, IHardSkillsMatrixState } from 'models/IHardSkillsMatrix';
+import {
+  IFormHardSkillsMatrix,
+  IHardSkillsMatrix,
+  IHardSkillsMatrixState,
+  ISkill,
+  ISkillGroup,
+} from 'models/IHardSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
 import {
@@ -14,6 +20,8 @@ import {
   createHardSkillsMatrix,
   editHardSkillsMatrix,
 } from './thunks';
+
+import { sortSkillLevels } from 'store/helpers/sortLevels';
 
 import paths from 'config/routes.json';
 
@@ -74,6 +82,17 @@ const harSkillsMatrix = createSlice({
     });
     builder.addCase(getOneHardSkillsMatrix.fulfilled, (state, { payload }) => {
       state.isLoading = false;
+      for (const group of payload.skillGroups) {
+        group.skills = group.skills?.map((skill: ISkill) => {
+          const levels = sortSkillLevels(skill.levels);
+
+          return {
+            ...skill,
+            levels,
+          };
+        });
+      }
+
       state.currentMatrix = payload;
     });
     builder.addCase(createHardSkillsMatrix.fulfilled, () => {
