@@ -12,6 +12,7 @@ import {
 import { levelsSelector, loadLevels, createLevel, updateLevel, deleteLevel } from 'store/reducers/levels';
 
 import { IListElement, TableComponent } from '../../components/Table';
+import { SettingsTabs } from '../SettingsTabs';
 
 export const PositionsLevels = () => {
   const { allPositions } = useSelector(positionsSelector);
@@ -50,6 +51,7 @@ export const PositionsLevels = () => {
 
   return (
     <>
+      <SettingsTabs />
       <TableComponent
         data={allPositions}
         name={'Position name'}

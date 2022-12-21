@@ -65,7 +65,7 @@ export const Navigation = ({ collapsed, setCollapse }: IProps) => {
           icon={<SettingsIcon />}
         >
           <Tooltip placement="right" title={collapsed ? SETTINGS : ''}>
-            <Link to={paths.settings}>{SETTINGS}</Link>
+            <Link to={paths.settingsLevelsPositions}>{SETTINGS}</Link>
           </Tooltip>
         </NavigationItem>
       </ul>

@@ -14,6 +14,7 @@ import {
 import { hardSkillsMatrixSelector, setCurrentPosition } from 'store/reducers/hardSkillsMatrix';
 
 import { TableComponent } from '../Table';
+import { SettingsTabs } from '../SettingsTabs';
 
 import routes from 'config/routes.json';
 import { IDBPosition } from 'models/IUser';
@@ -21,7 +22,7 @@ import { ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
 
 export const HardSkillsMatrixList = () => {
   const { allPositions } = useSelector(positionsSelector);
-  const { matrix, currentMatrix } = useSelector(hardSkillsMatrixSelector);
+  const { matrix } = useSelector(hardSkillsMatrixSelector);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -56,17 +57,20 @@ export const HardSkillsMatrixList = () => {
   );
 
   return (
-    <TableComponent
-      data={datatoShow}
-      name={'Position'}
-      handleDelete={handleDeleteMatrix}
-      handleCopy={handleCopyHardSkillsMatrix}
-      handleCreate={handleCreateHardSkillsMatrix}
-      handleOpenDetailsPage={handleOpenHardSkillsMatrixDetails}
-      positions={allPositions}
-      addModalTitle={'ADD NEW POSITION TECHNICAL ASSESSMENT'}
-      editModalTitle={'EDIT POSITION TECHNICAL ASSESSMENT'}
-      copyModalTitle={'SELECT POSITION TECHNICAL ASSESSMENT'}
-    />
+    <>
+      <SettingsTabs />
+      <TableComponent
+        data={datatoShow}
+        name={'Position'}
+        handleDelete={handleDeleteMatrix}
+        handleCopy={handleCopyHardSkillsMatrix}
+        handleCreate={handleCreateHardSkillsMatrix}
+        handleOpenDetailsPage={handleOpenHardSkillsMatrixDetails}
+        positions={allPositions}
+        addModalTitle={'ADD NEW POSITION TECHNICAL ASSESSMENT'}
+        editModalTitle={'EDIT POSITION TECHNICAL ASSESSMENT'}
+        copyModalTitle={'SELECT POSITION TECHNICAL ASSESSMENT'}
+      />
+    </>
   );
 };

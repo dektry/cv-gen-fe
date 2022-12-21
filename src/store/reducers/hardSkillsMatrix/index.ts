@@ -98,13 +98,13 @@ const harSkillsMatrix = createSlice({
     builder.addCase(createHardSkillsMatrix.fulfilled, () => {
       message.success('Matrix was created successfully');
       setTimeout(() => {
-        window.location.replace(`${paths.settings}`);
+        window.location.replace(`${paths.settingsHardSkillsMatrixList}`);
       }, 1000);
     });
     builder.addCase(editHardSkillsMatrix.fulfilled, () => {
       message.success('Changes saved successfully');
       setTimeout(() => {
-        window.location.replace(`${paths.settings}`);
+        window.location.replace(`${paths.settingsHardSkillsMatrixList}`);
       }, 1000);
     });
   },

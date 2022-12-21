@@ -55,7 +55,7 @@ export const HardSkillsMatrix = () => {
     if (id) {
       dispatch(getOneHardSkillsMatrix(id));
     } else if (currentMatrix && !currentMatrix.position?.name) {
-      navigate(paths.settings);
+      navigate(paths.settingsHardSkillsMatrixList);
     }
   }, [id, currentMatrix.position?.name]);
 
