@@ -139,7 +139,7 @@ export const AssessmentHistory = () => {
       {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
       <InterviewModal
         isOpen={isOpen}
-        modalTitle="Level & Position"
+        modalTitle="LEVEL & POSITION"
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
         state={state}

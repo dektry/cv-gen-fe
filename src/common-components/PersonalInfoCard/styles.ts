@@ -1,39 +1,30 @@
 import { createUseStyles } from 'react-jss';
+import { Theme } from '@mui/material/styles/createTheme';
 
-export const useStyles = createUseStyles({
+export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>({
   mainContainer: {
     display: 'flex',
     justifyContent: 'space-between',
   },
   infoContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    letterSpacing: '0.15px',
-    backgroundColor: 'rgba(144, 202, 249, 0.2)',
-    padding: '1rem',
-    width: '60%',
-    maxHeight: '12rem'
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: ({ theme }) => theme.palette.primary.main,
+    padding: '24px',
+    width: '100%',
+    height: '90px',
+    borderRadius: '8px',
+    gap: '32px',
   },
   name: {
-    fontWeight: '500',
-    fontSize: '20px',
-    lineHeight: '23px',
+    color: ({ theme }) => theme.palette.background.default,
+    textTransform: 'uppercase',
+  },
+  text: {
+    color: ({ theme }) => theme.palette.background.default,
   },
   greyText: {
-    fontWeight: '400',
-    fontSize: '12px',
-    lineHeight: '175%',
-    color: 'rgba(0, 0, 0, 0.38)',
-  },
-  positionAndLevelContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '50%',
-  },
-  innerContainer: {
-    marginRight: '0.5rem'
+    color: ({ theme }) => theme.palette.text.secondary,
   },
 });
