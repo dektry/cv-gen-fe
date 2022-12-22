@@ -19,8 +19,18 @@ export interface IAssessmentFromDB {
   comment?: string;
 }
 
+export interface IAssessmentHistoryRecord {
+  id: string;
+  created: string;
+  updated: string;
+  level: string;
+  position: string;
+  type: 'Assessment' | 'Interview';
+}
+
 export interface ITechAssessmentState {
   assessments: IAssessmentFromDB[];
+  assessmentsHistory: IAssessmentHistoryRecord[];
   isLoading: boolean;
   pageSize: number;
   currentPage: number;

@@ -16,7 +16,12 @@ import {
   httpGetTechAssessment,
 } from 'services/requests/techAssessment';
 
-import { IAssessmentFromDB, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
+import {
+  IAssessmentFromDB,
+  IAssessmentHistoryRecord,
+  ICompleteAssessment,
+  ITechAssessmentState,
+} from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
@@ -41,6 +46,7 @@ export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: 
 
 const initialState: ITechAssessmentState = {
   assessments: [],
+  assessmentsHistory: [],
   isLoading: false,
   pageSize: defaultPageSize,
   currentPage: defaultCurrentPage,
@@ -53,8 +59,8 @@ const techAssessment = createSlice({
   name: appStoreName,
   initialState,
   reducers: {
-    setTechAssessments: (state, { payload }: PayloadAction<IAssessmentFromDB[] | []>) => {
-      state.assessments = payload;
+    setTechAssessments: (state, { payload }: PayloadAction<IAssessmentHistoryRecord[] | []>) => {
+      state.assessmentsHistory = payload;
     },
     setPageSize: (state, { payload }: PayloadAction<number>) => {
       state.pageSize = payload;

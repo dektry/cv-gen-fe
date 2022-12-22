@@ -1,7 +1,9 @@
-import { useEffect, useCallback, useState, useMemo } from 'react';
-import { useParams, useNavigate, generatePath } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, generatePath, Link } from 'react-router-dom';
 
 import { message, Spin } from 'antd';
+
+import Typography from '@mui/material/Typography';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
@@ -17,27 +19,27 @@ import { loadEmployee } from 'store/reducers/employees/thunks';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
-import { ITableParams } from 'models/ICommon';
-import { IAssessmentFromDB } from 'models/ITechAssessment';
-
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { TableComponent as Table } from 'common-components/Table';
 import { StartInterviewButton } from 'Pages/GenerateCV/common-components/StartInterviewButton';
 import { InterviewModal } from 'Pages/GenerateCV/common-components/InterviewModal';
 
 import paths from 'config/routes.json';
-import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
 import { defaultEmployee } from 'store/constants';
+import { HistoryTable } from 'common-components/HistoryTable';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 export const AssessmentHistory = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
+  const classes = useStyles({ theme });
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } =
-    useSelector(techAssessmentSelector);
+  const { isLoading, chosenLevel, chosenPosition, assessmentsHistory } = useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
@@ -56,44 +58,6 @@ export const AssessmentHistory = () => {
       dispatch(setChosenEmployee(defaultEmployee));
     };
   }, []);
-
-  const paginationObj = useMemo(() => {
-    return {
-      pageSize,
-      total: assessments.length,
-      current: currentPage,
-      showTotal: (total: number) => `Total ${total} technical assessments passed`,
-    };
-  }, [assessments, currentPage]);
-
-  const createPath = (record: IAssessmentFromDB) => {
-    navigate(
-      generatePath(paths.prevTechnicalAssessment, {
-        id: id || '',
-        assessmentId: record.id,
-      })
-    );
-  };
-
-  const handleRowClick = useCallback(
-    (record: IAssessmentFromDB) => {
-      return {
-        onClick: () => createPath(record),
-      };
-    },
-    [history]
-  );
-
-  const params: ITableParams<IAssessmentFromDB> = useMemo(() => {
-    return {
-      entity: ASSESSMENT,
-      tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
-      dataSource: assessments,
-      handleRowClick,
-      paginationObj,
-      loading: isLoading,
-    };
-  }, [assessments]);
 
   const handleClick = () => {
     setIsOpen(true);
@@ -136,7 +100,17 @@ export const AssessmentHistory = () => {
     <>
       <EmployeeHeader personalData={personalData} backPath={paths.employeesList} />
       <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
-      {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
+      <div className={classes.midContainer}>
+        <Typography variant="h2">TECHNICAL ASSESSMENTS HISTORY</Typography>
+        <Link className={classes.link} to="/">
+          Show comparison
+        </Link>
+      </div>
+      {assessmentsHistory.length ? (
+        <HistoryTable assessments={assessmentsHistory} />
+      ) : (
+        <div>Technical assessments not found</div>
+      )}
       <InterviewModal
         isOpen={isOpen}
         modalTitle="Level & Position"
