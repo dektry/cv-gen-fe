@@ -41,7 +41,7 @@ export interface IHardSkillsMatrix {
 export interface IHardSkillsMatrixState {
   matrix: IHardSkillsMatrix[];
   currentMatrix: IFormHardSkillsMatrix;
-  isLoading: boolean;
+  hardSkillMatrixLoading: boolean;
 }
 
 export interface ICopyHardSkillsMatrixProps {

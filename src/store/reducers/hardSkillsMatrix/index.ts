@@ -22,7 +22,7 @@ import paths from 'config/routes.json';
 const initialState: IHardSkillsMatrixState = {
   matrix: [],
   currentMatrix: {} as IFormHardSkillsMatrix,
-  isLoading: false,
+  hardSkillMatrixLoading: false,
 };
 
 const harSkillsMatrix = createSlice({
@@ -30,7 +30,7 @@ const harSkillsMatrix = createSlice({
   initialState,
   reducers: {
     setHardSkillsMatrixIsLoading: (state, { payload }: PayloadAction<boolean>) => {
-      state.isLoading = payload;
+      state.hardSkillMatrixLoading = payload;
     },
     setCurrentHardSkillsMatrix: (state, { payload }: PayloadAction<IHardSkillsMatrix>) => {
       state.currentMatrix = payload;
@@ -46,36 +46,36 @@ const harSkillsMatrix = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllHardSkillsMatrix.pending, (state) => {
-      state.isLoading = true;
+      state.hardSkillMatrixLoading = true;
     });
     builder.addCase(getAllHardSkillsMatrix.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
+      state.hardSkillMatrixLoading = false;
       state.matrix = payload;
     });
     builder.addCase(getAllHardSkillsMatrix.rejected, (state) => {
-      state.isLoading = false;
+      state.hardSkillMatrixLoading = false;
     });
     builder.addCase(copyHardSkillsMatrix.pending, (state) => {
-      state.isLoading = true;
+      state.hardSkillMatrixLoading = true;
     });
     builder.addCase(copyHardSkillsMatrix.rejected, (state) => {
-      state.isLoading = false;
+      state.hardSkillMatrixLoading = false;
     });
     builder.addCase(copyHardSkillsMatrix.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
+      state.hardSkillMatrixLoading = false;
       if (payload) {
         state.currentMatrix.id = payload.hardSkillMatrixId;
         window.location.replace(`${paths.hardSkillsMatrixDetails.replace(':id', payload.hardSkillMatrixId)}`);
       }
     });
     builder.addCase(getOneHardSkillsMatrix.pending, (state) => {
-      state.isLoading = true;
+      state.hardSkillMatrixLoading = true;
     });
     builder.addCase(getOneHardSkillsMatrix.rejected, (state) => {
-      state.isLoading = false;
+      state.hardSkillMatrixLoading = false;
     });
     builder.addCase(getOneHardSkillsMatrix.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
+      state.hardSkillMatrixLoading = false;
       for (const group of payload.skillGroups) {
         group.skills = group.skills?.map((skill: ISkill) => {
           const levels = sortSkillLevels(skill.levels);

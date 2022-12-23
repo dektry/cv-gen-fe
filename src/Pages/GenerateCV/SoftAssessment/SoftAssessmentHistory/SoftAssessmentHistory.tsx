@@ -23,7 +23,7 @@ import { ISoftAssessment } from 'models/ISoftAssessment';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { TableComponent as Table } from 'common-components/Table';
 import { StartInterviewButton } from 'Pages/GenerateCV/common-components/StartInterviewButton';
-import { InterviewModal } from 'Pages/GenerateCV/common-components/InterviewModal';
+import { PositionsLevelsModal } from 'Pages/GenerateCV/common-components/PositionsLevelsModal';
 
 import paths from 'config/routes.json';
 import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
@@ -137,9 +137,9 @@ export const SoftAssessmentHistory = () => {
       <EmployeeHeader personalData={personalData} backPath={paths.employeesList} />
       <StartInterviewButton text="Start soft skills assessment" handleClick={handleClick} />
       {assessments.length ? <Table params={params} /> : <div>soft skill assessments not found</div>}
-      <InterviewModal
+      <PositionsLevelsModal
         isOpen={isOpen}
-        modalTitle="Level & Position"
+        modalTitle="LEVEL & POSITION"
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
         state={state}
