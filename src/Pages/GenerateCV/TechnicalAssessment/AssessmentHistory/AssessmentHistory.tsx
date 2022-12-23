@@ -14,8 +14,9 @@ import {
 } from 'store/reducers/techAssessment';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
-import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { getAllHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
+import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 
 import { ITableParams } from 'models/ICommon';
 import { IAssessmentFromDB } from 'models/ITechAssessment';
@@ -23,7 +24,7 @@ import { IAssessmentFromDB } from 'models/ITechAssessment';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { TableComponent as Table } from 'common-components/Table';
 import { StartInterviewButton } from 'Pages/GenerateCV/common-components/StartInterviewButton';
-import { InterviewModal } from 'Pages/GenerateCV/common-components/InterviewModal';
+import { PositionsLevelsModal } from 'Pages/GenerateCV/common-components/PositionsLevelsModal';
 
 import paths from 'config/routes.json';
 import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
@@ -41,8 +42,8 @@ export const AssessmentHistory = () => {
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
-  const { allPositions, positionsLoading } = useSelector(positionsSelector);
   const { allLevels, levelsLoading } = useSelector(levelsSelector);
+  const { hardSkillMatrixLoading, matrix } = useSelector(hardSkillsMatrixSelector);
 
   useEffect(() => {
     if (id) {
@@ -97,7 +98,7 @@ export const AssessmentHistory = () => {
 
   const handleClick = () => {
     setIsOpen(true);
-    dispatch(loadPositions());
+    dispatch(getAllHardSkillsMatrix());
     dispatch(loadLevels());
   };
 
@@ -122,6 +123,7 @@ export const AssessmentHistory = () => {
   };
 
   const personalData = { firstName, lastName, location, position, level };
+  const allPositions = useMemo(() => matrix.map((el) => el.position), [matrix]);
   const state = { positions: allPositions, levels: allLevels };
 
   useEffect(() => {
@@ -137,16 +139,16 @@ export const AssessmentHistory = () => {
       <EmployeeHeader personalData={personalData} backPath={paths.employeesList} />
       <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
       {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
-      <InterviewModal
+      <PositionsLevelsModal
         isOpen={isOpen}
-        modalTitle="Level & Position"
+        modalTitle="LEVEL & POSITION"
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
         state={state}
         personalData={personalData}
         setCurrentLevel={setInterviewLevel}
         setCurrentPosition={setInterviewPosition}
-        isLoading={positionsLoading && levelsLoading}
+        isLoading={hardSkillMatrixLoading && levelsLoading}
       />
     </>
   );
