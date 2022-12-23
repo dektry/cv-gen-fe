@@ -16,7 +16,7 @@ import {
   httpGetTechAssessment,
 } from 'services/requests/techAssessment';
 
-import { IAssessmentFromDB, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
+import { IAssessmentHistoryRecord, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
@@ -41,6 +41,7 @@ export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: 
 
 const initialState: ITechAssessmentState = {
   assessments: [],
+  assessmentsHistory: [],
   isLoading: false,
   pageSize: defaultPageSize,
   currentPage: defaultCurrentPage,
@@ -53,8 +54,8 @@ const techAssessment = createSlice({
   name: appStoreName,
   initialState,
   reducers: {
-    setTechAssessments: (state, { payload }: PayloadAction<IAssessmentFromDB[] | []>) => {
-      state.assessments = payload;
+    setTechAssessments: (state, { payload }: PayloadAction<IAssessmentHistoryRecord[] | []>) => {
+      state.assessmentsHistory = payload;
     },
     setPageSize: (state, { payload }: PayloadAction<number>) => {
       state.pageSize = payload;
@@ -81,20 +82,17 @@ const techAssessment = createSlice({
     });
     builder.addCase(loadTechAssessments.fulfilled, (state, { payload }) => {
       if (payload.length) {
-        const processedAssessments = payload.map((el: IAssessmentFromDB) => {
+        const processedAssessments = payload.map((el: IAssessmentHistoryRecord) => {
           return {
-            id: el.id,
-            date: new Date(el.createdAt).toLocaleDateString(),
-            position: el.position?.name,
-            level: el.level?.name,
-            type: 'Assessment',
-            answers: el.answers,
+            ...el,
+            created: new Date(el.created).toLocaleDateString(),
+            updated: new Date(el.updated).toLocaleDateString(),
           };
         });
-        state.assessments = processedAssessments;
+        state.assessmentsHistory = processedAssessments;
         state.isLoading = false;
       } else {
-        state.assessments = [];
+        state.assessmentsHistory = [];
         state.isLoading = false;
       }
     });
