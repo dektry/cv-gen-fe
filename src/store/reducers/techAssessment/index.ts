@@ -87,20 +87,17 @@ const techAssessment = createSlice({
     });
     builder.addCase(loadTechAssessments.fulfilled, (state, { payload }) => {
       if (payload.length) {
-        const processedAssessments = payload.map((el: IAssessmentFromDB) => {
+        const processedAssessments = payload.map((el: IAssessmentHistoryRecord) => {
           return {
-            id: el.id,
-            date: new Date(el.createdAt).toLocaleDateString(),
-            position: el.position?.name,
-            level: el.level?.name,
-            type: 'Assessment',
-            answers: el.answers,
+            ...el,
+            created: new Date(el.created).toLocaleDateString(),
+            updated: new Date(el.updated).toLocaleDateString(),
           };
         });
-        state.assessments = processedAssessments;
+        state.assessmentsHistory = processedAssessments;
         state.isLoading = false;
       } else {
-        state.assessments = [];
+        state.assessmentsHistory = [];
         state.isLoading = false;
       }
     });

@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 
 import { message, Spin } from 'antd';
@@ -18,16 +18,12 @@ import { levelsSelector, loadLevels } from 'store/reducers/levels';
 import { getAllHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
 
-import { ITableParams } from 'models/ICommon';
-import { IAssessmentFromDB } from 'models/ITechAssessment';
-
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { TableComponent as Table } from 'common-components/Table';
 import { StartInterviewButton } from 'Pages/GenerateCV/common-components/StartInterviewButton';
 import { PositionsLevelsModal } from 'Pages/GenerateCV/common-components/PositionsLevelsModal';
+import { HistoryTable } from 'common-components/HistoryTable';
 
 import paths from 'config/routes.json';
-import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
 import { defaultEmployee } from 'store/constants';
 
 export const AssessmentHistory = () => {
@@ -37,8 +33,7 @@ export const AssessmentHistory = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { assessments, isLoading, pageSize, currentPage, chosenLevel, chosenPosition } =
-    useSelector(techAssessmentSelector);
+  const { assessmentsHistory, isLoading, chosenLevel, chosenPosition } = useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
@@ -57,44 +52,6 @@ export const AssessmentHistory = () => {
       dispatch(setChosenEmployee(defaultEmployee));
     };
   }, []);
-
-  const paginationObj = useMemo(() => {
-    return {
-      pageSize,
-      total: assessments.length,
-      current: currentPage,
-      showTotal: (total: number) => `Total ${total} technical assessments passed`,
-    };
-  }, [assessments, currentPage]);
-
-  const createPath = (record: IAssessmentFromDB) => {
-    navigate(
-      generatePath(paths.prevTechnicalAssessment, {
-        id: id || '',
-        assessmentId: record.id,
-      })
-    );
-  };
-
-  const handleRowClick = useCallback(
-    (record: IAssessmentFromDB) => {
-      return {
-        onClick: () => createPath(record),
-      };
-    },
-    [history]
-  );
-
-  const params: ITableParams<IAssessmentFromDB> = useMemo(() => {
-    return {
-      entity: ASSESSMENT,
-      tableKeys: ASSESSMENT_HISTORY_TABLE_KEYS,
-      dataSource: assessments,
-      handleRowClick,
-      paginationObj,
-      loading: isLoading,
-    };
-  }, [assessments]);
 
   const handleClick = () => {
     setIsOpen(true);
@@ -138,7 +95,11 @@ export const AssessmentHistory = () => {
     <>
       <EmployeeHeader personalData={personalData} backPath={paths.employeesList} />
       <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
-      {assessments.length ? <Table params={params} /> : <div>Technical assessments not found</div>}
+      {assessmentsHistory.length ? (
+        <HistoryTable assessments={assessmentsHistory} />
+      ) : (
+        <div>Technical assessments not found</div>
+      )}
       <PositionsLevelsModal
         isOpen={isOpen}
         modalTitle="LEVEL & POSITION"
