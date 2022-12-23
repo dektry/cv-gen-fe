@@ -5,18 +5,13 @@ import { message, Spin } from 'antd';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import {
-  loadTechAssessments,
-  techAssessmentSelector,
-  chooseInterviewLevel,
-  chooseInterviewPosition,
-  setTechAssessments,
-} from 'store/reducers/techAssessment';
+import { loadTechAssessments, techAssessmentSelector, setTechAssessments } from 'store/reducers/techAssessment';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
-import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { levelsSelector, loadLevels, chooseLevel } from 'store/reducers/levels';
 import { getAllHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
+import { choosePosition, positionsSelector } from 'store/reducers/positions';
 
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { StartInterviewButton } from 'Pages/GenerateCV/common-components/StartInterviewButton';
@@ -25,6 +20,7 @@ import { HistoryTable } from 'common-components/HistoryTable';
 
 import paths from 'config/routes.json';
 import { defaultEmployee } from 'store/constants';
+import { IDBLevels, IDBPosition } from 'models/IUser';
 
 export const AssessmentHistory = () => {
   const dispatch = useAppDispatch();
@@ -33,11 +29,12 @@ export const AssessmentHistory = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { assessmentsHistory, isLoading, chosenLevel, chosenPosition } = useSelector(techAssessmentSelector);
+  const { assessmentsHistory, isLoading } = useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
-  const { allLevels, levelsLoading } = useSelector(levelsSelector);
+  const { allLevels, levelsLoading, chosenLevel } = useSelector(levelsSelector);
+  const { chosenPosition } = useSelector(positionsSelector);
   const { hardSkillMatrixLoading, matrix } = useSelector(hardSkillsMatrixSelector);
 
   useEffect(() => {
@@ -61,7 +58,7 @@ export const AssessmentHistory = () => {
 
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
-      navigate(generatePath(paths.technicalAssessment, { id: id, positionId: chosenPosition, levelId: chosenLevel }));
+      navigate(generatePath(paths.technicalAssessment, { id: id }));
     } else {
       message.warn('You should choose level and position');
     }
@@ -71,17 +68,17 @@ export const AssessmentHistory = () => {
     setIsOpen(false);
   };
 
-  const setInterviewLevel = (level: string) => {
-    dispatch(chooseInterviewLevel(level));
-  };
-
-  const setInterviewPosition = (position: string) => {
-    dispatch(chooseInterviewPosition(position));
-  };
-
   const personalData = { firstName, lastName, location, position, level };
   const allPositions = useMemo(() => matrix.map((el) => el.position), [matrix]);
   const state = { positions: allPositions, levels: allLevels };
+
+  const setInterviewLevel = (level: IDBLevels) => {
+    dispatch(chooseLevel(level));
+  };
+
+  const setInterviewPosition = (position: IDBPosition) => {
+    dispatch(choosePosition(position));
+  };
 
   useEffect(() => {
     return function clear() {

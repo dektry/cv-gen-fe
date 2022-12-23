@@ -26,17 +26,7 @@ import {
   IAssessmentSkill,
 } from 'models/ITechAssessment';
 
-import { EditableMatrix } from 'Pages/GenerateCV/common-components/EditableMatrix';
-
-interface IInterviewFormProps {
-  currentEmployee: IEmployee;
-  allLevels: IDBLevels[];
-  allPositions: IDBPosition[];
-  levelsSchema: ILevelsSchema[];
-  isLoadingInterviewMatrix: boolean;
-}
-
-export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: IInterviewFormProps) => {
+export const AssessmentForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -132,7 +122,7 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
   const handleFinishInterview = async () => {
     const interviewData: ICompleteAssessment = {
       id: '' || assessmentResult?.id,
-      employeeId: currentEmployee.id,
+      employeeId: 'currentEmployee.id',
       levelId: levelId || '' || assessmentResult?.level?.id,
       positionId: positionId || '' || assessmentResult?.position?.id,
       answers: answers || {},
@@ -144,11 +134,11 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
       dispatch(finishTechAssessment(interviewData));
     }
 
-    navigate(
-      generatePath(paths.technicalAssessmentHistory, {
-        id: currentEmployee?.id || '',
-      })
-    );
+    // navigate(
+    //   generatePath(paths.technicalAssessmentHistory, {
+    //     id: currentEmployee?.id || '',
+    //   })
+    // );
   };
 
   const handleClickDeleteSkill = (group: IAssessmentSkillGroup, skill: IAssessmentSkill) => {
@@ -176,23 +166,5 @@ export const AssessmentForm = ({ isLoadingInterviewMatrix, currentEmployee }: II
 
   if (skillMatrixIsLoading) return <Spin size="large" tip={'Loading skill matrix...'} />;
 
-  return (
-    <>
-      <EditableMatrix
-        answers={answers}
-        setAnswers={setAnswers}
-        handleFinishInterview={handleFinishInterview}
-        handleClickDeleteSkill={handleClickDeleteSkill}
-        handleClickAddSkillGroup={handleClickAddSkillGroup}
-        chosenPosition={positionId}
-        chosenLevel={levelId}
-        interviewResult={assessmentResult}
-        interviewMatrix={matrixTree}
-        isLoadingInterviewMatrix={isLoadingInterviewMatrix}
-        setInterviewMatrix={setMatrixTree}
-        setComment={setComment}
-        comment={comment}
-      />
-    </>
-  );
+  return <>FOFOROROROR</>;
 };

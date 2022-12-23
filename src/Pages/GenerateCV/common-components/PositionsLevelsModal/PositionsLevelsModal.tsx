@@ -19,8 +19,8 @@ import theme from 'theme/theme';
 interface IState {
   levels: IDBLevels[];
   positions: IDBPosition[];
-  currentLevel?: string;
-  currentPosition?: string;
+  currentLevel?: IDBLevels;
+  currentPosition?: IDBPosition;
 }
 
 interface IProps {
@@ -30,8 +30,8 @@ interface IProps {
   state: IState;
   onSubmit?: () => void;
   personalData: IPersonalData;
-  setCurrentPosition: (position: string) => void;
-  setCurrentLevel: (level: string) => void;
+  setCurrentPosition: (position: IDBPosition) => void;
+  setCurrentLevel: (level: IDBLevels) => void;
   isLoading: boolean;
 }
 
@@ -69,16 +69,16 @@ export const PositionsLevelsModal = ({
         ) : (
           <div className={classes.selectsWrapper}>
             <CustomSelect
-              value={currentPosition}
+              value={currentPosition?.name}
               label={'Desired position'}
               options={positionOptions}
-              onChange={(e) => setCurrentPosition(e.target.value)}
+              onChange={(e) => setCurrentPosition(positions.find((el) => el.name === e.target.value) as IDBPosition)}
             />
             <CustomSelect
-              value={currentLevel}
+              value={currentLevel?.name}
               label={'Desired level'}
               options={levelOptions}
-              onChange={(e) => setCurrentLevel(e.target.value)}
+              onChange={(e) => setCurrentLevel(levels.find((el) => el.name === e.target.value) as IDBLevels)}
             />
           </div>
         )}
@@ -87,7 +87,7 @@ export const PositionsLevelsModal = ({
             Cancel
           </Button>
           <Button className={classes.yesButton} onClick={onSubmit}>
-            Save changes
+            Start assessment
           </Button>
         </div>
       </Box>
