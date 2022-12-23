@@ -123,7 +123,7 @@ export const AssessmentHistory = () => {
   };
 
   const personalData = { firstName, lastName, location, position, level };
-  const allPositions = matrix.map((el) => el.position);
+  const allPositions = useMemo(() => matrix.map((el) => el.position), [matrix]);
   const state = { positions: allPositions, levels: allLevels };
 
   useEffect(() => {
