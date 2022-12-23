@@ -76,7 +76,12 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
                         }
                         control={methods.control}
                         render={({ field: { value, onChange } }) => (
-                          <CustomSelect options={levelsOptions} value={value} onChange={onChange} />
+                          <CustomSelect
+                            sx={{ width: '8rem' }}
+                            options={levelsOptions}
+                            value={value}
+                            onChange={onChange}
+                          />
                         )}
                       />
                     </TableCell>
