@@ -16,12 +16,7 @@ import {
   httpGetTechAssessment,
 } from 'services/requests/techAssessment';
 
-import {
-  IAssessmentFromDB,
-  IAssessmentHistoryRecord,
-  ICompleteAssessment,
-  ITechAssessmentState,
-} from 'models/ITechAssessment';
+import { IAssessmentHistoryRecord, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
