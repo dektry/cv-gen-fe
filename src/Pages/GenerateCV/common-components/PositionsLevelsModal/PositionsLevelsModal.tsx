@@ -35,7 +35,7 @@ interface IProps {
   isLoading: boolean;
 }
 
-export const InterviewModal = ({
+export const PositionsLevelsModal = ({
   isOpen,
   modalTitle,
   onClose,

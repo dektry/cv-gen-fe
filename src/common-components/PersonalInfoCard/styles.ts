@@ -5,6 +5,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   mainContainer: {
     display: 'flex',
     justifyContent: 'space-between',
+    width: '100%',
   },
   infoContainer: {
     display: 'flex',

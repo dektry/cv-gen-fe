@@ -1,9 +1,9 @@
-import { Button } from 'antd';
 import { useNavigate, useParams, generatePath } from 'react-router-dom';
 
 import { GenerateCvHeader } from 'common-components/GenerateCVHeader';
 import { EmployeeTabs } from '../EmployeeTabs';
 import { PersonalInfoCard } from 'common-components/PersonalInfoCard';
+import { GenerateCVButton } from 'common-components/GenerateCVButton';
 
 import { IPersonalData } from 'models/ICommon';
 import routes from 'config/routes.json';
@@ -25,9 +25,7 @@ export const EmployeeHeader = ({ backPath, personalData }: IProps) => {
     <>
       <GenerateCvHeader backPath={backPath} />
       <PersonalInfoCard personalData={personalData}>
-        <Button size="large" type="primary" onClick={handleClickGenerateCv}>
-          Generate CV
-        </Button>
+        <GenerateCVButton handleClickGenerateCv={handleClickGenerateCv} />
       </PersonalInfoCard>
       <EmployeeTabs />
     </>

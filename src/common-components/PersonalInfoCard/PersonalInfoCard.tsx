@@ -41,8 +41,8 @@ export const PersonalInfoCard = ({
             Level
           </Typography>
         </div>
+        {children}
       </div>
-      {children}
     </div>
   );
 };
