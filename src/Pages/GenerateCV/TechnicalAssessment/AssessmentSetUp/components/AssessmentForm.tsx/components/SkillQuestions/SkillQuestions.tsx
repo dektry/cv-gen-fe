@@ -1,4 +1,3 @@
-import { IFormQuestion } from 'models/IHardSkillsMatrix';
 import { useFieldArray, useFormContext, Controller } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
