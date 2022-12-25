@@ -36,7 +36,7 @@ export const HistoryTable = ({ assessments }: IProps) => {
         <TableBody>
           {assessments?.map((el: IAssessmentHistoryRecord) => {
             return (
-              <TableRow hover={true}>
+              <TableRow hover={true} key={el.id}>
                 <TableCell>{el.created}</TableCell>
                 <TableCell>{el.updated}</TableCell>
                 <TableCell>{el.position}</TableCell>

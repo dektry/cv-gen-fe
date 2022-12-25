@@ -58,7 +58,9 @@ export const AssessmentHistory = () => {
 
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition) {
-      navigate(generatePath(paths.technicalAssessment, { id: id }));
+      navigate(
+        generatePath(paths.technicalAssessment, { id: id, positionId: chosenPosition.id, levelId: chosenLevel.id })
+      );
     } else {
       message.warn('You should choose level and position');
     }

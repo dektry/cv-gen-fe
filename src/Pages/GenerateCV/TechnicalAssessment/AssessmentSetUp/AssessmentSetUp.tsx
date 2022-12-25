@@ -7,16 +7,20 @@ import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import { employeesSelector } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
-import { positionsSelector, loadPositions, loadSkillMatrix } from 'store/reducers/positions';
+import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
-import { loadInterviewMatrix } from 'store/reducers/interview';
-import { getTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { techAssessmentSelector } from 'store/reducers/techAssessment';
+import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
+import { getAllHardSkillsMatrix, getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import paths from 'config/routes.json';
 
 import { AssessmentForm } from './components/AssessmentForm.tsx';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { Typography } from '@mui/material';
+
+import { IDBLevels, IDBPosition } from 'models/IUser';
+import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -34,40 +38,46 @@ export const AssessmentSetUp = () => {
     assessmentId: string;
   }>();
 
-  const [position, setPosition] = useState('');
-  const [level, setLevel] = useState('');
-
   const { currentEmployee } = useSelector(employeesSelector);
-  const { chosenPosition } = useSelector(positionsSelector);
-  const { chosenLevel } = useSelector(levelsSelector);
+  const { allPositions, positionsLoading } = useSelector(positionsSelector);
+  const { allLevels, levelsLoading } = useSelector(levelsSelector);
   const { assessmentResult, isLoading } = useSelector(techAssessmentSelector);
+  const { matrix } = useSelector(hardSkillsMatrixSelector);
+
+  const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
+  const [level, setLevel] = useState<IDBLevels>({} as IDBLevels);
 
   useEffect(() => {
-    if (positionId && levelId) {
-      setPosition(positionId);
-      setLevel(levelId);
-    }
+    dispatch(getAllHardSkillsMatrix());
 
-    if (assessmentResult && assessmentResult.position.id && assessmentResult.level.id) {
-      setPosition(assessmentResult.position.id);
-      setLevel(assessmentResult.level.id);
+    if (matrix.length && position.name) {
+      const matrixId = (matrix.find((el) => el.position.name === position.name) as IHardSkillsMatrix).id;
+      dispatch(getOneHardSkillsMatrix(matrixId || ''));
     }
-  }, [positionId, levelId, assessmentResult]);
+  }, [position]);
+
+  useEffect(() => {
+    if (allPositions.length && allLevels.length) {
+      const currentPosition = allPositions.find((el) => el.id === positionId) as IDBPosition;
+      const currentLevel = allLevels.find((el) => el.id === levelId) as IDBLevels;
+
+      setPosition(currentPosition);
+      setLevel(currentLevel);
+    }
+  }, [allPositions.length, allLevels.length]);
+
+  useEffect(() => {
+    if (assessmentResult && assessmentResult.position.id && assessmentResult.level.id) {
+      setPosition(assessmentResult.position);
+      setLevel(assessmentResult.level);
+    }
+  }, [assessmentResult]);
 
   useEffect(() => {
     if (id) {
       dispatch(loadEmployee(id));
       dispatch(loadPositions());
       dispatch(loadLevels());
-    }
-
-    if (position && level) {
-      dispatch(loadInterviewMatrix({ positionId: position, levelId: level }));
-      dispatch(loadSkillMatrix(position));
-    }
-
-    if (assessmentId) {
-      dispatch(getTechAssessment(assessmentId));
     }
   }, [id, level, position, assessmentId]);
 
@@ -83,7 +93,7 @@ export const AssessmentSetUp = () => {
 
   const backPath = generatePath(paths.technicalAssessmentHistory, { id });
 
-  if (isLoading) return <Spin size="large" tip={'Loading page content...'} />;
+  if (isLoading || positionsLoading || levelsLoading) return <Spin size="large" tip={'Loading page content...'} />;
 
   const interviewDate = location.pathname.includes('new-interview') ? new Date().toLocaleDateString('en-GB') : '';
 
@@ -95,15 +105,19 @@ export const AssessmentSetUp = () => {
         <div className={classes.positionsContainer}>
           <div className={classes.positionLevelContainer}>
             <Typography variant="h3">Position: </Typography>
-            <Typography variant="h5" className={classes.tag}>
-              {chosenPosition?.name || assessmentResult?.position.name}
-            </Typography>
+            {position?.name && (
+              <Typography variant="h5" className={classes.tag}>
+                {position?.name}
+              </Typography>
+            )}
           </div>
           <div className={classes.positionLevelContainer}>
             <Typography variant="h3">Level: </Typography>
-            <Typography variant="h5" className={classes.tag}>
-              {chosenLevel?.name || assessmentResult?.level.name}
-            </Typography>
+            {level?.name && (
+              <Typography variant="h5" className={classes.tag}>
+                {level?.name}
+              </Typography>
+            )}
           </div>
         </div>
       </div>

@@ -16,7 +16,12 @@ import {
   httpGetTechAssessment,
 } from 'services/requests/techAssessment';
 
-import { IAssessmentHistoryRecord, ICompleteAssessment, ITechAssessmentState } from 'models/ITechAssessment';
+import {
+  IAssessmentHistoryRecord,
+  ICompleteAssessment,
+  IFormAssessmentResult,
+  ITechAssessmentState,
+} from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
@@ -26,7 +31,7 @@ export const loadTechAssessments = createAsyncThunk(loadAllTechAssessmentsAction
 
 export const finishTechAssessment = createAsyncThunk(
   completeTechAssessmentAction,
-  (assessment: ICompleteAssessment) => {
+  (assessment: IFormAssessmentResult) => {
     return httpCompleteTechAssessment(assessment);
   }
 );

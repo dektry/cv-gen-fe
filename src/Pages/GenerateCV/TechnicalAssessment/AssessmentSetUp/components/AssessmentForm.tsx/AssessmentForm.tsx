@@ -1,170 +1,132 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, generatePath, useParams } from 'react-router-dom';
 
-import { Spin } from 'antd';
-
-import { v4 as uuidv4 } from 'uuid';
-import { cloneDeep } from 'lodash';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import { useSelector } from 'react-redux';
-
 import { useAppDispatch } from 'store';
-import { interviewSelector, setInterviewMatrix } from 'store/reducers/interview';
-import { finishTechAssessment, editTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
-import { loadSkillMatrix } from 'store/reducers/positions';
+import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
+import { finishTechAssessment } from 'store/reducers/techAssessment';
 
-import { IInterviewAnswers, IInterviewResultAnswers, LevelTypesEnum } from 'models/IInterview';
+import { useForm, useWatch, useFieldArray, Controller, FormProvider } from 'react-hook-form';
+import { SkillGroupField } from 'common-components/SkillGroupField';
+import { CustomSelect } from 'common-components/CustomSelect';
+import { SkillQuestions } from './components/SkillQuestions';
+import { SaveButton } from 'common-components/SaveButton';
 
+import { LevelTypesEnum } from 'models/IInterview';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
+import { IFormSkill } from 'models/IHardSkillsMatrix';
+import { IFormAssessmentResult } from 'models/ITechAssessment';
 import paths from 'config/routes.json';
 
-import { IDBLevels, IDBPosition, ILevelsSchema } from 'models/IUser';
-import { IEmployee } from 'models/IEmployee';
-import {
-  ICompleteAssessment,
-  IAssessmentMatrix,
-  IAssessmentSkillGroup,
-  IAssessmentSkill,
-} from 'models/ITechAssessment';
+const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
+  label: level,
+  value: level,
+}));
 
 export const AssessmentForm = () => {
+  const { id, levelId, positionId } = useParams<{
+    id: string;
+    levelId: string;
+    positionId: string;
+  }>();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { levelId, positionId } = useParams<{ levelId: string; positionId: string }>();
+  const classes = useStyles({ theme });
 
-  const { interviewMatrix } = useSelector(interviewSelector);
-  const { assessmentResult } = useSelector(techAssessmentSelector);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
-  const [answers, setAnswers] = useState<IInterviewAnswers | undefined>({});
-
-  const [currentPosition, setCurrentPosition] = useState('');
-  const [currentLevel, setCurrentLevel] = useState('');
-  const [skillMatrixIsLoading, setSkillMatrixIsLoading] = useState(false);
-  const [comment, setComment] = useState(assessmentResult?.comment);
-
-  const [matrixTree, setMatrixTree] = useState<IAssessmentMatrix>([
-    {
-      uuid: uuidv4(),
-      position_id: '',
-      value: '',
-      skills: [
-        {
-          id: uuidv4(),
-          value: '',
-          questions: [{ id: uuidv4(), value: '' }],
-          levels: [{ id: uuidv4(), name: '', value: LevelTypesEnum.None }],
-        },
-      ],
-    },
-  ]);
+  const methods = useForm({
+    defaultValues: { matrix: currentMatrix, comment: '' },
+  });
 
   useEffect(() => {
-    if (positionId && levelId) {
-      setCurrentPosition(positionId);
-      setCurrentLevel(levelId);
-    }
+    const defaultValues = { matrix: currentMatrix, comment: '' };
+    methods.reset({ ...defaultValues });
+  }, [currentMatrix]);
 
-    if (assessmentResult && assessmentResult.position.id && assessmentResult.level.id) {
-      setCurrentPosition(assessmentResult.position.id);
-      setCurrentLevel(assessmentResult.level.id);
-    }
-  }, [positionId, levelId, assessmentResult]);
+  const values = useWatch({ control: methods.control });
 
-  useEffect(() => {
-    if (interviewMatrix) {
-      const newMatrix = interviewMatrix.map((group) => {
-        return {
-          uuid: uuidv4(),
-          position_id: currentPosition,
-          ...group,
-        };
-      });
-      setMatrixTree(newMatrix);
-    }
-  }, [interviewMatrix]);
+  const { fields } = useFieldArray({
+    name: 'matrix.skillGroups',
+    control: methods.control,
+    keyName: 'skillGroupKey',
+  });
 
-  useEffect(() => {
-    if (currentPosition) {
-      setSkillMatrixIsLoading(true);
-      dispatch(loadSkillMatrix(currentPosition));
-      setSkillMatrixIsLoading(false);
-    }
+  const handleSaveClick = () => {
+    const allSkills: IFormSkill[] = [];
+    values.matrix?.skillGroups?.forEach((group) => group.skills?.forEach((skill) => allSkills.push(skill)));
+    const grades: { value: string; skillId: string }[] = allSkills.map((skill) => ({
+      value: skill.currentLevel || '',
+      skillId: skill.id || '',
+    }));
 
-    if (assessmentResult) {
-      const processedAnswers: IInterviewAnswers = {};
-      assessmentResult.answers?.map((el: IInterviewResultAnswers) => {
-        processedAnswers[el.id] = el.actual;
-      });
-      setAnswers(processedAnswers);
-    }
-  }, [currentPosition, currentLevel]);
-
-  const handleClickAddSkillGroup = () => {
-    const matrixCopy = cloneDeep(matrixTree);
-
-    matrixCopy.push({
-      uuid: uuidv4(),
-      value: '',
-      position_id: positionId || '',
-      skills: [
-        {
-          id: uuidv4(),
-          value: '',
-          questions: [{ id: uuidv4(), value: '' }],
-          levels: [{ id: uuidv4(), name: '', value: LevelTypesEnum.None }],
-        },
-      ],
-    });
-
-    setMatrixTree(matrixCopy);
-  };
-
-  const handleFinishInterview = async () => {
-    const interviewData: ICompleteAssessment = {
-      id: '' || assessmentResult?.id,
-      employeeId: 'currentEmployee.id',
-      levelId: levelId || '' || assessmentResult?.level?.id,
-      positionId: positionId || '' || assessmentResult?.position?.id,
-      answers: answers || {},
-      comment: comment || '',
+    const result: IFormAssessmentResult = {
+      employeeId: id || '',
+      levelId: levelId || '',
+      positionId: positionId || '',
+      comment: values.comment || '',
+      grades,
     };
-    if (assessmentResult) {
-      dispatch(editTechAssessment(interviewData));
-    } else {
-      dispatch(finishTechAssessment(interviewData));
-    }
 
-    // navigate(
-    //   generatePath(paths.technicalAssessmentHistory, {
-    //     id: currentEmployee?.id || '',
-    //   })
-    // );
+    dispatch(finishTechAssessment(result));
+    navigate(generatePath(paths.technicalAssessmentHistory, { id }));
   };
 
-  const handleClickDeleteSkill = (group: IAssessmentSkillGroup, skill: IAssessmentSkill) => {
-    if (group.skills.length) {
-      const matrixTreeCopy = cloneDeep(matrixTree);
-      const newMatrix = matrixTreeCopy.map((item) => {
-        if (group?.uuid === item.uuid) {
-          return {
-            ...item,
-            skills: [...item.skills.filter((i) => i.id !== skill.id)],
-          };
-        }
-        return item;
-      });
-
-      setMatrixTree(newMatrix);
-    }
-  };
-
-  useEffect(() => {
-    return function clear() {
-      dispatch(setInterviewMatrix([]));
-    };
-  }, []);
-
-  if (skillMatrixIsLoading) return <Spin size="large" tip={'Loading skill matrix...'} />;
-
-  return <>FOFOROROROR</>;
+  return (
+    <FormProvider {...methods}>
+      {fields.map((group, groupIndex) => {
+        return (
+          <div className={classes.container} key={group.skillGroupKey}>
+            <SkillGroupField sx={{ marginBottom: '16px' }} value={group.value} />
+            {group.skills?.map((skill, skillIndex) => {
+              return (
+                <Box key={skill.id} className={classes.skill}>
+                  <div className={classes.skillUpperContainer}>
+                    <Typography className={classes.skillValue} variant="h3">
+                      {skill.value}
+                    </Typography>
+                    <Controller
+                      name={`matrix.skillGroups.${groupIndex}.skills.${skillIndex}.currentLevel`}
+                      control={methods.control}
+                      render={({ field: { value, onChange } }) => {
+                        return (
+                          <CustomSelect
+                            value={value}
+                            options={levelsOptions}
+                            sx={{ width: '220px' }}
+                            onChange={onChange}
+                          />
+                        );
+                      }}
+                    />
+                  </div>
+                  <SkillQuestions skillGroupIndex={groupIndex} skillIndex={skillIndex} />
+                </Box>
+              );
+            })}
+          </div>
+        );
+      })}
+      <Controller
+        name="comment"
+        control={methods.control}
+        render={({ field: { value, onChange } }) => {
+          return <TextField value={value} onChange={onChange} label={'Comment'} />;
+        }}
+      />
+      <div className={classes.buttonsContainer}>
+        <Button onClick={() => methods.reset()}>Reset</Button>
+        <SaveButton title="Save changes & finish interview" error={false} handleClickOkButton={handleSaveClick} />
+      </div>
+    </FormProvider>
+  );
 };
