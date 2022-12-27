@@ -6,9 +6,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { IAssessmentHistoryRecord } from 'models/ITechAssessment';
 
-import { generatePath, Link } from 'react-router-dom';
-import paths from 'config/routes.json';
-
 import { TypeBadge } from './components/TypeBadge';
 
 import { useStyles } from './styles';
@@ -42,16 +39,7 @@ export const HistoryTable = ({ assessments }: IProps) => {
                 <TableCell>{el.position}</TableCell>
                 <TableCell>{el.level}</TableCell>
                 <TableCell>
-                  <Link
-                    className={classes.link}
-                    to={generatePath(paths.technicalAssessment, {
-                      id: el.id,
-                      positionId: el.position,
-                      levelId: el.level,
-                    })}
-                  >
-                    View results
-                  </Link>
+                  <div className={classes.link}>View results</div>
                 </TableCell>
                 <TableCell>
                   <TypeBadge type={el.type} />

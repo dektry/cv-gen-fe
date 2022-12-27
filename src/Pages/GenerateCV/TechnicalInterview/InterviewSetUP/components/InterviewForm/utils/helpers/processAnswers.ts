@@ -1,16 +1,16 @@
-import { IInterviewAnswers, IInterviewResult, IInterviewMatrix } from 'models/IInterview';
+import { IInterviewResult, IInterviewMatrix, IInterviewResultAnswers } from 'models/IInterview';
 
 export const processInterviewAnswers = (interviewResult: IInterviewResult, interviewMatrix: IInterviewMatrix) => {
-  let resultAnswers: IInterviewAnswers = {};
+  let resultAnswers: IInterviewResultAnswers = {} as IInterviewResultAnswers;
   for (const answer of interviewResult.answers) {
-    const { skill, actual } = answer;
+    const { skill, assigned } = answer;
     let skillFromMatrix;
     for (const el of interviewMatrix) {
       skillFromMatrix = el.skills.find((item) => item.value === skill);
       if (skillFromMatrix) {
         resultAnswers = {
           ...resultAnswers,
-          [skillFromMatrix.id]: actual,
+          [skillFromMatrix.id]: assigned,
         };
       }
     }
