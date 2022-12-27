@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, generatePath, Link } from 'react-router-dom';
 
-import { message, Spin } from 'antd';
+import { message } from 'antd';
 import Typography from '@mui/material/Typography';
 
 import { useSelector } from 'react-redux';
@@ -37,7 +37,7 @@ export const AssessmentHistory = () => {
 
   const classes = useStyles({ theme });
 
-  const { assessmentsHistory, isLoading } = useSelector(techAssessmentSelector);
+  const { assessmentsHistory } = useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
@@ -114,8 +114,6 @@ export const AssessmentHistory = () => {
       setCurrentMatrix({} as IFormHardSkillsMatrix);
     };
   }, []);
-
-  if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
 
   return (
     <>

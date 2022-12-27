@@ -7,7 +7,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       display: 'flex',
       flexDirection: 'column',
       width: '600px',
-      height: '480px',
       position: 'absolute',
       top: '50%',
       left: '50%',
@@ -69,6 +68,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   closeIcon: {
     '&.MuiSvgIcon-root': {
+      position: 'absolute',
       right: '30.67px',
       top: '30.67px',
       color: ({ theme }) => theme.palette.primary.dark,
@@ -77,5 +77,28 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
         cursor: 'pointer',
       },
     },
+  },
+  upperContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: '24px',
+  },
+  positionsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '24px',
+  },
+  positionLevelContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: '8px',
+  },
+  tag: {
+    background: ({ theme }) => theme.palette.action.hover,
+    borderRadius: '100px',
+    padding: '2px 12px',
+    marginTop: 'auto',
   },
 });
