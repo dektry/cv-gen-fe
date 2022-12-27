@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useParams, useLocation } from 'react-router-dom';
 
 import { Spin } from 'antd';
 
@@ -7,46 +7,49 @@ import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import { employeesSelector } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
-import { positionsSelector, loadPositions, loadSkillMatrix } from 'store/reducers/positions';
+import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
-import { loadInterviewMatrix } from 'store/reducers/interview';
 import { getTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import paths from 'config/routes.json';
 
 import { AssessmentForm } from './components/AssessmentForm.tsx';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { AssessmentPositions } from './components/AssessmentPositions';
+import { Typography } from '@mui/material';
+
+import { IDBLevels, IDBPosition } from 'models/IUser';
+
+import { useStyles } from './styles';
+import theme from 'theme/theme';
 
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
-  const { id, levelId, positionId, assessmentId } = useParams<{
+  const classes = useStyles({ theme });
+
+  const { id, levelId, positionId, assessmentId, matrixId } = useParams<{
     id: string;
     levelId: string;
     positionId: string;
     assessmentId: string;
+    matrixId: string;
   }>();
-
-  const [position, setPosition] = useState('');
-  const [level, setLevel] = useState('');
 
   const { currentEmployee } = useSelector(employeesSelector);
   const { allPositions, positionsLoading } = useSelector(positionsSelector);
-  const { allLevels, levelsSchema, levelsLoading } = useSelector(levelsSelector);
+  const { allLevels, levelsLoading } = useSelector(levelsSelector);
   const { assessmentResult, isLoading } = useSelector(techAssessmentSelector);
 
-  useEffect(() => {
-    if (positionId && levelId) {
-      setPosition(positionId);
-      setLevel(levelId);
-    }
+  const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
+  const [level, setLevel] = useState<IDBLevels>({} as IDBLevels);
 
-    if (assessmentResult && assessmentResult.position.id && assessmentResult.level.id) {
-      setPosition(assessmentResult.position.id);
-      setLevel(assessmentResult.level.id);
+  useEffect(() => {
+    if (matrixId) {
+      dispatch(getOneHardSkillsMatrix(matrixId));
     }
-  }, [positionId, levelId, assessmentResult]);
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -55,15 +58,28 @@ export const AssessmentSetUp = () => {
       dispatch(loadLevels());
     }
 
-    if (position && level) {
-      dispatch(loadInterviewMatrix({ positionId: position, levelId: level }));
-      dispatch(loadSkillMatrix(position));
-    }
-
     if (assessmentId) {
       dispatch(getTechAssessment(assessmentId));
     }
-  }, [id, level, position, assessmentId]);
+  }, []);
+
+  useEffect(() => {
+    if (positionId && levelId) {
+      const currentPosition = allPositions.find((el) => el.id === positionId) as IDBPosition;
+      const currentLevel = allLevels.find((el) => el.id === levelId) as IDBLevels;
+
+      setPosition(currentPosition);
+      setLevel(currentLevel);
+    }
+
+    if (assessmentResult && assessmentResult.position && assessmentResult.level) {
+      const currentPosition = allPositions.find((el) => el.name === assessmentResult.position) as IDBPosition;
+      const currentLevel = allLevels.find((el) => el.name === assessmentResult.level) as IDBLevels;
+
+      setPosition(currentPosition);
+      setLevel(currentLevel);
+    }
+  }, [assessmentResult, allPositions.length, allLevels.length]);
 
   const personalData = useMemo(() => {
     return {
@@ -77,28 +93,35 @@ export const AssessmentSetUp = () => {
 
   const backPath = generatePath(paths.technicalAssessmentHistory, { id });
 
-  const currentPosition = useMemo(
-    () => allPositions.filter((el) => el.id === positionId)[0],
-    [allPositions, positionId]
-  );
-  const currentLevel = useMemo(() => allLevels.filter((el) => el.id === levelId)[0], [allLevels, levelId]);
+  if (isLoading || positionsLoading || levelsLoading) return <Spin size="large" tip={'Loading page content...'} />;
 
-  if (isLoading || levelsLoading || positionsLoading) return <Spin size="large" tip={'Loading page content...'} />;
+  const interviewDate = location.pathname.includes('new-interview') ? new Date().toLocaleDateString('en-GB') : '';
 
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />
-      <AssessmentPositions
-        position={currentPosition || assessmentResult?.position}
-        level={currentLevel || assessmentResult?.level}
-      />
-      <AssessmentForm
-        currentEmployee={currentEmployee}
-        allPositions={allPositions}
-        allLevels={allLevels}
-        levelsSchema={levelsSchema}
-        isLoadingInterviewMatrix={false}
-      />
+      <div className={classes.upperContainer}>
+        <Typography variant="h3">TECHNICAL ASSESSMENT {interviewDate}</Typography>
+        <div className={classes.positionsContainer}>
+          <div className={classes.positionLevelContainer}>
+            <Typography variant="h3">Position: </Typography>
+            {position?.name && (
+              <Typography variant="h5" className={classes.tag}>
+                {position?.name}
+              </Typography>
+            )}
+          </div>
+          <div className={classes.positionLevelContainer}>
+            <Typography variant="h3">Level: </Typography>
+            {level?.name && (
+              <Typography variant="h5" className={classes.tag}>
+                {level?.name}
+              </Typography>
+            )}
+          </div>
+        </div>
+      </div>
+      <AssessmentForm />
     </>
   );
 };

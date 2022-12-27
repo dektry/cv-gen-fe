@@ -43,6 +43,9 @@ const harSkillsMatrix = createSlice({
         state.currentMatrix.skillGroups = payload.skillGroups;
       }
     },
+    setCurrentHardSkillsMatrixId: (state, { payload }: PayloadAction<string>) => {
+      state.currentMatrix.id = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllHardSkillsMatrix.pending, (state) => {
@@ -108,5 +111,10 @@ export default harSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
-export const { setHardSkillsMatrixIsLoading, setCurrentHardSkillsMatrix, setCurrentPosition, setCurrentSkillGroups } =
-  harSkillsMatrix.actions;
+export const {
+  setHardSkillsMatrixIsLoading,
+  setCurrentHardSkillsMatrix,
+  setCurrentPosition,
+  setCurrentSkillGroups,
+  setCurrentHardSkillsMatrixId,
+} = harSkillsMatrix.actions;

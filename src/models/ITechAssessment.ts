@@ -2,6 +2,7 @@ import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
 import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum, IInterviewResultAnswers } from './IInterview';
 import { NullableField } from './TNullableField';
+import { string } from 'prop-types';
 
 export interface IAssessmentEmployee {
   employee: IEmployee;
@@ -11,12 +12,10 @@ export interface IAssessmentEmployee {
 
 export interface IAssessmentFromDB {
   id: string;
-  createdAt: string;
-  level: IDBLevels;
-  position: IDBPosition;
-  type: 'Assessment';
+  created: string;
+  level: string;
+  position: string;
   answers?: IInterviewResultAnswers[];
-  comment?: string;
 }
 
 export interface IAssessmentHistoryRecord {
@@ -73,3 +72,11 @@ export interface IExtendElement extends React.MouseEvent<HTMLDivElement> {
 }
 
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+
+export interface IFormAssessmentResult {
+  employeeId: string;
+  positionId: string;
+  levelId: string;
+  grades: { value: string; skillId: string }[];
+  comment: string;
+}

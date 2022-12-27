@@ -38,7 +38,7 @@ export enum LevelTypesEnum {
 }
 
 export interface IInterviewAnswers {
-  [key: string]: LevelTypesEnum;
+  [key: string]: string;
 }
 
 export interface ICompleteInterview {

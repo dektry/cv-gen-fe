@@ -91,7 +91,7 @@ export const InterviewMatrix = (props: IProps) => {
     setComment(event.target.value);
   };
 
-  const handleSkillChange = (level: LevelTypesEnum, skill: IInterviewSkill) => {
+  const handleSkillChange = (level: string, skill: IInterviewSkill) => {
     setAnswers({ ...answers, [skill.id]: level });
     setIsTreeChanged(true);
   };

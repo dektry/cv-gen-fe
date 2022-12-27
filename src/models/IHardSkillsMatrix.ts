@@ -22,6 +22,7 @@ export interface ILevel {
 export interface ISkill {
   value: string;
   id?: string;
+  currentLevel?: string;
   questions: IQuestion[];
   levels: ILevel[];
 }
@@ -74,6 +75,7 @@ export interface IFormSkill {
   grades?: IFormGrade[];
   questions?: IFormQuestion[];
   levels?: IFormLevel[];
+  currentLevel?: string;
 }
 
 export interface IFormSkillGroup {

@@ -13,9 +13,10 @@ import theme from 'theme/theme';
 
 interface IProps {
   assessments: IAssessmentHistoryRecord[];
+  handleRowClick: (assessmentId: string, position: string) => void;
 }
 
-export const HistoryTable = ({ assessments }: IProps) => {
+export const HistoryTable = ({ assessments, handleRowClick }: IProps) => {
   const classes = useStyles({ theme });
   return (
     <TableContainer>
@@ -33,7 +34,7 @@ export const HistoryTable = ({ assessments }: IProps) => {
         <TableBody>
           {assessments?.map((el: IAssessmentHistoryRecord) => {
             return (
-              <TableRow hover={true}>
+              <TableRow hover={true} key={el.id} onClick={() => handleRowClick(el.id, el.position)}>
                 <TableCell>{el.created}</TableCell>
                 <TableCell>{el.updated}</TableCell>
                 <TableCell>{el.position}</TableCell>

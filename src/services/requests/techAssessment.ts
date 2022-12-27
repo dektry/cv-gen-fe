@@ -2,7 +2,7 @@ import { message } from 'antd';
 
 import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
-import { ICompleteAssessment } from 'models/ITechAssessment';
+import { IFormAssessmentResult } from 'models/ITechAssessment';
 
 export const getAllTechAssessments = async (id: string) => {
   try {
@@ -26,7 +26,7 @@ export const httpGetTechAssessment = async (id: string) => {
   }
 };
 
-export const httpCompleteTechAssessment = async (assessment: ICompleteAssessment) => {
+export const httpCompleteTechAssessment = async (assessment: IFormAssessmentResult) => {
   try {
     const { data } = await apiClient.post(endpoints.employeeInterviews, assessment);
 
@@ -37,9 +37,9 @@ export const httpCompleteTechAssessment = async (assessment: ICompleteAssessment
   }
 };
 
-export const httpEditTechAssessment = async (assessment: ICompleteAssessment) => {
+export const httpEditTechAssessment = async (assessment: IFormAssessmentResult, id: string) => {
   try {
-    const { data } = await apiClient.put(`${endpoints.employeeInterviews}`, assessment);
+    const { data } = await apiClient.put(`${endpoints.employeeInterviews}/${id}`, assessment);
 
     return data;
   } catch (error) {

@@ -81,7 +81,7 @@ export const EditableMatrix = ({
     setComment(event.target.value);
   };
 
-  const handleSkillChange = (level: LevelTypesEnum, skill: IAssessmentSkill) => {
+  const handleSkillChange = (level: string, skill: IAssessmentSkill) => {
     setAnswers({ ...answers, [String(skill?.id)]: level });
   };
 
