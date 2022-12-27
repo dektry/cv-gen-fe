@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../..';
+import paths from 'config/routes.json';
 
 import {
   appStoreName,
@@ -36,7 +37,7 @@ export const finishTechAssessment = createAsyncThunk(
   }
 );
 
-export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (assessment: ICompleteAssessment) => {
+export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (assessment: IFormAssessmentResult) => {
   return httpEditTechAssessment(assessment);
 });
 
@@ -118,6 +119,28 @@ const techAssessment = createSlice({
     builder.addCase(getTechAssessment.rejected, (state) => {
       state.isLoading = false;
       message.error(`Server error. Please contact admin`);
+    });
+    builder.addCase(finishTechAssessment.fulfilled, () => {
+      message.success('Technical assessment was created successfully');
+      setTimeout(() => {
+        window.location.replace(
+          `${paths.technicalAssessmentHistory.replace(
+            ':id',
+            window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
+          )}`
+        );
+      }, 1000);
+    });
+    builder.addCase(editTechAssessment.fulfilled, () => {
+      message.success('Changes saved successfully');
+      setTimeout(() => {
+        window.location.replace(
+          `${paths.technicalAssessmentHistory.replace(
+            ':id',
+            window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
+          )}`
+        );
+      }, 1000);
     });
   },
 });

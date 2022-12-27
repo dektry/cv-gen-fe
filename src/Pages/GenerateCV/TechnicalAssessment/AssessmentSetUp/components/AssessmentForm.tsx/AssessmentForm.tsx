@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
-import { useNavigate, generatePath, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
+import { isEqual } from 'lodash';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -9,7 +11,8 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
-import { finishTechAssessment } from 'store/reducers/techAssessment';
+import { editTechAssessment, finishTechAssessment } from 'store/reducers/techAssessment';
+import { editHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import { useForm, useWatch, useFieldArray, Controller, FormProvider } from 'react-hook-form';
 import { SkillGroupField } from 'common-components/SkillGroupField';
@@ -21,9 +24,8 @@ import { LevelTypesEnum } from 'models/IInterview';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { IFormSkill } from 'models/IHardSkillsMatrix';
+import { IFormHardSkillsMatrix, IFormSkill } from 'models/IHardSkillsMatrix';
 import { IFormAssessmentResult } from 'models/ITechAssessment';
-import paths from 'config/routes.json';
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
   label: level,
@@ -31,14 +33,14 @@ const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
 }));
 
 export const AssessmentForm = () => {
-  const { id, levelId, positionId } = useParams<{
+  const { id, levelId, positionId, assessmentId } = useParams<{
     id: string;
     levelId: string;
     positionId: string;
+    assessmentId: string;
   }>();
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const classes = useStyles({ theme });
 
@@ -76,9 +78,20 @@ export const AssessmentForm = () => {
       comment: values.comment || '',
       grades,
     };
+    const valuesChanged = !isEqual(currentMatrix, values.matrix);
+    if (valuesChanged) {
+      const requestBody = {
+        matrix: values.matrix || ([] as IFormHardSkillsMatrix),
+        positionId: values.matrix?.position?.id || '',
+      };
 
-    dispatch(finishTechAssessment(result));
-    navigate(generatePath(paths.technicalAssessmentHistory, { id }));
+      dispatch(editHardSkillsMatrix(requestBody));
+    }
+    if (assessmentId) {
+      dispatch(editTechAssessment(result));
+    } else {
+      dispatch(finishTechAssessment(result));
+    }
   };
 
   return (
@@ -100,7 +113,7 @@ export const AssessmentForm = () => {
                       render={({ field: { value, onChange } }) => {
                         return (
                           <CustomSelect
-                            value={value}
+                            value={value || levelsOptions[0].value}
                             options={levelsOptions}
                             sx={{ width: '220px' }}
                             onChange={onChange}

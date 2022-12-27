@@ -86,7 +86,7 @@ export const PositionsLevelsModal = ({
           <Button className={classes.noButton} onClick={onClose}>
             Cancel
           </Button>
-          <Button className={classes.yesButton} onClick={onSubmit}>
+          <Button className={classes.yesButton} onClick={onSubmit} disabled={!currentPosition?.id || !currentLevel?.id}>
             Start assessment
           </Button>
         </div>
