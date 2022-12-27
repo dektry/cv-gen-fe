@@ -128,14 +128,14 @@ const techAssessment = createSlice({
     });
     builder.addCase(editTechAssessment.fulfilled, () => {
       message.success('Changes saved successfully');
-      // setTimeout(() => {
-      //   window.location.replace(
-      //     `${paths.technicalAssessmentHistory.replace(
-      //       ':id',
-      //       window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
-      //     )}`
-      //   );
-      // }, 1000);
+      setTimeout(() => {
+        window.location.replace(
+          `${paths.technicalAssessmentHistory.replace(
+            ':id',
+            window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
+          )}`
+        );
+      }, 1000);
     });
   },
 });
