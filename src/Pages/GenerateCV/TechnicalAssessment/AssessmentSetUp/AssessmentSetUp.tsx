@@ -9,9 +9,8 @@ import { employeesSelector } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
 import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
-import { techAssessmentSelector } from 'store/reducers/techAssessment';
-import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
-import { getAllHardSkillsMatrix, getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
+import { getTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import paths from 'config/routes.json';
 
@@ -20,7 +19,6 @@ import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeade
 import { Typography } from '@mui/material';
 
 import { IDBLevels, IDBPosition } from 'models/IUser';
-import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -31,47 +29,27 @@ export const AssessmentSetUp = () => {
 
   const classes = useStyles({ theme });
 
-  const { id, levelId, positionId, assessmentId } = useParams<{
+  const { id, levelId, positionId, assessmentId, matrixId } = useParams<{
     id: string;
     levelId: string;
     positionId: string;
     assessmentId: string;
+    matrixId: string;
   }>();
 
   const { currentEmployee } = useSelector(employeesSelector);
   const { allPositions, positionsLoading } = useSelector(positionsSelector);
   const { allLevels, levelsLoading } = useSelector(levelsSelector);
   const { assessmentResult, isLoading } = useSelector(techAssessmentSelector);
-  const { matrix } = useSelector(hardSkillsMatrixSelector);
 
   const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
   const [level, setLevel] = useState<IDBLevels>({} as IDBLevels);
 
   useEffect(() => {
-    dispatch(getAllHardSkillsMatrix());
-
-    if (matrix.length && position.name) {
-      const matrixId = (matrix.find((el) => el.position.name === position.name) as IHardSkillsMatrix).id;
-      dispatch(getOneHardSkillsMatrix(matrixId || ''));
+    if (matrixId) {
+      dispatch(getOneHardSkillsMatrix(matrixId));
     }
-  }, [position]);
-
-  useEffect(() => {
-    if (allPositions.length && allLevels.length) {
-      const currentPosition = allPositions.find((el) => el.id === positionId) as IDBPosition;
-      const currentLevel = allLevels.find((el) => el.id === levelId) as IDBLevels;
-
-      setPosition(currentPosition);
-      setLevel(currentLevel);
-    }
-  }, [allPositions.length, allLevels.length]);
-
-  useEffect(() => {
-    if (assessmentResult && assessmentResult.position.id && assessmentResult.level.id) {
-      setPosition(assessmentResult.position);
-      setLevel(assessmentResult.level);
-    }
-  }, [assessmentResult]);
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -79,7 +57,29 @@ export const AssessmentSetUp = () => {
       dispatch(loadPositions());
       dispatch(loadLevels());
     }
-  }, [id, level, position, assessmentId]);
+
+    if (assessmentId) {
+      dispatch(getTechAssessment(assessmentId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (positionId && levelId) {
+      const currentPosition = allPositions.find((el) => el.id === positionId) as IDBPosition;
+      const currentLevel = allLevels.find((el) => el.id === levelId) as IDBLevels;
+
+      setPosition(currentPosition);
+      setLevel(currentLevel);
+    }
+
+    if (assessmentResult && assessmentResult.position && assessmentResult.level) {
+      const currentPosition = allPositions.find((el) => el.name === assessmentResult.position) as IDBPosition;
+      const currentLevel = allLevels.find((el) => el.name === assessmentResult.level) as IDBLevels;
+
+      setPosition(currentPosition);
+      setLevel(currentLevel);
+    }
+  }, [assessmentResult, allPositions.length, allLevels.length]);
 
   const personalData = useMemo(() => {
     return {

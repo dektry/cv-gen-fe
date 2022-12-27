@@ -3,14 +3,14 @@ import { IInterviewAnswers, IInterviewResult, IInterviewMatrix } from 'models/II
 export const processInterviewAnswers = (interviewResult: IInterviewResult, interviewMatrix: IInterviewMatrix) => {
   let resultAnswers: IInterviewAnswers = {};
   for (const answer of interviewResult.answers) {
-    const { skill, actual } = answer;
+    const { skill, assigned } = answer;
     let skillFromMatrix;
     for (const el of interviewMatrix) {
       skillFromMatrix = el.skills.find((item) => item.value === skill);
       if (skillFromMatrix) {
         resultAnswers = {
           ...resultAnswers,
-          [skillFromMatrix.id]: actual,
+          [skillFromMatrix.id]: assigned,
         };
       }
     }

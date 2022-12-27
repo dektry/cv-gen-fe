@@ -17,12 +17,7 @@ import {
   httpGetTechAssessment,
 } from 'services/requests/techAssessment';
 
-import {
-  IAssessmentHistoryRecord,
-  ICompleteAssessment,
-  IFormAssessmentResult,
-  ITechAssessmentState,
-} from 'models/ITechAssessment';
+import { IAssessmentHistoryRecord, IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
@@ -37,9 +32,12 @@ export const finishTechAssessment = createAsyncThunk(
   }
 );
 
-export const editTechAssessment = createAsyncThunk(editTechAssessmentAction, (assessment: IFormAssessmentResult) => {
-  return httpEditTechAssessment(assessment);
-});
+export const editTechAssessment = createAsyncThunk(
+  editTechAssessmentAction,
+  ({ assessment, id }: { assessment: IFormAssessmentResult; id: string }) => {
+    return httpEditTechAssessment(assessment, id);
+  }
+);
 
 export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: string) => {
   return httpGetTechAssessment(id);
@@ -110,10 +108,7 @@ const techAssessment = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getTechAssessment.fulfilled, (state, { payload }) => {
-      state.assessmentResult = {
-        ...payload.interview,
-        answers: payload.answers,
-      };
+      state.assessmentResult = payload;
       state.isLoading = false;
     });
     builder.addCase(getTechAssessment.rejected, (state) => {
@@ -133,14 +128,14 @@ const techAssessment = createSlice({
     });
     builder.addCase(editTechAssessment.fulfilled, () => {
       message.success('Changes saved successfully');
-      setTimeout(() => {
-        window.location.replace(
-          `${paths.technicalAssessmentHistory.replace(
-            ':id',
-            window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
-          )}`
-        );
-      }, 1000);
+      // setTimeout(() => {
+      //   window.location.replace(
+      //     `${paths.technicalAssessmentHistory.replace(
+      //       ':id',
+      //       window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
+      //     )}`
+      //   );
+      // }, 1000);
     });
   },
 });

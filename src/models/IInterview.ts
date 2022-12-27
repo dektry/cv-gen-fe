@@ -38,7 +38,7 @@ export enum LevelTypesEnum {
 }
 
 export interface IInterviewAnswers {
-  [key: string]: LevelTypesEnum;
+  [key: string]: string;
 }
 
 export interface ICompleteInterview {
@@ -60,10 +60,10 @@ export interface IInterviewCandidate {
 }
 
 export interface IInterviewResultAnswers {
-  desired: LevelTypesEnum;
-  actual: LevelTypesEnum;
+  required: string;
+  assigned: string;
   skill: string;
-  id: string;
+  color: string;
 }
 
 export interface IInterviewResult extends IInterviewCandidate {

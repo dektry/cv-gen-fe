@@ -22,6 +22,7 @@ export interface ILevel {
 export interface ISkill {
   value: string;
   id?: string;
+  currentLevel?: string;
   questions: IQuestion[];
   levels: ILevel[];
 }

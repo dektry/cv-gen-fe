@@ -12,12 +12,10 @@ export interface IAssessmentEmployee {
 
 export interface IAssessmentFromDB {
   id: string;
-  createdAt: string;
-  level: IDBLevels;
-  position: IDBPosition;
-  type: 'Assessment';
+  created: string;
+  level: string;
+  position: string;
   answers?: IInterviewResultAnswers[];
-  comment?: string;
 }
 
 export interface IAssessmentHistoryRecord {

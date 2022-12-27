@@ -6,9 +6,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { IAssessmentHistoryRecord } from 'models/ITechAssessment';
 
-import { generatePath, Link } from 'react-router-dom';
-import paths from 'config/routes.json';
-
 import { TypeBadge } from './components/TypeBadge';
 
 import { useStyles } from './styles';
@@ -16,9 +13,10 @@ import theme from 'theme/theme';
 
 interface IProps {
   assessments: IAssessmentHistoryRecord[];
+  handleRowClick: (assessmentId: string, position: string) => void;
 }
 
-export const HistoryTable = ({ assessments }: IProps) => {
+export const HistoryTable = ({ assessments, handleRowClick }: IProps) => {
   const classes = useStyles({ theme });
   return (
     <TableContainer>
@@ -36,22 +34,13 @@ export const HistoryTable = ({ assessments }: IProps) => {
         <TableBody>
           {assessments?.map((el: IAssessmentHistoryRecord) => {
             return (
-              <TableRow hover={true} key={el.id}>
+              <TableRow hover={true} key={el.id} onClick={() => handleRowClick(el.id, el.position)}>
                 <TableCell>{el.created}</TableCell>
                 <TableCell>{el.updated}</TableCell>
                 <TableCell>{el.position}</TableCell>
                 <TableCell>{el.level}</TableCell>
                 <TableCell>
-                  <Link
-                    className={classes.link}
-                    to={generatePath(paths.technicalAssessment, {
-                      id: el.id,
-                      positionId: el.position,
-                      levelId: el.level,
-                    })}
-                  >
-                    View results
-                  </Link>
+                  <div className={classes.link}>View results</div>
                 </TableCell>
                 <TableCell>
                   <TypeBadge type={el.type} />

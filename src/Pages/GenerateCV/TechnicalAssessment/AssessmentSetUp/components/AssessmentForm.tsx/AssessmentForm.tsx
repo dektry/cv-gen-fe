@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
-import { editTechAssessment, finishTechAssessment } from 'store/reducers/techAssessment';
+import { editTechAssessment, finishTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
 import { editHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import { useForm, useWatch, useFieldArray, Controller, FormProvider } from 'react-hook-form';
@@ -45,15 +45,39 @@ export const AssessmentForm = () => {
   const classes = useStyles({ theme });
 
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
+  const { assessmentResult } = useSelector(techAssessmentSelector);
 
   const methods = useForm({
     defaultValues: { matrix: currentMatrix, comment: '' },
   });
 
   useEffect(() => {
-    const defaultValues = { matrix: currentMatrix, comment: '' };
-    methods.reset({ ...defaultValues });
-  }, [currentMatrix]);
+    if (assessmentResult?.position) {
+      const skillGroups = currentMatrix.skillGroups?.map((group) => {
+        const processedSkills = group.skills?.map((skill) => {
+          const answer = assessmentResult?.answers?.find((el) => el.skill === skill.value);
+          const currentLevel = answer?.assigned || '';
+          return {
+            ...skill,
+            currentLevel,
+          };
+        });
+        return {
+          ...group,
+          skills: processedSkills,
+        };
+      });
+      const copy = {
+        ...currentMatrix,
+        skillGroups,
+      };
+      const defaultValues = { matrix: copy, comment: '' };
+      methods.reset({ ...defaultValues });
+    } else {
+      const defaultValues = { matrix: currentMatrix, comment: '' };
+      methods.reset({ ...defaultValues });
+    }
+  }, [currentMatrix, assessmentResult]);
 
   const values = useWatch({ control: methods.control });
 
@@ -67,7 +91,7 @@ export const AssessmentForm = () => {
     const allSkills: IFormSkill[] = [];
     values.matrix?.skillGroups?.forEach((group) => group.skills?.forEach((skill) => allSkills.push(skill)));
     const grades: { value: string; skillId: string }[] = allSkills.map((skill) => ({
-      value: skill.currentLevel || '',
+      value: skill.currentLevel || 'None',
       skillId: skill.id || '',
     }));
 
@@ -88,7 +112,7 @@ export const AssessmentForm = () => {
       dispatch(editHardSkillsMatrix(requestBody));
     }
     if (assessmentId) {
-      dispatch(editTechAssessment(result));
+      dispatch(editTechAssessment({ assessment: result, id: assessmentId }));
     } else {
       dispatch(finishTechAssessment(result));
     }

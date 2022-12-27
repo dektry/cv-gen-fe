@@ -11,7 +11,6 @@ import { levelsSelector } from 'store/reducers/levels';
 import { useStyles } from './styles';
 import { INTERVIEW } from './utils/constants';
 
-import { InterviewResultsTable } from '../InterviewResultsTable';
 import { InterviewInfoCard } from '../InterviewInfoCard';
 import { ICompleteInterview } from 'models/IInterview';
 
@@ -67,7 +66,6 @@ export const InterviewResult = () => {
 
   return (
     <section className={classes.interviewResult}>
-      <InterviewResultsTable />
       <div>
         <span className={classes.informationTitle}>{INTERVIEW.CANDIDATE}</span>
         <span>{currentCandidate?.fullName}</span>

@@ -25,6 +25,7 @@ import { IDBLevels, IDBPosition } from 'models/IUser';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
+import { IFormHardSkillsMatrix, IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 export const AssessmentHistory = () => {
   const dispatch = useAppDispatch();
@@ -32,6 +33,7 @@ export const AssessmentHistory = () => {
   const { id } = useParams<{ id: string }>();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [currentMatrix, setCurrentMatrix] = useState<IFormHardSkillsMatrix>({} as IFormHardSkillsMatrix);
 
   const classes = useStyles({ theme });
 
@@ -47,6 +49,7 @@ export const AssessmentHistory = () => {
     if (id) {
       dispatch(loadTechAssessments(id));
       dispatch(loadEmployee(id));
+      dispatch(getAllHardSkillsMatrix());
     }
   }, []);
 
@@ -58,14 +61,18 @@ export const AssessmentHistory = () => {
 
   const handleClick = () => {
     setIsOpen(true);
-    dispatch(getAllHardSkillsMatrix());
     dispatch(loadLevels());
   };
 
   const handleSubmit = () => {
-    if (chosenLevel && chosenPosition) {
+    if (chosenLevel && chosenPosition && currentMatrix.id) {
       navigate(
-        generatePath(paths.technicalAssessment, { id: id, positionId: chosenPosition.id, levelId: chosenLevel.id })
+        generatePath(paths.technicalAssessment, {
+          id: id,
+          positionId: chosenPosition.id,
+          levelId: chosenLevel.id,
+          matrixId: currentMatrix.id,
+        })
       );
     } else {
       message.warn('You should choose level and position');
@@ -93,11 +100,18 @@ export const AssessmentHistory = () => {
 
   const setInterviewPosition = (position: IDBPosition) => {
     dispatch(choosePosition(position));
+    const foundMatrix = matrix.find((el) => el.position.id === position.id) as IHardSkillsMatrix;
+    setCurrentMatrix(foundMatrix);
   };
 
+  const handleRowClick = (assessmentId: string, position: string) => {
+    const foundMatrix = matrix.find((el) => el.position.name === position) as IHardSkillsMatrix;
+    navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId, matrixId: foundMatrix.id }));
+  };
   useEffect(() => {
     return function clear() {
       dispatch(setTechAssessments([]));
+      setCurrentMatrix({} as IFormHardSkillsMatrix);
     };
   }, []);
 
@@ -116,7 +130,7 @@ export const AssessmentHistory = () => {
         </Link>
       </div>
       {assessmentsHistory.length ? (
-        <HistoryTable assessments={assessmentsHistory} />
+        <HistoryTable handleRowClick={handleRowClick} assessments={assessmentsHistory} />
       ) : (
         <div>Technical assessments not found</div>
       )}
