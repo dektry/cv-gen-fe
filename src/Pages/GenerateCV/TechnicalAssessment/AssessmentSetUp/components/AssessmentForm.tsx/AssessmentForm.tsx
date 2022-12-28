@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { isEqual } from 'lodash';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -24,8 +22,8 @@ import { LevelTypesEnum } from 'models/IInterview';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { IFormHardSkillsMatrix, IFormSkill } from 'models/IHardSkillsMatrix';
-import { IFormAssessmentResult } from 'models/ITechAssessment';
+import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+import { IAssessmentDetailedResult, IAssessmentDetailedSkill, IFormAssessmentResult } from 'models/ITechAssessment';
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
   label: level,
@@ -42,36 +40,22 @@ export const AssessmentForm = () => {
 
   const dispatch = useAppDispatch();
 
+  const [isAnyQuestionChanged, setIsAnyQuestionChanged] = useState(false);
+
   const classes = useStyles({ theme });
 
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
   const { assessmentResult } = useSelector(techAssessmentSelector);
 
   const methods = useForm({
-    defaultValues: { matrix: currentMatrix, comment: '' },
+    // Type cast here used to avoid meaningless convertation hard skills matrix into assessment result interface structure.
+    // It is meaningless because we have to add just few empty fields to whole matrix and to the every skill.
+    defaultValues: { matrix: currentMatrix as IAssessmentDetailedResult, comment: '' },
   });
 
   useEffect(() => {
     if (assessmentResult?.position) {
-      const skillGroups = currentMatrix.skillGroups?.map((group) => {
-        const processedSkills = group.skills?.map((skill) => {
-          const answer = assessmentResult?.answers?.find((el) => el.skill === skill.value);
-          const currentLevel = answer?.assigned || '';
-          return {
-            ...skill,
-            currentLevel,
-          };
-        });
-        return {
-          ...group,
-          skills: processedSkills,
-        };
-      });
-      const copy = {
-        ...currentMatrix,
-        skillGroups,
-      };
-      const defaultValues = { matrix: copy, comment: '' };
+      const defaultValues = { matrix: assessmentResult, comment: assessmentResult.comment };
       methods.reset({ ...defaultValues });
     } else {
       const defaultValues = { matrix: currentMatrix, comment: '' };
@@ -88,10 +72,10 @@ export const AssessmentForm = () => {
   });
 
   const handleSaveClick = () => {
-    const allSkills: IFormSkill[] = [];
+    const allSkills: IAssessmentDetailedSkill[] = [];
     values.matrix?.skillGroups?.forEach((group) => group.skills?.forEach((skill) => allSkills.push(skill)));
     const grades: { value: string; skillId: string }[] = allSkills.map((skill) => ({
-      value: skill.currentLevel || 'None',
+      value: skill.currentSkillLevel?.value || 'None',
       skillId: skill.id || '',
     }));
 
@@ -102,13 +86,12 @@ export const AssessmentForm = () => {
       comment: values.comment || '',
       grades,
     };
-    const valuesChanged = !isEqual(currentMatrix, values.matrix);
-    if (valuesChanged) {
+    if (isAnyQuestionChanged) {
       const requestBody = {
         matrix: values.matrix || ([] as IFormHardSkillsMatrix),
         positionId: values.matrix?.position?.id || '',
+        isAssessmentPage: true,
       };
-
       dispatch(editHardSkillsMatrix(requestBody));
     }
     if (assessmentId) {
@@ -132,7 +115,7 @@ export const AssessmentForm = () => {
                       {skill.value}
                     </Typography>
                     <Controller
-                      name={`matrix.skillGroups.${groupIndex}.skills.${skillIndex}.currentLevel`}
+                      name={`matrix.skillGroups.${groupIndex}.skills.${skillIndex}.currentSkillLevel.value`}
                       control={methods.control}
                       render={({ field: { value, onChange } }) => {
                         return (
@@ -146,7 +129,11 @@ export const AssessmentForm = () => {
                       }}
                     />
                   </div>
-                  <SkillQuestions skillGroupIndex={groupIndex} skillIndex={skillIndex} />
+                  <SkillQuestions
+                    skillGroupIndex={groupIndex}
+                    skillIndex={skillIndex}
+                    setIsAnyQuestionChanged={setIsAnyQuestionChanged}
+                  />
                 </Box>
               );
             })}

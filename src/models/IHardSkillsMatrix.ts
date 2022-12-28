@@ -43,6 +43,7 @@ export interface IHardSkillsMatrixState {
   matrix: IHardSkillsMatrix[];
   currentMatrix: IFormHardSkillsMatrix;
   hardSkillMatrixLoading: boolean;
+  isAssessmentPage: boolean;
 }
 
 export interface ICopyHardSkillsMatrixProps {
@@ -75,7 +76,6 @@ export interface IFormSkill {
   grades?: IFormGrade[];
   questions?: IFormQuestion[];
   levels?: IFormLevel[];
-  currentLevel?: string;
 }
 
 export interface IFormSkillGroup {

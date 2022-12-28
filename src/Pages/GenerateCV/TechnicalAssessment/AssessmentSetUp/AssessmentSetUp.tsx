@@ -7,9 +7,9 @@ import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
 import { employeesSelector } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
-import { positionsSelector, loadPositions } from 'store/reducers/positions';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 import { getTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { hardSkillsMatrixSelector, setIsAssessmentPage } from 'store/reducers/hardSkillsMatrix';
 import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import paths from 'config/routes.json';
@@ -38,9 +38,9 @@ export const AssessmentSetUp = () => {
   }>();
 
   const { currentEmployee } = useSelector(employeesSelector);
-  const { allPositions, positionsLoading } = useSelector(positionsSelector);
   const { allLevels, levelsLoading } = useSelector(levelsSelector);
   const { assessmentResult, isLoading } = useSelector(techAssessmentSelector);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
   const [level, setLevel] = useState<IDBLevels>({} as IDBLevels);
@@ -49,12 +49,15 @@ export const AssessmentSetUp = () => {
     if (matrixId) {
       dispatch(getOneHardSkillsMatrix(matrixId));
     }
+    dispatch(setIsAssessmentPage(true));
   }, []);
 
   useEffect(() => {
     if (id) {
       dispatch(loadEmployee(id));
-      dispatch(loadPositions());
+    }
+
+    if (!allLevels.length) {
       dispatch(loadLevels());
     }
 
@@ -64,22 +67,24 @@ export const AssessmentSetUp = () => {
   }, []);
 
   useEffect(() => {
-    if (positionId && levelId) {
-      const currentPosition = allPositions.find((el) => el.id === positionId) as IDBPosition;
+    if (positionId && currentMatrix) {
       const currentLevel = allLevels.find((el) => el.id === levelId) as IDBLevels;
 
-      setPosition(currentPosition);
+      setPosition(currentMatrix.position as IDBPosition);
       setLevel(currentLevel);
     }
 
     if (assessmentResult && assessmentResult.position && assessmentResult.level) {
-      const currentPosition = allPositions.find((el) => el.name === assessmentResult.position) as IDBPosition;
-      const currentLevel = allLevels.find((el) => el.name === assessmentResult.level) as IDBLevels;
-
-      setPosition(currentPosition);
-      setLevel(currentLevel);
+      setPosition(assessmentResult.position);
+      setLevel(assessmentResult.level);
     }
-  }, [assessmentResult, allPositions.length, allLevels.length]);
+  }, [assessmentResult, allLevels.length]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setIsAssessmentPage(false));
+    };
+  }, []);
 
   const personalData = useMemo(() => {
     return {
@@ -93,7 +98,7 @@ export const AssessmentSetUp = () => {
 
   const backPath = generatePath(paths.technicalAssessmentHistory, { id });
 
-  if (isLoading || positionsLoading || levelsLoading) return <Spin size="large" tip={'Loading page content...'} />;
+  if (isLoading || levelsLoading) return <Spin size="large" tip={'Loading page content...'} />;
 
   const interviewDate = location.pathname.includes('new-interview') ? new Date().toLocaleDateString('en-GB') : '';
 

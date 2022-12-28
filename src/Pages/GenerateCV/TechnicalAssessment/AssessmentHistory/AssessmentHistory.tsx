@@ -49,7 +49,9 @@ export const AssessmentHistory = () => {
     if (id) {
       dispatch(loadTechAssessments(id));
       dispatch(loadEmployee(id));
-      dispatch(getAllHardSkillsMatrix());
+      if (!matrix.length) {
+        dispatch(getAllHardSkillsMatrix());
+      }
     }
   }, []);
 
@@ -61,7 +63,9 @@ export const AssessmentHistory = () => {
 
   const handleClick = () => {
     setIsOpen(true);
-    dispatch(loadLevels());
+    if (!allLevels.length) {
+      dispatch(loadLevels());
+    }
   };
 
   const handleSubmit = () => {
@@ -121,16 +125,18 @@ export const AssessmentHistory = () => {
     <>
       <EmployeeHeader personalData={personalData} backPath={paths.employeesList} />
       <StartInterviewButton text="Start technical assessment" handleClick={handleClick} />
-      <div className={classes.midContainer}>
-        <Typography variant="h2" sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
-          Technical assessment history
-        </Typography>
-        <Link className={classes.link} to={generatePath(paths.technicalAssessmentHistory, { id })}>
-          Show comparison
-        </Link>
-      </div>
       {assessmentsHistory.length ? (
-        <HistoryTable handleRowClick={handleRowClick} assessments={assessmentsHistory} />
+        <>
+          <div className={classes.midContainer}>
+            <Typography variant="h2" sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
+              Technical assessment history
+            </Typography>
+            <Link className={classes.link} to={generatePath(paths.technicalAssessmentHistory, { id })}>
+              Show comparison
+            </Link>
+          </div>
+          <HistoryTable handleRowClick={handleRowClick} assessments={assessmentsHistory} />
+        </>
       ) : (
         <div>Technical assessments not found</div>
       )}
