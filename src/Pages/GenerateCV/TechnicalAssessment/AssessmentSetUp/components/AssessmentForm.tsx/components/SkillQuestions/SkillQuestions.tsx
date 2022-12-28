@@ -13,9 +13,10 @@ import theme from 'theme/theme';
 interface IProps {
   skillGroupIndex: number;
   skillIndex: number;
+  setIsAnyQuestionChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SkillQuestions = ({ skillGroupIndex, skillIndex }: IProps) => {
+export const SkillQuestions = ({ skillGroupIndex, skillIndex, setIsAnyQuestionChanged }: IProps) => {
   const classes = useStyles({ theme });
   const { control } = useFormContext();
 
@@ -34,14 +35,26 @@ export const SkillQuestions = ({ skillGroupIndex, skillIndex }: IProps) => {
               name={`matrix.skillGroups.${skillGroupIndex}.skills.${skillIndex}.questions.${questionIndex}.value`}
               control={control}
               render={({ field: { value, onChange } }) => {
-                return <TextField value={value} onChange={onChange} label="Question" />;
+                return (
+                  <TextField
+                    value={value}
+                    onChange={(e) => {
+                      onChange(e);
+                      setIsAnyQuestionChanged(true);
+                    }}
+                    label="Question"
+                  />
+                );
               }}
             />
             <Button
               className={classes.deleteQuestionBtn}
               variant="contained"
               endIcon={<AddRoundedIcon />}
-              onClick={() => remove(questionIndex)}
+              onClick={() => {
+                remove(questionIndex);
+                setIsAnyQuestionChanged(true);
+              }}
             />
           </div>
         );
@@ -49,7 +62,10 @@ export const SkillQuestions = ({ skillGroupIndex, skillIndex }: IProps) => {
       <AddButton
         sx={{ width: '10rem', justifySelf: 'flex-start' }}
         title="Add question"
-        onClick={() => append({ id: uuidv4(), value: '' })}
+        onClick={() => {
+          append({ id: uuidv4(), value: '' });
+          setIsAnyQuestionChanged(true);
+        }}
       />
     </div>
   );

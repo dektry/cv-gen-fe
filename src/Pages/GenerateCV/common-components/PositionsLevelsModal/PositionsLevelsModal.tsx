@@ -28,7 +28,7 @@ interface IProps {
   modalTitle: string;
   onClose: () => void;
   state: IState;
-  onSubmit?: () => void;
+  onSubmit: () => void;
   personalData: IPersonalData;
   setCurrentPosition: (position: IDBPosition) => void;
   setCurrentLevel: (level: IDBLevels) => void;
@@ -86,7 +86,15 @@ export const PositionsLevelsModal = ({
           <Button className={classes.noButton} onClick={onClose}>
             Cancel
           </Button>
-          <Button className={classes.yesButton} onClick={onSubmit} disabled={!currentPosition?.id || !currentLevel?.id}>
+          <Button
+            className={classes.yesButton}
+            onClick={() => {
+              onSubmit();
+              setCurrentPosition({} as IDBPosition);
+              setCurrentLevel({} as IDBLevels);
+            }}
+            disabled={!currentPosition?.id || !currentLevel?.id}
+          >
             Start assessment
           </Button>
         </div>
