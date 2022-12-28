@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch } from 'store';
+import { AsyncThunkAction } from '@reduxjs/toolkit';
 import { getTechAssessment } from 'store/reducers/techAssessment';
 
 import Table from '@mui/material/Table';
@@ -19,6 +20,8 @@ import theme from 'theme/theme';
 interface IProps {
   assessments: IAssessmentHistoryRecord[];
   handleRowClick: (assessmentId: string, position: string) => void;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  getTechAssessment(arg: string): AsyncThunkAction<any, string, Record<string, unknown>>;
 }
 
 export const HistoryTable = ({ assessments, handleRowClick }: IProps) => {

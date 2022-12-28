@@ -18,6 +18,8 @@ import { AssessmentForm } from './components/AssessmentForm.tsx';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { Typography } from '@mui/material';
 
+import { DatePositionLevelInfo } from 'common-components/DatePositionLevelInfo';
+
 import { IDBLevels, IDBPosition } from 'models/IUser';
 
 import { useStyles } from './styles';
@@ -95,32 +97,10 @@ export const AssessmentSetUp = () => {
 
   if (isLoading || positionsLoading || levelsLoading) return <Spin size="large" tip={'Loading page content...'} />;
 
-  const interviewDate = location.pathname.includes('new-interview') ? new Date().toLocaleDateString('en-GB') : '';
-
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />
-      <div className={classes.upperContainer}>
-        <Typography variant="h3">TECHNICAL ASSESSMENT {interviewDate}</Typography>
-        <div className={classes.positionsContainer}>
-          <div className={classes.positionLevelContainer}>
-            <Typography variant="h3">Position: </Typography>
-            {position?.name && (
-              <Typography variant="h5" className={classes.tag}>
-                {position?.name}
-              </Typography>
-            )}
-          </div>
-          <div className={classes.positionLevelContainer}>
-            <Typography variant="h3">Level: </Typography>
-            {level?.name && (
-              <Typography variant="h5" className={classes.tag}>
-                {level?.name}
-              </Typography>
-            )}
-          </div>
-        </div>
-      </div>
+      <DatePositionLevelInfo title={'TECHNICAL ASSESSMENT'} position={position.name} level={level.name} />
       <AssessmentForm />
     </>
   );
