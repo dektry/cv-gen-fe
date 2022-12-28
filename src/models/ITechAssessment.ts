@@ -75,6 +75,7 @@ export interface ITechAssessmentState {
   chosenLevel?: string;
   skillId?: string;
   assessmentResult: NullableField<IAssessmentDetailedResult>;
+  assessmentShortResult: NullableField<IAssessmentFromDB>;
 }
 
 export interface ICompleteAssessment {

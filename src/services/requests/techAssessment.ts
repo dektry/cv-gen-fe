@@ -26,6 +26,17 @@ export const httpGetTechAssessment = async (id: string) => {
   }
 };
 
+export const httpGetTechAssessmentResults = async (id: string) => {
+  try {
+    const { data } = await apiClient.get(`${endpoints.employeeInterviews}/${id}/result`);
+
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_TECH_ASSESSMENT_RESULT_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
 export const httpCompleteTechAssessment = async (assessment: IFormAssessmentResult) => {
   try {
     const { data } = await apiClient.post(endpoints.employeeInterviews, assessment);

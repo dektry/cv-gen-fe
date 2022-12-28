@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Radio, RadioChangeEvent } from 'antd';
 
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'store';
-import { interviewSelector, saveChangesToInterview } from 'store/reducers/interview';
+import { interviewSelector } from 'store/reducers/interview';
 import { candidatesSelector } from 'store/reducers/candidates';
 import { positionsSelector } from 'store/reducers/positions';
 import { levelsSelector } from 'store/reducers/levels';
@@ -12,13 +11,9 @@ import { useStyles } from './styles';
 import { INTERVIEW } from './utils/constants';
 
 import { InterviewInfoCard } from '../InterviewInfoCard';
-import { ICompleteInterview } from 'models/IInterview';
-
-import { processInterviewAnswers } from 'Pages/GenerateCV/TechnicalInterview/InterviewSetUP/components/InterviewForm/utils/helpers/processAnswers';
 
 export const InterviewResult = () => {
-  const dispatch = useAppDispatch();
-  const { interviewResult, chosenLevel, chosenPosition, interviewMatrix } = useSelector(interviewSelector);
+  const { interviewResult } = useSelector(interviewSelector);
 
   const [isEdited, setIsEdited] = useState(false);
   const [isOffered, setIsOffered] = useState(interviewResult?.isOffered);
@@ -42,22 +37,22 @@ export const InterviewResult = () => {
     setIsEdited(!isEdited);
   };
 
-  const handleSaveChanges = useCallback(() => {
-    if (interviewResult) {
-      const processedAnswers = processInterviewAnswers(interviewResult, interviewMatrix);
-      const interviewData: ICompleteInterview = {
-        candidateId: currentCandidate.id,
-        positionId: chosenPosition || interviewResult.position.id || '',
-        levelId: chosenLevel || interviewResult.level.id || '',
-        comment,
-        isOffered,
-        answers: processedAnswers,
-      };
+  // const handleSaveChanges = useCallback(() => {
+  //   if (interviewResult) {
+  //     const processedAnswers = processInterviewAnswers(interviewResult, interviewMatrix);
+  //     const interviewData: ICompleteInterview = {
+  //       candidateId: currentCandidate.id,
+  //       positionId: chosenPosition || interviewResult.position.id || '',
+  //       levelId: chosenLevel || interviewResult.level.id || '',
+  //       comment,
+  //       isOffered,
+  //       answers: processedAnswers,
+  //     };
 
-      dispatch(saveChangesToInterview(interviewData));
-      setIsEdited(false);
-    }
-  }, [interviewResult, interviewMatrix, chosenPosition, chosenLevel, comment, currentCandidate, isOffered, dispatch]);
+  //     dispatch(saveChangesToInterview(interviewData));
+  //     setIsEdited(false);
+  //   }
+  // }, [interviewResult, interviewMatrix, chosenPosition, chosenLevel, comment, currentCandidate, isOffered, dispatch]);
 
   const radioOptions = [
     { label: 'Yes', value: true },
@@ -91,7 +86,7 @@ export const InterviewResult = () => {
           value={comment}
           disabled={!isEdited}
         />
-        <Button className={classes.editButton} disabled={!isEdited} onClick={handleSaveChanges}>
+        <Button className={classes.editButton} disabled={!isEdited}>
           Save changes
         </Button>
       </div>

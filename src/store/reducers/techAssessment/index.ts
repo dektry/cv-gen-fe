@@ -9,12 +9,14 @@ import {
   completeTechAssessmentAction,
   editTechAssessmentAction,
   getTechAssessmentAction,
+  getTechAssessmentResultsAction,
 } from 'store/reducers/techAssessment/actionTypes';
 import {
   getAllTechAssessments,
   httpCompleteTechAssessment,
   httpEditTechAssessment,
   httpGetTechAssessment,
+  httpGetTechAssessmentResults,
 } from 'services/requests/techAssessment';
 
 import { IAssessmentHistoryRecord, IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
@@ -43,6 +45,10 @@ export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: 
   return httpGetTechAssessment(id);
 });
 
+export const getTechAssessmentResults = createAsyncThunk(getTechAssessmentResultsAction, (id: string) => {
+  return httpGetTechAssessmentResults(id);
+});
+
 const initialState: ITechAssessmentState = {
   assessments: [],
   assessmentsHistory: [],
@@ -52,6 +58,7 @@ const initialState: ITechAssessmentState = {
   chosenLevel: undefined,
   chosenPosition: undefined,
   assessmentResult: null,
+  assessmentShortResult: null,
 };
 
 const techAssessment = createSlice({
@@ -136,6 +143,9 @@ const techAssessment = createSlice({
           )}`
         );
       }, 1000);
+    });
+    builder.addCase(getTechAssessmentResults.fulfilled, (state, { payload }) => {
+      state.assessmentShortResult = payload;
     });
   },
 });

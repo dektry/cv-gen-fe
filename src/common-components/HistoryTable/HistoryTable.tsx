@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch } from 'store';
 import { AsyncThunkAction } from '@reduxjs/toolkit';
-import { getTechAssessment } from 'store/reducers/techAssessment';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -21,10 +20,10 @@ interface IProps {
   assessments: IAssessmentHistoryRecord[];
   handleRowClick: (assessmentId: string, position: string) => void;
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  getTechAssessment(arg: string): AsyncThunkAction<any, string, Record<string, unknown>>;
+  getAssessment(arg: string): AsyncThunkAction<any, string, Record<string, unknown>>;
 }
 
-export const HistoryTable = ({ assessments, handleRowClick }: IProps) => {
+export const HistoryTable = ({ assessments, handleRowClick, getAssessment }: IProps) => {
   const classes = useStyles({ theme });
 
   const dispatch = useAppDispatch();
@@ -33,7 +32,7 @@ export const HistoryTable = ({ assessments, handleRowClick }: IProps) => {
 
   const handleResultsModalOpen = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
     e.stopPropagation();
-    dispatch(getTechAssessment(id));
+    dispatch(getAssessment(id));
     setIsResultsModalOpen(true);
   };
 

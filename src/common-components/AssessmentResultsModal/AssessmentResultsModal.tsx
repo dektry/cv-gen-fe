@@ -28,8 +28,8 @@ interface IProps {
 
 export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle }: IProps) => {
   const classes = useStyles({ theme });
-
-  const { assessmentResult, isLoading } = useSelector(techAssessmentSelector);
+  // TODO: somehow move all data getting logic to parent component
+  const { assessmentShortResult, isLoading } = useSelector(techAssessmentSelector);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -44,9 +44,9 @@ export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle }: IProps) 
           <>
             <DatePositionLevelInfo
               title={'TECHNICAL ASSESSMENT'}
-              date={assessmentResult?.created}
-              position={assessmentResult?.position || ''}
-              level={assessmentResult?.level || ''}
+              date={assessmentShortResult?.created}
+              position={assessmentShortResult?.position || ''}
+              level={assessmentShortResult?.level || ''}
             />
             <div className={classes.tableContainer}>
               <TableContainer>
@@ -59,7 +59,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle }: IProps) 
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {assessmentResult?.answers?.map((el) => {
+                    {assessmentShortResult?.answers?.map((el) => {
                       return (
                         <TableRow key={el.skill} hover={true}>
                           <TableCell>{el.skill}</TableCell>

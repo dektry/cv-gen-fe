@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { generatePath, useParams, useLocation } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { Spin } from 'antd';
 
@@ -16,20 +16,13 @@ import paths from 'config/routes.json';
 
 import { AssessmentForm } from './components/AssessmentForm.tsx';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { Typography } from '@mui/material';
 
 import { DatePositionLevelInfo } from 'common-components/DatePositionLevelInfo';
 
 import { IDBLevels, IDBPosition } from 'models/IUser';
 
-import { useStyles } from './styles';
-import theme from 'theme/theme';
-
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();
-  const location = useLocation();
-
-  const classes = useStyles({ theme });
 
   const { id, levelId, positionId, assessmentId, matrixId } = useParams<{
     id: string;

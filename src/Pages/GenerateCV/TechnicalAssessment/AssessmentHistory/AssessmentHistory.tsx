@@ -6,7 +6,12 @@ import Typography from '@mui/material/Typography';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { loadTechAssessments, techAssessmentSelector, setTechAssessments } from 'store/reducers/techAssessment';
+import {
+  loadTechAssessments,
+  techAssessmentSelector,
+  setTechAssessments,
+  getTechAssessmentResults,
+} from 'store/reducers/techAssessment';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
 import { levelsSelector, loadLevels, chooseLevel } from 'store/reducers/levels';
@@ -112,6 +117,7 @@ export const AssessmentHistory = () => {
     const foundMatrix = matrix.find((el) => el.position.name === position) as IHardSkillsMatrix;
     navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId, matrixId: foundMatrix.id }));
   };
+
   useEffect(() => {
     return function clear() {
       dispatch(setTechAssessments([]));
@@ -133,7 +139,11 @@ export const AssessmentHistory = () => {
               Show comparison
             </Link>
           </div>
-          <HistoryTable handleRowClick={handleRowClick} assessments={assessmentsHistory} />
+          <HistoryTable
+            handleRowClick={handleRowClick}
+            assessments={assessmentsHistory}
+            getAssessment={getTechAssessmentResults}
+          />
         </>
       ) : (
         <div>Technical assessments not found</div>
