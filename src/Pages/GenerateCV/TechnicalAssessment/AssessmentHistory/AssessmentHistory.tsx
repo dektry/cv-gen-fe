@@ -118,6 +118,20 @@ export const AssessmentHistory = () => {
     navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId, matrixId: foundMatrix.id }));
   };
 
+  const setInterviewLevel = (level: IDBLevels) => {
+    dispatch(chooseLevel(level));
+  };
+
+  const setInterviewPosition = (position: IDBPosition) => {
+    dispatch(choosePosition(position));
+    const foundMatrix = matrix.find((el) => el.position.id === position.id) as IHardSkillsMatrix;
+    setCurrentMatrix(foundMatrix);
+  };
+
+  const handleRowClick = (assessmentId: string, position: string) => {
+    const foundMatrix = matrix.find((el) => el.position.name === position) as IHardSkillsMatrix;
+    navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId, matrixId: foundMatrix.id }));
+  };
   useEffect(() => {
     return function clear() {
       dispatch(setTechAssessments([]));

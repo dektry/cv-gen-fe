@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useParams, useLocation } from 'react-router-dom';
 
 import { Spin } from 'antd';
 
@@ -23,6 +23,7 @@ import { IDBLevels, IDBPosition } from 'models/IUser';
 
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   const { id, levelId, positionId, assessmentId, matrixId } = useParams<{
     id: string;
