@@ -7,6 +7,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       display: 'flex',
       flexDirection: 'column',
       width: '700px',
+      maxHeight: '600px',
       position: 'absolute',
       top: '50%',
       left: '50%',
@@ -72,5 +73,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   tableContainer: {
     margin: '24px',
+    overflow: 'scroll',
   },
 });

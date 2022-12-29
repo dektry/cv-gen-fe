@@ -50,7 +50,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle }: IProps) 
             />
             <div className={classes.tableContainer}>
               <TableContainer>
-                <Table aria-label="assessment results table">
+                <Table aria-label="assessment results table" sx={{ overflowY: 'scroll' }}>
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>Skill name</TableCell>

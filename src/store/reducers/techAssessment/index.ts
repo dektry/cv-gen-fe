@@ -134,7 +134,7 @@ const techAssessment = createSlice({
       }, 1000);
     });
     builder.addCase(editTechAssessment.fulfilled, () => {
-      message.success('Changes saved successfully');
+      message.success('Changes to technical assessment saved successfully');
       setTimeout(() => {
         window.location.replace(
           `${paths.technicalAssessmentHistory.replace(
