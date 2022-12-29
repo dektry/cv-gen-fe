@@ -5,17 +5,12 @@ import { message, Spin } from 'antd';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import {
-  softSkillInterviewSelector,
-  chooseInterviewLevel,
-  chooseInterviewPosition,
-  setSoftAssessmentList,
-} from 'store/reducers/softSkillAssessment';
+import { softSkillInterviewSelector, setSoftAssessmentList } from 'store/reducers/softSkillAssessment';
 import { getAllSoftSkillAssessments } from 'store/reducers/softSkillAssessment/thunks';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
-import { positionsSelector, loadPositions } from 'store/reducers/positions';
-import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { positionsSelector, loadPositions, choosePosition } from 'store/reducers/positions';
+import { chooseLevel, levelsSelector, loadLevels } from 'store/reducers/levels';
 
 import { ITableParams } from 'models/ICommon';
 import { ISoftAssessment } from 'models/ISoftAssessment';
@@ -28,6 +23,7 @@ import { PositionsLevelsModal } from 'Pages/GenerateCV/common-components/Positio
 import paths from 'config/routes.json';
 import { ASSESSMENT_HISTORY_TABLE_KEYS, ASSESSMENT } from './utils/constants';
 import { defaultEmployee } from 'store/constants';
+import { IDBLevels, IDBPosition } from 'models/IUser';
 
 export const SoftAssessmentHistory = () => {
   const dispatch = useAppDispatch();
@@ -113,12 +109,12 @@ export const SoftAssessmentHistory = () => {
     setIsOpen(false);
   };
 
-  const setInterviewLevel = (level: string) => {
-    dispatch(chooseInterviewLevel(level));
+  const setInterviewLevel = (level: IDBLevels) => {
+    dispatch(chooseLevel(level));
   };
 
-  const setInterviewPosition = (position: string) => {
-    dispatch(chooseInterviewPosition(position));
+  const setInterviewPosition = (position: IDBPosition) => {
+    dispatch(choosePosition(position));
   };
 
   useEffect(() => {

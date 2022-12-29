@@ -22,6 +22,7 @@ export interface ILevel {
 export interface ISkill {
   value: string;
   id?: string;
+  currentLevel?: string;
   questions: IQuestion[];
   levels: ILevel[];
 }
@@ -42,6 +43,7 @@ export interface IHardSkillsMatrixState {
   matrix: IHardSkillsMatrix[];
   currentMatrix: IFormHardSkillsMatrix;
   hardSkillMatrixLoading: boolean;
+  isAssessmentPage: boolean;
 }
 
 export interface ICopyHardSkillsMatrixProps {

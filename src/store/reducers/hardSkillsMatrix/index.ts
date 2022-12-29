@@ -23,6 +23,7 @@ const initialState: IHardSkillsMatrixState = {
   matrix: [],
   currentMatrix: {} as IFormHardSkillsMatrix,
   hardSkillMatrixLoading: false,
+  isAssessmentPage: false,
 };
 
 const harSkillsMatrix = createSlice({
@@ -42,6 +43,12 @@ const harSkillsMatrix = createSlice({
       if (payload.skillGroups) {
         state.currentMatrix.skillGroups = payload.skillGroups;
       }
+    },
+    setCurrentHardSkillsMatrixId: (state, { payload }: PayloadAction<string>) => {
+      state.currentMatrix.id = payload;
+    },
+    setIsAssessmentPage: (state, { payload }: PayloadAction<boolean>) => {
+      state.isAssessmentPage = payload;
     },
   },
   extraReducers: (builder) => {
@@ -95,11 +102,13 @@ const harSkillsMatrix = createSlice({
         window.location.replace(`${paths.settingsHardSkillsMatrixList}`);
       }, 1000);
     });
-    builder.addCase(editHardSkillsMatrix.fulfilled, () => {
-      message.success('Changes saved successfully');
-      setTimeout(() => {
-        window.location.replace(`${paths.settingsHardSkillsMatrixList}`);
-      }, 1000);
+    builder.addCase(editHardSkillsMatrix.fulfilled, (state) => {
+      if (!state.isAssessmentPage) {
+        message.success('Changes saved successfully');
+        setTimeout(() => {
+          window.location.replace(`${paths.settingsHardSkillsMatrixList}`);
+        }, 1000);
+      }
     });
   },
 });
@@ -108,5 +117,11 @@ export default harSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
-export const { setHardSkillsMatrixIsLoading, setCurrentHardSkillsMatrix, setCurrentPosition, setCurrentSkillGroups } =
-  harSkillsMatrix.actions;
+export const {
+  setHardSkillsMatrixIsLoading,
+  setCurrentHardSkillsMatrix,
+  setCurrentPosition,
+  setCurrentSkillGroups,
+  setCurrentHardSkillsMatrixId,
+  setIsAssessmentPage,
+} = harSkillsMatrix.actions;
