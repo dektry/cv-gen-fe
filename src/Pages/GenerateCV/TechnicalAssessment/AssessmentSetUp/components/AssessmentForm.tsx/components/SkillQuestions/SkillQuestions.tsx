@@ -13,10 +13,16 @@ import theme from 'theme/theme';
 interface IProps {
   skillGroupIndex: number;
   skillIndex: number;
+  isAnyQuestionChanged: boolean;
   setIsAnyQuestionChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SkillQuestions = ({ skillGroupIndex, skillIndex, setIsAnyQuestionChanged }: IProps) => {
+export const SkillQuestions = ({
+  skillGroupIndex,
+  skillIndex,
+  isAnyQuestionChanged,
+  setIsAnyQuestionChanged,
+}: IProps) => {
   const classes = useStyles({ theme });
   const { control } = useFormContext();
 
@@ -40,7 +46,9 @@ export const SkillQuestions = ({ skillGroupIndex, skillIndex, setIsAnyQuestionCh
                     value={value}
                     onChange={(e) => {
                       onChange(e);
-                      setIsAnyQuestionChanged(true);
+                      if (!isAnyQuestionChanged) {
+                        setIsAnyQuestionChanged(true);
+                      }
                     }}
                     label="Question"
                   />
@@ -53,7 +61,9 @@ export const SkillQuestions = ({ skillGroupIndex, skillIndex, setIsAnyQuestionCh
               endIcon={<AddRoundedIcon />}
               onClick={() => {
                 remove(questionIndex);
-                setIsAnyQuestionChanged(true);
+                if (!isAnyQuestionChanged) {
+                  setIsAnyQuestionChanged(true);
+                }
               }}
             />
           </div>
@@ -64,7 +74,9 @@ export const SkillQuestions = ({ skillGroupIndex, skillIndex, setIsAnyQuestionCh
         title="Add question"
         onClick={() => {
           append({ id: uuidv4(), value: '' });
-          setIsAnyQuestionChanged(true);
+          if (!isAnyQuestionChanged) {
+            setIsAnyQuestionChanged(true);
+          }
         }}
       />
     </div>

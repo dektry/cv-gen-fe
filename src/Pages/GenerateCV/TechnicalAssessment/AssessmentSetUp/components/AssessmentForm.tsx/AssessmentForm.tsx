@@ -132,6 +132,7 @@ export const AssessmentForm = () => {
                   <SkillQuestions
                     skillGroupIndex={groupIndex}
                     skillIndex={skillIndex}
+                    isAnyQuestionChanged={isAnyQuestionChanged}
                     setIsAnyQuestionChanged={setIsAnyQuestionChanged}
                   />
                 </Box>
