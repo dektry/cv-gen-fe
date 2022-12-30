@@ -23,8 +23,7 @@ import { LevelTypesEnum } from 'models/IInterview';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
-import { IAssessmentDetailedLevel, IAssessmentDetailedSkill, IFormAssessmentResult } from 'models/ITechAssessment';
-import { IDBLevels } from 'models/IUser';
+import { IAssessmentDetailedSkill, IFormAssessmentResult } from 'models/ITechAssessment';
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
   label: level,
