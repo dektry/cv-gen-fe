@@ -59,6 +59,7 @@ const initialState: ITechAssessmentState = {
   chosenPosition: undefined,
   assessmentResult: null,
   assessmentShortResult: null,
+  isHistoryLoading: false,
 };
 
 const techAssessment = createSlice({
@@ -86,10 +87,13 @@ const techAssessment = createSlice({
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
     },
+    setIsHistoryLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isHistoryLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTechAssessments.pending, (state) => {
-      state.isLoading = true;
+      state.isHistoryLoading = true;
     });
     builder.addCase(loadTechAssessments.fulfilled, (state, { payload }) => {
       if (payload.length) {
@@ -101,14 +105,14 @@ const techAssessment = createSlice({
           };
         });
         state.assessmentsHistory = processedAssessments;
-        state.isLoading = false;
+        state.isHistoryLoading = false;
       } else {
         state.assessmentsHistory = [];
-        state.isLoading = false;
+        state.isHistoryLoading = false;
       }
     });
     builder.addCase(loadTechAssessments.rejected, (state) => {
-      state.isLoading = false;
+      state.isHistoryLoading = false;
       message.error(`Server error. Please contact admin`);
     });
     builder.addCase(getTechAssessment.pending, (state) => {

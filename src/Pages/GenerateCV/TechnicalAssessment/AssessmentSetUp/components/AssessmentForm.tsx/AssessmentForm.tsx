@@ -102,8 +102,8 @@ export const AssessmentForm = () => {
       dispatch(editHardSkillsMatrix(requestBody));
     }
 
-    if (assessmentResult?.id) {
-      dispatch(editTechAssessment({ assessment: result, id: assessmentResult.id }));
+    if (assessmentId) {
+      dispatch(editTechAssessment({ assessment: result, id: assessmentId }));
     } else {
       dispatch(finishTechAssessment(result));
     }

@@ -4,6 +4,8 @@ import { useParams, useNavigate, generatePath, Link } from 'react-router-dom';
 import { message } from 'antd';
 import Typography from '@mui/material/Typography';
 
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import {
@@ -42,7 +44,7 @@ export const AssessmentHistory = () => {
 
   const classes = useStyles({ theme });
 
-  const { assessmentsHistory } = useSelector(techAssessmentSelector);
+  const { assessmentsHistory, isHistoryLoading } = useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
@@ -123,6 +125,8 @@ export const AssessmentHistory = () => {
       setCurrentMatrix({} as IFormHardSkillsMatrix);
     };
   }, []);
+
+  if (isHistoryLoading || levelsLoading) return <CircularProgress sx={{ margin: 'auto' }} />;
 
   return (
     <>

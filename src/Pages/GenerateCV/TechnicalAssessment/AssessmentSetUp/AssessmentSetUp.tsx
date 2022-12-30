@@ -52,7 +52,7 @@ export const AssessmentSetUp = () => {
       dispatch(loadEmployee(id));
     }
 
-    if (!allLevels.length) {
+    if (!allLevels.length && !assessmentId) {
       dispatch(loadLevels());
     }
 
@@ -73,7 +73,7 @@ export const AssessmentSetUp = () => {
       setPosition(assessmentResult.position);
       setLevel(assessmentResult.level);
     }
-  }, [assessmentResult, allLevels.length]);
+  }, [assessmentResult, allLevels.length, currentMatrix]);
 
   useEffect(() => {
     return () => {

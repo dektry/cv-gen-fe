@@ -69,6 +69,7 @@ export interface ITechAssessmentState {
   assessments: IAssessmentFromDB[];
   assessmentsHistory: IAssessmentHistoryRecord[];
   isLoading: boolean;
+  isHistoryLoading: boolean;
   pageSize: number;
   currentPage: number;
   chosenPosition?: string;
