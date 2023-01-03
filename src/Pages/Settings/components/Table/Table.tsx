@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
-import { HardSkillsMatrixCreateEditModal } from '../HardSkillsMatrixCreateEditModal';
+import { SkillsMatrixCreateEditModal } from '../SkillsMatrixCreateEditModal';
 
 import paths from 'config/routes.json';
 
@@ -265,7 +265,7 @@ export const TableComponent = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <HardSkillsMatrixCreateEditModal
+      <SkillsMatrixCreateEditModal
         isOpen={isCreateModalOpen}
         onClose={handleCreateModaleClose}
         onSubmit={hanldeCreateSubmit}
@@ -274,7 +274,7 @@ export const TableComponent = ({
         buttonText={`Add ${text}`}
         data={positionsThatAreNotInMatrixList}
       />
-      <HardSkillsMatrixCreateEditModal
+      <SkillsMatrixCreateEditModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
         onSubmit={handleEditSubmit}
@@ -285,7 +285,7 @@ export const TableComponent = ({
         data={positions}
       />
       {handleCopy && copyModalTitle && (
-        <HardSkillsMatrixCreateEditModal
+        <SkillsMatrixCreateEditModal
           isOpen={isCopyModalOpen}
           onClose={handleCloseCopyModal}
           onSubmit={handleCopySubmit}

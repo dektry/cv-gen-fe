@@ -25,7 +25,7 @@ interface IProps {
   data?: IListElement[];
 }
 
-export const HardSkillsMatrixCreateEditModal = ({
+export const SkillsMatrixCreateEditModal = ({
   isOpen,
   modalTitle,
   onClose,
