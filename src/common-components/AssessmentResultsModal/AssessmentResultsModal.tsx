@@ -1,5 +1,3 @@
-import { techAssessmentSelector } from 'store/reducers/techAssessment';
-
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,22 +12,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import { IAssessmentFromDB } from 'models/ITechAssessment';
+
 import { DatePositionLevelInfo } from 'common-components/DatePositionLevelInfo';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { useSelector } from 'react-redux';
+import { NullableField } from 'models/TNullableField';
 
 interface IProps {
   isOpen: boolean;
   onClose: () => void;
   modalTitle: string;
+  assessmentShortResult: NullableField<IAssessmentFromDB>;
+  isLoading: boolean;
 }
 
-export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle }: IProps) => {
+export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle, assessmentShortResult, isLoading }: IProps) => {
   const classes = useStyles({ theme });
-  // TODO: somehow move all data getting logic to parent component
-  const { assessmentShortResult, isLoading } = useSelector(techAssessmentSelector);
 
   return (
     <Modal open={isOpen} onClose={onClose}>

@@ -13,6 +13,7 @@ import {
   techAssessmentSelector,
   setTechAssessments,
   getTechAssessmentResults,
+  deleteTechAssessment,
 } from 'store/reducers/techAssessment';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
@@ -44,7 +45,8 @@ export const AssessmentHistory = () => {
 
   const classes = useStyles({ theme });
 
-  const { assessmentsHistory, isHistoryLoading } = useSelector(techAssessmentSelector);
+  const { assessmentsHistory, isHistoryLoading, assessmentShortResult, isLoading } =
+    useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
@@ -146,6 +148,9 @@ export const AssessmentHistory = () => {
             handleRowClick={handleRowClick}
             assessments={assessmentsHistory}
             getAssessment={getTechAssessmentResults}
+            assessmentShortResult={assessmentShortResult}
+            isLoading={isLoading}
+            deleteAssessment={deleteTechAssessment}
           />
         </>
       ) : (

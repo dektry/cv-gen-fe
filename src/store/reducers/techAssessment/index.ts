@@ -10,6 +10,7 @@ import {
   editTechAssessmentAction,
   getTechAssessmentAction,
   getTechAssessmentResultsAction,
+  deleteTechAssessmentAction,
 } from 'store/reducers/techAssessment/actionTypes';
 import {
   getAllTechAssessments,
@@ -17,6 +18,7 @@ import {
   httpEditTechAssessment,
   httpGetTechAssessment,
   httpGetTechAssessmentResults,
+  httpDeleteTechAssessment,
 } from 'services/requests/techAssessment';
 
 import { IAssessmentHistoryRecord, IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
@@ -47,6 +49,10 @@ export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: 
 
 export const getTechAssessmentResults = createAsyncThunk(getTechAssessmentResultsAction, (id: string) => {
   return httpGetTechAssessmentResults(id);
+});
+
+export const deleteTechAssessment = createAsyncThunk(deleteTechAssessmentAction, (id: string) => {
+  return httpDeleteTechAssessment(id);
 });
 
 const initialState: ITechAssessmentState = {

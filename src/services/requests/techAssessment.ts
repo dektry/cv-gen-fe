@@ -58,3 +58,12 @@ export const httpEditTechAssessment = async (assessment: IFormAssessmentResult, 
     message.error(`Server error. Please contact admin`);
   }
 };
+
+export const httpDeleteTechAssessment = async (id: string) => {
+  try {
+    await apiClient.delete(`${endpoints.employeeInterviews}/${id}`);
+  } catch (error) {
+    console.error('[API_CLIENT_DELETE_TECH_ASSESSMENTS_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
