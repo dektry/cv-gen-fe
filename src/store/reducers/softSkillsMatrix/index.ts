@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { message } from 'antd';
 
 import { RootState } from '../..';
 
@@ -6,9 +7,17 @@ import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
 import { ISoftSkillsMatrix, ISoftSkillsMatrixState, ISkill, IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
-import { getAllSoftSkillsMatrix, getOneSoftSkillsMatrix } from './thunks';
+import {
+  getAllSoftSkillsMatrix,
+  getOneSoftSkillsMatrix,
+  copySoftSkillsMatrix,
+  createSoftSkillsMatrix,
+  editSoftSkillsMatrix,
+} from './thunks';
 
 import { sortSkillLevels } from 'store/helpers/sortLevels';
+
+import paths from 'config/routes.json';
 
 const initialState: ISoftSkillsMatrixState = {
   matrix: [],
@@ -73,6 +82,33 @@ const softSkillsMatrix = createSlice({
       }
 
       state.currentMatrix = payload;
+    });
+    builder.addCase(copySoftSkillsMatrix.pending, (state) => {
+      state.softSkillMatrixLoading = true;
+    });
+    builder.addCase(copySoftSkillsMatrix.rejected, (state) => {
+      state.softSkillMatrixLoading = false;
+    });
+    builder.addCase(copySoftSkillsMatrix.fulfilled, (state, { payload }) => {
+      state.softSkillMatrixLoading = false;
+      if (payload) {
+        state.currentMatrix.id = payload.softSkillMatrixId;
+        window.location.replace(`${paths.softSkillsMatrixDetails.replace(':id', payload.softSkillMatrixId)}`);
+      }
+    });
+    builder.addCase(createSoftSkillsMatrix.fulfilled, () => {
+      message.success('Matrix was created successfully');
+      setTimeout(() => {
+        window.location.replace(`${paths.settingsSoftSkillsMatrixList}`);
+      }, 1000);
+    });
+    builder.addCase(editSoftSkillsMatrix.fulfilled, (state) => {
+      if (!state.isAssessmentPage) {
+        message.success('Changes saved successfully');
+        setTimeout(() => {
+          window.location.replace(`${paths.settingsSoftSkillsMatrixList}`);
+        }, 1000);
+      }
     });
   },
 });

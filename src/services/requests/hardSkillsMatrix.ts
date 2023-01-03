@@ -83,7 +83,10 @@ export const httpCopyHardSkillsMatrix = async (
   props: ICopyHardSkillsMatrixProps
 ): Promise<{ hardSkillMatrixId: string } | undefined> => {
   try {
-    const { data } = await apiClient.post(`${endpoints.hardSkillsMatrix}/copy`, props);
+    const { data } = await apiClient.post(`${endpoints.hardSkillsMatrix}/copy`, {
+      positionId: props.positionId,
+      hardSkillMatrixId: props.skillMatrixId,
+    });
 
     return data;
   } catch (error) {

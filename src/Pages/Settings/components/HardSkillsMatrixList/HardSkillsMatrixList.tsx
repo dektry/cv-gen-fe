@@ -47,8 +47,8 @@ export const HardSkillsMatrixList = () => {
     navigate(generatePath(routes.hardSkillsMatrixDetails, { id }));
   };
 
-  const handleCopyHardSkillsMatrix = ({ hardSkillMatrixId, positionId }: ICopyHardSkillsMatrixProps) => {
-    dispatch(copyHardSkillsMatrix({ positionId, hardSkillMatrixId }));
+  const handleCopyHardSkillsMatrix = ({ skillMatrixId, positionId }: ICopyHardSkillsMatrixProps) => {
+    dispatch(copyHardSkillsMatrix({ positionId, skillMatrixId }));
   };
 
   const datatoShow = useMemo(

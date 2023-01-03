@@ -84,3 +84,8 @@ export interface IFormSoftSkillsMatrix {
   position?: IFormPosition;
   skillGroups?: IFormSkillGroup[];
 }
+
+export interface ICopySoftSkillsMatrixProps {
+  positionId: string;
+  skillMatrixId: string;
+}

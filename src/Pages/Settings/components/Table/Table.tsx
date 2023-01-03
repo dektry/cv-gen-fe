@@ -31,7 +31,7 @@ export interface IListElement {
 
 export interface IHandleCopyProp {
   positionId: string;
-  hardSkillMatrixId: string;
+  skillMatrixId: string;
 }
 
 interface IProps {
@@ -161,7 +161,7 @@ export const TableComponent = ({
 
   const handleCopySubmit = (name: string, position?: IDBPosition) => {
     if (handleCopy && activeListElement.id && position) {
-      handleCopy({ positionId: position.id || '', hardSkillMatrixId: activeListElement.id });
+      handleCopy({ positionId: position.id || '', skillMatrixId: activeListElement.id });
     }
   };
 
