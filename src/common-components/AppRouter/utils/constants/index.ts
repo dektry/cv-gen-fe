@@ -20,6 +20,7 @@ import { CreateEmployee } from 'Pages/CreateEmployee';
 import { HardSkillsMatrix } from 'Pages/Settings/components/HardSkillsMatrix';
 import { Settings } from 'Pages/Settings';
 import { HardSkillsMatrixList } from 'Pages/Settings/components/HardSkillsMatrixList';
+import { SoftSkillsMatrixList } from 'Pages/Settings/components/SoftSkillsMatrixList';
 
 import routes from 'config/routes.json';
 
@@ -51,6 +52,7 @@ export const privateRoutes: IRoute[] = [
   { path: routes.hardSkillsMatrixDetails, component: HardSkillsMatrix },
   { path: routes.settingsLevelsPositions, component: Settings },
   { path: routes.settingsHardSkillsMatrixList, component: HardSkillsMatrixList },
+  { path: routes.settingsSoftSkillsMatrixList, component: SoftSkillsMatrixList },
 ];
 
 if (process.env.REACT_APP_ENV === 'development') {
