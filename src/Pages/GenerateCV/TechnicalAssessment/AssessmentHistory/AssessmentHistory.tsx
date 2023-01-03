@@ -1,12 +1,20 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, generatePath, Link } from 'react-router-dom';
 
-import { message, Spin } from 'antd';
+import { message } from 'antd';
 import Typography from '@mui/material/Typography';
+
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { loadTechAssessments, techAssessmentSelector, setTechAssessments } from 'store/reducers/techAssessment';
+import {
+  loadTechAssessments,
+  techAssessmentSelector,
+  setTechAssessments,
+  getTechAssessmentResults,
+  deleteTechAssessment,
+} from 'store/reducers/techAssessment';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
 import { levelsSelector, loadLevels, chooseLevel } from 'store/reducers/levels';
@@ -37,7 +45,8 @@ export const AssessmentHistory = () => {
 
   const classes = useStyles({ theme });
 
-  const { assessmentsHistory, isLoading } = useSelector(techAssessmentSelector);
+  const { assessmentsHistory, isHistoryLoading, assessmentShortResult, isLoading } =
+    useSelector(techAssessmentSelector);
   const {
     currentEmployee: { firstName, lastName, position, level, location },
   } = useSelector(employeesSelector);
@@ -108,10 +117,10 @@ export const AssessmentHistory = () => {
     setCurrentMatrix(foundMatrix);
   };
 
-  const handleRowClick = (assessmentId: string, position: string) => {
-    const foundMatrix = matrix.find((el) => el.position.name === position) as IHardSkillsMatrix;
-    navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId, matrixId: foundMatrix.id }));
+  const handleRowClick = (assessmentId: string) => {
+    navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId }));
   };
+
   useEffect(() => {
     return function clear() {
       dispatch(setTechAssessments([]));
@@ -119,7 +128,7 @@ export const AssessmentHistory = () => {
     };
   }, []);
 
-  if (isLoading) return <Spin size="large" tip={'Loading technical assessment...'} />;
+  if (isHistoryLoading || levelsLoading) return <CircularProgress sx={{ margin: 'auto' }} />;
 
   return (
     <>
@@ -135,7 +144,14 @@ export const AssessmentHistory = () => {
               Show comparison
             </Link>
           </div>
-          <HistoryTable handleRowClick={handleRowClick} assessments={assessmentsHistory} />
+          <HistoryTable
+            handleRowClick={handleRowClick}
+            assessments={assessmentsHistory}
+            getAssessment={getTechAssessmentResults}
+            assessmentShortResult={assessmentShortResult}
+            isLoading={isLoading}
+            deleteAssessment={deleteTechAssessment}
+          />
         </>
       ) : (
         <div>Technical assessments not found</div>

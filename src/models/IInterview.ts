@@ -47,7 +47,7 @@ export interface ICompleteInterview {
   positionId: string;
   comment?: string;
   isOffered?: boolean;
-  answers: IInterviewAnswers;
+  answers: IInterviewResultAnswers;
 }
 
 export interface IInterviewCandidate {

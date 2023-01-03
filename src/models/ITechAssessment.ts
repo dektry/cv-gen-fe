@@ -69,12 +69,14 @@ export interface ITechAssessmentState {
   assessments: IAssessmentFromDB[];
   assessmentsHistory: IAssessmentHistoryRecord[];
   isLoading: boolean;
+  isHistoryLoading: boolean;
   pageSize: number;
   currentPage: number;
   chosenPosition?: string;
   chosenLevel?: string;
   skillId?: string;
   assessmentResult: NullableField<IAssessmentDetailedResult>;
+  assessmentShortResult: NullableField<IAssessmentFromDB>;
 }
 
 export interface ICompleteAssessment {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { generatePath, useParams, useLocation } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { Spin } from 'antd';
 
@@ -16,18 +16,13 @@ import paths from 'config/routes.json';
 
 import { AssessmentForm } from './components/AssessmentForm.tsx';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
-import { Typography } from '@mui/material';
+
+import { DatePositionLevelInfo } from 'common-components/DatePositionLevelInfo';
 
 import { IDBLevels, IDBPosition } from 'models/IUser';
 
-import { useStyles } from './styles';
-import theme from 'theme/theme';
-
 export const AssessmentSetUp = () => {
   const dispatch = useAppDispatch();
-  const location = useLocation();
-
-  const classes = useStyles({ theme });
 
   const { id, levelId, positionId, assessmentId, matrixId } = useParams<{
     id: string;
@@ -57,7 +52,7 @@ export const AssessmentSetUp = () => {
       dispatch(loadEmployee(id));
     }
 
-    if (!allLevels.length) {
+    if (!allLevels.length && !assessmentId) {
       dispatch(loadLevels());
     }
 
@@ -78,7 +73,7 @@ export const AssessmentSetUp = () => {
       setPosition(assessmentResult.position);
       setLevel(assessmentResult.level);
     }
-  }, [assessmentResult, allLevels.length]);
+  }, [assessmentResult, allLevels.length, currentMatrix]);
 
   useEffect(() => {
     return () => {
@@ -100,32 +95,15 @@ export const AssessmentSetUp = () => {
 
   if (isLoading || levelsLoading) return <Spin size="large" tip={'Loading page content...'} />;
 
-  const interviewDate = location.pathname.includes('new-interview') ? new Date().toLocaleDateString('en-GB') : '';
-
   return (
     <>
       <EmployeeHeader personalData={personalData} backPath={backPath} />
-      <div className={classes.upperContainer}>
-        <Typography variant="h3">TECHNICAL ASSESSMENT {interviewDate}</Typography>
-        <div className={classes.positionsContainer}>
-          <div className={classes.positionLevelContainer}>
-            <Typography variant="h3">Position: </Typography>
-            {position?.name && (
-              <Typography variant="h5" className={classes.tag}>
-                {position?.name}
-              </Typography>
-            )}
-          </div>
-          <div className={classes.positionLevelContainer}>
-            <Typography variant="h3">Level: </Typography>
-            {level?.name && (
-              <Typography variant="h5" className={classes.tag}>
-                {level?.name}
-              </Typography>
-            )}
-          </div>
-        </div>
-      </div>
+      <DatePositionLevelInfo
+        title={'TECHNICAL ASSESSMENT'}
+        date={assessmentResult?.created}
+        position={position?.name}
+        level={level?.name}
+      />
       <AssessmentForm />
     </>
   );

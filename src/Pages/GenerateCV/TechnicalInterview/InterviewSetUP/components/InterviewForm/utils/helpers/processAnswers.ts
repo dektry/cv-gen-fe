@@ -1,7 +1,7 @@
-import { IInterviewAnswers, IInterviewResult, IInterviewMatrix } from 'models/IInterview';
+import { IInterviewResult, IInterviewMatrix, IInterviewResultAnswers } from 'models/IInterview';
 
 export const processInterviewAnswers = (interviewResult: IInterviewResult, interviewMatrix: IInterviewMatrix) => {
-  let resultAnswers: IInterviewAnswers = {};
+  let resultAnswers: IInterviewResultAnswers = {} as IInterviewResultAnswers;
   for (const answer of interviewResult.answers) {
     const { skill, assigned } = answer;
     let skillFromMatrix;

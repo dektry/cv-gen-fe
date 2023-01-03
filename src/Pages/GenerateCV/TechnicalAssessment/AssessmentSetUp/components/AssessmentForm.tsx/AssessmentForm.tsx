@@ -23,7 +23,7 @@ import { LevelTypesEnum } from 'models/IInterview';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
-import { IAssessmentDetailedResult, IAssessmentDetailedSkill, IFormAssessmentResult } from 'models/ITechAssessment';
+import { IAssessmentDetailedSkill, IFormAssessmentResult } from 'models/ITechAssessment';
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
   label: level,
@@ -47,23 +47,23 @@ export const AssessmentForm = () => {
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
   const { assessmentResult } = useSelector(techAssessmentSelector);
 
+  const defaultValues = assessmentResult?.id ? assessmentResult : currentMatrix;
+
   const methods = useForm({
-    // Type cast here used to avoid meaningless convertation hard skills matrix into assessment result interface structure.
-    // It is meaningless because we have to add just few empty fields to whole matrix and to the every skill.
-    defaultValues: { matrix: currentMatrix as IAssessmentDetailedResult, comment: '' },
+    defaultValues: { matrix: defaultValues, comment: '' },
   });
 
+  const values = useWatch({ control: methods.control });
+
   useEffect(() => {
-    if (assessmentResult?.position) {
-      const defaultValues = { matrix: assessmentResult, comment: assessmentResult.comment };
-      methods.reset({ ...defaultValues });
+    if (assessmentResult?.id) {
+      const updatedValues = { matrix: assessmentResult, comment: assessmentResult.comment };
+      methods.reset({ ...updatedValues });
     } else {
-      const defaultValues = { matrix: currentMatrix, comment: '' };
-      methods.reset({ ...defaultValues });
+      const updatedValues = { matrix: currentMatrix, comment: '' };
+      methods.reset({ ...updatedValues });
     }
   }, [currentMatrix, assessmentResult]);
-
-  const values = useWatch({ control: methods.control });
 
   const { fields } = useFieldArray({
     name: 'matrix.skillGroups',
@@ -74,18 +74,24 @@ export const AssessmentForm = () => {
   const handleSaveClick = () => {
     const allSkills: IAssessmentDetailedSkill[] = [];
     values.matrix?.skillGroups?.forEach((group) => group.skills?.forEach((skill) => allSkills.push(skill)));
-    const grades: { value: string; skillId: string }[] = allSkills.map((skill) => ({
-      value: skill.currentSkillLevel?.value || 'None',
-      skillId: skill.id || '',
-    }));
+    const grades: { value: string; skillId: string; gradeId: string }[] = allSkills.map(
+      (skill: IAssessmentDetailedSkill) => {
+        return {
+          gradeId: skill.currentSkillLevel?.id || '',
+          value: skill.currentSkillLevel?.value || 'None',
+          skillId: skill.id || '',
+        };
+      }
+    );
 
     const result: IFormAssessmentResult = {
       employeeId: id || '',
-      levelId: levelId || '',
-      positionId: positionId || '',
+      levelId: levelId || assessmentResult?.level?.id || '',
+      positionId: positionId || assessmentResult?.position?.id || '',
       comment: values.comment || '',
       grades,
     };
+
     if (isAnyQuestionChanged) {
       const requestBody = {
         matrix: values.matrix || ([] as IFormHardSkillsMatrix),
@@ -94,6 +100,7 @@ export const AssessmentForm = () => {
       };
       dispatch(editHardSkillsMatrix(requestBody));
     }
+
     if (assessmentId) {
       dispatch(editTechAssessment({ assessment: result, id: assessmentId }));
     } else {

@@ -9,12 +9,16 @@ import {
   completeTechAssessmentAction,
   editTechAssessmentAction,
   getTechAssessmentAction,
+  getTechAssessmentResultsAction,
+  deleteTechAssessmentAction,
 } from 'store/reducers/techAssessment/actionTypes';
 import {
   getAllTechAssessments,
   httpCompleteTechAssessment,
   httpEditTechAssessment,
   httpGetTechAssessment,
+  httpGetTechAssessmentResults,
+  httpDeleteTechAssessment,
 } from 'services/requests/techAssessment';
 
 import { IAssessmentHistoryRecord, IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
@@ -43,6 +47,14 @@ export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: 
   return httpGetTechAssessment(id);
 });
 
+export const getTechAssessmentResults = createAsyncThunk(getTechAssessmentResultsAction, (id: string) => {
+  return httpGetTechAssessmentResults(id);
+});
+
+export const deleteTechAssessment = createAsyncThunk(deleteTechAssessmentAction, (id: string) => {
+  return httpDeleteTechAssessment(id);
+});
+
 const initialState: ITechAssessmentState = {
   assessments: [],
   assessmentsHistory: [],
@@ -52,6 +64,8 @@ const initialState: ITechAssessmentState = {
   chosenLevel: undefined,
   chosenPosition: undefined,
   assessmentResult: null,
+  assessmentShortResult: null,
+  isHistoryLoading: false,
 };
 
 const techAssessment = createSlice({
@@ -79,10 +93,13 @@ const techAssessment = createSlice({
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
     },
+    setIsHistoryLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isHistoryLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadTechAssessments.pending, (state) => {
-      state.isLoading = true;
+      state.isHistoryLoading = true;
     });
     builder.addCase(loadTechAssessments.fulfilled, (state, { payload }) => {
       if (payload.length) {
@@ -94,14 +111,14 @@ const techAssessment = createSlice({
           };
         });
         state.assessmentsHistory = processedAssessments;
-        state.isLoading = false;
+        state.isHistoryLoading = false;
       } else {
         state.assessmentsHistory = [];
-        state.isLoading = false;
+        state.isHistoryLoading = false;
       }
     });
     builder.addCase(loadTechAssessments.rejected, (state) => {
-      state.isLoading = false;
+      state.isHistoryLoading = false;
       message.error(`Server error. Please contact admin`);
     });
     builder.addCase(getTechAssessment.pending, (state) => {
@@ -127,7 +144,7 @@ const techAssessment = createSlice({
       }, 1000);
     });
     builder.addCase(editTechAssessment.fulfilled, () => {
-      message.success('Changes saved successfully');
+      message.success('Changes to technical assessment saved successfully');
       setTimeout(() => {
         window.location.replace(
           `${paths.technicalAssessmentHistory.replace(
@@ -136,6 +153,9 @@ const techAssessment = createSlice({
           )}`
         );
       }, 1000);
+    });
+    builder.addCase(getTechAssessmentResults.fulfilled, (state, { payload }) => {
+      state.assessmentShortResult = payload;
     });
   },
 });

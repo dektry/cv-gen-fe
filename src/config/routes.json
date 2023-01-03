@@ -9,7 +9,7 @@
     "technicalInterview": "/candidate/:id/tech-interview",
     "technicalAssessmentHistory": "/employee/:id/tech-interview/history",
     "softSkillAssessmentHistory": "/employee/:id/soft-interview/history",
-    "prevTechnicalAssessment": "/employee/:id/tech-interview/history/:assessmentId/:matrixId",
+    "prevTechnicalAssessment": "/employee/:id/tech-interview/history/:assessmentId",
     "prevSoftSkillsAssessment": "/employee/:id/soft-interview/history/:assessmentId",
     "technicalAssessment": "/employee/:id/tech-interview/:positionId/:levelId/:matrixId/new-interview",
     "softAssessment": "/employee/:id/soft-interview/:positionId/:levelId",
