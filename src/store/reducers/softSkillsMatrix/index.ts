@@ -4,7 +4,7 @@ import { message } from 'antd';
 import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
-import { ISoftSkillsMatrix, ISoftSkillsMatrixState, ISkill, IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
+import { ISoftSkillsMatrixState, ISkill, IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
 import {
@@ -33,7 +33,7 @@ const softSkillsMatrix = createSlice({
     setSoftSkillsMatrixIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.softSkillMatrixLoading = payload;
     },
-    setCurrentSoftSkillsMatrix: (state, { payload }: PayloadAction<ISoftSkillsMatrix>) => {
+    setCurrentSoftSkillsMatrix: (state, { payload }: PayloadAction<IFormSoftSkillsMatrix>) => {
       state.currentMatrix = payload;
     },
     setCurrentPosition: (state, { payload }: PayloadAction<IDBPosition>) => {

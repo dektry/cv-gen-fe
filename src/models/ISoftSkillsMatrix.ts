@@ -40,7 +40,6 @@ export interface ILevel {
 export interface ISkill {
   value: string;
   id?: string;
-  currentLevel?: string;
   levels: ILevel[];
 }
 
