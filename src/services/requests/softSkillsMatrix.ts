@@ -68,7 +68,7 @@ export const httpCopySoftSkillsMatrix = async (
 export const httpCreateSoftSkillsMatrix = async (matrix: IFormSoftSkillsMatrix, positionId: string) => {
   try {
     const { data } = await apiClient.post(endpoints.softSkillsMatrix, {
-      skillGroups: matrix.skillGroups,
+      skills: matrix.skills,
       positionId: positionId,
     });
     return data;
@@ -85,7 +85,7 @@ export const httpCreateSoftSkillsMatrix = async (matrix: IFormSoftSkillsMatrix, 
 export const httpEditSoftSkillsMatrix = async (matrix: IFormSoftSkillsMatrix, positionId: string) => {
   try {
     const { data } = await apiClient.put(`${endpoints.softSkillsMatrix}/${matrix.id}`, {
-      skillGroups: matrix.skillGroups,
+      skills: matrix.skills,
       positionId: positionId,
     });
     return data;

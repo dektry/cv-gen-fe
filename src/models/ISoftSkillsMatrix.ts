@@ -1,12 +1,35 @@
 import { IDBPosition } from './IUser';
 
-export interface IQuestion {
-  id?: string;
-  value: string;
+export enum SoftLevelTypesEnum {
+  None = 'None',
+  A = 'A',
+  A1 = 'A1',
+  B = 'B',
+  C = 'C',
+  D = 'D',
 }
+
+export const levelTypes: { [key in SoftLevelTypesEnum]: string } = {
+  [SoftLevelTypesEnum.None]: 'None',
+  [SoftLevelTypesEnum.D]: 'D',
+  [SoftLevelTypesEnum.C]: 'C',
+  [SoftLevelTypesEnum.B]: 'B',
+  [SoftLevelTypesEnum.A]: 'A',
+  [SoftLevelTypesEnum.A1]: 'A1',
+};
+
+export const levelTypesPriority: { [key in SoftLevelTypesEnum]: number } = {
+  [SoftLevelTypesEnum.None]: 1,
+  [SoftLevelTypesEnum.D]: 2,
+  [SoftLevelTypesEnum.C]: 3,
+  [SoftLevelTypesEnum.B]: 4,
+  [SoftLevelTypesEnum.A]: 5,
+  [SoftLevelTypesEnum.A1]: 6,
+};
 
 export interface ILevel {
   value: string;
+  description: string;
   id: string;
   level_id: {
     id: string;
@@ -18,20 +41,13 @@ export interface ISkill {
   value: string;
   id?: string;
   currentLevel?: string;
-  questions: IQuestion[];
   levels: ILevel[];
-}
-
-export interface ISkillGroup {
-  id?: string;
-  value: string;
-  skills: ISkill[];
 }
 
 export interface ISoftSkillsMatrix {
   id?: string;
   position: IDBPosition;
-  skillGroups: ISkillGroup[];
+  skills: ISkill[];
 }
 
 export interface ISoftSkillsMatrixState {
@@ -54,35 +70,24 @@ export interface IFormPosition {
 export interface IFormLevel {
   value?: string;
   id?: string;
+  description?: string;
   level_id?: {
     id?: string;
     name?: string;
   };
 }
 
-export interface IFormQuestion {
-  id?: string;
-  value?: string;
-}
-
 export interface IFormSkill {
   value?: string;
   id?: string;
   grades?: IFormGrade[];
-  questions?: IFormQuestion[];
   levels?: IFormLevel[];
-}
-
-export interface IFormSkillGroup {
-  id?: string;
-  value?: string;
-  skills?: IFormSkill[];
 }
 
 export interface IFormSoftSkillsMatrix {
   id?: string;
   position?: IFormPosition;
-  skillGroups?: IFormSkillGroup[];
+  skills?: IFormSkill[];
 }
 
 export interface ICopySoftSkillsMatrixProps {

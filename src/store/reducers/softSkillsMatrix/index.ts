@@ -39,9 +39,9 @@ const softSkillsMatrix = createSlice({
     setCurrentPosition: (state, { payload }: PayloadAction<IDBPosition>) => {
       state.currentMatrix.position = payload;
     },
-    setCurrentSkillGroups: (state, { payload }: PayloadAction<IFormSoftSkillsMatrix>) => {
-      if (payload.skillGroups) {
-        state.currentMatrix.skillGroups = payload.skillGroups;
+    setCurrentSkills: (state, { payload }: PayloadAction<IFormSoftSkillsMatrix>) => {
+      if (payload.skills) {
+        state.currentMatrix.skills = payload.skills;
       }
     },
     setCurrentSoftSkillsMatrixId: (state, { payload }: PayloadAction<string>) => {
@@ -121,7 +121,7 @@ export const {
   setSoftSkillsMatrixIsLoading,
   setCurrentSoftSkillsMatrix,
   setCurrentPosition,
-  setCurrentSkillGroups,
+  setCurrentSkills,
   setCurrentSoftSkillsMatrixId,
   setIsAssessmentPage,
 } = softSkillsMatrix.actions;
