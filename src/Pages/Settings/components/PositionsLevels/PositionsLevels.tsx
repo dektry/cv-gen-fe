@@ -21,8 +21,12 @@ export const PositionsLevels = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(loadPositions());
-    dispatch(loadLevels());
+    if (!allPositions.length) {
+      dispatch(loadPositions());
+    }
+    if (!allLevels.length) {
+      dispatch(loadLevels());
+    }
   }, []);
 
   const handleCreatePosition = (name?: string) => {

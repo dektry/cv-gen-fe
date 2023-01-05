@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { getOneSoftSkillsMatrix } from 'store/reducers/softSkillsMatrix/thunks';
-import { loadLevels } from 'store/reducers/levels';
+import { loadLevels, levelsSelector } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -23,7 +23,7 @@ import { ISoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 
 import paths from 'config/routes.json';
 
-const steps = ['Technical assessment questions', 'Setting the level'];
+const steps = ['Soft assessment questions', 'Setting the level'];
 
 export const SoftSkillsMatrix = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,6 +31,7 @@ export const SoftSkillsMatrix = () => {
   const navigate = useNavigate();
 
   const { currentMatrix } = useSelector(softSkillsMatrixSelector);
+  const { allLevels } = useSelector(levelsSelector);
 
   const classes = useStyles({ theme });
 
@@ -38,7 +39,9 @@ export const SoftSkillsMatrix = () => {
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
-    dispatch(loadLevels());
+    if (!allLevels.length) {
+      dispatch(loadLevels());
+    }
 
     return () => {
       dispatch(setCurrentSoftSkillsMatrix({} as ISoftSkillsMatrix));

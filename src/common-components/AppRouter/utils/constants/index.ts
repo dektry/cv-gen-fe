@@ -23,6 +23,7 @@ import { HardSkillsMatrixList } from 'Pages/Settings/components/HardSkillsMatrix
 import { SoftSkillsMatrixList } from 'Pages/Settings/components/SoftSkillsMatrixList';
 
 import routes from 'config/routes.json';
+import { SoftSkillsMatrix } from 'Pages/Settings/components/SoftSkillsMatrix';
 
 export interface IRoute {
   path: string;
@@ -53,6 +54,8 @@ export const privateRoutes: IRoute[] = [
   { path: routes.settingsLevelsPositions, component: Settings },
   { path: routes.settingsHardSkillsMatrixList, component: HardSkillsMatrixList },
   { path: routes.settingsSoftSkillsMatrixList, component: SoftSkillsMatrixList },
+  { path: routes.softSkillsMatrixSetUp, component: SoftSkillsMatrix },
+  { path: routes.softSkillsMatrixDetails, component: SoftSkillsMatrix },
 ];
 
 if (process.env.REACT_APP_ENV === 'development') {

@@ -28,7 +28,9 @@ export const SoftSkillsMatrixList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(loadPositions());
+    if (!allPositions.length) {
+      dispatch(loadPositions());
+    }
     dispatch(getAllSoftSkillsMatrix());
   }, []);
 

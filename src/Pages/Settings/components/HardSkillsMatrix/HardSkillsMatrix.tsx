@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
-import { loadLevels } from 'store/reducers/levels';
+import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -31,6 +31,7 @@ export const HardSkillsMatrix = () => {
   const navigate = useNavigate();
 
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
+  const { allLevels } = useSelector(levelsSelector);
 
   const classes = useStyles({ theme });
 
@@ -38,7 +39,9 @@ export const HardSkillsMatrix = () => {
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
-    dispatch(loadLevels());
+    if (!allLevels.length) {
+      dispatch(loadLevels());
+    }
 
     return () => {
       dispatch(setCurrentHardSkillsMatrix({} as IHardSkillsMatrix));

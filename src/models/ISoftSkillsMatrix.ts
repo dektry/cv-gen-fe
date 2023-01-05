@@ -79,7 +79,6 @@ export interface IFormLevel {
 export interface IFormSkill {
   value?: string;
   id?: string;
-  grades?: IFormGrade[];
   levels?: IFormLevel[];
 }
 

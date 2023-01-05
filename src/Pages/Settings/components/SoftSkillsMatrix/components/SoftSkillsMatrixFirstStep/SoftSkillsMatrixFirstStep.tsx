@@ -67,7 +67,9 @@ export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => 
   const values = useWatch({ control: methods.control });
 
   const handleAddSkill = () => {
-    append({ id: uuidv4(), value: '', levels: [] });
+    const appendValue = { value: '', id: uuidv4(), levels: [] };
+
+    append(appendValue);
   };
 
   const handleSaveMatrix: SubmitHandler<IProps> = (data) => {
@@ -94,13 +96,14 @@ export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => 
     (values.skills as IFormSkill[])?.some(
       (el) => !el.value || !el.levels?.length || (el.levels as IFormLevel[]).some((level) => !level.value)
     );
+
   return (
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSaveMatrix)} className={classes.container}>
-          {fields.map((group, idx) => (
-            <SoftSkillsMatrixSkill key={group.fieldKey} idx={idx} removeSection={remove} />
-          ))}
+          {fields.map((skill, idx) => {
+            return <SoftSkillsMatrixSkill key={skill.fieldKey} idx={idx} removeSection={remove} />;
+          })}
           <AddButton title={'Add new section'} onClick={handleAddSkill} />
           <div className={classes.buttonsContainer}>
             <Button onClick={handleResetModalOpen}>RESET CHANGES</Button>
