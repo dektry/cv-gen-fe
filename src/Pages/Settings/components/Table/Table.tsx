@@ -47,6 +47,7 @@ interface IProps {
   editModalTitle: string;
   copyModalTitle?: string;
   hardSkillsMatrixId?: string;
+  matrixLoading?: boolean;
 }
 
 interface FormValues {
@@ -64,6 +65,7 @@ export const TableComponent = ({
   addModalTitle,
   editModalTitle,
   copyModalTitle,
+  matrixLoading,
 }: IProps) => {
   const classes = useStyles({ theme });
   const navigate = useNavigate();
@@ -293,6 +295,7 @@ export const TableComponent = ({
           label={text}
           buttonText={'Save'}
           data={positionsThatAreNotInMatrixList}
+          matrixLoading={matrixLoading}
         />
       )}
       <DeleteModal

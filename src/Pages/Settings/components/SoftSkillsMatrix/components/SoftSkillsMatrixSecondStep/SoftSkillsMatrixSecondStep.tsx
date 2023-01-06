@@ -13,7 +13,7 @@ import { SoftSkillLevelsTable } from './components/SoftSkillLevelsTable';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { createSoftSkillsMatrix, editSoftSkillsMatrix } from 'store/reducers/softSkillsMatrix/thunks';
-import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
+import { IFormSoftSkillsMatrix, IFormLevel, IFormSkill } from 'models/ISoftSkillsMatrix';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
 
@@ -86,6 +86,10 @@ export const SoftSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     setIsSaveModalOpen(false);
   };
 
+  const disabled = (values.matrix?.skills as IFormSkill[])?.some((el) =>
+    (el.levels as IFormLevel[]).some((level) => !level.level_id?.id)
+  );
+
   return (
     <>
       <FormProvider {...methods}>
@@ -95,7 +99,7 @@ export const SoftSkillsMatrixSecondStep = ({ matrix }: IProps) => {
           ))}
           <div className={classes.buttonsContainer}>
             <Button onClick={handleResetModalOpen}>RESET CHANGES</Button>
-            <Button type="submit" className={classes.saveButton}>
+            <Button type="submit" className={classes.saveButton} disabled={disabled}>
               Save changes
             </Button>
           </div>

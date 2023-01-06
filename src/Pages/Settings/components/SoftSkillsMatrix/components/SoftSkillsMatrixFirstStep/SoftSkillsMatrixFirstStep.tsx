@@ -94,7 +94,11 @@ export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => 
   const disabled =
     !values.skills ||
     (values.skills as IFormSkill[])?.some(
-      (el) => !el.value || !el.levels?.length || (el.levels as IFormLevel[]).some((level) => !level.value)
+      (el) =>
+        !el.value ||
+        !el.levels?.length ||
+        (el.levels as IFormLevel[]).some((level) => !level.value) ||
+        (el.levels as IFormLevel[]).some((level) => !level.description)
     );
 
   return (

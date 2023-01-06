@@ -22,7 +22,7 @@ import { ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
 
 export const HardSkillsMatrixList = () => {
   const { allPositions } = useSelector(positionsSelector);
-  const { matrix } = useSelector(hardSkillsMatrixSelector);
+  const { matrix, hardSkillMatrixLoading } = useSelector(hardSkillsMatrixSelector);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -72,6 +72,7 @@ export const HardSkillsMatrixList = () => {
         addModalTitle={'ADD NEW POSITION TECHNICAL ASSESSMENT'}
         editModalTitle={'EDIT POSITION TECHNICAL ASSESSMENT'}
         copyModalTitle={'SELECT POSITION TECHNICAL ASSESSMENT'}
+        matrixLoading={hardSkillMatrixLoading}
       />
     </>
   );

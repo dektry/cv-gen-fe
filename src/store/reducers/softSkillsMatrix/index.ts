@@ -70,7 +70,7 @@ const softSkillsMatrix = createSlice({
     });
     builder.addCase(getOneSoftSkillsMatrix.fulfilled, (state, { payload }) => {
       state.softSkillMatrixLoading = false;
-      for (const group of payload.skillGroups) {
+      for (const group of payload.skills) {
         group.skills = group.skills?.map((skill: ISkill) => {
           const levels = sortSkillLevels(skill.levels);
 

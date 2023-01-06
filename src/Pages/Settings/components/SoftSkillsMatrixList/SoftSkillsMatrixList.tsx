@@ -22,7 +22,7 @@ import routes from 'config/routes.json';
 
 export const SoftSkillsMatrixList = () => {
   const { allPositions } = useSelector(positionsSelector);
-  const { matrix } = useSelector(softSkillsMatrixSelector);
+  const { matrix, softSkillMatrixLoading } = useSelector(softSkillsMatrixSelector);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -71,6 +71,7 @@ export const SoftSkillsMatrixList = () => {
         addModalTitle={'ADD NEW POSITION SOFT SKILLS ASSESSMENT'}
         editModalTitle={'EDIT POSITION SOFT SKILLS ASSESSMENT'}
         copyModalTitle={'SELECT POSITION SOFT SKILLS ASSESSMENT'}
+        matrixLoading={softSkillMatrixLoading}
       />
     </>
   );

@@ -23,6 +23,7 @@ interface IProps {
   buttonText: string;
   inputValue?: string;
   data?: IListElement[];
+  matrixLoading?: boolean;
 }
 
 export const SkillsMatrixCreateEditModal = ({
@@ -34,8 +35,10 @@ export const SkillsMatrixCreateEditModal = ({
   buttonText,
   inputValue,
   data,
+  matrixLoading,
 }: IProps) => {
   const classes = useStyles({ theme });
+  console.log(matrixLoading);
 
   const [value, setValue] = useState('');
   const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);
@@ -114,7 +117,7 @@ export const SkillsMatrixCreateEditModal = ({
             <SaveButton
               title={data ? 'Start' : buttonText}
               handleClickOkButton={() => onSubmit(value, position)}
-              error={disabled}
+              error={disabled || Boolean(matrixLoading)}
             />
           </div>
         </Box>
