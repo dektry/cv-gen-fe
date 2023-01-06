@@ -22,5 +22,6 @@
     "softSkillToCv": "/softSkillToCv",
     "education": "/education",
     "language": "/language",
-    "hardSkillsMatrix": "/hard-skill-matrix"
+    "hardSkillsMatrix": "/hard-skill-matrix",
+    "softSkillsMatrix": "/soft-skill-matrix"
   }

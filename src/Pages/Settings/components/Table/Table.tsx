@@ -9,17 +9,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Typography from '@mui/material/Typography';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
-import { HardSkillsMatrixCreateEditModal } from '../HardSkillsMatrixCreateEditModal';
-
-import paths from 'config/routes.json';
+import { SkillsMatrixCreateEditModal } from '../SkillsMatrixCreateEditModal';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -33,7 +29,7 @@ export interface IListElement {
 
 export interface IHandleCopyProp {
   positionId: string;
-  hardSkillMatrixId: string;
+  skillMatrixId: string;
 }
 
 interface IProps {
@@ -49,6 +45,8 @@ interface IProps {
   editModalTitle: string;
   copyModalTitle?: string;
   hardSkillsMatrixId?: string;
+  matrixLoading?: boolean;
+  editPath?: string;
 }
 
 interface FormValues {
@@ -66,11 +64,12 @@ export const TableComponent = ({
   addModalTitle,
   editModalTitle,
   copyModalTitle,
+  matrixLoading,
+  editPath,
 }: IProps) => {
   const classes = useStyles({ theme });
   const navigate = useNavigate();
 
-  const [popoverAnchorElement, setPopoverAnchorElement] = useState<HTMLButtonElement | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -93,21 +92,10 @@ export const TableComponent = ({
     keyName: 'fieldKey',
   });
 
-  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>, el: IListElement, idx: number) => {
+  const handleOpenDeleteModal = (el: IListElement, idx: number) => {
     setActiveListElement(el);
-
     setListElementNumericId(idx);
-    setPopoverAnchorElement(event.currentTarget);
-  };
-
-  const handleClosePopover = () => {
-    setPopoverAnchorElement(null);
-    setActiveListElement({} as IListElement);
-  };
-
-  const handleOpenDeleteModal = () => {
     setIsDeleteModalOpen(true);
-    setPopoverAnchorElement(null);
   };
 
   const handleDeleteModalClose = () => {
@@ -139,12 +127,14 @@ export const TableComponent = ({
     setIsCreateModalOpen(false);
   };
 
-  const handleEditClick = () => {
-    navigate(generatePath(paths.hardSkillsMatrixDetails, { id: activeListElement.id }));
+  const handleEditClick = (id: string) => {
+    if (editPath) {
+      navigate(generatePath(editPath, { id }));
+    }
   };
 
-  const handleOpenEditModal = () => {
-    setPopoverAnchorElement(null);
+  const handleOpenEditModal = (el: IListElement) => {
+    setActiveListElement(el);
     setIsEditModalOpen(true);
   };
 
@@ -163,8 +153,8 @@ export const TableComponent = ({
     setIsEditModalOpen(false);
   };
 
-  const handleOpenCopyModal = () => {
-    setPopoverAnchorElement(null);
+  const handleOpenCopyModal = (el: IListElement) => {
+    setActiveListElement(el);
     setIsCopyModalOpen(true);
   };
 
@@ -175,12 +165,10 @@ export const TableComponent = ({
 
   const handleCopySubmit = (name: string, position?: IDBPosition) => {
     if (handleCopy && activeListElement.id && position) {
-      handleCopy({ positionId: position.id || '', hardSkillMatrixId: activeListElement.id });
+      handleCopy({ positionId: position.id || '', skillMatrixId: activeListElement.id });
     }
   };
 
-  const open = Boolean(popoverAnchorElement);
-  const popOverId = open ? 'simple-popover' : undefined;
   const modalTitle = name.includes('Position') ? 'Delete position' : 'Delete level';
   const text = name.includes('Position') ? 'Position' : 'Level';
   const modalText = `Are you sure that you want to delete this ${text.toLowerCase()}? All data will be lost.`;
@@ -216,43 +204,72 @@ export const TableComponent = ({
                   {row.name}
                 </TableCell>
                 <TableCell className={classes.cellRight}>
+                  {handleCopy && (
+                    <Button
+                      className={classes.button}
+                      onClick={() => handleOpenCopyModal(row)}
+                      endIcon={
+                        <svg
+                          style={{ marginRight: '12px' }}
+                          width="13"
+                          height="15"
+                          viewBox="0 0 13 15"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M1.14706 15C0.841177 15 0.573529 14.8875 0.344118 14.6625C0.114706 14.4375 0 14.175 0 13.875V2.56875H1.14706V13.875H10.2088V15H1.14706ZM3.44118 12.75C3.13529 12.75 2.86765 12.6375 2.63824 12.4125C2.40882 12.1875 2.29412 11.925 2.29412 11.625V1.125C2.29412 0.825 2.40882 0.5625 2.63824 0.3375C2.86765 0.1125 3.13529 0 3.44118 0H11.8529C12.1588 0 12.4265 0.1125 12.6559 0.3375C12.8853 0.5625 13 0.825 13 1.125V11.625C13 11.925 12.8853 12.1875 12.6559 12.4125C12.4265 12.6375 12.1588 12.75 11.8529 12.75H3.44118Z"
+                            fill="#333333"
+                          />
+                        </svg>
+                      }
+                    />
+                  )}
                   <Button
-                    className={classes.more}
-                    onClick={(e) =>
-                      handleClickPopover(e, { id: row.id || '', name: row.name, positionId: row.positionId }, idx)
+                    className={classes.button}
+                    onClick={() => (handleUpdate ? handleOpenEditModal(row) : handleEditClick(row.id || ''))}
+                    endIcon={
+                      <svg
+                        style={{ marginRight: '12px' }}
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M0 11.0837V14H2.91626L11.5173 5.39897L8.60103 2.48271L0 11.0837ZM13.7725 3.14373C14.0758 2.84044 14.0758 2.35051 13.7725 2.04722L11.9528 0.227468C11.6495 -0.0758228 11.1596 -0.0758228 10.8563 0.227468L9.43314 1.6506L12.3494 4.56687L13.7725 3.14373Z"
+                          fill="#333333"
+                        />
+                      </svg>
                     }
-                    endIcon={<MoreVertIcon className={classes.icon} color="disabled" />}
                   />
-                  <Popover
-                    className={classes.popOver}
-                    id={popOverId}
-                    open={open}
-                    anchorEl={popoverAnchorElement}
-                    onClose={handleClosePopover}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    }}
-                  >
-                    {handleCopy && (
-                      <Button className={classes.button} onClick={handleOpenCopyModal}>
-                        Copy
-                      </Button>
-                    )}
-                    <Button className={classes.button} onClick={handleUpdate ? handleOpenEditModal : handleEditClick}>
-                      Edit
-                    </Button>
-                    <Button className={classes.deleteButton} onClick={handleOpenDeleteModal}>
-                      Delete
-                    </Button>
-                  </Popover>
+                  <Button
+                    className={classes.button}
+                    onClick={() => handleOpenDeleteModal(row, idx)}
+                    endIcon={
+                      <svg
+                        style={{ marginRight: '12px' }}
+                        width="12"
+                        height="16"
+                        viewBox="0 0 12 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M0.857143 14.2222C0.857143 15.2 1.62857 16 2.57143 16H9.42857C10.3714 16 11.1429 15.2 11.1429 14.2222V4.55556C11.1429 4.00327 10.6951 3.55556 10.1429 3.55556H1.85714C1.30486 3.55556 0.857143 4.00327 0.857143 4.55556V14.2222ZM12 1.77778C12 1.28686 11.602 0.888889 11.1111 0.888889H9.4249C9.15338 0.888889 8.89353 0.778478 8.70506 0.583024L8.4378 0.305864C8.24932 0.110411 7.98948 0 7.71795 0H4.28205C4.01052 0 3.75068 0.110411 3.5622 0.305864L3.29494 0.583025C3.10647 0.778478 2.84662 0.888889 2.5751 0.888889H0.888889C0.397969 0.888889 0 1.28686 0 1.77778C0 2.2687 0.397969 2.66667 0.888889 2.66667H11.1111C11.602 2.66667 12 2.2687 12 1.77778Z"
+                          fill="#333333"
+                        />
+                      </svg>
+                    }
+                  />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <HardSkillsMatrixCreateEditModal
+      <SkillsMatrixCreateEditModal
         isOpen={isCreateModalOpen}
         onClose={handleCreateModaleClose}
         onSubmit={hanldeCreateSubmit}
@@ -261,7 +278,7 @@ export const TableComponent = ({
         buttonText={`Add ${text}`}
         data={positionsThatAreNotInMatrixList}
       />
-      <HardSkillsMatrixCreateEditModal
+      <SkillsMatrixCreateEditModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
         onSubmit={handleEditSubmit}
@@ -272,7 +289,7 @@ export const TableComponent = ({
         data={positions}
       />
       {handleCopy && copyModalTitle && (
-        <HardSkillsMatrixCreateEditModal
+        <SkillsMatrixCreateEditModal
           isOpen={isCopyModalOpen}
           onClose={handleCloseCopyModal}
           onSubmit={handleCopySubmit}
@@ -280,6 +297,7 @@ export const TableComponent = ({
           label={text}
           buttonText={'Save'}
           data={positionsThatAreNotInMatrixList}
+          matrixLoading={matrixLoading}
         />
       )}
       <DeleteModal

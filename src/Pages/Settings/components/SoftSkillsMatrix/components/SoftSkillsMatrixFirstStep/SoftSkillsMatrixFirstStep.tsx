@@ -7,19 +7,19 @@ import { SxProps } from '@mui/material';
 
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
-import { hardSkillsMatrixSelector, setCurrentSkillGroups } from 'store/reducers/hardSkillsMatrix';
+import { softSkillsMatrixSelector, setCurrentSkills } from 'store/reducers/softSkillsMatrix';
 
-import { IFormSkill, IFormSkillGroup } from 'models/IHardSkillsMatrix';
+import { IFormSkill, IFormLevel } from 'models/ISoftSkillsMatrix';
 
-import { AssessmentSkillGroup } from './components/AssessmentSkillGroup';
 import { AddButton } from 'common-components/AddButton';
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
+import { SoftSkillsMatrixSkill } from './components/SoftSkillsMatrixSkill';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 
 interface IProps {
-  skillGroups?: IFormSkillGroup[];
+  skills?: IFormSkill[];
   setActiveStep: (value: React.SetStateAction<number>) => void;
 }
 
@@ -42,40 +42,42 @@ const sxProp: SxProps = [
   },
 ];
 
-export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps) => {
+export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => {
   const dispatch = useAppDispatch();
   const classes = useStyles({ theme });
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
+  const { currentMatrix } = useSelector(softSkillsMatrixSelector);
 
   const methods = useForm<IProps>({
-    defaultValues: { skillGroups },
+    defaultValues: { skills },
   });
 
   const isModified = methods.formState.isDirty;
 
   const { fields, append, remove } = useFieldArray({
-    name: 'skillGroups',
+    name: 'skills',
     control: methods.control,
     keyName: 'fieldKey',
   });
 
   useEffect(() => {
-    const defaultValues = { skillGroups: currentMatrix.skillGroups };
+    const defaultValues = { skills: currentMatrix.skills };
     methods.reset({ ...defaultValues });
   }, [currentMatrix.id]);
 
   const values = useWatch({ control: methods.control });
 
-  const handleAddSkillGroup = () => {
-    append({ id: uuidv4(), value: '', skills: [] });
+  const handleAddSkill = () => {
+    const appendValue = { value: '', id: uuidv4(), levels: [] };
+
+    append(appendValue);
   };
 
   const handleSaveMatrix: SubmitHandler<IProps> = (data) => {
     setActiveStep(1);
 
-    dispatch(setCurrentSkillGroups(data));
+    dispatch(setCurrentSkills(data));
   };
 
   const handleResetModalOpen = () => {
@@ -92,21 +94,24 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
   };
 
   const disabled =
-    !values.skillGroups ||
-    (values.skillGroups as IFormSkillGroup[])?.some(
-      (el) => !el.value || !el.skills?.length || (el.skills as IFormSkill[]).some((skill) => !skill.value)
+    !values.skills ||
+    (values.skills as IFormSkill[])?.some(
+      (el) =>
+        !el.value ||
+        !el.levels?.length ||
+        (el.levels as IFormLevel[]).some((level) => !level.value) ||
+        (el.levels as IFormLevel[]).some((level) => !level.description)
     ) ||
     !isModified;
 
-  //TODO: remove submit event on enter pressed
   return (
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSaveMatrix)} className={classes.container}>
-          {fields.map((group, idx) => (
-            <AssessmentSkillGroup key={group.fieldKey} idx={idx} removeSection={remove} />
-          ))}
-          <AddButton title={'Add new section'} onClick={handleAddSkillGroup} />
+          {fields.map((skill, idx) => {
+            return <SoftSkillsMatrixSkill key={skill.fieldKey} idx={idx} removeSection={remove} />;
+          })}
+          <AddButton title={'Add new section'} onClick={handleAddSkill} />
           <div className={classes.buttonsContainer}>
             <Button onClick={handleResetModalOpen}>RESET CHANGES</Button>
             <Button sx={sxProp} type="submit" className={classes.saveButton} disabled={disabled}>

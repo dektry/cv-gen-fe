@@ -17,16 +17,9 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   cellRight: {
     '&.MuiTableCell-root': {
-      width: '1%',
-    },
-  },
-  popOver: {
-    '&.MuiPopover-root': {
       display: 'flex',
-      flexDirection: 'column',
-      width: '7vw',
-      fontSize: ({ theme }) => theme.typography.h3,
-      padding: '14px 16px',
+      flexDirection: 'row',
+      gap: '11px',
     },
   },
   more: {
@@ -51,19 +44,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   },
   button: {
     '&.MuiButtonBase-root': {
-      width: '100%',
+      maxWidth: '24px',
+      minWidth: '24px',
       textTransform: 'none',
       display: 'flex',
-      justifyContent: 'flex-start',
-    },
-  },
-  deleteButton: {
-    color: ({ theme }) => theme.palette.error.main,
-    '&.MuiButtonBase-root': {
-      width: '100%',
-      textTransform: 'none',
-      display: 'flex',
-      justifyContent: 'flex-start',
     },
   },
   upperContainer: {

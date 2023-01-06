@@ -18,7 +18,7 @@ import { AddButton } from 'common-components/AddButton';
 import { CustomTextField } from 'common-components/CustomTextField';
 import { AssessmentSkillQuestions } from '../AssessmentSkillQuestions';
 
-import { piskStartLevel } from './utils/helpers/pickStartLevel';
+import { pickStartLevel } from 'Pages/Settings/utils/helpers/pickStartLevel';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -28,7 +28,7 @@ interface IProps {
   removeSection: UseFieldArrayRemove;
 }
 
-const startLevel = piskStartLevel();
+const startLevel = pickStartLevel();
 
 export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   const classes = useStyles({ theme });

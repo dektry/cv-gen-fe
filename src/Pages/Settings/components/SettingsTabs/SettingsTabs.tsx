@@ -33,7 +33,7 @@ export const SettingsTabs = () => {
       setValue(0);
     } else if (location.pathname.includes('hard-skills-matrix-list')) {
       setValue(1);
-    } else if (location.pathname.includes('soft-assessment')) {
+    } else if (location.pathname.includes('soft-skills-matrix-list')) {
       setValue(2);
     } else if (location.pathname.includes('english-assessment')) {
       setValue(3);
@@ -54,7 +54,7 @@ export const SettingsTabs = () => {
         break;
       }
       case 2: {
-        navigate(paths.settingsLevelsPositions);
+        navigate(paths.settingsSoftSkillsMatrixList);
         break;
       }
       case 3: {

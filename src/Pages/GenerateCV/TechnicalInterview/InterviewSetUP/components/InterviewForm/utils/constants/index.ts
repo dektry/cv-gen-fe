@@ -2,16 +2,20 @@ import { LevelTypesEnum } from 'models/IInterview';
 
 export const levelTypes: { [key in LevelTypesEnum]: string } = {
   [LevelTypesEnum.None]: 'None',
+  [LevelTypesEnum.Novice]: 'Novice',
   [LevelTypesEnum.Basic]: 'Basic',
+  [LevelTypesEnum.Intermediate]: 'Intermediate',
   [LevelTypesEnum.Expert]: 'Expert',
   [LevelTypesEnum.Advanced]: 'Advanced',
 };
 
 export const levelTypesPriority: { [key in LevelTypesEnum]: number } = {
   [LevelTypesEnum.None]: 1,
-  [LevelTypesEnum.Basic]: 2,
-  [LevelTypesEnum.Expert]: 3,
-  [LevelTypesEnum.Advanced]: 4,
+  [LevelTypesEnum.Novice]: 2,
+  [LevelTypesEnum.Basic]: 3,
+  [LevelTypesEnum.Intermediate]: 4,
+  [LevelTypesEnum.Advanced]: 5,
+  [LevelTypesEnum.Expert]: 6,
 };
 
 export const INTERVIEW = {

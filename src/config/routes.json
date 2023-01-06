@@ -29,5 +29,8 @@
     "hardSkillsMatrixSetUp": "/settings/hard-skills-matrix",
     "hardSkillsMatrixDetails": "/settings/hard-skills-matrix/:id",
     "settingsLevelsPositions": "/settings/positions-and-levels",
-    "settingsHardSkillsMatrixList": "/settings/hard-skills-matrix-list"
+    "settingsHardSkillsMatrixList": "/settings/hard-skills-matrix-list",
+    "softSkillsMatrixSetUp": "/settings/soft-skills-matrix",
+    "softSkillsMatrixDetails": "/settings/soft-skills-matrix/:id",
+    "settingsSoftSkillsMatrixList": "/settings/soft-skills-matrix-list"
 }

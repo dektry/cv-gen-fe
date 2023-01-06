@@ -48,7 +48,7 @@ export interface IHardSkillsMatrixState {
 
 export interface ICopyHardSkillsMatrixProps {
   positionId: string;
-  hardSkillMatrixId: string;
+  skillMatrixId: string;
 }
 
 export interface IFormGrade {

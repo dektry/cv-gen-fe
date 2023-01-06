@@ -26,7 +26,7 @@ const initialState: IHardSkillsMatrixState = {
   isAssessmentPage: false,
 };
 
-const harSkillsMatrix = createSlice({
+const hardSkillsMatrix = createSlice({
   name: appStoreName,
   initialState,
   reducers: {
@@ -113,7 +113,7 @@ const harSkillsMatrix = createSlice({
   },
 });
 
-export default harSkillsMatrix.reducer;
+export default hardSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
 
@@ -124,4 +124,4 @@ export const {
   setCurrentSkillGroups,
   setCurrentHardSkillsMatrixId,
   setIsAssessmentPage,
-} = harSkillsMatrix.actions;
+} = hardSkillsMatrix.actions;

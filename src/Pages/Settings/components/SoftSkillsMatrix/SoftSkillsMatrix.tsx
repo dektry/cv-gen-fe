@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
-import { levelsSelector, loadLevels } from 'store/reducers/levels';
+import { getOneSoftSkillsMatrix } from 'store/reducers/softSkillsMatrix/thunks';
+import { loadLevels, levelsSelector } from 'store/reducers/levels';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -15,22 +15,22 @@ import Chip from '@mui/material/Chip';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { hardSkillsMatrixSelector, setCurrentHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix';
+import { softSkillsMatrixSelector, setCurrentSoftSkillsMatrix } from 'store/reducers/softSkillsMatrix';
 
-import { HardSkillsMatrixFirstStep } from './components/HardSkillsMatrixFirstStep';
-import { HardSkillsMatrixSecondStep } from './components/HardSkillsMatrixSecondStep';
-import { IHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+import { SoftSkillsMatrixFirstStep } from './components/SoftSkillsMatrixFirstStep';
+import { SoftSkillsMatrixSecondStep } from './components/SoftSkillsMatrixSecondStep';
+import { ISoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 
 import paths from 'config/routes.json';
 
-const steps = ['Technical assessment questions', 'Setting the level'];
+const steps = ['Soft assessment questions', 'Setting the level'];
 
-export const HardSkillsMatrix = () => {
+export const SoftSkillsMatrix = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
+  const { currentMatrix } = useSelector(softSkillsMatrixSelector);
   const { allLevels } = useSelector(levelsSelector);
 
   const classes = useStyles({ theme });
@@ -44,21 +44,21 @@ export const HardSkillsMatrix = () => {
     }
 
     return () => {
-      dispatch(setCurrentHardSkillsMatrix({} as IHardSkillsMatrix));
+      dispatch(setCurrentSoftSkillsMatrix({} as ISoftSkillsMatrix));
     };
   }, []);
 
   useEffect(() => {
-    if (currentMatrix.skillGroups?.length) {
+    if (currentMatrix.skills?.length) {
       setDisabled(false);
     }
-  }, [currentMatrix.skillGroups?.length]);
+  }, [currentMatrix.skills?.length]);
 
   useEffect(() => {
     if (id && id !== currentMatrix.id) {
-      dispatch(getOneHardSkillsMatrix(id));
+      dispatch(getOneSoftSkillsMatrix(id));
     } else if (currentMatrix && !currentMatrix.position?.name) {
-      navigate(paths.settingsHardSkillsMatrixList);
+      navigate(paths.settingsSoftSkillsMatrixList);
     }
   }, [id, currentMatrix.position?.name]);
 
@@ -69,7 +69,7 @@ export const HardSkillsMatrix = () => {
   return (
     <div>
       <div className={classes.header}>
-        <Typography variant="h2">TECHNICAL ASSESSMENT</Typography>
+        <Typography variant="h2">SOFT ASSESSMENT</Typography>
         <div>
           Position: <Chip className={classes.chip} label={currentMatrix.position?.name} />
         </div>
@@ -86,9 +86,9 @@ export const HardSkillsMatrix = () => {
         </Stepper>
         <div>
           {activeStep === 0 ? (
-            <HardSkillsMatrixFirstStep skillGroups={currentMatrix.skillGroups} setActiveStep={setActiveStep} />
+            <SoftSkillsMatrixFirstStep skills={currentMatrix.skills} setActiveStep={setActiveStep} />
           ) : (
-            <HardSkillsMatrixSecondStep matrix={currentMatrix} />
+            <SoftSkillsMatrixSecondStep matrix={currentMatrix} />
           )}
         </div>
       </Box>
