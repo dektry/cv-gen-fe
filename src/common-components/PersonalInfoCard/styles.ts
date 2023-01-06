@@ -14,7 +14,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     backgroundColor: ({ theme }) => theme.palette.primary.main,
     padding: '24px',
     width: '100%',
-    height: '90px',
+    height: '124px',
     borderRadius: '8px',
     gap: '32px',
   },
