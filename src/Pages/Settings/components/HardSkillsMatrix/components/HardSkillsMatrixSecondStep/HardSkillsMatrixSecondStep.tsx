@@ -34,8 +34,6 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     defaultValues: { matrix },
   });
 
-  const isModified = methods.formState.isDirty;
-
   useEffect(() => {
     const defaultValues = { matrix: currentMatrix };
     methods.reset({ ...defaultValues });
@@ -88,8 +86,6 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     setIsSaveModalOpen(false);
   };
 
-  const disabled = !isModified;
-
   return (
     <>
       <FormProvider {...methods}>
@@ -99,7 +95,7 @@ export const HardSkillsMatrixSecondStep = ({ matrix }: IProps) => {
           ))}
           <div className={classes.buttonsContainer}>
             <Button onClick={handleResetModalOpen}>RESET CHANGES</Button>
-            <Button type="submit" className={classes.saveButton} disabled={disabled}>
+            <Button type="submit" className={classes.saveButton}>
               Save changes
             </Button>
           </div>

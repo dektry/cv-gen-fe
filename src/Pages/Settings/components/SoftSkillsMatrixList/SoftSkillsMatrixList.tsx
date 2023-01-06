@@ -15,6 +15,7 @@ import { softSkillsMatrixSelector, setCurrentPosition } from 'store/reducers/sof
 
 import { TableComponent } from '../Table';
 import { SettingsTabs } from '../SettingsTabs';
+import { Spinner } from 'common-components/Spinner';
 
 import { IDBPosition } from 'models/IUser';
 import { ICopySoftSkillsMatrixProps } from 'models/ISoftSkillsMatrix';
@@ -57,6 +58,9 @@ export const SoftSkillsMatrixList = () => {
     () => matrix.map((el) => ({ id: el.id, name: el.position.name, positionId: el.position.id })),
     [matrix]
   );
+
+  if (softSkillMatrixLoading) return <Spinner text="Soft skills matrix list is loading" />;
+
   return (
     <>
       <SettingsTabs />

@@ -16,6 +16,8 @@ import { hardSkillsMatrixSelector, setCurrentPosition } from 'store/reducers/har
 import { TableComponent } from '../Table';
 import { SettingsTabs } from '../SettingsTabs';
 
+import { Spinner } from 'common-components/Spinner';
+
 import routes from 'config/routes.json';
 import { IDBPosition } from 'models/IUser';
 import { ICopyHardSkillsMatrixProps } from 'models/IHardSkillsMatrix';
@@ -57,6 +59,8 @@ export const HardSkillsMatrixList = () => {
     () => matrix.map((el) => ({ id: el.id, name: el.position.name, positionId: el.position.id })),
     [matrix]
   );
+
+  if (hardSkillMatrixLoading) return <Spinner text="Hard skills matrix list is loading" />;
 
   return (
     <>

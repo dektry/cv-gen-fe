@@ -34,8 +34,6 @@ export const SoftSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     defaultValues: { matrix },
   });
 
-  const isModified = methods.formState.isDirty;
-
   useEffect(() => {
     const defaultValues = { matrix: currentMatrix };
     methods.reset({ ...defaultValues });
@@ -88,10 +86,9 @@ export const SoftSkillsMatrixSecondStep = ({ matrix }: IProps) => {
     setIsSaveModalOpen(false);
   };
 
-  const disabled =
-    (values.matrix?.skills as IFormSkill[])?.some((el) =>
-      (el.levels as IFormLevel[]).some((level) => !level.level_id?.id)
-    ) || !isModified;
+  const disabled = (values.matrix?.skills as IFormSkill[])?.some((el) =>
+    (el.levels as IFormLevel[]).some((level) => !level.level_id?.id)
+  );
 
   return (
     <>
