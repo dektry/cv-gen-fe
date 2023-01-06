@@ -1,21 +1,13 @@
 import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
-import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum, IInterviewResultAnswers } from './IInterview';
+import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum } from './IInterview';
 import { NullableField } from './TNullableField';
-import { string } from 'prop-types';
+import { IAssessmentHistoryRecord, IAssessmentFromDB } from './ICommon';
 
 export interface IAssessmentEmployee {
   employee: IEmployee;
   level: IDBLevels;
   position: IDBPosition;
-}
-
-export interface IAssessmentFromDB {
-  id: string;
-  created: string;
-  level: string;
-  position: string;
-  answers?: IInterviewResultAnswers[];
 }
 
 export interface IAssessmentDetailedLevel {
@@ -54,15 +46,6 @@ export interface IAssessmentDetailedResult {
   created: string;
   comment: string;
   skillGroups: IAssessmentDetailedGroup[];
-}
-
-export interface IAssessmentHistoryRecord {
-  id: string;
-  created: string;
-  updated: string;
-  level: string;
-  position: string;
-  type: 'Assessment' | 'Interview';
 }
 
 export interface ITechAssessmentState {

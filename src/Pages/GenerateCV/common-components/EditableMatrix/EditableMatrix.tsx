@@ -8,13 +8,13 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 import { IInterviewAnswers } from 'models/IInterview';
 import {
-  IAssessmentFromDB,
   IAssessmentMatrix,
   IAssessmentSkill,
   IAssessmentSkillGroup,
   IExtendElement,
   InputChangeEvent,
 } from 'models/ITechAssessment';
+import { IAssessmentFromDB } from 'models/ICommon';
 import { NullableField } from 'models/TNullableField';
 import { LevelTypesEnum } from 'models/IInterview';
 

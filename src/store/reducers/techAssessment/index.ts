@@ -21,7 +21,8 @@ import {
   httpDeleteTechAssessment,
 } from 'services/requests/techAssessment';
 
-import { IAssessmentHistoryRecord, IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
+import { IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
+import { IAssessmentHistoryRecord } from 'models/ICommon';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 

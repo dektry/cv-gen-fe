@@ -12,7 +12,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import AddRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { IAssessmentHistoryRecord, IAssessmentFromDB } from 'models/ITechAssessment';
+import { IAssessmentFromDB } from 'models/ICommon';
+import { IAssessmentHistoryRecord } from 'models/ICommon';
 import { NullableField } from 'models/TNullableField';
 
 import { TypeBadge } from './components/TypeBadge';

@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import { IAssessmentFromDB } from 'models/ITechAssessment';
+import { IAssessmentFromDB } from 'models/ICommon';
 
 import { DatePositionLevelInfo } from 'common-components/DatePositionLevelInfo';
 
