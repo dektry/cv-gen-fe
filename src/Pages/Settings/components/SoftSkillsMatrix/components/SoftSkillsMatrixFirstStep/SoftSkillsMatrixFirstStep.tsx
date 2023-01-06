@@ -53,6 +53,8 @@ export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => 
     defaultValues: { skills },
   });
 
+  const isModified = methods.formState.isDirty;
+
   const { fields, append, remove } = useFieldArray({
     name: 'skills',
     control: methods.control,
@@ -99,7 +101,8 @@ export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => 
         !el.levels?.length ||
         (el.levels as IFormLevel[]).some((level) => !level.value) ||
         (el.levels as IFormLevel[]).some((level) => !level.description)
-    );
+    ) ||
+    !isModified;
 
   return (
     <>

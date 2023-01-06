@@ -73,6 +73,7 @@ export const HardSkillsMatrixList = () => {
         editModalTitle={'EDIT POSITION TECHNICAL ASSESSMENT'}
         copyModalTitle={'SELECT POSITION TECHNICAL ASSESSMENT'}
         matrixLoading={hardSkillMatrixLoading}
+        editPath={routes.hardSkillsMatrixDetails}
       />
     </>
   );

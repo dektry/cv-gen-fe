@@ -72,6 +72,7 @@ export const SoftSkillsMatrixList = () => {
         editModalTitle={'EDIT POSITION SOFT SKILLS ASSESSMENT'}
         copyModalTitle={'SELECT POSITION SOFT SKILLS ASSESSMENT'}
         matrixLoading={softSkillMatrixLoading}
+        editPath={routes.softSkillsMatrixDetails}
       />
     </>
   );

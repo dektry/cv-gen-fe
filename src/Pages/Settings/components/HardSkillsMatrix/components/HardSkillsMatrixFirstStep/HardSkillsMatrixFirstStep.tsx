@@ -53,6 +53,8 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
     defaultValues: { skillGroups },
   });
 
+  const isModified = methods.formState.isDirty;
+
   const { fields, append, remove } = useFieldArray({
     name: 'skillGroups',
     control: methods.control,
@@ -93,7 +95,8 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
     !values.skillGroups ||
     (values.skillGroups as IFormSkillGroup[])?.some(
       (el) => !el.value || !el.skills?.length || (el.skills as IFormSkill[]).some((skill) => !skill.value)
-    );
+    ) ||
+    !isModified;
 
   //TODO: remove submit event on enter pressed
   return (

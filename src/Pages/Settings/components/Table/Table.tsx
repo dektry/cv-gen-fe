@@ -17,8 +17,6 @@ import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';
 import { SkillsMatrixCreateEditModal } from '../SkillsMatrixCreateEditModal';
 
-import paths from 'config/routes.json';
-
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { IDBPosition } from 'models/IUser';
@@ -48,6 +46,7 @@ interface IProps {
   copyModalTitle?: string;
   hardSkillsMatrixId?: string;
   matrixLoading?: boolean;
+  editPath?: string;
 }
 
 interface FormValues {
@@ -66,6 +65,7 @@ export const TableComponent = ({
   editModalTitle,
   copyModalTitle,
   matrixLoading,
+  editPath,
 }: IProps) => {
   const classes = useStyles({ theme });
   const navigate = useNavigate();
@@ -128,7 +128,9 @@ export const TableComponent = ({
   };
 
   const handleEditClick = (id: string) => {
-    navigate(generatePath(paths.hardSkillsMatrixDetails, { id }));
+    if (editPath) {
+      navigate(generatePath(editPath, { id }));
+    }
   };
 
   const handleOpenEditModal = (el: IListElement) => {
