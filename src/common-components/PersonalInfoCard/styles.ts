@@ -11,6 +11,7 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: ({ theme }) => theme.palette.primary.main,
     padding: '24px',
     width: '100%',
