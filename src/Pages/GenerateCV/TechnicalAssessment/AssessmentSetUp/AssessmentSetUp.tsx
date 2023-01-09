@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux';
 import { employeesSelector } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
-import { getTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { techAssessmentSelector } from 'store/reducers/techAssessment';
+import { getTechAssessment } from 'store/reducers/techAssessment/thunks';
 import { hardSkillsMatrixSelector, setIsAssessmentPage } from 'store/reducers/hardSkillsMatrix';
 import { getOneHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 

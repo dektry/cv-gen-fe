@@ -77,6 +77,7 @@ export interface ITechAssessmentState {
   skillId?: string;
   assessmentResult: NullableField<IAssessmentDetailedResult>;
   assessmentShortResult: NullableField<IAssessmentFromDB>;
+  assessmentsComparison: NullableField<IAssessmentsComparison>;
 }
 
 export interface ICompleteAssessment {
@@ -119,4 +120,14 @@ export interface IFormAssessmentResult {
   levelId: string;
   grades: { value: string; skillId: string }[];
   comment: string;
+}
+
+export interface IComparisonSkillGroup {
+  groupName: string;
+  skills: string[][];
+}
+
+export interface IAssessmentsComparison {
+  head: string[];
+  body: IComparisonSkillGroup[];
 }

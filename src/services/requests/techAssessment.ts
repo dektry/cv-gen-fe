@@ -67,3 +67,14 @@ export const httpDeleteTechAssessment = async (id: string) => {
     message.error(`Server error. Please contact admin`);
   }
 };
+
+export const httpGetTechAssessmentsComparison = async (id: string) => {
+  try {
+    const { data } = await apiClient.get(`${endpoints.employeeInterviews}/${id}/comparison`);
+
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_TECH_ASSESSMENTS_COMPARISON_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};

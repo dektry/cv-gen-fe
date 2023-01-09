@@ -5,7 +5,7 @@ import Button from 'antd/lib/button';
 import { useStyles } from 'common-components/ButtonWithLink/styles';
 
 interface IProps {
-  id: string | undefined;
+  id?: string;
   path: string;
   text: string;
 }

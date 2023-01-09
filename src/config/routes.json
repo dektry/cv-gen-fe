@@ -11,6 +11,7 @@
     "softSkillAssessmentHistory": "/employee/:id/soft-interview/history",
     "prevTechnicalAssessment": "/employee/:id/tech-interview/history/:assessmentId",
     "prevSoftSkillsAssessment": "/employee/:id/soft-interview/history/:assessmentId",
+    "techAssessmentsComparison": "/employee/:id/tech-interview/comparison",
     "technicalAssessment": "/employee/:id/tech-interview/:positionId/:levelId/:matrixId/new-interview",
     "softAssessment": "/employee/:id/soft-interview/:positionId/:levelId",
     "softSkillsInterview": "/candidate/:id/soft-interview",
