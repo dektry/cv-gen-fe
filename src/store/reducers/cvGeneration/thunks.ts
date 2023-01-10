@@ -45,19 +45,12 @@ export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: st
   const allAssessments = await getAllTechAssessments(userId);
 
   if (allAssessments && allAssessments.length && allAssessments[allAssessments.length - 1]) {
-    const {
-      id: lastAssessmentId,
-      level: { id: levelId },
-      position: { id: positionId },
-    } = allAssessments[allAssessments.length - 1];
+    const { id: lastAssessmentId } = allAssessments[allAssessments.length - 1];
 
-    const [lastAssessment, skillMatrix] = await Promise.all([
-      httpGetTechAssessment(lastAssessmentId),
-      getSkillMatrixByIds(positionId, levelId),
-    ]);
+    const lastAssessment = await httpGetTechAssessment(lastAssessmentId);
     const answers = lastAssessment?.answers || [];
 
-    skillMatrix.forEach((group: Record<string, unknown>) => {
+    lastAssessment.skillGroups.forEach((group: Record<string, unknown>) => {
       const profSkillGroup: TProfSkill = { groupName: '', skills: [] };
 
       profSkillGroup.groupName = group.value as string;
