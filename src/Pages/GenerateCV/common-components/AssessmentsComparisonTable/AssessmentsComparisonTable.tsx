@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,10 +14,18 @@ interface IProps {
 }
 
 export const AssessmentsComparisonTable = ({ assessments }: IProps) => {
+  const emptyCells: string[] = [];
+
+  for (let i = 0; i <= assessments.head.length - 2; i++) {
+    emptyCells.push(uuidv4());
+  }
+
+  console.log(assessments);
+
   return (
     <>
       <TableContainer>
-        <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table stickyHeader sx={{ minWidth: 650, overflow: 'auto' }} aria-label="simple table">
           <TableHead>
             <TableRow>
               {assessments.head.map((el, idx) => (
@@ -33,8 +43,9 @@ export const AssessmentsComparisonTable = ({ assessments }: IProps) => {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: '#f4f7fc' }}
                 >
                   <TableCell>{row.groupName}</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
+                  {emptyCells.map((el) => (
+                    <TableCell key={el} />
+                  ))}
                 </TableRow>
                 {row.skills.map((skill, skillIndex) => {
                   return (
