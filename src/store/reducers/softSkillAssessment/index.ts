@@ -3,16 +3,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
-import { getAllSoftSkillAssessments, getOneSoftAssessment } from './thunks';
+import { getAllSoftSkillAssessments, getOneSoftAssessment, getSoftAssessmentResults } from './thunks';
 
 import { ISoftAssessmentState, ISoftSkill, ISoftAssessment } from 'models/ISoftAssessment';
+import { IAssessmentHistoryRecord } from 'models/ICommon';
 
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 
 const initialState: ISoftAssessmentState = {
   assessments: [],
+  assessmentsHistory: [],
+  assessmentShortResult: null,
   softSkillsList: [],
   isLoading: false,
+  isHistoryLoading: false,
   pageSize: defaultPageSize,
   currentPage: defaultCurrentPage,
   assessmentResult: null,
@@ -50,25 +54,26 @@ const softSkillAssessment = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllSoftSkillAssessments.pending, (state) => {
-      state.isLoading = true;
+      state.isHistoryLoading = true;
     });
     builder.addCase(getAllSoftSkillAssessments.rejected, (state) => {
-      state.isLoading = false;
+      state.isHistoryLoading = false;
     });
     builder.addCase(getAllSoftSkillAssessments.fulfilled, (state, { payload }) => {
       if (payload.length) {
-        const processedAssessments = payload.map((el: ISoftAssessment) => {
+        const processedAssessments = payload.map((el: IAssessmentHistoryRecord) => {
           return {
-            id: el.id,
-            date: new Date(el.createdAt).toLocaleDateString(),
-            position: el.position?.name,
-            level: el.level?.name,
-            type: 'Assessment',
+            ...el,
+            created: new Date(el.created).toLocaleDateString(),
+            updated: new Date(el.updated).toLocaleDateString(),
           };
         });
-        state.assessments = processedAssessments;
+        state.assessmentsHistory = processedAssessments;
+        state.isHistoryLoading = false;
+      } else {
+        state.assessmentsHistory = [];
+        state.isHistoryLoading = false;
       }
-      state.isLoading = false;
     });
     builder.addCase(getOneSoftAssessment.pending, (state) => {
       state.isLoading = true;
@@ -80,12 +85,15 @@ const softSkillAssessment = createSlice({
       state.assessmentResult = payload;
       state.isLoading = false;
     });
+    builder.addCase(getSoftAssessmentResults.fulfilled, (state, { payload }) => {
+      state.assessmentShortResult = payload;
+    });
   },
 });
 
 export default softSkillAssessment.reducer;
 
-export const softSkillInterviewSelector = (state: RootState): ISoftAssessmentState => state.softSkillAssessment;
+export const softSkillAssessmentSelector = (state: RootState): ISoftAssessmentState => state.softSkillAssessment;
 
 export const {
   setSoftAssessmentResult,

@@ -1,5 +1,6 @@
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface';
 import { NullableField } from './TNullableField';
+import { IInterviewResultAnswers } from './IInterview';
 
 export interface IPagination {
   totalItems: number;
@@ -70,4 +71,21 @@ export interface IPersonalData {
   location: NullableField<string>;
   position: NullableField<string>;
   level: NullableField<string>;
+}
+
+export interface IAssessmentHistoryRecord {
+  id: string;
+  created: string;
+  updated: string;
+  level: string;
+  position: string;
+  type: 'Assessment' | 'Interview';
+}
+
+export interface IAssessmentFromDB {
+  id: string;
+  created: string;
+  level: string;
+  position: string;
+  answers?: IInterviewResultAnswers[];
 }

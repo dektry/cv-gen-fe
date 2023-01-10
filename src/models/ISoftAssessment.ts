@@ -1,5 +1,6 @@
 import { IDBPosition, IDBLevels } from './IUser';
 import { NullableField } from './TNullableField';
+import { IAssessmentHistoryRecord, IAssessmentFromDB } from './ICommon';
 
 export interface ISoftSkill {
   id: string;
@@ -33,4 +34,7 @@ export interface ISoftAssessmentState {
   chosenLevel?: string;
   skillId?: string;
   assessmentResult: NullableField<ISoftAssessment>;
+  isHistoryLoading: boolean;
+  assessmentsHistory: IAssessmentHistoryRecord[];
+  assessmentShortResult: NullableField<IAssessmentFromDB>;
 }
