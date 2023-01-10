@@ -14,4 +14,9 @@ export const useStyles = createUseStyles({
   softSkillsSelect: {
     width: '100%',
   },
+  container: {
+    '&.MuiFormControl-root': {
+      width: '100%',
+    },
+  },
 });

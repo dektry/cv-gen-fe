@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { cvGenerationSelector } from 'store/reducers/cvGeneration';
 import { useAppDispatch } from 'store';
 import { downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
-import { CvInfo } from 'Pages/CVGeneration/CVGenerationPage';
+import { CvInfoForm } from 'models/ICVGeneration';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
 import { templateWidth } from 'Pages/CVGeneration/constants';
@@ -16,7 +16,7 @@ interface ICVPreviewProps {
   isModalOpen: boolean;
   handleOk: () => void;
   handleCancel: () => void;
-  cvInfo: CvInfo;
+  cvInfo: CvInfoForm;
 }
 
 export const CVPreview = React.memo((props: ICVPreviewProps) => {

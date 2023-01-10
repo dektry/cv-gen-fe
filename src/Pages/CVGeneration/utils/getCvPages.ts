@@ -1,6 +1,6 @@
 import { message } from 'antd';
 
-import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { CvInfoForm, ICvProject, ICvProfSkill, IProfSkill } from 'models/ICVGeneration';
 import {
   invisibleBorderToWrapWithoutSkills,
   profSkillGroupHeight,
@@ -13,22 +13,22 @@ import { IProject } from 'models/IProject';
 
 type TNextPageStart = { group: number; skill: number };
 
-export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
-  let dataForPages: Partial<CvInfo>[] = [];
+export const getCvPages = (cvInfoData: CvInfoForm, templates: { [name: string]: HandlebarsTemplateDelegate }) => {
+  let dataForPages: Partial<CvInfoForm>[] = [];
   const result: string[] = [];
 
   if (!cvInfoData.profSkills) return result;
 
-  const cvInfo = { ...cvInfoData };
+  const cvInfo: CvInfoForm = { ...cvInfoData };
 
   try {
     const { profSkillsOnIntroPage, nextPageStart } = countProfSkillsOnIntroPage(
       templates['v2-intro'],
-      cvInfo.firstName,
-      cvInfo.description,
-      cvInfo.softSkills,
-      cvInfo.profSkills,
-      cvInfo.position
+      cvInfo.firstName || '',
+      cvInfo.description || '',
+      cvInfo.softSkills || [],
+      cvInfo.profSkills || [],
+      cvInfo.position || ''
     );
 
     dataForPages.push({
@@ -37,9 +37,10 @@ export const getCvPages = (cvInfoData: CvInfo, templates: { [name: string]: Hand
     });
 
     if (
-      (cvInfo.profSkills.length - 1 === nextPageStart.group &&
-        cvInfo.profSkills[nextPageStart.group].skills.length - 1 >= nextPageStart.skill) ||
-      cvInfo.profSkills.length - 1 > nextPageStart.group
+      (cvInfo.profSkills?.[nextPageStart.group]?.skills &&
+        (cvInfo.profSkills[nextPageStart.group].skills as IProfSkill[]).length - 1 >= nextPageStart.skill &&
+        cvInfo.profSkills.length - 1 === nextPageStart.group) ||
+      (cvInfo.profSkills && cvInfo.profSkills.length - 1 > nextPageStart.group)
     ) {
       dataForPages = dataForPages.concat(
         groupProfSkillsForPages(templates['v2-prof-skills'], nextPageStart, cvInfo.profSkills)
@@ -80,9 +81,9 @@ const countProfSkillsOnIntroPage = (
   firstName: string,
   description: string,
   softSkills: string[],
-  profSkills: TProfSkill[],
+  profSkills: ICvProfSkill[],
   position: string | null
-): { profSkillsOnIntroPage: TProfSkill[]; nextPageStart: TNextPageStart } => {
+): { profSkillsOnIntroPage: ICvProfSkill[]; nextPageStart: TNextPageStart } => {
   const body = document.body;
   const div = document.createElement('div');
   div.style.position = 'absolute';
@@ -98,7 +99,7 @@ const countProfSkillsOnIntroPage = (
 
   div.remove();
 
-  const result: TProfSkill[] = [];
+  const result: ICvProfSkill[] = [];
   let group = 0;
   let skill = 0;
 
@@ -110,19 +111,23 @@ const countProfSkillsOnIntroPage = (
       break;
     }
 
-    result.push({ ...profSkills[i], skills: [] });
+    if (profSkills[i]?.skills) {
+      result.push({ ...profSkills[i], skills: [] });
 
-    for (let j = 0; j < profSkills[i].skills.length; j++) {
-      if (availableSpace < profSkillLineHeight && j % 2 === 0) {
-        break;
+      for (let j = 0; j < (profSkills[i].skills as IProfSkill[]).length; j++) {
+        if (availableSpace < profSkillLineHeight && j % 2 === 0) {
+          break;
+        }
+        // there are two skills in one line
+        if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
+
+        if (profSkills[i].skills) {
+          result[result.length - 1].skills?.push((profSkills[i].skills as IProfSkill[])[j]);
+        }
+
+        group = i;
+        skill = j + 1;
       }
-      // there are two skills in one line
-      if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
-
-      result[result.length - 1].skills.push(profSkills[i].skills[j]);
-
-      group = i;
-      skill = j + 1;
     }
   }
 
@@ -132,8 +137,8 @@ const countProfSkillsOnIntroPage = (
 const groupProfSkillsForPages = (
   template: HandlebarsTemplateDelegate,
   { group, skill }: TNextPageStart,
-  profSkills: TProfSkill[]
-): { profSkills: TProfSkill[] }[] => {
+  profSkills: ICvProfSkill[]
+): { profSkills: ICvProfSkill[] }[] => {
   const body = document.body;
   const div = document.createElement('div');
   div.style.position = 'absolute';
@@ -151,43 +156,47 @@ const groupProfSkillsForPages = (
   let availableSpace = availableSpaceOnSinglePage;
   div.remove();
 
-  const result: { profSkills: TProfSkill[] }[] = [];
-  let currentPage: { profSkills: TProfSkill[] } = { profSkills: [] };
-  result.push(currentPage as { profSkills: TProfSkill[] });
+  const result: { profSkills: ICvProfSkill[] }[] = [];
+  let currentPage: { profSkills: ICvProfSkill[] } = { profSkills: [] };
+  result.push(currentPage as { profSkills: ICvProfSkill[] });
 
   for (let i = group; i < profSkills.length; i++) {
     // if true - group name was already added to intro page
-    if (i === group && profSkills[i].skills[skill]) {
-      currentPage.profSkills.push({ skills: [] });
-    } else {
-      // if condition above is false - skip current group
-      if (i === group) ++i;
+    if (profSkills[i].skills) {
+      if (i === group && (profSkills[i].skills as IProfSkill[])[skill]) {
+        currentPage.profSkills.push({ skills: [] });
+      } else {
+        // if condition above is false - skip current group
+        if (i === group) ++i;
 
-      availableSpace -= profSkillGroupHeight;
+        availableSpace -= profSkillGroupHeight;
 
-      if (availableSpace < profSkillLineHeight) {
-        availableSpace = availableSpaceOnSinglePage;
-        currentPage = { profSkills: [] };
-        result.push(currentPage as { profSkills: TProfSkill[] });
+        if (availableSpace < profSkillLineHeight) {
+          availableSpace = availableSpaceOnSinglePage;
+          currentPage = { profSkills: [] };
+          result.push(currentPage as { profSkills: ICvProfSkill[] });
+        }
+
+        currentPage.profSkills.push({ ...profSkills[i], skills: [] });
       }
 
-      currentPage.profSkills.push({ ...profSkills[i], skills: [] });
-    }
+      for (let j = 0; j < (profSkills[i].skills as IProfSkill[]).length; j++) {
+        // if we are on the first page, we need to skip skills, which were already placed on intro page
+        if (i == group && skill !== null && j < skill) continue;
 
-    for (let j = 0; j < profSkills[i].skills.length; j++) {
-      // if we are on the first page, we need to skip skills, which were already placed on intro page
-      if (i == group && skill !== null && j < skill) continue;
+        if (availableSpace < profSkillLineHeight) {
+          availableSpace = availableSpaceOnSinglePage;
+          currentPage = { profSkills: [{ skills: [] }] };
+          result.push(currentPage as { profSkills: ICvProfSkill[] });
+        }
 
-      if (availableSpace < profSkillLineHeight) {
-        availableSpace = availableSpaceOnSinglePage;
-        currentPage = { profSkills: [{ skills: [] }] };
-        result.push(currentPage as { profSkills: TProfSkill[] });
+        // there are two skills in one line
+        if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
+
+        (currentPage.profSkills[currentPage.profSkills.length - 1].skills as IProfSkill[]).push(
+          (profSkills[i].skills as IProfSkill[])[j]
+        );
       }
-
-      // there are two skills in one line
-      if ((j + 1) % 2 !== 0) availableSpace -= profSkillLineHeight;
-
-      currentPage.profSkills[currentPage.profSkills.length - 1].skills.push(profSkills[i].skills[j]);
     }
   }
 
@@ -196,8 +205,8 @@ const groupProfSkillsForPages = (
 
 const groupProjectsForPages = (
   template: HandlebarsTemplateDelegate,
-  projects: IProject[]
-): { projects: IProject[] }[] => {
+  projects: ICvProject[]
+): { projects: ICvProject[] }[] => {
   const body = document.body;
   const div = document.createElement('div');
   div.style.position = 'absolute';
@@ -220,15 +229,15 @@ const groupProjectsForPages = (
 
   div.remove();
 
-  const result: { projects: IProject[] }[] = [];
-  let currentPage: { projects: IProject[] } = { projects: [] };
-  result.push(currentPage as { projects: IProject[] });
+  const result: { projects: ICvProject[] }[] = [];
+  let currentPage: { projects: ICvProject[] } = { projects: [] };
+  result.push(currentPage as { projects: ICvProject[] });
 
   for (let i = 0; i < projects.length; i++) {
     if (availableSpace < projectsElementsHeight[i]) {
       availableSpace = availableSpaceOnSinglePage;
       currentPage = { projects: [] };
-      result.push(currentPage as { projects: IProject[] });
+      result.push(currentPage as { projects: ICvProject[] });
     }
     availableSpace -= projectsElementsHeight[i];
 

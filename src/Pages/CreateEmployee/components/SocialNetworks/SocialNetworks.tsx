@@ -1,71 +1,61 @@
 import { TextField } from '@mui/material';
 import { Typography } from '@mui/material';
 
-import { ICreateEmployee } from 'models/IEmployee';
-import { NullableField } from 'models/TNullableField';
+import { useFormContext, Controller } from 'react-hook-form';
 
 import theme from 'theme/theme';
 import { useStyles } from '../../styles';
 
-interface IProps {
-  skypeUsername: NullableField<string>;
-  slackUsername: NullableField<string>;
-  twitterUsername: NullableField<string>;
-  facebookUrl: NullableField<string>;
-  linkedinUrl: NullableField<string>;
-  handleChangeInput: (fields: Partial<ICreateEmployee>) => void;
-}
-
-export const SocialNetworks = ({
-  skypeUsername,
-  slackUsername,
-  twitterUsername,
-  facebookUrl,
-  linkedinUrl,
-  handleChangeInput,
-}: IProps) => {
+export const SocialNetworks = () => {
   const classes = useStyles({ theme });
+  const { control } = useFormContext();
   return (
     <div>
       <Typography sx={{ mb: '8px', mt: '24px' }} variant="h2">
         SOCIAL NETWORKS
       </Typography>
       <div className={classes.gridContainer}>
-        <TextField
-          value={skypeUsername || ''}
-          label={'Skype'}
+        <Controller
           name="skypeUsername"
-          placeholder={'Add username'}
-          onChange={(e) => handleChangeInput({ skypeUsername: e.target.value })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField value={value || ''} label={'Skype'} placeholder={'Add username'} onChange={onChange} />
+          )}
         />
-        <TextField
-          value={slackUsername || ''}
-          label={'Slack'}
+        <Controller
           name="slackUsername"
-          placeholder={'Add username'}
-          onChange={(e) => handleChangeInput({ slackUsername: e.target.value })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField value={value || ''} label={'Slack'} placeholder={'Add username'} onChange={onChange} />
+          )}
         />
-        <TextField
-          value={twitterUsername || ''}
-          label={'Twitter'}
+        <Controller
           name="twitterUsername"
-          placeholder={'Add username'}
-          onChange={(e) => handleChangeInput({ twitterUsername: e.target.value })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField value={value || ''} label={'Twitter'} placeholder={'Add username'} onChange={onChange} />
+          )}
         />
-        <TextField
-          value={facebookUrl || ''}
-          label={'Facebook'}
-          name="facebookUrl"
-          placeholder={'Add link'}
-          onChange={(e) => handleChangeInput({ facebookUrl: e.target.value })}
+        <Controller
+          name="twitterUsername"
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField
+              value={value || ''}
+              label={'Facebook'}
+              name="facebookUrl"
+              placeholder={'Add link'}
+              onChange={onChange}
+            />
+          )}
         />
       </div>
-      <TextField
-        value={linkedinUrl || ''}
-        label={'Linkedin'}
+      <Controller
         name="linkedinUrl"
-        placeholder={'Add link'}
-        onChange={(e) => handleChangeInput({ linkedinUrl: e.target.value })}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <TextField value={value || ''} label={'Linkedin'} placeholder={'Add link'} onChange={onChange} />
+        )}
       />
     </div>
   );

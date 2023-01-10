@@ -4,7 +4,7 @@ import { IProject } from './IProject';
 import { IEducation } from './IEducation';
 import { ILanguage } from './ILanguage';
 
-interface IEmployeeDepartment {
+export interface IEmployeeDepartment {
   id: string;
   name: string;
 }
