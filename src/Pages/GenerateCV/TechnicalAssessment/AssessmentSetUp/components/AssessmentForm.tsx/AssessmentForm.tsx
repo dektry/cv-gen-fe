@@ -9,7 +9,8 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { hardSkillsMatrixSelector } from 'store/reducers/hardSkillsMatrix';
-import { editTechAssessment, finishTechAssessment, techAssessmentSelector } from 'store/reducers/techAssessment';
+import { techAssessmentSelector } from 'store/reducers/techAssessment';
+import { editTechAssessment, finishTechAssessment } from 'store/reducers/techAssessment/thunks';
 import { editHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import { useForm, useWatch, useFieldArray, Controller, FormProvider } from 'react-hook-form';

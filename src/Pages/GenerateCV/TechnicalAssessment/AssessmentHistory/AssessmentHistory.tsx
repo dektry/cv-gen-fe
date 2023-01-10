@@ -8,13 +8,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
+import { techAssessmentSelector, setTechAssessments } from 'store/reducers/techAssessment';
 import {
   loadTechAssessments,
-  techAssessmentSelector,
-  setTechAssessments,
   getTechAssessmentResults,
   deleteTechAssessment,
-} from 'store/reducers/techAssessment';
+} from 'store/reducers/techAssessment/thunks';
 import { employeesSelector, setChosenEmployee } from 'store/reducers/employees';
 import { loadEmployee } from 'store/reducers/employees/thunks';
 import { levelsSelector, loadLevels, chooseLevel } from 'store/reducers/levels';
@@ -140,7 +139,7 @@ export const AssessmentHistory = () => {
             <Typography variant="h2" sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
               Technical assessment history
             </Typography>
-            <Link className={classes.link} to={generatePath(paths.technicalAssessmentHistory, { id })}>
+            <Link className={classes.link} to={generatePath(paths.techAssessmentsComparison, { id })}>
               Show comparison
             </Link>
           </div>
