@@ -99,6 +99,12 @@ const projects = createSlice({
       });
       state.isLoading = false;
     });
+    builder.addCase(createProject.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(editProject.fulfilled, (state) => {
+      state.isLoading = false;
+    });
   },
 });
 

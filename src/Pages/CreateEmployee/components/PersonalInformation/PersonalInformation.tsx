@@ -1,68 +1,92 @@
 import { TextField } from '@mui/material';
 import { CustomSelect } from 'common-components/CustomSelect';
 
-import { ICreateEmployee } from 'models/IEmployee';
-import { NullableField } from 'models/TNullableField';
+import { useFormContext, Controller } from 'react-hook-form';
 
 import { timezones } from '../../utils/constants';
 
 import theme from 'theme/theme';
 import { useStyles } from '../../styles';
 
-interface IProps {
-  firstName: string;
-  lastName: string;
-  gender: NullableField<string>;
-  location: NullableField<string>;
-  timezone: NullableField<string>;
-  handleChangeInput: (fields: Partial<ICreateEmployee>) => void;
-}
-
-export const PersonalInformation = ({ firstName, lastName, gender, location, timezone, handleChangeInput }: IProps) => {
+export const PersonalInformation = () => {
   const classes = useStyles({ theme });
+
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <div className={classes.gridContainer}>
-      <TextField
-        value={firstName}
-        label={'First name'}
+      <Controller
         name="firstName"
-        placeholder={'Add first name'}
-        required
-        onChange={(e) => handleChangeInput({ firstName: e.target.value })}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <TextField
+            value={value}
+            label={'First name'}
+            error={!!errors.firstName?.message}
+            helperText={String(errors.firstName?.message)}
+            placeholder={'Add first name'}
+            required
+            onChange={onChange}
+          />
+        )}
       />
-      <TextField
-        value={lastName}
-        label={'Last name'}
+      <Controller
         name="lastName"
-        placeholder={'Add last name'}
-        required
-        onChange={(e) => handleChangeInput({ lastName: e.target.value })}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <TextField
+            value={value}
+            label={'Last name'}
+            error={!!errors.lastName?.message}
+            helperText={String(errors.lastName?.message)}
+            placeholder={'Add last name'}
+            required
+            onChange={onChange}
+          />
+        )}
       />
-      <CustomSelect
-        options={[
-          { value: 'male', label: 'Male' },
-          { value: 'female', label: 'Female' },
-        ]}
-        value={gender || ''}
-        label={'Gender'}
+      <Controller
         name="gender"
-        required
-        onChange={(e) => handleChangeInput({ gender: e.target.value })}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <CustomSelect
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+            ]}
+            value={value || ''}
+            label={'Gender'}
+            error={!!errors.gender?.message}
+            helperText={String(errors.gender?.message)}
+            required
+            onChange={onChange}
+          />
+        )}
       />
-      <TextField
-        value={location || ''}
-        label={'Location'}
+      <Controller
         name="location"
-        placeholder={'Add location'}
-        required
-        onChange={(e) => handleChangeInput({ location: e.target.value })}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <TextField
+            value={value}
+            label={'Location'}
+            error={!!errors.location?.message}
+            helperText={String(errors.location?.message)}
+            placeholder={'Add location'}
+            required
+            onChange={onChange}
+          />
+        )}
       />
-      <CustomSelect
-        options={timezones}
-        value={timezone || ''}
-        label={'Time zone'}
+      <Controller
         name="timezone"
-        onChange={(e) => handleChangeInput({ timezone: e.target.value })}
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <CustomSelect options={timezones} value={value || ''} label={'Time zone'} onChange={onChange} />
+        )}
       />
     </div>
   );

@@ -1,9 +1,9 @@
 import { TextField } from '@mui/material';
 import { Typography } from '@mui/material';
-import { CustomSelect } from 'common-components/CustomSelect';
 
-import { ICreateEmployee } from 'models/IEmployee';
-import { NullableField } from 'models/TNullableField';
+import { useFormContext, Controller } from 'react-hook-form';
+
+import { CustomSelect } from 'common-components/CustomSelect';
 
 import theme from 'theme/theme';
 import { useStyles } from '../../styles';
@@ -14,25 +14,17 @@ interface IOption {
 }
 
 interface IProps {
-  hiredOn: NullableField<string>;
-  yearsOfExperience: NullableField<number>;
-  position: NullableField<string>;
-  level: NullableField<string>;
   positionsOptions: IOption[];
   levelsOptions: IOption[];
-  handleChangeInput: (fields: Partial<ICreateEmployee>) => void;
 }
 
-export const WorkExperience = ({
-  hiredOn,
-  yearsOfExperience,
-  position,
-  level,
-  positionsOptions,
-  levelsOptions,
-  handleChangeInput,
-}: IProps) => {
+export const WorkExperience = ({ positionsOptions, levelsOptions }: IProps) => {
   const classes = useStyles({ theme });
+
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <div>
@@ -40,37 +32,66 @@ export const WorkExperience = ({
         WORK EXPERIENCE
       </Typography>
       <div className={classes.gridContainer}>
-        <TextField
-          value={hiredOn || ''}
-          label={'Hired on'}
+        <Controller
           name="hiredOn"
-          placeholder={'Add date'}
-          type="date"
-          required
-          onChange={(e) => handleChangeInput({ hiredOn: e.target.value })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField
+              value={value}
+              label={'Hired on'}
+              error={!!errors.hiredOn?.message}
+              helperText={String(errors.hiredOn?.message)}
+              placeholder={'Add date'}
+              type="date"
+              required
+              onChange={onChange}
+            />
+          )}
         />
-        <TextField
-          value={yearsOfExperience || ''}
-          label={'Experience in years'}
+        <Controller
           name="yearsOfExperience"
-          type="number"
-          onChange={(e) => handleChangeInput({ yearsOfExperience: Number(e.target.value) })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <TextField
+              value={value}
+              label={'Experience in years'}
+              name="yearsOfExperience"
+              type="number"
+              onChange={onChange}
+            />
+          )}
         />
-        <CustomSelect
-          options={positionsOptions}
-          value={position || ''}
-          label={'Position'}
+        <Controller
           name="position"
-          required
-          onChange={(e) => handleChangeInput({ position: e.target.value })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <CustomSelect
+              options={positionsOptions}
+              value={value || ''}
+              label={'Position'}
+              error={!!errors.position?.message}
+              helperText={String(errors.position?.message)}
+              name="position"
+              required
+              onChange={onChange}
+            />
+          )}
         />
-        <CustomSelect
-          options={levelsOptions}
-          value={level || ''}
-          label={'Position level'}
+        <Controller
           name="level"
-          required
-          onChange={(e) => handleChangeInput({ level: e.target.value })}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <CustomSelect
+              options={levelsOptions}
+              value={value || ''}
+              label={'Position level'}
+              error={!!errors.level?.message}
+              helperText={String(errors.level?.message)}
+              name="level"
+              required
+              onChange={onChange}
+            />
+          )}
         />
       </div>
     </div>

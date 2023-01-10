@@ -80,4 +80,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       },
     },
   },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+    margin: '24px',
+  },
 });

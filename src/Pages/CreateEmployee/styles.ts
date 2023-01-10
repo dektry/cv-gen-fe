@@ -15,4 +15,10 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
+  formContainer: {
+    '&.MuiFormControl-root': {
+      margin: 0,
+      width: '100%',
+    },
+  },
 });

@@ -19,4 +19,10 @@ export const useStyles = createUseStyles({
   button: {
     marginLeft: '8px',
   },
+  projectsContainer: {
+    '&.MuiFormControl-root': {
+      margin: 0,
+      width: '100%',
+    },
+  },
 });

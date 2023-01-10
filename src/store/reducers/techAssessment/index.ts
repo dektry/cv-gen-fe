@@ -1,60 +1,22 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../..';
 import paths from 'config/routes.json';
 
-import {
-  appStoreName,
-  loadAllTechAssessmentsAction,
-  completeTechAssessmentAction,
-  editTechAssessmentAction,
-  getTechAssessmentAction,
-  getTechAssessmentResultsAction,
-  deleteTechAssessmentAction,
-} from 'store/reducers/techAssessment/actionTypes';
-import {
-  getAllTechAssessments,
-  httpCompleteTechAssessment,
-  httpEditTechAssessment,
-  httpGetTechAssessment,
-  httpGetTechAssessmentResults,
-  httpDeleteTechAssessment,
-} from 'services/requests/techAssessment';
+import { appStoreName } from 'store/reducers/techAssessment/actionTypes';
 
-import { IFormAssessmentResult, ITechAssessmentState } from 'models/ITechAssessment';
-import { IAssessmentHistoryRecord } from 'models/ICommon';
+import { IAssessmentHistoryRecord, IAssessmentsComparison, ITechAssessmentState } from 'models/ITechAssessment';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 
-export const loadTechAssessments = createAsyncThunk(loadAllTechAssessmentsAction, (id: string) =>
-  getAllTechAssessments(id)
-);
-
-export const finishTechAssessment = createAsyncThunk(
-  completeTechAssessmentAction,
-  (assessment: IFormAssessmentResult) => {
-    return httpCompleteTechAssessment(assessment);
-  }
-);
-
-export const editTechAssessment = createAsyncThunk(
-  editTechAssessmentAction,
-  ({ assessment, id }: { assessment: IFormAssessmentResult; id: string }) => {
-    return httpEditTechAssessment(assessment, id);
-  }
-);
-
-export const getTechAssessment = createAsyncThunk(getTechAssessmentAction, (id: string) => {
-  return httpGetTechAssessment(id);
-});
-
-export const getTechAssessmentResults = createAsyncThunk(getTechAssessmentResultsAction, (id: string) => {
-  return httpGetTechAssessmentResults(id);
-});
-
-export const deleteTechAssessment = createAsyncThunk(deleteTechAssessmentAction, (id: string) => {
-  return httpDeleteTechAssessment(id);
-});
+import {
+  loadTechAssessments,
+  getTechAssessment,
+  getTechAssessmentResults,
+  editTechAssessment,
+  finishTechAssessment,
+  getTechAssessmentsComparison,
+} from './thunks';
 
 const initialState: ITechAssessmentState = {
   assessments: [],
@@ -67,6 +29,7 @@ const initialState: ITechAssessmentState = {
   assessmentResult: null,
   assessmentShortResult: null,
   isHistoryLoading: false,
+  assessmentsComparison: null,
 };
 
 const techAssessment = createSlice({
@@ -96,6 +59,9 @@ const techAssessment = createSlice({
     },
     setIsHistoryLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isHistoryLoading = payload;
+    },
+    setAssessmentsComparison: (state, { payload }: PayloadAction<IAssessmentsComparison | null>) => {
+      state.assessmentsComparison = payload;
     },
   },
   extraReducers: (builder) => {
@@ -158,6 +124,16 @@ const techAssessment = createSlice({
     builder.addCase(getTechAssessmentResults.fulfilled, (state, { payload }) => {
       state.assessmentShortResult = payload;
     });
+    builder.addCase(getTechAssessmentsComparison.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getTechAssessmentsComparison.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getTechAssessmentsComparison.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.assessmentsComparison = payload;
+    });
   },
 });
 
@@ -173,4 +149,5 @@ export const {
   chooseInterviewLevel,
   chooseInterviewPosition,
   setIsLoading,
+  setAssessmentsComparison,
 } = techAssessment.actions;
