@@ -63,12 +63,6 @@ export const SoftAssessmentHistory = () => {
     }
   }, []);
 
-  useEffect(() => {
-    return function clear() {
-      dispatch(setChosenEmployee(defaultEmployee));
-    };
-  }, []);
-
   const handleClick = () => {
     setIsOpen(true);
     if (!allLevels.length) {
@@ -124,6 +118,7 @@ export const SoftAssessmentHistory = () => {
     return function clear() {
       dispatch(setSoftAssessmentList([]));
       setCurrentMatrix({} as IFormSoftSkillsMatrix);
+      dispatch(setChosenEmployee(defaultEmployee));
     };
   }, []);
 

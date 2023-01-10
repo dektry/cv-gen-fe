@@ -5,7 +5,8 @@ import paths from 'config/routes.json';
 
 import { appStoreName } from 'store/reducers/techAssessment/actionTypes';
 
-import { IAssessmentHistoryRecord, IAssessmentsComparison, ITechAssessmentState } from 'models/ITechAssessment';
+import { IAssessmentsComparison, ITechAssessmentState } from 'models/ITechAssessment';
+import { IAssessmentHistoryRecord } from 'models/ICommon';
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 import { message } from 'antd';
 

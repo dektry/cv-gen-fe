@@ -63,12 +63,6 @@ export const AssessmentHistory = () => {
     }
   }, []);
 
-  useEffect(() => {
-    return function clear() {
-      dispatch(setChosenEmployee(defaultEmployee));
-    };
-  }, []);
-
   const handleClick = () => {
     setIsOpen(true);
     if (!allLevels.length) {
@@ -124,6 +118,7 @@ export const AssessmentHistory = () => {
     return function clear() {
       dispatch(setTechAssessments([]));
       setCurrentMatrix({} as IFormHardSkillsMatrix);
+      dispatch(setChosenEmployee(defaultEmployee));
     };
   }, []);
 
