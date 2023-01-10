@@ -20,8 +20,6 @@ export const AssessmentsComparisonTable = ({ assessments }: IProps) => {
     emptyCells.push(uuidv4());
   }
 
-  console.log(assessments);
-
   return (
     <>
       <TableContainer>
