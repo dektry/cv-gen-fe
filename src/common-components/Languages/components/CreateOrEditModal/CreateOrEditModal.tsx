@@ -19,7 +19,7 @@ import { CustomSelect } from 'common-components/CustomSelect';
 
 import { languageLevels, languages } from '../../utils/constants';
 import { formattedLanguageLevels } from '../LanguageForm/utils/helpers';
-import { ICvLanguage } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvLanguage } from 'models/ICVGeneration';
 
 interface IProps {
   isOpen: boolean;

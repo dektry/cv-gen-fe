@@ -4,7 +4,6 @@ import { generatePdf, getTemplate } from 'services/requests/cvGeneration';
 import { generateCv, getProfSkills, loadCvTemplate, loadGroupOfTemplates } from './actionTypes';
 import { TProfSkill } from 'Pages/CVGeneration';
 import { getAllTechAssessments, httpGetTechAssessment } from 'services/requests/techAssessment';
-import { getSkillMatrixByIds } from 'services/requests/skills';
 
 interface IDownloadProps {
   template: string;

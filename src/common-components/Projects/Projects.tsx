@@ -12,7 +12,7 @@ import { ProjectCard } from './components/ProjectCard';
 import { CreateEditModal } from './components/CreateEditModal';
 
 import { useStyles } from './styles';
-import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvProject } from 'models/ICVGeneration';
 
 export const Projects = () => {
   const classes = useStyles();

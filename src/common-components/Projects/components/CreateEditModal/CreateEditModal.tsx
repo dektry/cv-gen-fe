@@ -19,7 +19,7 @@ import { employeesSelector } from 'store/reducers/employees';
 import { technologiesSelector } from 'store/reducers/technologies';
 import { getTechnologiesList } from 'store/reducers/technologies/thunks';
 
-import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvProject } from 'models/ICVGeneration';
 
 import { TagsInput } from 'common-components/TagsInput';
 

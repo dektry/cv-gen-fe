@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ICvLanguage } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvLanguage } from 'models/ICVGeneration';
 
 import { httpGetLanguages, httpPostLanguage, httpPutLanguage, httpDeleteLanguage } from 'services/requests/languages';
 

@@ -1,6 +1,6 @@
 import { message } from 'antd';
 
-import { CvInfoForm, ICvProject, ICvProfSkill, IProfSkill } from '../components/CVGenerationInfo';
+import { CvInfoForm, ICvProject, ICvProfSkill, IProfSkill } from 'models/ICVGeneration';
 import {
   invisibleBorderToWrapWithoutSkills,
   profSkillGroupHeight,

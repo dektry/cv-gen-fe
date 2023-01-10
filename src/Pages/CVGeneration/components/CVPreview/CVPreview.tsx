@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { cvGenerationSelector } from 'store/reducers/cvGeneration';
 import { useAppDispatch } from 'store';
 import { downloadCv, fetchGroupOfTemplates } from 'store/reducers/cvGeneration/thunks';
-import { CvInfoForm } from '../CVGenerationInfo';
+import { CvInfoForm } from 'models/ICVGeneration';
 import { useStyles } from 'Pages/CVGeneration/components/CVPreview/styles';
 import { getCvPages } from 'Pages/CVGeneration/utils/getCvPages';
 import { templateWidth } from 'Pages/CVGeneration/constants';

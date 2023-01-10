@@ -1,5 +1,5 @@
 import { IProjectFromDB } from 'models/IProject';
-import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvProject } from 'models/ICVGeneration';
 
 export function projectFormatter(project: ICvProject, id: string): IProjectFromDB {
   const processedTools = project.tools?.map((el) => {

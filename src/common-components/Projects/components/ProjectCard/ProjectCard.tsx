@@ -6,7 +6,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 
-import { ICvProject } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvProject } from 'models/ICVGeneration';
 
 import { EditButton } from 'common-components/EditButton';
 import { DeleteButton } from 'common-components/DeleteButton';

@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { apiClient } from '../apiService';
 import endpoints from 'config/endpoint.json';
-import { ICvLanguage } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvLanguage } from 'models/ICVGeneration';
 
 export const httpGetLanguages = async (employeeId: string) => {
   try {

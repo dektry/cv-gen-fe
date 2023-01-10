@@ -1,5 +1,5 @@
 import { IEmployee } from 'models/IEmployee';
-import { CvInfoForm } from '../components/CVGenerationInfo';
+import { CvInfoForm } from 'models/ICVGeneration';
 
 export function formatEmployeeBeforeUpdate(employee: IEmployee, cvInfo: CvInfoForm) {
   return {

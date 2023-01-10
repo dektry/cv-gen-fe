@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvEducation } from 'models/ICVGeneration';
 
 import {
   httpGetEducation,

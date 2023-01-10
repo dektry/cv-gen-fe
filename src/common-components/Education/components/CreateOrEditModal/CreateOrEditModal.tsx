@@ -15,7 +15,7 @@ import { yearOptions } from '../../utils/constants';
 import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { CustomSelect } from 'common-components/CustomSelect';
-import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvEducation } from 'models/ICVGeneration';
 
 interface IProps {
   isOpen: boolean;

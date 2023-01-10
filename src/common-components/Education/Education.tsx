@@ -10,7 +10,7 @@ import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvEducation } from 'models/ICVGeneration';
 
 import { AddButton } from 'common-components/AddButton';
 import { DeleteModal } from 'common-components/DeleteModal';

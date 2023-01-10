@@ -1,4 +1,4 @@
-import { ICvEducation } from '../components/CVGenerationInfo';
+import { ICvEducation } from 'models/ICVGeneration';
 
 export const formatEducationBeforeCvGen = (education: ICvEducation[]): string[][] => {
   return education.map((el) => {

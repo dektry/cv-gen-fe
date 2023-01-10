@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { apiClient } from '../apiService';
 import endpoints from 'config/endpoint.json';
-import { ICvEducation } from 'Pages/CVGeneration/components/CVGenerationInfo';
+import { ICvEducation } from 'models/ICVGeneration';
 
 export const httpGetEducation = async (employeeId: string) => {
   try {
