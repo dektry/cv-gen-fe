@@ -3,7 +3,8 @@ import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, B
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
-import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { useFieldArray, useFormContext, Controller } from 'react-hook-form';
+
 import { SkillGroupField } from 'common-components/SkillGroupField';
 import { CustomSelect } from 'common-components/CustomSelect';
 import { AddButton } from 'common-components/AddButton';
@@ -11,6 +12,7 @@ import { DeleteButton } from 'common-components/DeleteButton';
 import theme from 'theme/theme';
 import { LevelTypesEnum } from 'models/IInterview';
 import { useStyles } from './styles';
+import { ICvProfSkill } from 'models/ICVGeneration';
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
   label: level,
@@ -18,103 +20,64 @@ const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
 }));
 
 interface IProfSkillGroup {
-  skillGroup: TProfSkill;
+  skillGroup: ICvProfSkill;
   groupIndex: number;
-  profSkills: TProfSkill[];
-  updateCvInfo: (fields: Partial<CvInfo>) => void;
   handleDeleteSkillGroup: (groupIndex: number) => void;
 }
 
 export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
-  const { skillGroup, groupIndex, profSkills, updateCvInfo, handleDeleteSkillGroup } = props;
+  const { groupIndex, handleDeleteSkillGroup } = props;
 
   const classes = useStyles({ theme });
 
-  const [groupState, setGroupState] = useState(skillGroup);
+  const { control } = useFormContext();
 
-  useEffect(() => {
-    setGroupState(skillGroup);
-  }, [skillGroup]);
-
-  useEffect(() => {
-    const newProfSkills = [...profSkills];
-    newProfSkills[groupIndex] = groupState;
-    updateCvInfo({ profSkills: newProfSkills });
-  }, [groupState]);
-
-  const handleSkillGroupChange = (value: string) => {
-    setGroupState((prevState) => ({
-      ...prevState,
-      groupName: value,
-    }));
-  };
-
-  const handleSkillChange = (groupIndex: number, skillIndex: number, value: string) => {
-    const skills = [...groupState.skills];
-    skills[skillIndex].name = value;
-    setGroupState((prevState) => ({
-      ...prevState,
-      skills,
-    }));
-  };
-
-  const handleSkillLevelChange = (groupIndex: number, skillIndex: number, value: string) => {
-    const skills = [...groupState.skills];
-    skills[skillIndex] = { ...skills[skillIndex], level: value };
-    setGroupState((prevState) => ({
-      ...prevState,
-      skills,
-    }));
-  };
-
-  const handleAddSkill = () => {
-    const skills = [...groupState.skills];
-    skills.push({ name: '', level: '' });
-    setGroupState((prevState) => ({
-      ...prevState,
-      skills,
-    }));
-  };
-
-  const handleDeleteSkill = (groupIndex: number, skillIndex: number) => {
-    const skills = [...groupState.skills];
-    skills.splice(skillIndex, 1);
-    setGroupState((prevState) => ({
-      ...prevState,
-      skills,
-    }));
-  };
+  const { fields, remove, append } = useFieldArray({
+    name: `profSkills.${groupIndex}.skills`,
+    control,
+    keyName: 'skillKey',
+  });
 
   return (
     <Accordion className={classes.accordion} disableGutters TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className={classes.icon} />}>
-        <SkillGroupField value={groupState.groupName} onChange={(e) => handleSkillGroupChange(e.target.value)} />
+        <Controller
+          name={`profSkills.${groupIndex}.groupName`}
+          control={control}
+          render={({ field: { value, onChange } }) => <SkillGroupField value={value} onChange={onChange} />}
+        />
       </AccordionSummary>
       <AccordionDetails>
-        {groupState.skills.map((skill, skillIndex) => (
-          <Box key={'skill' + groupIndex + skillIndex} className={classes.skill}>
-            <TextField
-              label="Skill"
-              value={skill.name}
-              onChange={(e) => handleSkillChange(groupIndex, skillIndex, e.target.value)}
+        {fields?.map((skill, skillIndex) => (
+          <Box key={skill.skillKey} className={classes.skill}>
+            <Controller
+              name={`profSkills.${groupIndex}.skills.${skillIndex}.name`}
+              control={control}
+              render={({ field: { value, onChange } }) => {
+                return <TextField label="Skill" value={value} onChange={onChange} />;
+              }}
             />
-            <CustomSelect
-              value={skill.level}
-              options={levelsOptions}
-              sx={{ width: '220px' }}
-              onChange={(e) => handleSkillLevelChange(groupIndex, skillIndex, e.target.value)}
+            <Controller
+              name={`profSkills.${groupIndex}.skills.${skillIndex}.level`}
+              control={control}
+              render={({ field: { value, onChange } }) => {
+                return (
+                  <CustomSelect value={value} options={levelsOptions} sx={{ width: '220px' }} onChange={onChange} />
+                );
+              }}
             />
+
             <Button
               className={classes.deleteSkillBtn}
               variant="contained"
               endIcon={<AddRoundedIcon />}
-              onClick={() => handleDeleteSkill(groupIndex, skillIndex)}
+              onClick={() => remove(skillIndex)}
             />
           </Box>
         ))}
       </AccordionDetails>
       <AccordionActions sx={{ justifyContent: 'space-between' }}>
-        <AddButton title="Add field" onClick={() => handleAddSkill()} />
+        <AddButton title="Add field" onClick={() => append({ name: '', level: '' })} />
         <DeleteButton title="Delete section" onClick={() => handleDeleteSkillGroup(groupIndex)} />
       </AccordionActions>
     </Accordion>

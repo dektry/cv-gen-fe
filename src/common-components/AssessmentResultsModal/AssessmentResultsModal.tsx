@@ -36,14 +36,14 @@ export const AssessmentResultsModal = ({ isOpen, onClose, modalTitle, assessment
       <Box className={classes.box}>
         <CloseIcon className={classes.closeIcon} onClick={onClose} />
         <Typography variant="h2" className={classes.title}>
-          {modalTitle}
+          {`${modalTitle} RESULTS`}
         </Typography>
         {isLoading ? (
           <CircularProgress sx={{ margin: 'auto' }} />
         ) : (
           <>
             <DatePositionLevelInfo
-              title={'TECHNICAL ASSESSMENT'}
+              title={modalTitle}
               date={assessmentShortResult?.created}
               position={assessmentShortResult?.position || ''}
               level={assessmentShortResult?.level || ''}

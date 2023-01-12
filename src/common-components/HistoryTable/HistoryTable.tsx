@@ -31,6 +31,7 @@ interface IProps {
   deleteAssessment(arg: string): AsyncThunkAction<any, string, Record<string, unknown>>;
   assessmentShortResult: NullableField<IAssessmentFromDB>;
   isLoading: boolean;
+  resultsModalTitle: string;
 }
 
 export const HistoryTable = ({
@@ -40,6 +41,7 @@ export const HistoryTable = ({
   assessmentShortResult,
   isLoading,
   deleteAssessment,
+  resultsModalTitle,
 }: IProps) => {
   const classes = useStyles({ theme });
 
@@ -148,7 +150,7 @@ export const HistoryTable = ({
       <AssessmentResultsModal
         isOpen={isResultsModalOpen}
         onClose={handleResultsModalClose}
-        modalTitle={'TECHNICAL ASSESSMENT RESULTS'}
+        modalTitle={resultsModalTitle}
         assessmentShortResult={assessmentShortResult}
         isLoading={isLoading}
       />

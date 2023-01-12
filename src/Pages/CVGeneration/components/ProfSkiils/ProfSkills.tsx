@@ -1,39 +1,37 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Box, LinearProgress, Typography } from '@mui/material';
-import { throttle } from 'lodash';
 
-import { CvInfo, TProfSkill } from 'Pages/CVGeneration/CVGenerationPage';
+import { useFormContext, useFieldArray } from 'react-hook-form';
+
 import { AddButton } from 'common-components/AddButton';
 import { profSkillsSelector } from 'store/reducers/cvGeneration';
 import { useDeferredLoading } from 'hooks/useDeferredLoading';
 import { ProfSkillGroup } from 'Pages/CVGeneration/components/ProfSkiils/ProfSkillGroup';
+import { ICvProfSkill } from 'models/ICVGeneration';
 
-interface IProfSkills {
-  profSkills: TProfSkill[];
-  updateCvInfo: (fields: Partial<CvInfo>) => void;
-}
+type TProfSkillGroupForm = ICvProfSkill & { profSkillGroupKey: string };
 
-export const ProfSkills = React.memo((props: IProfSkills) => {
-  const { profSkills, updateCvInfo } = props;
-
+export const ProfSkills = () => {
   const { isLoading } = useSelector(profSkillsSelector);
+
+  const { control } = useFormContext();
+
+  const { remove, append, fields } = useFieldArray({
+    name: 'profSkills',
+    control,
+    keyName: 'profSkillGroupKey',
+  });
 
   const deferredLoading = useDeferredLoading(isLoading);
 
   const handleAddSkillGroup = () => {
-    const newProfSkills = [...profSkills];
-    newProfSkills.push({ groupName: '', skills: [] });
-    updateCvInfo({ profSkills: newProfSkills });
+    append({ groupName: '', skills: [] });
   };
 
   const handleDeleteSkillGroup = (groupIndex: number) => {
-    const newProfSkills = [...profSkills];
-    newProfSkills.splice(groupIndex, 1);
-    updateCvInfo({ profSkills: newProfSkills });
+    remove(groupIndex);
   };
-
-  const updateCvInfoThrottled = useCallback(throttle(updateCvInfo, 700), [updateCvInfo]);
 
   return (
     <Box>
@@ -44,13 +42,11 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
         <LinearProgress></LinearProgress>
       ) : (
         <>
-          {profSkills?.map((skillGroup, groupIndex) => (
+          {(fields as TProfSkillGroupForm[])?.map((skillGroup: TProfSkillGroupForm, groupIndex: number) => (
             <ProfSkillGroup
-              key={'group' + groupIndex}
-              profSkills={profSkills}
+              key={skillGroup.profSkillGroupKey}
               skillGroup={skillGroup}
               groupIndex={groupIndex}
-              updateCvInfo={updateCvInfoThrottled}
               handleDeleteSkillGroup={handleDeleteSkillGroup}
             />
           ))}
@@ -64,4 +60,4 @@ export const ProfSkills = React.memo((props: IProfSkills) => {
       />
     </Box>
   );
-});
+};
