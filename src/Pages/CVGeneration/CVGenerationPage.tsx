@@ -124,10 +124,6 @@ export const CVGenerationPage = React.memo(() => {
     };
   }, []);
 
-  const updateCvInfo = useCallback((fields: Partial<CvInfo>) => {
-    setCvInfo((prev) => ({ ...prev, ...fields }));
-  }, []);
-
   const tagsSearch = (value: string) => {
     dispatch(getSoftSkillsToCvList({ query: value }));
   };
@@ -194,7 +190,7 @@ export const CVGenerationPage = React.memo(() => {
           softSkillsSearch={tagsSearch}
           updateCvSoftSkills={updateCvSoftSkills}
         />
-        <ProfSkills profSkills={profSkills} updateCvInfo={updateCvInfo} />
+        <ProfSkills />
         <Projects />
         <div className={classes.genCVbtnBlock}>
           <SaveButton error={false} title={'SAVE CHANGES'} handleClickOkButton={() => handleSubmit()} />

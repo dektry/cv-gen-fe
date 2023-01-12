@@ -145,6 +145,7 @@ export const AssessmentHistory = () => {
             assessmentShortResult={assessmentShortResult}
             isLoading={isLoading}
             deleteAssessment={deleteTechAssessment}
+            resultsModalTitle={'TECHNICAL ASSESSMENT'}
           />
         </>
       ) : (
