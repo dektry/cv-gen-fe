@@ -146,6 +146,7 @@ export const SoftAssessmentHistory = () => {
             isLoading={isLoading}
             deleteAssessment={deleteSoftAssessment}
             resultsModalTitle={'SOFT ASSESSMENT'}
+
           />
         </>
       ) : (
