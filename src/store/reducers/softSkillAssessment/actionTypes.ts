@@ -6,3 +6,4 @@ export const completeSoftSkillAssessment = `${appStoreName}/completeSoftSkillAss
 export const editSoftSkillAssessment = `${appStoreName}/editSoftSkillAssessment`;
 export const deleteSoftSkillAssessmentAction = `${appStoreName}/delete-soft-assessment`;
 export const getSoftAssessmentResultsAction = `${appStoreName}/get-soft-assessment-results`;
+export const getSoftAssessmentsComparisonAction = `${appStoreName}/get-soft-assessments-comparison`;

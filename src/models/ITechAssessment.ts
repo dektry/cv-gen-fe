@@ -2,7 +2,7 @@ import { IDBLevels, IDBPosition } from './IUser';
 import { IEmployee } from './IEmployee';
 import { IInterviewAnswers, IInterviewQuestion, LevelTypesEnum } from './IInterview';
 import { NullableField } from './TNullableField';
-import { IAssessmentHistoryRecord, IAssessmentFromDB } from './ICommon';
+import { IAssessmentHistoryRecord, IAssessmentFromDB, IAssessmentsComparison } from './ICommon';
 
 export interface IAssessmentEmployee {
   employee: IEmployee;
@@ -103,14 +103,4 @@ export interface IFormAssessmentResult {
   levelId: string;
   grades: { value: string; skillId: string }[];
   comment: string;
-}
-
-export interface IComparisonSkillGroup {
-  groupName: string;
-  skills: string[][];
-}
-
-export interface IAssessmentsComparison {
-  head: string[];
-  body: IComparisonSkillGroup[];
 }

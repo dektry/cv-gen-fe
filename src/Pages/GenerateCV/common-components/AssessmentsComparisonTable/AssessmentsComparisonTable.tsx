@@ -7,16 +7,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import { IAssessmentsComparison } from 'models/ITechAssessment';
+import { IAssessmentsComparison } from 'models/ICommon';
 
 interface IProps {
   assessments: IAssessmentsComparison;
+  showGroupName: boolean;
 }
 
-export const AssessmentsComparisonTable = ({ assessments }: IProps) => {
+export const AssessmentsComparisonTable = ({ assessments, showGroupName }: IProps) => {
   const emptyCells: string[] = [];
 
-  for (let i = 0; i <= assessments.head.length - 2; i++) {
+  for (let i = 0; i < assessments.head.length - 1; i++) {
     emptyCells.push(uuidv4());
   }
 
@@ -27,7 +28,7 @@ export const AssessmentsComparisonTable = ({ assessments }: IProps) => {
           <TableHead>
             <TableRow>
               {assessments.head.map((el, idx) => (
-                <TableCell key={`${el}-${idx}`} sx={{ fontWeight: 'bold' }}>
+                <TableCell key={`${el}-${idx}-${uuidv4()}`} sx={{ fontWeight: 'bold' }}>
                   {el}
                 </TableCell>
               ))}
@@ -36,15 +37,17 @@ export const AssessmentsComparisonTable = ({ assessments }: IProps) => {
           <TableBody>
             {assessments.body.map((row, groupIndex) => (
               <>
-                <TableRow
-                  key={`${row.groupName}-${groupIndex}`}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: '#f4f7fc' }}
-                >
-                  <TableCell>{row.groupName}</TableCell>
-                  {emptyCells.map((el) => (
-                    <TableCell key={el} />
-                  ))}
-                </TableRow>
+                {showGroupName && (
+                  <TableRow
+                    key={`${row.groupName}-${groupIndex}`}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: '#f4f7fc' }}
+                  >
+                    <TableCell>{row.groupName}</TableCell>
+                    {emptyCells.map((el) => (
+                      <TableCell key={el} />
+                    ))}
+                  </TableRow>
+                )}
                 {row.skills.map((skill, skillIndex) => {
                   return (
                     <TableRow

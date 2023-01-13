@@ -22,6 +22,7 @@ import { Settings } from 'Pages/Settings';
 import { HardSkillsMatrixList } from 'Pages/Settings/components/HardSkillsMatrixList';
 import { SoftSkillsMatrixList } from 'Pages/Settings/components/SoftSkillsMatrixList';
 import { TechAssessmentsComparison } from 'Pages/GenerateCV/TechnicalAssessment/TechAssessmentsComparison';
+import { SoftAssessmentsComparison } from 'Pages/GenerateCV/SoftAssessment/SoftAssessmentsComparison';
 
 import routes from 'config/routes.json';
 import { SoftSkillsMatrix } from 'Pages/Settings/components/SoftSkillsMatrix';
@@ -58,6 +59,7 @@ export const privateRoutes: IRoute[] = [
   { path: routes.settingsSoftSkillsMatrixList, component: SoftSkillsMatrixList },
   { path: routes.softSkillsMatrixSetUp, component: SoftSkillsMatrix },
   { path: routes.softSkillsMatrixDetails, component: SoftSkillsMatrix },
+  { path: routes.softAssessmentsComparison, component: SoftAssessmentsComparison },
 ];
 
 if (process.env.REACT_APP_ENV === 'development') {

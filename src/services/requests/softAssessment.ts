@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
 
+import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 import { ISoftAssessment } from 'models/ISoftAssessment';
 
 export const httpGetAllSoftAssessments = async (id: string) => {
@@ -38,7 +39,7 @@ export const httpGetSoftAssessmentResults = async (id: string) => {
   }
 };
 
-export const httpCompleteSoftAssessment = async (assessment: ISoftAssessment) => {
+export const httpCompleteSoftAssessment = async (assessment: IFormSoftSkillsMatrix) => {
   try {
     const { data } = await apiClient.post(endpoints.employeeSoftAssessments, assessment);
 
@@ -65,6 +66,17 @@ export const httpDeleteSoftAssessment = async (id: string) => {
     await apiClient.delete(`${endpoints.employeeSoftAssessments}/${id}`);
   } catch (error) {
     console.error('[API_CLIENT_DELETE_SOFT_ASSESSMENT_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
+
+export const httpGetSoftAssessmentsComparison = async (id: string) => {
+  try {
+    const { data } = await apiClient.get(`${endpoints.employeeSoftAssessments}/${id}/comparison`);
+
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_ЫЩАЕ_ASSESSMENTS_COMPARISON_ERROR]', error);
     message.error(`Server error. Please contact admin`);
   }
 };

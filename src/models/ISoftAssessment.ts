@@ -1,6 +1,6 @@
 import { IDBPosition, IDBLevels } from './IUser';
 import { NullableField } from './TNullableField';
-import { IAssessmentHistoryRecord, IAssessmentFromDB } from './ICommon';
+import { IAssessmentHistoryRecord, IAssessmentFromDB, IAssessmentsComparison } from './ICommon';
 
 export interface ISoftSkill {
   id: string;
@@ -13,12 +13,11 @@ export interface ISoftSkill {
 
 export interface ISoftAssessment {
   id: NullableField<string>;
-  createdAt: string;
+  created: string;
   type: 'Assessment';
   employeeId: string;
   position?: IDBPosition;
   level?: IDBLevels;
-  comment?: string;
   softSkills: Array<ISoftSkill>;
   chosenPosition?: string;
   chosenLevel?: string;
@@ -37,4 +36,5 @@ export interface ISoftAssessmentState {
   isHistoryLoading: boolean;
   assessmentsHistory: IAssessmentHistoryRecord[];
   assessmentShortResult: NullableField<IAssessmentFromDB>;
+  assessmentsComparison: NullableField<IAssessmentsComparison>;
 }

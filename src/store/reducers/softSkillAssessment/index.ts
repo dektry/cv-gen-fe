@@ -3,10 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
-import { getAllSoftSkillAssessments, getOneSoftAssessment, getSoftAssessmentResults } from './thunks';
+import {
+  getAllSoftSkillAssessments,
+  getOneSoftAssessment,
+  getSoftAssessmentResults,
+  getSoftAssessmentsComparison,
+} from './thunks';
 
 import { ISoftAssessmentState, ISoftSkill, ISoftAssessment } from 'models/ISoftAssessment';
-import { IAssessmentHistoryRecord } from 'models/ICommon';
+import { IAssessmentHistoryRecord, IAssessmentsComparison } from 'models/ICommon';
 
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
 
@@ -22,6 +27,7 @@ const initialState: ISoftAssessmentState = {
   assessmentResult: null,
   chosenLevel: undefined,
   chosenPosition: undefined,
+  assessmentsComparison: null,
 };
 
 const softSkillAssessment = createSlice({
@@ -50,6 +56,9 @@ const softSkillAssessment = createSlice({
     },
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
+    },
+    setAssessmentsComparison: (state, { payload }: PayloadAction<IAssessmentsComparison | null>) => {
+      state.assessmentsComparison = payload;
     },
   },
   extraReducers: (builder) => {
@@ -88,6 +97,16 @@ const softSkillAssessment = createSlice({
     builder.addCase(getSoftAssessmentResults.fulfilled, (state, { payload }) => {
       state.assessmentShortResult = payload;
     });
+    builder.addCase(getSoftAssessmentsComparison.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getSoftAssessmentsComparison.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getSoftAssessmentsComparison.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.assessmentsComparison = payload;
+    });
   },
 });
 
@@ -103,4 +122,5 @@ export const {
   chooseInterviewPosition,
   setIsLoading,
   setSoftAssessmentList,
+  setAssessmentsComparison,
 } = softSkillAssessment.actions;

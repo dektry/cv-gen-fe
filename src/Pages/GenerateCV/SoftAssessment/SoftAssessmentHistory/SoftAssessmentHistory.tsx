@@ -32,7 +32,7 @@ import { IDBLevels, IDBPosition } from 'models/IUser';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-import { IFormSoftSkillsMatrix, ISoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
+import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 
 export const SoftAssessmentHistory = () => {
   const dispatch = useAppDispatch();
@@ -73,7 +73,7 @@ export const SoftAssessmentHistory = () => {
   const handleSubmit = () => {
     if (chosenLevel && chosenPosition && currentMatrix.id) {
       navigate(
-        generatePath(paths.technicalAssessment, {
+        generatePath(paths.softAssessment, {
           id: id,
           positionId: chosenPosition.id,
           levelId: chosenLevel.id,
@@ -106,12 +106,12 @@ export const SoftAssessmentHistory = () => {
 
   const setInterviewPosition = (position: IDBPosition) => {
     dispatch(choosePosition(position));
-    const foundMatrix = matrix.find((el) => el.position.id === position.id) as ISoftSkillsMatrix;
+    const foundMatrix = matrix.find((el) => el.position.id === position.id) as IFormSoftSkillsMatrix;
     setCurrentMatrix(foundMatrix);
   };
 
   const handleRowClick = (assessmentId: string) => {
-    navigate(generatePath(paths.prevTechnicalAssessment, { id, assessmentId }));
+    navigate(generatePath(paths.prevSoftSkillsAssessment, { id, assessmentId }));
   };
 
   useEffect(() => {
@@ -134,7 +134,7 @@ export const SoftAssessmentHistory = () => {
             <Typography variant="h2" sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
               Soft skills assessment history
             </Typography>
-            <Link className={classes.link} to={generatePath(paths.softSkillAssessmentHistory, { id })}>
+            <Link className={classes.link} to={generatePath(paths.softAssessmentsComparison, { id })}>
               Show comparison
             </Link>
           </div>
@@ -146,7 +146,6 @@ export const SoftAssessmentHistory = () => {
             isLoading={isLoading}
             deleteAssessment={deleteSoftAssessment}
             resultsModalTitle={'SOFT ASSESSMENT'}
-
           />
         </>
       ) : (
