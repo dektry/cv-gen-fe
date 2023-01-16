@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch } from 'store';
 import { useSelector } from 'react-redux';
-import { techAssessmentSelector, setAssessmentsComparison } from 'store/reducers/techAssessment';
-import { getTechAssessmentsComparison } from 'store/reducers/techAssessment/thunks';
+import { softSkillAssessmentSelector, setAssessmentsComparison } from 'store/reducers/softSkillAssessment';
+import { getSoftAssessmentsComparison } from 'store/reducers/softSkillAssessment/thunks';
 
 import Typography from '@mui/material/Typography';
 
@@ -14,21 +14,21 @@ import { AssessmentsComparisonTable } from 'Pages/GenerateCV/common-components/A
 
 import paths from 'config/routes.json';
 
-export const TechAssessmentsComparison = () => {
+export const SoftAssessmentsComparison = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<{ id: string }>();
-  const { isLoading, assessmentsComparison } = useSelector(techAssessmentSelector);
+  const { isLoading, assessmentsComparison } = useSelector(softSkillAssessmentSelector);
 
   useEffect(() => {
     if (id) {
-      dispatch(getTechAssessmentsComparison(id));
+      dispatch(getSoftAssessmentsComparison(id));
     }
   }, []);
 
   useEffect(() => {
     return () => {
-      dispatch(setAssessmentsComparison(null));
+      setAssessmentsComparison(null);
     };
   }, []);
 
@@ -36,9 +36,11 @@ export const TechAssessmentsComparison = () => {
 
   return (
     <>
-      <GenerateCvHeader backPath={paths.technicalAssessmentHistory.replace(':id', id as string)} />
+      <GenerateCvHeader backPath={paths.softSkillAssessmentHistory.replace(':id', id as string)} />
       <Typography variant="h2">COMPARISON TABLE</Typography>
-      {assessmentsComparison && <AssessmentsComparisonTable assessments={assessmentsComparison} showGroupName={true} />}
+      {assessmentsComparison && (
+        <AssessmentsComparisonTable assessments={assessmentsComparison} showGroupName={false} />
+      )}
     </>
   );
 };

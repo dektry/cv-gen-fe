@@ -89,3 +89,13 @@ export interface IAssessmentFromDB {
   position: string;
   answers?: IInterviewResultAnswers[];
 }
+
+export interface IComparisonSkillGroup {
+  groupName: string;
+  skills: string[][];
+}
+
+export interface IAssessmentsComparison {
+  head: string[];
+  body: IComparisonSkillGroup[];
+}

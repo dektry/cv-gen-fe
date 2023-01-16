@@ -7,8 +7,8 @@ import {
   httpGetSoftAssessment,
   httpDeleteSoftAssessment,
   httpGetSoftAssessmentResults,
+  httpGetSoftAssessmentsComparison,
 } from 'services/requests/softAssessment';
-import { ISoftAssessment } from 'models/ISoftAssessment';
 
 import {
   completeSoftSkillAssessment,
@@ -17,7 +17,9 @@ import {
   editSoftSkillAssessment,
   deleteSoftSkillAssessmentAction,
   getSoftAssessmentResultsAction,
+  getSoftAssessmentsComparisonAction,
 } from './actionTypes';
+import { IFormSoftAssessmentResult } from 'models/ISoftAssessment';
 
 export const getAllSoftSkillAssessments = createAsyncThunk(loadAllSoftSkillAssessments, (employeeId: string) => {
   return httpGetAllSoftAssessments(employeeId);
@@ -27,13 +29,19 @@ export const getOneSoftAssessment = createAsyncThunk(loadAOneSoftSkillAssessment
   return httpGetSoftAssessment(assessmentId);
 });
 
-export const completeSoftAssessment = createAsyncThunk(completeSoftSkillAssessment, (assessment: ISoftAssessment) => {
-  return httpCompleteSoftAssessment(assessment);
-});
+export const completeSoftAssessment = createAsyncThunk(
+  completeSoftSkillAssessment,
+  (assessment: IFormSoftAssessmentResult) => {
+    return httpCompleteSoftAssessment(assessment);
+  }
+);
 
-export const editSoftAssessment = createAsyncThunk(editSoftSkillAssessment, (assessment: ISoftAssessment) => {
-  return httpEditSoftAssessment(assessment);
-});
+export const editSoftAssessment = createAsyncThunk(
+  editSoftSkillAssessment,
+  ({ assessment, assessmentId }: { assessment: IFormSoftAssessmentResult; assessmentId: string }) => {
+    return httpEditSoftAssessment(assessment, assessmentId);
+  }
+);
 
 export const deleteSoftAssessment = createAsyncThunk(deleteSoftSkillAssessmentAction, (id: string) => {
   return httpDeleteSoftAssessment(id);
@@ -41,4 +49,8 @@ export const deleteSoftAssessment = createAsyncThunk(deleteSoftSkillAssessmentAc
 
 export const getSoftAssessmentResults = createAsyncThunk(getSoftAssessmentResultsAction, (id: string) => {
   return httpGetSoftAssessmentResults(id);
+});
+
+export const getSoftAssessmentsComparison = createAsyncThunk(getSoftAssessmentsComparisonAction, (id: string) => {
+  return httpGetSoftAssessmentsComparison(id);
 });

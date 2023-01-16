@@ -1,14 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { message } from 'antd';
 
 import { RootState } from 'store';
 
 import { appStoreName } from './actionTypes';
-import { getAllSoftSkillAssessments, getOneSoftAssessment, getSoftAssessmentResults } from './thunks';
+import {
+  getAllSoftSkillAssessments,
+  getOneSoftAssessment,
+  getSoftAssessmentResults,
+  getSoftAssessmentsComparison,
+  completeSoftAssessment,
+  editSoftAssessment,
+} from './thunks';
 
 import { ISoftAssessmentState, ISoftSkill, ISoftAssessment } from 'models/ISoftAssessment';
-import { IAssessmentHistoryRecord } from 'models/ICommon';
+import { IAssessmentHistoryRecord, IAssessmentsComparison } from 'models/ICommon';
 
 import { defaultCurrentPage, defaultPageSize } from 'store/constants';
+import paths from 'config/routes.json';
 
 const initialState: ISoftAssessmentState = {
   assessments: [],
@@ -22,6 +31,7 @@ const initialState: ISoftAssessmentState = {
   assessmentResult: null,
   chosenLevel: undefined,
   chosenPosition: undefined,
+  assessmentsComparison: null,
 };
 
 const softSkillAssessment = createSlice({
@@ -50,6 +60,9 @@ const softSkillAssessment = createSlice({
     },
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload;
+    },
+    setAssessmentsComparison: (state, { payload }: PayloadAction<IAssessmentsComparison | null>) => {
+      state.assessmentsComparison = payload;
     },
   },
   extraReducers: (builder) => {
@@ -88,6 +101,38 @@ const softSkillAssessment = createSlice({
     builder.addCase(getSoftAssessmentResults.fulfilled, (state, { payload }) => {
       state.assessmentShortResult = payload;
     });
+    builder.addCase(getSoftAssessmentsComparison.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getSoftAssessmentsComparison.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getSoftAssessmentsComparison.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.assessmentsComparison = payload;
+    });
+    builder.addCase(completeSoftAssessment.fulfilled, () => {
+      message.success('Soft assessment was created successfully');
+      setTimeout(() => {
+        window.location.replace(
+          `${paths.softSkillAssessmentHistory.replace(
+            ':id',
+            window.location.pathname.split('/employee/')[1].split('/soft-interview')[0]
+          )}`
+        );
+      }, 1000);
+    });
+    builder.addCase(editSoftAssessment.fulfilled, () => {
+      message.success('Changes to soft assessment saved successfully');
+      setTimeout(() => {
+        window.location.replace(
+          `${paths.softSkillAssessmentHistory.replace(
+            ':id',
+            window.location.pathname.split('/employee/')[1].split('/soft-interview')[0]
+          )}`
+        );
+      }, 1000);
+    });
   },
 });
 
@@ -103,4 +148,5 @@ export const {
   chooseInterviewPosition,
   setIsLoading,
   setSoftAssessmentList,
+  setAssessmentsComparison,
 } = softSkillAssessment.actions;
