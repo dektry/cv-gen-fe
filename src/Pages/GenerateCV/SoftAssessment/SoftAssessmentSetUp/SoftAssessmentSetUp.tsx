@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, generatePath } from 'react-router-dom';
 
-import { useForm, useFieldArray, FormProvider, SubmitHandler } from 'react-hook-form';
+import { useForm, useFieldArray, FormProvider, SubmitHandler, useWatch } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import { SxProps } from '@mui/material';
 
@@ -20,7 +20,12 @@ import { loadEmployee } from 'store/reducers/employees/thunks';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
 import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
-import { ISoftAssessment } from 'models/ISoftAssessment';
+import {
+  ISoftAssessment,
+  IFormSoftAssessmentResult,
+  IFormSoftSkill,
+  IFormSoftSkillLevel,
+} from 'models/ISoftAssessment';
 import { IDBPosition, IDBLevels } from 'models/IUser';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
@@ -28,8 +33,6 @@ import { SoftAssessmentSkill } from './components/SoftAssessmentSkill';
 import { Spinner } from 'common-components/Spinner';
 import { EmployeeHeader } from 'Pages/GenerateCV/common-components/EmployeeHeader';
 import { DatePositionLevelInfo } from 'common-components/DatePositionLevelInfo';
-
-import { matrixTypeNarrowing } from './utils/helpers/matrixTypeNarrowing';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
@@ -82,6 +85,8 @@ export const SoftAssessmentSetUp = () => {
     defaultValues: { matrix: defaultValues },
   });
 
+  const values = useWatch({ control: methods.control });
+
   const isModified = methods.formState.isDirty;
 
   const { fields, update } = useFieldArray({
@@ -128,6 +133,8 @@ export const SoftAssessmentSetUp = () => {
   useEffect(() => {
     if (assessmentResult?.id) {
       const updatedValues = { matrix: assessmentResult };
+      console.log(assessmentResult);
+
       methods.reset({ ...updatedValues });
     } else {
       const updatedValues = { matrix: currentMatrix };
@@ -135,11 +142,32 @@ export const SoftAssessmentSetUp = () => {
     }
   }, [currentMatrix, assessmentResult]);
 
-  const handleSaveMatrix: SubmitHandler<{ matrix: IFormSoftSkillsMatrix | ISoftAssessment }> = (data) => {
-    if (matrixTypeNarrowing(data.matrix)) {
-      dispatch(editSoftAssessment(data.matrix as ISoftAssessment));
+  const handleSaveMatrix: SubmitHandler<{ matrix: IFormSoftSkillsMatrix | ISoftAssessment }> = () => {
+    const grades: { value: string; skillId: string; gradeId: string; comment: string }[] | undefined =
+      values.matrix?.skills?.map((skill: IFormSoftSkill) => {
+        const chosenLevel = skill.levels?.find(
+          (el) => el.value === skill.currentLevel || el.value === skill.currentSkillLevel?.value
+        ) as IFormSoftSkillLevel;
+        console.log(chosenLevel);
+
+        return {
+          gradeId: skill.currentSkillLevel?.id || '',
+          value: skill.currentLevel || skill.currentSkillLevel?.value || 'None',
+          skillId: skill.id || '',
+          comment: skill.currentSkillLevel?.comment || '',
+        };
+      });
+
+    const result: IFormSoftAssessmentResult = {
+      employeeId: id || '',
+      levelId: levelId || assessmentResult?.level?.id || '',
+      positionId: positionId || assessmentResult?.position?.id || '',
+      grades,
+    };
+    if (assessmentId) {
+      dispatch(editSoftAssessment({ assessment: result, assessmentId }));
     } else {
-      dispatch(completeSoftAssessment(data.matrix as IFormSoftSkillsMatrix));
+      dispatch(completeSoftAssessment(result));
     }
   };
 

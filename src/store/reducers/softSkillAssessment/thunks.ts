@@ -9,7 +9,6 @@ import {
   httpGetSoftAssessmentResults,
   httpGetSoftAssessmentsComparison,
 } from 'services/requests/softAssessment';
-import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
 
 import {
   completeSoftSkillAssessment,
@@ -20,7 +19,7 @@ import {
   getSoftAssessmentResultsAction,
   getSoftAssessmentsComparisonAction,
 } from './actionTypes';
-import { ISoftAssessment } from 'models/ISoftAssessment';
+import { IFormSoftAssessmentResult } from 'models/ISoftAssessment';
 
 export const getAllSoftSkillAssessments = createAsyncThunk(loadAllSoftSkillAssessments, (employeeId: string) => {
   return httpGetAllSoftAssessments(employeeId);
@@ -32,14 +31,17 @@ export const getOneSoftAssessment = createAsyncThunk(loadAOneSoftSkillAssessment
 
 export const completeSoftAssessment = createAsyncThunk(
   completeSoftSkillAssessment,
-  (assessment: IFormSoftSkillsMatrix) => {
+  (assessment: IFormSoftAssessmentResult) => {
     return httpCompleteSoftAssessment(assessment);
   }
 );
 
-export const editSoftAssessment = createAsyncThunk(editSoftSkillAssessment, (assessment: ISoftAssessment) => {
-  return httpEditSoftAssessment(assessment);
-});
+export const editSoftAssessment = createAsyncThunk(
+  editSoftSkillAssessment,
+  ({ assessment, assessmentId }: { assessment: IFormSoftAssessmentResult; assessmentId: string }) => {
+    return httpEditSoftAssessment(assessment, assessmentId);
+  }
+);
 
 export const deleteSoftAssessment = createAsyncThunk(deleteSoftSkillAssessmentAction, (id: string) => {
   return httpDeleteSoftAssessment(id);

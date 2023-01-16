@@ -82,6 +82,11 @@ export interface IFormSkill {
   levels?: IFormLevel[];
   comment?: string;
   currentLevel?: string;
+  currentSkillLevel?: {
+    comment?: string;
+    id?: string;
+    value?: string;
+  };
 }
 
 export interface IFormSoftSkillsMatrix {

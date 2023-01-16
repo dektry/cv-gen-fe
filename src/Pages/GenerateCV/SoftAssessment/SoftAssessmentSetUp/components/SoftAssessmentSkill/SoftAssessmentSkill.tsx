@@ -37,32 +37,36 @@ export const SoftAssessmentSkill = ({ idx, handleSkillLevelChange, skill }: IPro
         />
       </div>
 
-      {fields.map((level, levelIndex) => (
-        <Box key={level.levelKey} className={classes.skill}>
-          <Controller
-            name={`matrix.skills.${idx}.levels.${levelIndex}.value`}
-            control={control}
-            render={({ field: { value } }) => {
-              return (
-                <Radio
-                  checked={skill?.currentLevel === value}
-                  value={value}
-                  onChange={() => handleSkillLevelChange(idx, value)}
-                />
-              );
-            }}
-          />
-          <Controller
-            name={`matrix.skills.${idx}.levels.${levelIndex}.description`}
-            control={control}
-            render={({ field: { value } }) => (
-              <TextField multiline={true} sx={{ width: '90%' }} fullWidth={true} value={value} />
-            )}
-          />
-        </Box>
-      ))}
+      {fields.map((level, levelIndex) => {
+        const currentLevel = skill?.currentLevel ? skill?.currentLevel : skill?.currentSkillLevel?.value;
+
+        return (
+          <Box key={level.levelKey} className={classes.skill}>
+            <Controller
+              name={`matrix.skills.${idx}.levels.${levelIndex}.value`}
+              control={control}
+              render={({ field: { value } }) => {
+                return (
+                  <Radio
+                    checked={currentLevel === value}
+                    value={value}
+                    onChange={() => handleSkillLevelChange(idx, value)}
+                  />
+                );
+              }}
+            />
+            <Controller
+              name={`matrix.skills.${idx}.levels.${levelIndex}.description`}
+              control={control}
+              render={({ field: { value } }) => (
+                <TextField multiline={true} sx={{ width: '90%' }} fullWidth={true} value={value} />
+              )}
+            />
+          </Box>
+        );
+      })}
       <Controller
-        name={`matrix.skills.${idx}.comment`}
+        name={`matrix.skills.${idx}.currentSkillLevel.comment`}
         control={control}
         render={({ field: { value, onChange } }) => (
           <TextField

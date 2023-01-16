@@ -3,8 +3,7 @@ import { message } from 'antd';
 import { apiClient } from 'services/apiService';
 import endpoints from 'config/endpoint.json';
 
-import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
-import { ISoftAssessment } from 'models/ISoftAssessment';
+import { IFormSoftAssessmentResult } from 'models/ISoftAssessment';
 
 export const httpGetAllSoftAssessments = async (id: string) => {
   try {
@@ -39,7 +38,7 @@ export const httpGetSoftAssessmentResults = async (id: string) => {
   }
 };
 
-export const httpCompleteSoftAssessment = async (assessment: IFormSoftSkillsMatrix) => {
+export const httpCompleteSoftAssessment = async (assessment: IFormSoftAssessmentResult) => {
   try {
     const { data } = await apiClient.post(endpoints.employeeSoftAssessments, assessment);
 
@@ -50,9 +49,9 @@ export const httpCompleteSoftAssessment = async (assessment: IFormSoftSkillsMatr
   }
 };
 
-export const httpEditSoftAssessment = async (assessment: ISoftAssessment) => {
+export const httpEditSoftAssessment = async (assessment: IFormSoftAssessmentResult, assessmentId: string) => {
   try {
-    const { data } = await apiClient.put(`${endpoints.employeeInterviews}/${assessment.id}`, assessment);
+    const { data } = await apiClient.put(`${endpoints.employeeSoftAssessments}/${assessmentId}`, assessment);
 
     return data;
   } catch (error) {
