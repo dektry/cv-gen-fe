@@ -74,7 +74,10 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
   const values = useWatch<FormValues>({ control });
 
   useEffect(() => {
-    const defaultValues = { ...projectInfo, formResponsibilities: projectInfo.responsibilities?.toString() };
+    const defaultValues = {
+      ...projectInfo,
+      formResponsibilities: projectInfo.responsibilities?.toString().replaceAll(',', ';'),
+    };
     reset({ ...defaultValues });
   }, [projectInfo]);
 
@@ -96,7 +99,8 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
 
   const handleSubmit = () => {
     if (projectInfo && onSubmit) {
-      const projectToSave = formatProject(values, values.formResponsibilities, currentEmployee);
+      const formattedResponsibilities = values.formResponsibilities?.replaceAll(';', ',');
+      const projectToSave = formatProject(values, formattedResponsibilities, currentEmployee);
       onSubmit(projectToSave);
       setOpenChildModal(false);
       onClose();
@@ -212,7 +216,7 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
                   render={({ field: { value, onChange } }) => (
                     <TextField
                       multiline={false}
-                      label="Responsibilities"
+                      label="Responsibilities (semiciolon as a divider)"
                       placeholder="Add project responsibilities"
                       error={!!errors.formResponsibilities?.message}
                       helperText={errors.formResponsibilities?.message}
