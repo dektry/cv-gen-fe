@@ -14,7 +14,7 @@ import { editTechAssessment, finishTechAssessment } from 'store/reducers/techAss
 import { editHardSkillsMatrix } from 'store/reducers/hardSkillsMatrix/thunks';
 
 import { useForm, useWatch, useFieldArray, Controller, FormProvider } from 'react-hook-form';
-import { SkillGroupField } from 'common-components/SkillGroupField';
+import { SkillGroupBage } from 'common-components/SkillGroupBage';
 import { CustomSelect } from 'common-components/CustomSelect';
 import { SkillQuestions } from './components/SkillQuestions';
 import { SaveButton } from 'common-components/SaveButton';
@@ -114,7 +114,7 @@ export const AssessmentForm = () => {
       {fields.map((group, groupIndex) => {
         return (
           <div className={classes.container} key={group.skillGroupKey}>
-            <SkillGroupField sx={{ marginBottom: '16px' }} value={group.value} />
+            <SkillGroupBage sx={{ marginBottom: '16px' }} value={group.value} />
             {group.skills?.map((skill, skillIndex) => {
               return (
                 <Box key={skill.id} className={classes.skill}>

@@ -29,7 +29,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       color: (theme) => theme.theme.palette.secondary.main,
       display: 'flex',
       '& input': {
-        cursor: 'pointer',
         textAlign: 'center',
         padding: ({ hint }) => (hint ? '8px 8px 8px 16px' : '8px 16px'),
       },
@@ -38,6 +37,9 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
       },
       '& .MuiOutlinedInput-notchedOutline': {
         borderColor: 'transparent',
+      },
+      '& .Mui-disabled': {
+        '-webkit-text-fill-color': 'white',
       },
     },
   },

@@ -10,13 +10,14 @@ type ISkillGroupField = {
   hint?: string;
 } & TextFieldProps;
 
-export const SkillGroupField = (props: ISkillGroupField) => {
+export const SkillGroupBage = (props: ISkillGroupField) => {
   const { value, error, hint } = props;
 
   const classes = useStyles({
     theme,
     hint: hint || '',
   });
+
   return (
     <TextField
       onClick={(e) => e.stopPropagation()}
@@ -26,6 +27,7 @@ export const SkillGroupField = (props: ISkillGroupField) => {
       InputProps={{ endAdornment: hint && <InfoOutlinedIcon /> }}
       label={'Section name:'}
       InputLabelProps={{ className: classes.label }}
+      disabled={true}
       {...props}
     />
   );
