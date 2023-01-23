@@ -74,9 +74,20 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
   const values = useWatch<FormValues>({ control });
 
   useEffect(() => {
+    let processedResponsibilities = '';
+    if (projectInfo.responsibilities?.length) {
+      for (let i = 0; i < projectInfo.responsibilities?.length; i++) {
+        if (i < projectInfo.responsibilities?.length - 1) {
+          processedResponsibilities += `${projectInfo.responsibilities[i]};`;
+        } else {
+          processedResponsibilities += `${projectInfo.responsibilities[i]}`;
+        }
+      }
+    }
     const defaultValues = {
       ...projectInfo,
-      formResponsibilities: projectInfo.responsibilities?.toString().replaceAll(',', ';'),
+      formResponsibilities: processedResponsibilities,
+
     };
     reset({ ...defaultValues });
   }, [projectInfo]);
