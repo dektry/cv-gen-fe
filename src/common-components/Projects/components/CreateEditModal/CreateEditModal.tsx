@@ -87,6 +87,7 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
     const defaultValues = {
       ...projectInfo,
       formResponsibilities: processedResponsibilities,
+
     };
     reset({ ...defaultValues });
   }, [projectInfo]);
@@ -109,7 +110,8 @@ export const CreateEditModal = React.memo(({ isOpen, modalTitle, onClose, onSubm
 
   const handleSubmit = () => {
     if (projectInfo && onSubmit) {
-      const projectToSave = formatProject(values, values.formResponsibilities, currentEmployee);
+      const formattedResponsibilities = values.formResponsibilities?.replaceAll(';', ',');
+      const projectToSave = formatProject(values, formattedResponsibilities, currentEmployee);
       onSubmit(projectToSave);
       setOpenChildModal(false);
       onClose();
