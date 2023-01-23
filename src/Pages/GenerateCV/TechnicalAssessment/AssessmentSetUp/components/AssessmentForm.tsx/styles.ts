@@ -32,7 +32,6 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     width: '100%',
   },
   skillValue: {
-    textTransform: 'uppercase',
     fontWeight: 'bold',
   },
   buttonsContainer: {
