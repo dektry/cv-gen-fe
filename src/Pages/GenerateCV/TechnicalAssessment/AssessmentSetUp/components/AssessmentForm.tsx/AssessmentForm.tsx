@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -78,7 +79,7 @@ export const AssessmentForm = () => {
     const grades: { value: string; skillId: string; gradeId: string }[] = allSkills.map(
       (skill: IAssessmentDetailedSkill) => {
         return {
-          gradeId: skill.currentSkillLevel?.id || '',
+          gradeId: skill.currentSkillLevel?.id || uuidv4(),
           value: skill.currentSkillLevel?.value || 'None',
           skillId: skill.id || '',
         };

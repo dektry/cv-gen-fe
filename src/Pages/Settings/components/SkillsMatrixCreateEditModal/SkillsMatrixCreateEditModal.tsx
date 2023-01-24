@@ -38,7 +38,6 @@ export const SkillsMatrixCreateEditModal = ({
   matrixLoading,
 }: IProps) => {
   const classes = useStyles({ theme });
-  console.log(matrixLoading);
 
   const [value, setValue] = useState('');
   const [position, setPosition] = useState<IDBPosition>({} as IDBPosition);

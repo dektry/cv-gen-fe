@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, generatePath } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useForm, useFieldArray, FormProvider, SubmitHandler, useWatch } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -20,12 +21,7 @@ import { loadEmployee } from 'store/reducers/employees/thunks';
 import { levelsSelector, loadLevels } from 'store/reducers/levels';
 
 import { IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
-import {
-  ISoftAssessment,
-  IFormSoftAssessmentResult,
-  IFormSoftSkill,
-  IFormSoftSkillLevel,
-} from 'models/ISoftAssessment';
+import { ISoftAssessment, IFormSoftAssessmentResult, IFormSoftSkill } from 'models/ISoftAssessment';
 import { IDBPosition, IDBLevels } from 'models/IUser';
 
 import { SimpleTextModal } from 'common-components/SimpleTextModal';
@@ -133,7 +129,6 @@ export const SoftAssessmentSetUp = () => {
   useEffect(() => {
     if (assessmentResult?.id) {
       const updatedValues = { matrix: assessmentResult };
-      console.log(assessmentResult);
 
       methods.reset({ ...updatedValues });
     } else {
@@ -145,13 +140,8 @@ export const SoftAssessmentSetUp = () => {
   const handleSaveMatrix: SubmitHandler<{ matrix: IFormSoftSkillsMatrix | ISoftAssessment }> = () => {
     const grades: { value: string; skillId: string; gradeId: string; comment: string }[] | undefined =
       values.matrix?.skills?.map((skill: IFormSoftSkill) => {
-        const chosenLevel = skill.levels?.find(
-          (el) => el.value === skill.currentLevel || el.value === skill.currentSkillLevel?.value
-        ) as IFormSoftSkillLevel;
-        console.log(chosenLevel);
-
         return {
-          gradeId: skill.currentSkillLevel?.id || '',
+          gradeId: skill.currentSkillLevel?.id || uuidv4(),
           value: skill.currentLevel || skill.currentSkillLevel?.value || 'None',
           skillId: skill.id || '',
           comment: skill.currentSkillLevel?.comment || '',
