@@ -2,8 +2,6 @@ import { IEmployee } from 'models/IEmployee';
 import { IProject } from 'models/IProject';
 
 export function formatProject(project: Partial<IProject>, responsibilities?: string, employee?: IEmployee): IProject {
-  console.log(responsibilities);
-
   const responsibilitiesToArr = responsibilities?.split(';');
   return {
     id: project.id || '',

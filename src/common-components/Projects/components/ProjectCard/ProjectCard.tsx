@@ -55,7 +55,7 @@ export const ProjectCard = React.memo(
           TransitionProps={{ unmountOnExit: true }}
         >
           <AccordionSummary expandIcon={<ArrowDropDownIcon color="primary" />}>
-            <Typography variant="h3">{`Project ${id + 1}`}</Typography>
+            <Typography variant="h3">{`#${id + 1} ${project.name}`}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <div className={classes.container}>
