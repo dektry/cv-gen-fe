@@ -4,6 +4,7 @@ import { generatePdf, getTemplate } from 'services/requests/cvGeneration';
 import { generateCv, getProfSkills, loadCvTemplate, loadGroupOfTemplates } from './actionTypes';
 import { TProfSkill } from 'Pages/CVGeneration';
 import { getAllTechAssessments, httpGetTechAssessment } from 'services/requests/techAssessment';
+import { IFormLevel } from 'models/IHardSkillsMatrix';
 
 interface IDownloadProps {
   template: string;
@@ -47,7 +48,6 @@ export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: st
     const { id: lastAssessmentId } = allAssessments[allAssessments.length - 1];
 
     const lastAssessment = await httpGetTechAssessment(lastAssessmentId);
-    const answers = lastAssessment?.answers || [];
 
     lastAssessment.skillGroups.forEach((group: Record<string, unknown>) => {
       const profSkillGroup: TProfSkill = { groupName: '', skills: [] };
@@ -57,8 +57,7 @@ export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: st
         const profSkill = { name: '', level: '' };
 
         profSkill.name = skill.value as string;
-        profSkill.level =
-          (answers.find((answer: Record<string, unknown>) => answer.skill === skill.value)?.actual as string) || 'None';
+        profSkill.level = (skill.currentSkillLevel as IFormLevel).value || 'None';
 
         return profSkill;
       });
