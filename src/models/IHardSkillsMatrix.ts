@@ -8,6 +8,7 @@ export interface IFormPosition {
 export interface IQuestion {
   id?: string;
   value: string;
+  order: number;
 }
 
 export interface ILevel {
@@ -21,6 +22,7 @@ export interface ILevel {
 
 export interface ISkill {
   value: string;
+  order: number;
   id?: string;
   currentLevel?: string;
   questions: IQuestion[];
@@ -30,6 +32,7 @@ export interface ISkill {
 export interface ISkillGroup {
   id?: string;
   value: string;
+  order: number;
   skills: ISkill[];
 }
 
@@ -68,6 +71,7 @@ export interface IFormLevel {
 export interface IFormQuestion {
   id?: string;
   value?: string;
+  order?: number;
 }
 
 export interface IFormSkill {
@@ -76,12 +80,14 @@ export interface IFormSkill {
   grades?: IFormGrade[];
   questions?: IFormQuestion[];
   levels?: IFormLevel[];
+  order?: number;
 }
 
 export interface IFormSkillGroup {
   id?: string;
   value?: string;
   skills?: IFormSkill[];
+  order?: number;
 }
 
 export interface IFormHardSkillsMatrix {

@@ -69,7 +69,7 @@ export const SoftSkillsMatrixFirstStep = ({ skills, setActiveStep }: IProps) => 
   const values = useWatch({ control: methods.control });
 
   const handleAddSkill = () => {
-    const appendValue = { value: '', id: uuidv4(), levels: [] };
+    const appendValue = { value: '', id: uuidv4(), levels: [], order: values.skills?.length || 0 };
 
     append(appendValue);
   };

@@ -31,6 +31,7 @@ export interface ILevel {
   value: string;
   description: string;
   id: string;
+  order: number;
   level_id: {
     id: string;
     name: string;
@@ -39,6 +40,7 @@ export interface ILevel {
 
 export interface ISkill {
   value: string;
+  order: number;
   id?: string;
   levels: ILevel[];
 }
@@ -70,6 +72,7 @@ export interface IFormLevel {
   value?: string;
   id?: string;
   description?: string;
+  order?: number;
   level_id?: {
     id?: string;
     name?: string;
@@ -82,6 +85,7 @@ export interface IFormSkill {
   levels?: IFormLevel[];
   comment?: string;
   currentLevel?: string;
+  order?: number;
   currentSkillLevel?: {
     comment?: string;
     id?: string;

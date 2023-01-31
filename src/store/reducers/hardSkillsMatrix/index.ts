@@ -4,7 +4,14 @@ import { message } from 'antd';
 import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
-import { IFormHardSkillsMatrix, IHardSkillsMatrix, IHardSkillsMatrixState, ISkill } from 'models/IHardSkillsMatrix';
+import {
+  IFormHardSkillsMatrix,
+  IHardSkillsMatrix,
+  IHardSkillsMatrixState,
+  IQuestion,
+  ISkill,
+  ISkillGroup,
+} from 'models/IHardSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
 import {
@@ -92,8 +99,14 @@ const hardSkillsMatrix = createSlice({
             levels,
           };
         });
-      }
 
+        group.skills.sort((a: ISkill, b: ISkill) => a.order - b.order);
+
+        for (const skill of group.skills) {
+          skill.questions.sort((a: IQuestion, b: IQuestion) => a.order - b.order);
+        }
+      }
+      payload.skillGroups.sort((a: ISkillGroup, b: ISkillGroup) => a.order - b.order);
       state.currentMatrix = payload;
     });
     builder.addCase(createHardSkillsMatrix.fulfilled, () => {

@@ -4,7 +4,7 @@ import { message } from 'antd';
 import { RootState } from '../..';
 
 import { appStoreName } from 'store/reducers/hardSkillsMatrix/actionTypes';
-import { ISoftSkillsMatrixState, ISkill, IFormSoftSkillsMatrix } from 'models/ISoftSkillsMatrix';
+import { ISoftSkillsMatrixState, ISkill, IFormSoftSkillsMatrix, ILevel } from 'models/ISoftSkillsMatrix';
 import { IDBPosition } from 'models/IUser';
 
 import {
@@ -79,8 +79,10 @@ const softSkillsMatrix = createSlice({
             levels,
           };
         });
-      }
 
+        group.skills.sort((a: ILevel, b: ILevel) => a.order - b.order);
+      }
+      payload.skills.sort((a: ISkill, b: ISkill) => a.order - b.order);
       state.currentMatrix = payload;
     });
     builder.addCase(copySoftSkillsMatrix.pending, (state) => {
