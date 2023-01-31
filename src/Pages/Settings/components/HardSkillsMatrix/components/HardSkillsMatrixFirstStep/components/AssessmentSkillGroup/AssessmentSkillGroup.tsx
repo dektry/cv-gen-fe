@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useSelector } from 'react-redux';
@@ -66,6 +66,8 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
     keyName: 'skillKey',
   });
 
+  const values = useWatch({ control: methods.control });
+
   const handleDeleteGroupModalOpen = () => {
     setIsDeleteGroupModalOpen(true);
   };
@@ -94,8 +96,14 @@ export const AssessmentSkillGroup = ({ idx, removeSection }: IProps) => {
   };
 
   const appendSkillValue = currentMatrix.id
-    ? { value: '', id: uuidv4(), levels: defaultLevels, questions: [] }
-    : { value: '', questions: [], grades: defaultGrades };
+    ? {
+        value: '',
+        id: uuidv4(),
+        levels: defaultLevels,
+        questions: [],
+        order: values.skillGroups[idx].skills.length || 0,
+      }
+    : { value: '', questions: [], grades: defaultGrades, order: values.skillGroups[idx].skills.length || 0 };
 
   return (
     <>

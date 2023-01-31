@@ -69,7 +69,7 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
   const values = useWatch({ control: methods.control });
 
   const handleAddSkillGroup = () => {
-    append({ id: uuidv4(), value: '', skills: [] });
+    append({ id: uuidv4(), value: '', skills: [], order: values.skillGroups?.length || 0 });
   };
 
   const handleSaveMatrix: SubmitHandler<IProps> = (data) => {

@@ -1,4 +1,4 @@
-import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
+import { useFormContext, useFieldArray, Controller, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import Box from '@mui/material/Box';
@@ -26,6 +26,8 @@ export const AssessmentSkillQuestions = ({ groupIndex, skillIndex }: IProps) => 
     keyName: 'questionKey',
   });
 
+  const values = useWatch({ control });
+
   return (
     <>
       {fields.map((question, questionId) => {
@@ -48,7 +50,16 @@ export const AssessmentSkillQuestions = ({ groupIndex, skillIndex }: IProps) => 
         );
       })}
 
-      <AddButton onClick={() => append({ id: uuidv4(), value: '' })} title={'Add question'} />
+      <AddButton
+        onClick={() =>
+          append({
+            id: uuidv4(),
+            value: '',
+            order: values.skillGroups[groupIndex].skills[skillIndex].questions.length || 0,
+          })
+        }
+        title={'Add question'}
+      />
     </>
   );
 };

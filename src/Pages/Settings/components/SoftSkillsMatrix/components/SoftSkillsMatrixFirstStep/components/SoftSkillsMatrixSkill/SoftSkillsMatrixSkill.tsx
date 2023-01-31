@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+import { useFormContext, Controller, useFieldArray, UseFieldArrayRemove, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
 import Box from '@mui/material/Box';
@@ -40,6 +40,8 @@ export const SoftSkillsMatrixSkill = ({ idx, removeSection }: IProps) => {
     keyName: 'levelKey',
   });
 
+  const values = useWatch({ control: methods.control });
+
   const handleDeleteSkillModalOpen = () => {
     setIsDeleteSkillModalOpen(true);
   };
@@ -53,7 +55,13 @@ export const SoftSkillsMatrixSkill = ({ idx, removeSection }: IProps) => {
     setIsDeleteSkillModalOpen(false);
   };
 
-  const appendLevelValue = { id: uuidv4(), value: '', description: '', level_id: { id: '' } };
+  const appendLevelValue = {
+    id: uuidv4(),
+    value: '',
+    description: '',
+    level_id: { id: '' },
+    order: values.skills[idx].levels.length || 0,
+  };
 
   const disabled = fields.length >= skillLevelsOptionsLength;
 
