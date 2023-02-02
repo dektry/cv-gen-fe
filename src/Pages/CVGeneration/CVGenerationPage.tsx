@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'antd';
 
 import FormControl from '@mui/material/FormControl';
@@ -68,6 +68,8 @@ export type CvInfo = Pick<IEmployee, 'level' | 'yearsOfExperience' | 'position' 
 export const CVGenerationPage = React.memo(() => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
+
+  const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
 
@@ -194,7 +196,11 @@ export const CVGenerationPage = React.memo(() => {
         positionId: currentPosition?.id || '',
         levelId: currentLevel?.id || '',
       });
-      dispatch(editTechAssessment({ assessment: formattedProfSkills, id: lastAssessment?.id as string }));
+      dispatch(editTechAssessment({ assessment: formattedProfSkills, id: lastAssessment?.id as string })).then((r) => {
+        if (r.type.includes('fulfilled')) {
+          navigate('/');
+        }
+      });
     }
   }, [values]);
 
