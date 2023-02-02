@@ -1,12 +1,18 @@
 import { IAssessmentDetailedResult, IFormAssessmentResult } from 'models/ITechAssessment';
-import { TProfSkill } from '../CVGenerationPage';
+
+export type TProfSkillForm = {
+  groupName?: string;
+  skills?: { id?: string; name?: string; level?: string; gradeId?: string; gradeValue?: string }[];
+};
+
 interface IArgs {
-  profSkills: TProfSkill[];
+  profSkills: TProfSkillForm[];
   assessmentResult: IAssessmentDetailedResult;
   employeeId: string;
   positionId: string;
   levelId: string;
 }
+
 export function formatProfSkillsBeforeUpdate({
   profSkills,
   assessmentResult,
@@ -17,7 +23,9 @@ export function formatProfSkillsBeforeUpdate({
   const grades: { value: string; skillId: string; gradeId: string }[] = [];
 
   for (const group of profSkills) {
-    group.skills.forEach((skill) => grades.push({ value: skill.level, gradeId: skill.gradeId, skillId: skill.id }));
+    group.skills?.forEach((skill) =>
+      grades.push({ value: skill.level || '', gradeId: skill.gradeId || '', skillId: skill.id || '' })
+    );
   }
 
   return {

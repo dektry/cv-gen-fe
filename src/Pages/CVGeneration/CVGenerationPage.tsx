@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
 
@@ -47,7 +47,6 @@ import { Spinner } from 'common-components/Spinner';
 
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 import { editTechAssessment } from 'store/reducers/techAssessment/thunks';
-import { IAssessmentDetailedResult } from 'models/ITechAssessment';
 
 export type TProfSkill = {
   groupName?: string;
@@ -78,6 +77,8 @@ export const CVGenerationPage = React.memo(() => {
   const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
   const { education } = useSelector(educationSelector);
   const { languages } = useSelector(languagesSelector);
+  const { allLevels } = useSelector(levelsSelector);
+  const { allPositions } = useSelector(positionsSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,11 +98,11 @@ export const CVGenerationPage = React.memo(() => {
     dispatch(loadLevels());
   }, []);
 
-  const { allLevels } = useSelector(levelsSelector);
-  const { allPositions } = useSelector(positionsSelector);
-
-  const currentLevel = allLevels.find((el) => el.name === currentEmployee.level);
-  const currentPosition = allPositions.find((el) => currentEmployee.position?.replace(/-/g, ' ').match(el.name));
+  const currentLevel = useMemo(() => allLevels.find((el) => el.name === currentEmployee.level), [allLevels]);
+  const currentPosition = useMemo(
+    () => allPositions.find((el) => currentEmployee.position?.replace(/-/g, ' ').match(el.name)),
+    [allPositions]
+  );
 
   useEffect(() => {
     const { position, yearsOfExperience } = currentEmployee;
@@ -188,12 +189,13 @@ export const CVGenerationPage = React.memo(() => {
 
     if (values.profSkills && id && lastAssessment) {
       const formattedProfSkills = formatProfSkillsBeforeUpdate({
-        profSkills: values.profSkills as TProfSkill[],
-        assessmentResult: lastAssessment as IAssessmentDetailedResult,
-        employeeId: id as string,
+        profSkills: values.profSkills,
+        assessmentResult: lastAssessment,
+        employeeId: id,
         positionId: currentPosition?.id || '',
         levelId: currentLevel?.id || '',
       });
+
       dispatch(editTechAssessment({ assessment: formattedProfSkills, id: lastAssessment?.id as string }));
     }
   }, [values]);
