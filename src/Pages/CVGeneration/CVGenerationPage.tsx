@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from 'antd';
 
@@ -24,6 +24,9 @@ import { fetchProfSkills } from 'store/reducers/cvGeneration/thunks';
 import { projectsSelector } from 'store/reducers/projects';
 import { createProject, editProject, getProjectsList } from 'store/reducers/projects/thunks';
 import { setSoftSkillsToCvOfEmployee, softSkillsToCvSelector } from 'store/reducers/softSkillsToCV';
+import { setIsCVGenerationPage } from 'store/reducers/techAssessment';
+import { positionsSelector, loadPositions } from 'store/reducers/positions';
+import { levelsSelector, loadLevels } from 'store/reducers/levels';
 import {
   getSoftSkillsToCvList,
   getSoftSkillsToCvOfEmployee,
@@ -34,6 +37,7 @@ import { educationSelector } from 'store/reducers/education';
 import { createLanguage, editLanguage, getLanguages } from 'store/reducers/languages/thunks';
 import { languagesSelector } from 'store/reducers/languages';
 import { formatEmployeeBeforeUpdate } from './utils/formatEmployeeBeforeUpdate';
+import { formatProfSkillsBeforeUpdate } from './utils/formatProfSkillsBeforeUpdate';
 import { IEducation } from 'models/IEducation';
 import { ILanguage } from 'models/ILanguage';
 
@@ -42,10 +46,11 @@ import { SaveButton } from 'common-components/SaveButton';
 import { Spinner } from 'common-components/Spinner';
 
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
+import { editTechAssessment } from 'store/reducers/techAssessment/thunks';
 
 export type TProfSkill = {
   groupName?: string;
-  skills: { name: string; level: string }[];
+  skills: { id: string; name: string; level: string; gradeId: string; gradeValue: string }[];
 };
 
 export type CvInfo = Pick<IEmployee, 'level' | 'yearsOfExperience' | 'position' | 'avatarUrl'> & {
@@ -68,10 +73,12 @@ export const CVGenerationPage = React.memo(() => {
   const { currentEmployee, isLoadingOneEmployee } = useSelector(employeesSelector);
 
   const { projects, isLoading: projectsIsLoading } = useSelector(projectsSelector);
-  const { data: profSkills, isLoading } = useSelector(profSkillsSelector);
+  const { data: profSkills, isLoading, lastAssessment } = useSelector(profSkillsSelector);
   const { skills, skillsOfEmployee } = useSelector(softSkillsToCvSelector);
   const { education } = useSelector(educationSelector);
   const { languages } = useSelector(languagesSelector);
+  const { allLevels } = useSelector(levelsSelector);
+  const { allPositions } = useSelector(positionsSelector);
 
   const [cvInfo, setCvInfo] = useState<CvInfo>({} as CvInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,7 +93,16 @@ export const CVGenerationPage = React.memo(() => {
     if (id) {
       dispatch(loadEmployee(id));
     }
+    dispatch(setIsCVGenerationPage(true));
+    dispatch(loadPositions());
+    dispatch(loadLevels());
   }, []);
+
+  const currentLevel = useMemo(() => allLevels.find((el) => el.name === currentEmployee.level), [allLevels]);
+  const currentPosition = useMemo(
+    () => allPositions.find((el) => currentEmployee.position?.replace(/-/g, ' ').match(el.name)),
+    [allPositions]
+  );
 
   useEffect(() => {
     const { position, yearsOfExperience } = currentEmployee;
@@ -169,6 +185,18 @@ export const CVGenerationPage = React.memo(() => {
         };
         langToSave.id ? dispatch(editLanguage(langToSave)) : dispatch(createLanguage(langToSave));
       }
+    }
+
+    if (values.profSkills && id && lastAssessment) {
+      const formattedProfSkills = formatProfSkillsBeforeUpdate({
+        profSkills: values.profSkills,
+        assessmentResult: lastAssessment,
+        employeeId: id,
+        positionId: currentPosition?.id || '',
+        levelId: currentLevel?.id || '',
+      });
+
+      dispatch(editTechAssessment({ assessment: formattedProfSkills, id: lastAssessment?.id as string }));
     }
   }, [values]);
 

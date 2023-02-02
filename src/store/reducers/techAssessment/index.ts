@@ -31,6 +31,7 @@ const initialState: ITechAssessmentState = {
   assessmentShortResult: null,
   isHistoryLoading: false,
   assessmentsComparison: null,
+  isCVGenerationPage: false,
 };
 
 const techAssessment = createSlice({
@@ -63,6 +64,9 @@ const techAssessment = createSlice({
     },
     setAssessmentsComparison: (state, { payload }: PayloadAction<IAssessmentsComparison | null>) => {
       state.assessmentsComparison = payload;
+    },
+    setIsCVGenerationPage: (state, { payload }: PayloadAction<boolean>) => {
+      state.isCVGenerationPage = payload;
     },
   },
   extraReducers: (builder) => {
@@ -111,16 +115,18 @@ const techAssessment = createSlice({
         );
       }, 1000);
     });
-    builder.addCase(editTechAssessment.fulfilled, () => {
-      message.success('Changes to technical assessment saved successfully');
-      setTimeout(() => {
-        window.location.replace(
-          `${paths.technicalAssessmentHistory.replace(
-            ':id',
-            window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
-          )}`
-        );
-      }, 1000);
+    builder.addCase(editTechAssessment.fulfilled, (state) => {
+      if (!state.isCVGenerationPage) {
+        message.success('Changes to technical assessment saved successfully');
+        setTimeout(() => {
+          window.location.replace(
+            `${paths.technicalAssessmentHistory.replace(
+              ':id',
+              window.location.pathname.split('/employee/')[1].split('/tech-interview')[0]
+            )}`
+          );
+        }, 1000);
+      }
     });
     builder.addCase(getTechAssessmentResults.fulfilled, (state, { payload }) => {
       state.assessmentShortResult = payload;
@@ -151,4 +157,5 @@ export const {
   chooseInterviewPosition,
   setIsLoading,
   setAssessmentsComparison,
+  setIsCVGenerationPage,
 } = techAssessment.actions;

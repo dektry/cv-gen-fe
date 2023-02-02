@@ -5,6 +5,7 @@ import { generateCv, getProfSkills, loadCvTemplate, loadGroupOfTemplates } from 
 import { TProfSkill } from 'Pages/CVGeneration';
 import { getAllTechAssessments, httpGetTechAssessment } from 'services/requests/techAssessment';
 import { IFormLevel } from 'models/IHardSkillsMatrix';
+import { IAssessmentDetailedSkill } from 'models/ITechAssessment';
 
 interface IDownloadProps {
   template: string;
@@ -53,11 +54,13 @@ export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: st
       const profSkillGroup: TProfSkill = { groupName: '', skills: [] };
 
       profSkillGroup.groupName = group.value as string;
-      profSkillGroup.skills = (group.skills as Record<string, unknown>[]).map((skill) => {
-        const profSkill = { name: '', level: '' };
+      profSkillGroup.skills = (group.skills as IAssessmentDetailedSkill[]).map((skill) => {
+        const profSkill = { id: '', name: '', level: '', gradeId: '', gradeValue: '' };
 
         profSkill.name = skill.value as string;
         profSkill.level = (skill.currentSkillLevel as IFormLevel).value || 'None';
+        profSkill.id = skill.id as string;
+        profSkill.gradeId = (skill.currentSkillLevel as IFormLevel).id as string;
 
         return profSkill;
       });
@@ -66,5 +69,5 @@ export const fetchProfSkills = createAsyncThunk(getProfSkills, async (userId: st
     });
   }
 
-  return profSkills;
+  return { profSkills, lastAssessment: allAssessments[allAssessments.length - 1] };
 });
