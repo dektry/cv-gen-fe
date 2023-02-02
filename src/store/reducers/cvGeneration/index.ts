@@ -9,6 +9,8 @@ import {
   fetchProfSkills,
 } from 'store/reducers/cvGeneration/thunks';
 import { TProfSkill } from 'Pages/CVGeneration';
+import { IAssessmentDetailedResult } from 'models/ITechAssessment';
+import { NullableField } from 'models/TNullableField';
 
 export type TTemplatesDic = { [name: string]: string };
 
@@ -18,6 +20,7 @@ type TInitialStateCvGeneration = {
   profSkills: {
     data: TProfSkill[];
     isLoading: boolean;
+    lastAssessment: NullableField<IAssessmentDetailedResult>;
   };
   isLoading: boolean;
   isGeneratingPdf: boolean;
@@ -29,6 +32,7 @@ const initialState: TInitialStateCvGeneration = {
   profSkills: {
     data: [],
     isLoading: false,
+    lastAssessment: null,
   },
   isLoading: false,
   isGeneratingPdf: false,
@@ -75,13 +79,13 @@ const cvGeneration = createSlice({
       state.isLoading = false;
     });
     builder.addCase(fetchProfSkills.fulfilled, (state, { payload }) => {
-      state.profSkills = { data: payload, isLoading: false };
+      state.profSkills = { data: payload.profSkills, isLoading: false, lastAssessment: payload.lastAssessment };
     });
     builder.addCase(fetchProfSkills.pending, (state) => {
-      state.profSkills = { data: [], isLoading: true };
+      state.profSkills = { data: [], isLoading: true, lastAssessment: null };
     });
     builder.addCase(fetchProfSkills.rejected, (state) => {
-      state.profSkills = { data: [], isLoading: false };
+      state.profSkills = { data: [], isLoading: false, lastAssessment: null };
     });
   },
 });

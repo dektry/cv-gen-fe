@@ -61,6 +61,7 @@ export interface ITechAssessmentState {
   assessmentResult: NullableField<IAssessmentDetailedResult>;
   assessmentShortResult: NullableField<IAssessmentFromDB>;
   assessmentsComparison: NullableField<IAssessmentsComparison>;
+  isCVGenerationPage: boolean;
 }
 
 export interface ICompleteAssessment {
@@ -99,8 +100,8 @@ export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
 export interface IFormAssessmentResult {
   employeeId: string;
-  positionId: string;
-  levelId: string;
+  positionId?: string;
+  levelId?: string;
   grades: { value: string; skillId: string }[];
   comment: string;
 }
