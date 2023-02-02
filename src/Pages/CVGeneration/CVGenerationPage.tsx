@@ -186,7 +186,7 @@ export const CVGenerationPage = React.memo(() => {
       }
     }
 
-    if (values.profSkills && id) {
+    if (values.profSkills && id && lastAssessment) {
       const formattedProfSkills = formatProfSkillsBeforeUpdate({
         profSkills: values.profSkills as TProfSkill[],
         assessmentResult: lastAssessment as IAssessmentDetailedResult,

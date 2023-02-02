@@ -24,7 +24,7 @@ export function formatProfSkillsBeforeUpdate({
     employeeId,
     positionId,
     levelId,
-    comment: assessmentResult.comment || '',
+    comment: assessmentResult?.comment || '',
     grades,
   };
 }
