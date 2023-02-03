@@ -61,4 +61,22 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
   addButton: {
     marginTop: '24px',
   },
+
+  dragNDropIcon: {
+    width: '24px',
+    height: '24px',
+    position: 'relative',
+  },
+
+  line: {
+    width: '16px',
+    height: '2px',
+    backgroundColor: '#000',
+    position: 'absolute',
+    top: '11px',
+    left: '6px',
+    '&:nth-child(2)': {
+      top: '15px',
+    },
+  },
 });
