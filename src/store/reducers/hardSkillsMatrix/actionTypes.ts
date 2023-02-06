@@ -6,3 +6,4 @@ export const createHardSkillsMatrixAction = `${appStoreName}/createHardSkillsMat
 export const deleteHardSkillsMatrixAction = `${appStoreName}/deleteHardSkillsMatrix`;
 export const copyHardSkillsMatrixAction = `${appStoreName}/copyHardSkillsMatrix`;
 export const editHardSkillsMatrixAction = `${appStoreName}/editHardSkillsMatrixAction`;
+export const getSkillLevelsAction = `${appStoreName}/getSkillLevelsAction`;

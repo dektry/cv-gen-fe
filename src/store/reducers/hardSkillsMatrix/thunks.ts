@@ -8,6 +8,7 @@ import {
   httpCreateHardSkillsMatrix,
   httpEditHardSkillsMatrix,
   httpCopyHardSkillsMatrix,
+  httpGetTechSkillLevels,
 } from 'services/requests/hardSkillsMatrix';
 
 import {
@@ -47,4 +48,8 @@ export const editHardSkillsMatrix = createAsyncThunk(
 
 export const copyHardSkillsMatrix = createAsyncThunk(copyHardSkillsMatrixAction, (data: ICopyHardSkillsMatrixProps) => {
   return httpCopyHardSkillsMatrix(data);
+});
+
+export const getSkillLevels = createAsyncThunk('getSkillLevelsAction', () => {
+  return httpGetTechSkillLevels();
 });

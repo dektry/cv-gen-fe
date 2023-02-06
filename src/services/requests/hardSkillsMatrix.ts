@@ -98,3 +98,14 @@ export const httpCopyHardSkillsMatrix = async (
     }
   }
 };
+
+export const httpGetTechSkillLevels = async () => {
+  try {
+    const { data } = await apiClient.get(endpoints.skillLevels);
+
+    return data;
+  } catch (error) {
+    console.error('[API_CLIENT_GET_TECH_SKILL_LEVELS_ERROR]', error);
+    message.error(`Server error. Please contact admin`);
+  }
+};
