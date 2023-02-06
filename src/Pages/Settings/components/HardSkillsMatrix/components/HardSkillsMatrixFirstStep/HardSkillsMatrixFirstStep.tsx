@@ -57,6 +57,10 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
   const [isModified, setIsModified] = useState(methods.formState.isDirty);
   const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
+  useEffect(() => {
+    setIsModified(methods.formState.isDirty);
+  }, [methods.formState.isDirty]);
+
   const { fields, append, remove } = useFieldArray({
     name: 'skillGroups',
     control: methods.control,
