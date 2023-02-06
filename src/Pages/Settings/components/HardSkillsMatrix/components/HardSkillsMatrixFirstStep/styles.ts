@@ -10,4 +10,8 @@ export const useStyles = createUseStyles<string, Record<string, unknown>, Theme>
     justifyContent: 'flex-end',
     marginTop: '42px',
   },
+  cardsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 });

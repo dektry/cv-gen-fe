@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { range } from 'lodash';
+
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { useForm, useFieldArray, FormProvider, useWatch, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -46,14 +49,13 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
   const dispatch = useAppDispatch();
   const classes = useStyles({ theme });
 
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
-
   const methods = useForm<IProps>({
     defaultValues: { skillGroups },
   });
 
-  const isModified = methods.formState.isDirty;
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isModified, setIsModified] = useState(methods.formState.isDirty);
+  const { currentMatrix } = useSelector(hardSkillsMatrixSelector);
 
   const { fields, append, remove } = useFieldArray({
     name: 'skillGroups',
@@ -98,14 +100,70 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
     ) ||
     !isModified;
 
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    const directionOfDrag = destination.index > source.index ? 'GREATER' : 'LESS';
+    let affectedRange: number[];
+
+    if (directionOfDrag === 'GREATER') {
+      affectedRange = range(source.index, destination.index + 1);
+    } else if (directionOfDrag === 'LESS') {
+      affectedRange = range(destination.index, source.index);
+    }
+    const reOrderedSkillGroupsList = values.skillGroups?.map((group) => {
+      if (group.id === result.draggableId) {
+        group.order = result.destination?.index;
+        return group;
+      } else if (affectedRange.includes(Number(group.order))) {
+        if (directionOfDrag === 'GREATER') {
+          group.order = (group.order as number) - 1;
+
+          return group;
+        } else if (directionOfDrag === 'LESS') {
+          group.order = (group.order as number) + 1;
+          return group;
+        }
+      } else {
+        return group;
+      }
+    });
+
+    (reOrderedSkillGroupsList as IFormSkillGroup[]).sort((a, b) => Number(a.order) - Number(b.order));
+
+    const defaultValues = { skillGroups: reOrderedSkillGroupsList };
+    methods.reset({ ...defaultValues });
+    setIsModified(true);
+  };
+
   //TODO: remove submit event on enter pressed
   return (
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSaveMatrix)} className={classes.container}>
-          {fields.map((group, idx) => (
-            <AssessmentSkillGroup key={group.fieldKey} idx={idx} removeSection={remove} />
-          ))}
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="AssessmentSkillGroup">
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps} className={classes.cardsContainer}>
+                  {fields.map((group, idx) => (
+                    <AssessmentSkillGroup
+                      key={group.fieldKey}
+                      idx={idx}
+                      id={group.id || ''}
+                      removeSection={remove}
+                      setIsModified={setIsModified}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           <AddButton title={'Add new section'} onClick={handleAddSkillGroup} />
           <div className={classes.buttonsContainer}>
             <Button onClick={handleResetModalOpen}>RESET CHANGES</Button>
