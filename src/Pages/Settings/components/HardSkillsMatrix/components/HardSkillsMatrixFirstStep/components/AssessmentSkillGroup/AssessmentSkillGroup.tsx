@@ -130,7 +130,6 @@ export const AssessmentSkillGroup = ({ idx, id, removeSection, setIsModified }: 
     const reOrderedSkillsList = values.skillGroups[idx]?.skills?.map((skill: IFormSkill) => {
       if (skill.id === result.draggableId) {
         skill.order = result.destination?.index;
-        console.log('NUMBER ORDER', skill, directionOfDrag);
         return skill;
       } else if (affectedRange.includes(Number(skill.order))) {
         if (directionOfDrag === 'GREATER') {
