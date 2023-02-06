@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { levelsSelector } from 'store/reducers/levels';
 
@@ -19,6 +20,8 @@ import { SkillGroupField } from 'common-components/SkillGroupField';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
+import { getSkillLevels } from 'store/reducers/hardSkillsMatrix/thunks';
+import { useAppDispatch } from 'store';
 
 const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
   label: level,
@@ -32,10 +35,15 @@ interface IProps {
 
 export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
   const classes = useStyles({ theme });
+  const dispatch = useAppDispatch();
 
   const { allLevels } = useSelector(levelsSelector);
 
   const methods = useFormContext();
+
+  useEffect(() => {
+    dispatch(getSkillLevels());
+  }, []);
 
   return (
     <div className={classes.container}>

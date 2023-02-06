@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ICopyHardSkillsMatrixProps, IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
+import { ICopyHardSkillsMatrixProps, IFormHardSkillsMatrix, TSkillLevel } from 'models/IHardSkillsMatrix';
 
 import {
   httpGetAllHardSkillsMatrix,
@@ -19,6 +19,7 @@ import {
   editHardSkillsMatrixAction,
   copyHardSkillsMatrixAction,
 } from './actionTypes';
+import { RootState } from 'store/index';
 
 export const getAllHardSkillsMatrix = createAsyncThunk(loadAllHardSkillsMatrix, () => {
   return httpGetAllHardSkillsMatrix();
@@ -50,6 +51,15 @@ export const copyHardSkillsMatrix = createAsyncThunk(copyHardSkillsMatrixAction,
   return httpCopyHardSkillsMatrix(data);
 });
 
-export const getSkillLevels = createAsyncThunk('getSkillLevelsAction', () => {
-  return httpGetTechSkillLevels();
-});
+export const getSkillLevels = createAsyncThunk<TSkillLevel[], undefined, { state: RootState }>(
+  'getSkillLevelsAction',
+  (_, { getState, rejectWithValue }) => {
+    const skillLevels = getState().hardSkillsMatrix.skillLevels;
+
+    if (skillLevels.length) {
+      return rejectWithValue('Skill levels already loaded');
+    }
+
+    return httpGetTechSkillLevels();
+  }
+);

@@ -134,6 +134,7 @@ const hardSkillsMatrix = createSlice({
 export default hardSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
+export const hardSkillLevelsSelector = (state: RootState) => state.hardSkillsMatrix.skillLevels;
 
 export const {
   setHardSkillsMatrixIsLoading,
