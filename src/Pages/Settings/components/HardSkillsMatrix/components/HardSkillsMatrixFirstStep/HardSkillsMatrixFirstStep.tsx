@@ -149,7 +149,7 @@ export const HardSkillsMatrixFirstStep = ({ skillGroups, setActiveStep }: IProps
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="AssessmentSkillGroup">
               {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
+                <div ref={provided.innerRef} {...provided.droppableProps} className={classes.cardsContainer}>
                   {fields.map((group, idx) => (
                     <AssessmentSkillGroup
                       key={group.fieldKey}

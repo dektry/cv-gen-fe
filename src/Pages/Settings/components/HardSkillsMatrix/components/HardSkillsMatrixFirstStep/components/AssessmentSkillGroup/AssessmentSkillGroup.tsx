@@ -163,7 +163,7 @@ export const AssessmentSkillGroup = ({ idx, id, removeSection, setIsModified }: 
 
   return (
     <>
-      <Draggable draggableId={id} index={idx} key={idx}>
+      <Draggable draggableId={id} index={idx} key={id}>
         {(provided) => (
           <div className={classes.container} {...provided.draggableProps} ref={provided.innerRef}>
             <div {...provided.dragHandleProps} className={classes.dragNDropIcon}>
