@@ -12,7 +12,6 @@ import { levelsSelector } from 'store/reducers/levels';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddRoundedIcon from '@mui/icons-material/DeleteRounded';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 import { SkillGroupField } from 'common-components/SkillGroupField';
 import { DeleteButton } from 'common-components/DeleteButton';
@@ -131,6 +130,7 @@ export const AssessmentSkillGroup = ({ idx, id, removeSection, setIsModified }: 
     const reOrderedSkillsList = values.skillGroups[idx]?.skills?.map((skill: IFormSkill) => {
       if (skill.id === result.draggableId) {
         skill.order = result.destination?.index;
+        console.log('NUMBER ORDER', skill, directionOfDrag);
         return skill;
       } else if (affectedRange.includes(Number(skill.order))) {
         if (directionOfDrag === 'GREATER') {
@@ -181,38 +181,39 @@ export const AssessmentSkillGroup = ({ idx, id, removeSection, setIsModified }: 
               <DeleteButton title={'Delete section'} onClick={handleDeleteGroupModalOpen} />
             </div>
             <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="AssessmentSkillGroup">
+              <Droppable droppableId="AssessmentSkill">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {fields.map((skill, skillIndex) => (
-                      <Draggable draggableId={skill.skillKey} index={skillIndex} key={skill.skillKey}>
+                      <Draggable
+                        draggableId={(skill as IFormSkill).id || ''}
+                        index={skillIndex}
+                        key={(skill as IFormSkill).id}
+                      >
                         {(provided) => (
-                          <Box
-                            key={skill.skillKey}
-                            className={classes.skill}
-                            {...provided.draggableProps}
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                          >
-                            <Controller
-                              name={`skillGroups.${idx}.skills.${skillIndex}.value`}
-                              control={methods.control}
-                              render={({ field: { value, onChange } }) => (
-                                <CustomTextField fullWidth={true} value={value} onChange={onChange} />
-                              )}
-                            />
-                            <Button
-                              className={classes.deleteSkillBtn}
-                              variant="contained"
-                              endIcon={<AddRoundedIcon />}
-                              onClick={() => handleDeleteSkillModalOpen(skillIndex)}
-                            />
+                          <div {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
+                            <Box key={skill.skillKey} className={classes.skill}>
+                              <Controller
+                                name={`skillGroups.${idx}.skills.${skillIndex}.value`}
+                                control={methods.control}
+                                render={({ field: { value, onChange } }) => (
+                                  <CustomTextField fullWidth={true} value={value} onChange={onChange} />
+                                )}
+                              />
+                              <Button
+                                className={classes.deleteSkillBtn}
+                                variant="contained"
+                                endIcon={<AddRoundedIcon />}
+                                onClick={() => handleDeleteSkillModalOpen(skillIndex)}
+                              />
 
-                            <AssessmentSkillQuestions groupIndex={idx} skillIndex={skillIndex} />
-                          </Box>
+                              <AssessmentSkillQuestions groupIndex={idx} skillIndex={skillIndex} />
+                            </Box>
+                          </div>
                         )}
                       </Draggable>
                     ))}
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
