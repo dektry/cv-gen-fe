@@ -13,7 +13,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
-import { LevelTypesEnum } from 'models/IInterview';
 
 import { CustomSelect } from 'common-components/CustomSelect';
 import { SkillGroupField } from 'common-components/SkillGroupField';
@@ -22,11 +21,7 @@ import { useStyles } from './styles';
 import theme from 'theme/theme';
 import { getSkillLevels } from 'store/reducers/hardSkillsMatrix/thunks';
 import { useAppDispatch } from 'store';
-
-const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
-  label: level,
-  value: level,
-}));
+import { hardSkillLevelsSelector } from 'store/reducers/hardSkillsMatrix';
 
 interface IProps {
   skillGroup: IFormSkillGroup;
@@ -38,6 +33,7 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
   const dispatch = useAppDispatch();
 
   const { allLevels } = useSelector(levelsSelector);
+  const skillLevels = useSelector(hardSkillLevelsSelector);
 
   const methods = useFormContext();
 
@@ -90,9 +86,10 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
                         render={({ field: { value, onChange } }) => (
                           <CustomSelect
                             sx={{ width: '8rem' }}
-                            options={levelsOptions}
+                            options={skillLevels}
                             value={value}
                             onChange={onChange}
+                            setDefaultValue
                           />
                         )}
                       />

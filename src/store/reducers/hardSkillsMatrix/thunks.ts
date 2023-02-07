@@ -51,7 +51,7 @@ export const copyHardSkillsMatrix = createAsyncThunk(copyHardSkillsMatrixAction,
   return httpCopyHardSkillsMatrix(data);
 });
 
-export const getSkillLevels = createAsyncThunk<TSkillLevel[], undefined, { state: RootState }>(
+export const getSkillLevels = createAsyncThunk<{ id: number; name: string }[], undefined, { state: RootState }>(
   'getSkillLevelsAction',
   (_, { getState, rejectWithValue }) => {
     const skillLevels = getState().hardSkillsMatrix.skillLevels;
