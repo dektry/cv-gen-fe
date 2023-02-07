@@ -10,28 +10,22 @@ import { CustomSelect } from 'common-components/CustomSelect';
 import { AddButton } from 'common-components/AddButton';
 import { DeleteButton } from 'common-components/DeleteButton';
 import theme from 'theme/theme';
-import { LevelTypesEnum } from 'models/IInterview';
 import { useStyles } from './styles';
 import { ICvProfSkill } from 'models/ICVGeneration';
-
-const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
-  label: level,
-  value: level,
-}));
+import { TSkillLevel } from 'models/IHardSkillsMatrix';
 
 interface IProfSkillGroup {
   skillGroup: ICvProfSkill;
   groupIndex: number;
   handleDeleteSkillGroup: (groupIndex: number) => void;
+  skillLevels: TSkillLevel[];
 }
 
 export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
-  const { groupIndex, handleDeleteSkillGroup } = props;
+  const { groupIndex, handleDeleteSkillGroup, skillLevels } = props;
 
   const classes = useStyles({ theme });
-
   const { control } = useFormContext();
-
   const { fields, remove, append } = useFieldArray({
     name: `profSkills.${groupIndex}.skills`,
     control,
@@ -61,9 +55,7 @@ export const ProfSkillGroup = React.memo((props: IProfSkillGroup) => {
               name={`profSkills.${groupIndex}.skills.${skillIndex}.level`}
               control={control}
               render={({ field: { value, onChange } }) => {
-                return (
-                  <CustomSelect value={value} options={levelsOptions} sx={{ width: '220px' }} onChange={onChange} />
-                );
+                return <CustomSelect value={value} options={skillLevels} sx={{ width: '220px' }} onChange={onChange} />;
               }}
             />
 

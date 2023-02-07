@@ -89,7 +89,6 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
                             options={skillLevels}
                             value={value}
                             onChange={onChange}
-                            setDefaultValue
                           />
                         )}
                       />

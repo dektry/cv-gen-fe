@@ -43,7 +43,9 @@ export interface IHardSkillsMatrix {
 }
 
 export type TSkillLevel = {
-  value: number;
+  id: number;
+  name: string;
+  value: string;
   label: string;
 };
 

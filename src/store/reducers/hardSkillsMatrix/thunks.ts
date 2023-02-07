@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ICopyHardSkillsMatrixProps, IFormHardSkillsMatrix, TSkillLevel } from 'models/IHardSkillsMatrix';
+import { ICopyHardSkillsMatrixProps, IFormHardSkillsMatrix } from 'models/IHardSkillsMatrix';
 
 import {
   httpGetAllHardSkillsMatrix,

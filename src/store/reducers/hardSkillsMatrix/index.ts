@@ -126,7 +126,7 @@ const hardSkillsMatrix = createSlice({
       }
     });
     builder.addCase(getSkillLevels.fulfilled, (state, { payload }) => {
-      state.skillLevels = payload.map((l) => ({ ...l, label: l.name, value: l.id }));
+      state.skillLevels = payload.map((l) => ({ ...l, label: l.name, value: l.name }));
     });
   },
 });
