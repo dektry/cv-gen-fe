@@ -82,9 +82,15 @@ const projects = createSlice({
       state.isLoading = false;
     });
     builder.addCase(createProjectAndUpdateList.fulfilled, (state, { payload }) => {
-      state.projects = payload.map((project: IProjectFromDB) => {
+      const processedProjects = payload.map((project: IProjectFromDB) => {
         return formatProjectFromDb(project);
       });
+      processedProjects.sort((a: IProject, b: IProject) => {
+        if (a.order && b.order) {
+          return a.order - b.order;
+        }
+      });
+      state.projects = processedProjects;
       state.isLoading = false;
     });
     builder.addCase(deleteProjectAndUpdateList.pending, (state) => {

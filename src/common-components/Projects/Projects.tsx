@@ -1,4 +1,7 @@
 import { useState, useCallback } from 'react';
+import { range } from 'lodash';
+
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 
@@ -24,13 +27,14 @@ export const Projects = () => {
   const [projectInfo, setProjectInfo] = useState<ICvProject>({} as ICvProject);
   const [id, setId] = useState(0);
 
-  const { control } = useFormContext();
+  const { control, reset } = useFormContext();
   const { append, remove, update } = useFieldArray({
     name: 'projects',
     control,
   });
 
-  const { projects } = useWatch({ control });
+  const values = useWatch({ control });
+  const { projects } = values;
 
   const handleClickDeleteProjectButton = (project: ICvProject) => {
     setProjectInfo(project);
@@ -75,11 +79,54 @@ export const Projects = () => {
   };
 
   const handleAddProject = (project: ICvProject) => {
-    append(project);
+    append({ ...project, order: projects.length || 0 });
   };
 
   const handleEditProject = (project: ICvProject) => {
     update(id, project);
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    const directionOfDrag = destination.index > source.index ? 'GREATER' : 'LESS';
+    let affectedRange: number[];
+
+    if (directionOfDrag === 'GREATER') {
+      affectedRange = range(source.index, destination.index + 1);
+    } else if (directionOfDrag === 'LESS') {
+      affectedRange = range(destination.index, source.index);
+    }
+    const reOrderedProjectsList = projects?.map((project: ICvProject) => {
+      if (project.name === result.draggableId) {
+        project.order = result.destination?.index;
+        console.log('ORDER', project.order);
+
+        return project;
+      } else if (affectedRange.includes(Number(project.order))) {
+        if (directionOfDrag === 'GREATER') {
+          project.order = (project.order as number) - 1;
+
+          return project;
+        } else if (directionOfDrag === 'LESS') {
+          project.order = (project.order as number) + 1;
+          return project;
+        }
+      } else {
+        return project;
+      }
+    });
+
+    reOrderedProjectsList.sort((a: ICvProject, b: ICvProject) => Number(a.order) - Number(b.order));
+
+    const defaultValues = { ...values, projects: [...reOrderedProjectsList] };
+
+    reset({ ...defaultValues });
   };
 
   return (
@@ -93,22 +140,31 @@ export const Projects = () => {
         </div>
       </div>
       <FormControl className={classes.projectsContainer}>
-        {projects?.map((project: ICvProject, idx: number) => (
-          <ProjectCard
-            key={project.id}
-            id={idx}
-            project={project}
-            projectInfo={projectInfo}
-            handleClickDeleteProjectButton={handleClickDeleteProjectButton}
-            handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
-            handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
-            isDeleteProjectModalOpen={isDeleteProjectModalOpen}
-            handleCloseEditModal={handleCloseEditModal}
-            handleOpenEditModal={handleOpenEditModal}
-            editModalOpen={editModalOpen}
-            handleEditProjectForm={handleEditProject}
-          />
-        ))}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="ProjectCard">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                {projects?.map((project: ICvProject, idx: number) => (
+                  <ProjectCard
+                    key={project.id}
+                    id={idx}
+                    project={project}
+                    projectInfo={projectInfo}
+                    handleClickDeleteProjectButton={handleClickDeleteProjectButton}
+                    handleClickDeleteProjectConfirm={handleClickDeleteProjectConfirm}
+                    handleCloseDeleteProjectModal={handleCloseDeleteProjectModal}
+                    isDeleteProjectModalOpen={isDeleteProjectModalOpen}
+                    handleCloseEditModal={handleCloseEditModal}
+                    handleOpenEditModal={handleOpenEditModal}
+                    editModalOpen={editModalOpen}
+                    handleEditProjectForm={handleEditProject}
+                  />
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </FormControl>
       <CreateEditModal
         isOpen={createModalOpen}

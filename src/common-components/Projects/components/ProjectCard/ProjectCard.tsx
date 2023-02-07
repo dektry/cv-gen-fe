@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Draggable } from 'react-beautiful-dnd';
+
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Chip from '@mui/material/Chip';
@@ -48,84 +50,93 @@ export const ProjectCard = React.memo(
 
     return (
       <>
-        <Accordion
-          key={project.id}
-          className={classes.accordion}
-          disableGutters
-          TransitionProps={{ unmountOnExit: true }}
-        >
-          <AccordionSummary expandIcon={<ArrowDropDownIcon color="primary" />}>
-            <Typography variant="h3">{`#${id + 1} ${project.name}`}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div className={classes.container}>
-              <div className={classes.upperContainer}>
-                <div className={classes.infoBlock}>
-                  <Typography variant={'h6'} className={classes.label}>
-                    Project name
-                  </Typography>
-                  <Typography variant={'h5'} className={classes.boldData}>
-                    {project.name}
-                  </Typography>
-                </div>
-                <div className={classes.infoBlock}>
-                  <Typography variant={'h6'} className={classes.label}>
-                    Duration
-                  </Typography>
-                  <Typography variant={'h5'} className={classes.boldData}>
-                    {project.duration}
-                  </Typography>
-                </div>
-                <div className={classes.infoBlock}>
-                  <Typography variant={'h6'}>Project role</Typography>
-                  <Typography variant={'h5'} className={classes.boldData}>
-                    {project.position}
-                  </Typography>
-                </div>
-                <div className={classes.infoBlock}>
-                  <Typography variant={'h6'} className={classes.label}>
-                    Project team size
-                  </Typography>
-                  <Typography variant={'h5'} className={classes.boldData}>{`${project.teamSize} members`}</Typography>
-                </div>
-              </div>
-              <div className={classes.middleContainer}>
-                <div className={classes.description}>
-                  <Typography variant={'h6'} className={classes.label}>
-                    Project description
-                  </Typography>
-                  <Typography variant={'h5'}>{project.description}</Typography>
-                </div>
-                <div className={classes.responsibilities}>
-                  <Typography variant={'h6'} className={classes.label}>
-                    Responsibilities
-                  </Typography>
-                  <ul className={classes.list}>
-                    {project.responsibilities?.map((el, id) => (
-                      <li key={`${el}-${id}`}>
-                        <Typography variant={'h5'}>{el}</Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className={classes.lowerContainer}>
-                <Typography variant={'h6'} className={classes.label}>
-                  Tools & technologies
-                </Typography>
-                <Stack direction={'row'} spacing={0} sx={{ flexWrap: 'wrap', gap: 1, mt: '4px' }}>
-                  {project.tools?.map((tool, id) => (
-                    <Chip key={`${tool}-${id}`} className={classes.chip} label={tool} />
-                  ))}
-                </Stack>
-              </div>
+        <Draggable draggableId={project.name as string} index={id} key={project.name}>
+          {(provided) => (
+            <div {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
+              <Accordion
+                key={project.id}
+                className={classes.accordion}
+                disableGutters
+                TransitionProps={{ unmountOnExit: true }}
+              >
+                <AccordionSummary expandIcon={<ArrowDropDownIcon color="primary" />}>
+                  <Typography variant="h3">{`#${id + 1} ${project.name}`}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className={classes.container}>
+                    <div className={classes.upperContainer}>
+                      <div className={classes.infoBlock}>
+                        <Typography variant={'h6'} className={classes.label}>
+                          Project name
+                        </Typography>
+                        <Typography variant={'h5'} className={classes.boldData}>
+                          {project.name}
+                        </Typography>
+                      </div>
+                      <div className={classes.infoBlock}>
+                        <Typography variant={'h6'} className={classes.label}>
+                          Duration
+                        </Typography>
+                        <Typography variant={'h5'} className={classes.boldData}>
+                          {project.duration}
+                        </Typography>
+                      </div>
+                      <div className={classes.infoBlock}>
+                        <Typography variant={'h6'}>Project role</Typography>
+                        <Typography variant={'h5'} className={classes.boldData}>
+                          {project.position}
+                        </Typography>
+                      </div>
+                      <div className={classes.infoBlock}>
+                        <Typography variant={'h6'} className={classes.label}>
+                          Project team size
+                        </Typography>
+                        <Typography
+                          variant={'h5'}
+                          className={classes.boldData}
+                        >{`${project.teamSize} members`}</Typography>
+                      </div>
+                    </div>
+                    <div className={classes.middleContainer}>
+                      <div className={classes.description}>
+                        <Typography variant={'h6'} className={classes.label}>
+                          Project description
+                        </Typography>
+                        <Typography variant={'h5'}>{project.description}</Typography>
+                      </div>
+                      <div className={classes.responsibilities}>
+                        <Typography variant={'h6'} className={classes.label}>
+                          Responsibilities
+                        </Typography>
+                        <ul className={classes.list}>
+                          {project.responsibilities?.map((el, id) => (
+                            <li key={`${el}-${id}`}>
+                              <Typography variant={'h5'}>{el}</Typography>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className={classes.lowerContainer}>
+                      <Typography variant={'h6'} className={classes.label}>
+                        Tools & technologies
+                      </Typography>
+                      <Stack direction={'row'} spacing={0} sx={{ flexWrap: 'wrap', gap: 1, mt: '4px' }}>
+                        {project.tools?.map((tool, id) => (
+                          <Chip key={`${tool}-${id}`} className={classes.chip} label={tool} />
+                        ))}
+                      </Stack>
+                    </div>
+                  </div>
+                </AccordionDetails>
+                <AccordionActions sx={{ justifyContent: 'flex-end' }}>
+                  <DeleteButton title="Delete project" onClick={() => handleClickDeleteProjectButton(project)} />
+                  <EditButton title="Edit project" onClick={() => handleOpenEditModal(project, id)} />
+                </AccordionActions>
+              </Accordion>
             </div>
-          </AccordionDetails>
-          <AccordionActions sx={{ justifyContent: 'flex-end' }}>
-            <DeleteButton title="Delete project" onClick={() => handleClickDeleteProjectButton(project)} />
-            <EditButton title="Edit project" onClick={() => handleOpenEditModal(project, id)} />
-          </AccordionActions>
-        </Accordion>
+          )}
+        </Draggable>
 
         <DeleteModal
           onSubmit={() => handleClickDeleteProjectConfirm(id)}
