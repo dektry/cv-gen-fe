@@ -9,11 +9,13 @@ import { profSkillsSelector } from 'store/reducers/cvGeneration';
 import { useDeferredLoading } from 'hooks/useDeferredLoading';
 import { ProfSkillGroup } from 'Pages/CVGeneration/components/ProfSkiils/ProfSkillGroup';
 import { ICvProfSkill } from 'models/ICVGeneration';
+import { hardSkillLevelsSelector } from 'store/reducers/hardSkillsMatrix';
 
 type TProfSkillGroupForm = ICvProfSkill & { profSkillGroupKey: string };
 
 export const ProfSkills = () => {
   const { isLoading } = useSelector(profSkillsSelector);
+  const skillLevels = useSelector(hardSkillLevelsSelector);
 
   const { control } = useFormContext();
 
@@ -48,6 +50,7 @@ export const ProfSkills = () => {
               skillGroup={skillGroup}
               groupIndex={groupIndex}
               handleDeleteSkillGroup={handleDeleteSkillGroup}
+              skillLevels={skillLevels}
             />
           ))}
         </>

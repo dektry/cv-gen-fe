@@ -42,11 +42,19 @@ export interface IHardSkillsMatrix {
   skillGroups: ISkillGroup[];
 }
 
+export type TSkillLevel = {
+  id: number;
+  name: string;
+  value: string;
+  label: string;
+};
+
 export interface IHardSkillsMatrixState {
   matrix: IHardSkillsMatrix[];
   currentMatrix: IFormHardSkillsMatrix;
   hardSkillMatrixLoading: boolean;
   isAssessmentPage: boolean;
+  skillLevels: TSkillLevel[];
 }
 
 export interface ICopyHardSkillsMatrixProps {

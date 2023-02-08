@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { levelsSelector } from 'store/reducers/levels';
 
@@ -12,18 +13,15 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 import { IFormSkillGroup } from 'models/IHardSkillsMatrix';
-import { LevelTypesEnum } from 'models/IInterview';
 
 import { CustomSelect } from 'common-components/CustomSelect';
 import { SkillGroupField } from 'common-components/SkillGroupField';
 
 import { useStyles } from './styles';
 import theme from 'theme/theme';
-
-const levelsOptions = Object.values(LevelTypesEnum).map((level) => ({
-  label: level,
-  value: level,
-}));
+import { getSkillLevels } from 'store/reducers/hardSkillsMatrix/thunks';
+import { useAppDispatch } from 'store';
+import { hardSkillLevelsSelector } from 'store/reducers/hardSkillsMatrix';
 
 interface IProps {
   skillGroup: IFormSkillGroup;
@@ -32,10 +30,16 @@ interface IProps {
 
 export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
   const classes = useStyles({ theme });
+  const dispatch = useAppDispatch();
 
   const { allLevels } = useSelector(levelsSelector);
+  const skillLevels = useSelector(hardSkillLevelsSelector);
 
   const methods = useFormContext();
+
+  useEffect(() => {
+    dispatch(getSkillLevels());
+  }, []);
 
   return (
     <div className={classes.container}>
@@ -82,7 +86,7 @@ export const HardSkillLevelsTable = ({ skillGroup, idx }: IProps) => {
                         render={({ field: { value, onChange } }) => (
                           <CustomSelect
                             sx={{ width: '8rem' }}
-                            options={levelsOptions}
+                            options={skillLevels}
                             value={value}
                             onChange={onChange}
                           />

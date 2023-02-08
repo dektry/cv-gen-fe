@@ -20,6 +20,7 @@ import {
   getOneHardSkillsMatrix,
   createHardSkillsMatrix,
   editHardSkillsMatrix,
+  getSkillLevels,
 } from './thunks';
 
 import { sortSkillLevels } from 'store/helpers/sortLevels';
@@ -31,6 +32,7 @@ const initialState: IHardSkillsMatrixState = {
   currentMatrix: {} as IFormHardSkillsMatrix,
   hardSkillMatrixLoading: false,
   isAssessmentPage: false,
+  skillLevels: [],
 };
 
 const hardSkillsMatrix = createSlice({
@@ -123,12 +125,16 @@ const hardSkillsMatrix = createSlice({
         }, 1000);
       }
     });
+    builder.addCase(getSkillLevels.fulfilled, (state, { payload }) => {
+      state.skillLevels = payload.map((l) => ({ ...l, label: l.name, value: l.name }));
+    });
   },
 });
 
 export default hardSkillsMatrix.reducer;
 
 export const hardSkillsMatrixSelector = (state: RootState): IHardSkillsMatrixState => state.hardSkillsMatrix;
+export const hardSkillLevelsSelector = (state: RootState) => state.hardSkillsMatrix.skillLevels;
 
 export const {
   setHardSkillsMatrixIsLoading,

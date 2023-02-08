@@ -2,7 +2,7 @@ import { MenuItem, TextField } from '@mui/material';
 import { TextFieldProps } from '@mui/material/TextField/TextField';
 
 type TCustomSelect = {
-  options: { value: string; label: string }[];
+  options: { value: string | number; label: string }[];
 } & TextFieldProps;
 
 export const CustomSelect = (props: TCustomSelect) => {

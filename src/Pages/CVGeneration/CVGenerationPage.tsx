@@ -47,6 +47,7 @@ import { Spinner } from 'common-components/Spinner';
 
 import { projectFormatter } from 'Pages/GenerateCV/ChoosePerson/Employee/utils/helpers/projectFormatter';
 import { editTechAssessment } from 'store/reducers/techAssessment/thunks';
+import { getSkillLevels } from 'store/reducers/hardSkillsMatrix/thunks';
 
 export type TProfSkill = {
   groupName?: string;
@@ -134,6 +135,7 @@ export const CVGenerationPage = React.memo(() => {
       dispatch(getSoftSkillsToCvOfEmployee(id));
       dispatch(getEducation(id));
       dispatch(getLanguages(id));
+      dispatch(getSkillLevels());
     }
     return () => {
       dispatch(resetCvGeneration());
