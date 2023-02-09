@@ -72,7 +72,7 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
             />
           )}
         />
-      </div>{' '}
+      </div>
       <div className={classes.row}>
         <Languages />
       </div>
@@ -87,7 +87,6 @@ export const CVGenerationInfo = (props: CVGenerationInfoProps) => {
             value={softSkillsOptions}
             skills={softSkillsOfEmployee}
             onSearch={softSkillsSearch}
-            key={JSON.stringify(softSkillsOfEmployee)}
           />
         </div>
       </div>
